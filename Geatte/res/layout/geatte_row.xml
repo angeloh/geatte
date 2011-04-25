@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/my_geatte_row"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">    
+
+	<ImageView android:id="@+id/my_geatte_img"
+		android:layout_width="54dip"
+		android:layout_height="54dip"
+		android:layout_marginTop="8dip"
+		android:layout_marginRight="8dip"
+		android:layout_marginLeft="8dip"
+		android:layout_marginBottom="4dip"
+	/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView android:id="@+id/my_geatte_title"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView android:id="@+id/my_geatte_vote"
+            android:textSize="12sp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

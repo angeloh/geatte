@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:gravity="center_horizontal" android:padding="10px"
+	>
+
+	<TextView android:id="@+id/edit_top_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_marginLeft="10px"
+		android:layout_marginBottom="15px" style="@style/label_top"
+		android:text="@string/edit_top_label" />
+
+	<TextView android:id="@+id/edit_title_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/edit_top_label"
+		android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+		style="@style/label" android:text="@string/edit_title_label" />
+	<EditText android:id="@+id/title"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/edit_title_label"
+		android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+		style="@style/edit_text" />	
+		
+	<TextView android:id="@+id/edit_desc_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/title"
+		android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+		style="@style/label" android:text="@string/edit_desc_label" />
+	<EditText android:id="@+id/desc"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/edit_desc_label"
+		android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+		style="@style/edit_text" />
+	
+	<ImageView android:id="@+id/edit_img"
+		android:layout_width="fill_parent"
+		android:layout_height="150px"
+		android:layout_below="@id/desc"
+		android:layout_marginLeft="10px" android:layout_marginBottom="5px" />
+		
+	<!-- 
+	<TextView android:id="@+id/edit_desc_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/title"
+		android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+		style="@style/label" android:text="@string/edit_desc_label" />
+	<Spinner android:id="@+id/cuisine"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/cuisine_label"
+		android:layout_marginLeft="10px" android:layout_marginBottom="20px" />
+    -->
+     
+    <Button android:id="@+id/send_button"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"      
+        android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+        android:layout_below="@id/edit_img"
+        android:text="@string/send_geatte_button_label" />
+
+</RelativeLayout>

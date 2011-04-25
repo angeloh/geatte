@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="snap_geatte_button_label">Snap A Geatte</string>
+    <string name="take_picture">Take a picture</string>
+    <string name="app_name">Geatte</string>
+    <string name="no_geattes">No Geattes Yet</string>
+    
+    <string name="menu_delete">Delete Geatte</string>
+	<string name="menu_add_more_geatte">Add more geatte</string>
+	<string name="menu_get_next_page">Get next page</string>
+    
+    <string name="edit_geatte">New Geatte</string>
+    <string name="edit_top_label">Send A Geatte</string>
+    <string name="edit_title_label">Title:</string>
+    <string name="edit_desc_label">Description:</string>
+    <string name="edit_image_label">Image:</string>
+    
+    <string name="desc_label">Description:</string>
+    <string name="vote_label">Vote:</string>
+    <string name="comment_label">Comment:</string>
+    
+    <string name="send_geatte_button_label">Send Geatte</string>
+</resources>
