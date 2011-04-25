@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
-import android.widget.TextView;
 
 /**
  * "List" of my geattes screen
@@ -30,7 +29,7 @@ public class GeatteList extends ListActivity {
     //private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
     //private static final int NUM_RESULTS_PER_PAGE = 8;
 
-    private TextView empty;
+    //private TextView empty;
     private ProgressDialog progressDialog;
     private GeatteDBAdapter dbHelper;
 
@@ -79,7 +78,7 @@ public class GeatteList extends ListActivity {
 	startManagingCursor(myGeattesCursor);
 
 	// Create an array to specify the fields we want to display in the list
-	String[] from = new String[]{GeatteDBAdapter.KEY_IMAGE_IMAGE, GeatteDBAdapter.KEY_INTEREST_TITLE};
+	String[] from = new String[]{GeatteDBAdapter.KEY_IMAGE_PATH, GeatteDBAdapter.KEY_INTEREST_TITLE};
 	//String[] from = new String[]{GeatteDBAdapter.KEY_INTEREST_TITLE};
 
 	// and an array of the fields we want to bind those fields to

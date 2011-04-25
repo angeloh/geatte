@@ -80,10 +80,9 @@ public class GeatteDetail extends Activity {
 	    mDescText.setText(cursor.getString(
 		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
 
-	    byte[] byteArr = cursor.getBlob(
-		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_IMAGE));
-
-	    mInterestImage.setImageBitmap(BitmapFactory.decodeByteArray(byteArr, 0, byteArr.length));
+	    String savedImagePath = cursor.getString(
+		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
+	    mInterestImage.setImageBitmap(BitmapFactory.decodeFile(savedImagePath));
 
 	}
     }

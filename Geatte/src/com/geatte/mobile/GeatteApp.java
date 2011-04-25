@@ -1,14 +1,25 @@
 package com.geatte.mobile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class GeatteApp extends Activity {
+
+    private static final String CLASSTAG = GeatteApp.class.getSimpleName();
     private static final int ACTIVITY_SNAP = 0;
     private static final int ACTIVITY_CREATE = 1;
     /** Called when the activity is first created. */
@@ -22,6 +33,7 @@ public class GeatteApp extends Activity {
 	    public void onClick(View v ){
 		//Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
 		Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE );
+		//intent.putExtra( MediaStore.EXTRA_OUTPUT, outputFileUri );
 		startActivityForResult(intent, ACTIVITY_SNAP);
 	    }
 	});
@@ -107,10 +119,41 @@ public class GeatteApp extends Activity {
 	    }catch (IOException e){
 		//
 	    }*/
-
+	    String path = saveToFile(x);
 	    Intent i = new Intent(this, GeatteEdit.class);
-	    i.putExtra(GeatteDBAdapter.KEY_IMAGE_IMAGE, x);
+	    i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, path);
 	    startActivityForResult(i, ACTIVITY_CREATE);
 	}
+    }
+
+    public String saveToFile(Bitmap bitmap) {
+	String filename;
+	Date date = new Date();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+	filename = sdf.format(date);
+
+	try {
+	    String path = Environment.getExternalStorageDirectory().toString();
+	    OutputStream fOut = null;
+	    File dir = new File(path, "/geatte/images/");
+	    if (!dir.isDirectory()) {
+		dir.mkdirs();
+	    }
+
+	    File file = new File(dir, filename + ".jpg");
+
+	    fOut = new FileOutputStream(file);
+
+	    bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+	    fOut.flush();
+	    fOut.close();
+
+	    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(), file
+		    .getName());
+	    return file.getAbsolutePath();
+	} catch (Exception e) {
+	    Log.w(Constants.LOGTAG, " " + GeatteApp.CLASSTAG + " Exception :" , e);
+	}
+	return null;
     }
 }

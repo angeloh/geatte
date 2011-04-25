@@ -6,12 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.util.Log;
-import java.io.ByteArrayOutputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Custom adapter for Geatte Review model objects.
@@ -34,7 +29,7 @@ public class GeatteDBAdapter {
     public static final String KEY_IMAGE_ID = "_id";
     public static final String KEY_IMAGE_AS_ID = "image_id";
     public static final String KEY_IMAGE_INTEREST_ID = "interest";
-    public static final String KEY_IMAGE_IMAGE = "image";
+    public static final String KEY_IMAGE_PATH = "image_path";
     //public static final String KEY_IMAGE_HASH = "hash";
 
     //TABLE contacts
@@ -74,7 +69,7 @@ public class GeatteDBAdapter {
 
     private static final String DB_CREATE_IMAGES =
 	"CREATE TABLE " + DB_TABLE_IMAGES + " (" + KEY_IMAGE_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
-	KEY_IMAGE_IMAGE + " BLOB," +
+	KEY_IMAGE_PATH + " TEXT," +
 	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
 	KEY_IMAGE_INTEREST_ID + " INTEGER," +
 	"FOREIGN KEY (" + KEY_IMAGE_INTEREST_ID + ") REFERENCES interests (" + KEY_INTEREST_ID + ")" +
@@ -173,12 +168,11 @@ public class GeatteDBAdapter {
 	return mDb.insert(DB_TABLE_FEEDBACKS, null, initialValues);
     }
 
-    public long insertImage(long interestId, Bitmap bitmap) {
+    public long insertImage(long interestId, String imagePath) {
 	ContentValues initialValues = new ContentValues();
 	initialValues.put(KEY_IMAGE_INTEREST_ID, interestId);
-	if (bitmap != null) {
-	    byte[] byteArray = getBitmapAsByteArray(bitmap);
-	    initialValues.put(KEY_IMAGE_IMAGE, byteArray);
+	if (imagePath != null) {
+	    initialValues.put(KEY_IMAGE_PATH, imagePath);
 	    //initialValues.put(KEY_IMAGE_HASH, getHashFromByteArray(byteArray));
 
 	    return mDb.insert(DB_TABLE_IMAGES, null, initialValues);
@@ -210,7 +204,7 @@ public class GeatteDBAdapter {
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + ", " +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_ID + " AS " + KEY_IMAGE_AS_ID + ", " +
-	DB_TABLE_IMAGES + "." + KEY_IMAGE_IMAGE + " " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_PATH + " " +
 	" FROM " +
 	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
@@ -242,7 +236,7 @@ public class GeatteDBAdapter {
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + ", " +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_ID + " AS " + KEY_IMAGE_AS_ID + ", " +
-	DB_TABLE_IMAGES + "." + KEY_IMAGE_IMAGE + " " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_PATH + " " +
 	"FROM " +
 	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
@@ -285,11 +279,10 @@ public class GeatteDBAdapter {
 	return mDb.update(DB_TABLE_INTERESTS, args, KEY_INTEREST_ID + "=" + rowId, null) > 0;
     }
 
-    public boolean updateImage(long imageId, Bitmap bitmap) {
+    public boolean updateImage(long imageId, String imagePath) {
 	ContentValues args = new ContentValues();
-	if (bitmap != null) {
-	    byte[] byteArray = getBitmapAsByteArray(bitmap);
-	    args.put(KEY_IMAGE_IMAGE, byteArray);
+	if (imagePath != null) {
+	    args.put(KEY_IMAGE_PATH, imagePath);
 	    //args.put(KEY_IMAGE_HASH, getHashFromByteArray(byteArray));
 
 	    return mDb.update(DB_TABLE_IMAGES, args, KEY_IMAGE_ID + "=" + imageId, null) > 0;
@@ -298,7 +291,7 @@ public class GeatteDBAdapter {
 	}
     }
 
-    private byte[] getBitmapAsByteArray(Bitmap bitmap) {
+    /*private byte[] getBitmapAsByteArray(Bitmap bitmap) {
 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 	// Middle parameter is quality, but since PNG is lossless, it doesn't matter
@@ -318,6 +311,6 @@ public class GeatteDBAdapter {
 	}
 	return null;
 
-    }
+    }*/
 
 }

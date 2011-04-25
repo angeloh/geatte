@@ -2,7 +2,6 @@ package com.geatte.mobile;
 
 import android.app.Activity;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +18,7 @@ public class GeatteEdit extends Activity {
     private EditText mDescText;
     private ImageView mSnapView;
     private Long mRowId;
-    private Bitmap mImageBitmap;
+    private String imagePath;
     private GeatteDBAdapter mDbHelper;
 
     @Override
@@ -47,9 +46,9 @@ public class GeatteEdit extends Activity {
 
 	// in new created mode, read the image from extras
 	if (mRowId == null || mRowId == 0L) {
-	    if (mImageBitmap == null) {
+	    if (imagePath == null) {
 		Bundle extras = getIntent().getExtras();
-		mImageBitmap = (Bitmap) (extras != null ? extras.get(GeatteDBAdapter.KEY_IMAGE_IMAGE) : null);
+		imagePath = (String) (extras != null ? extras.get(GeatteDBAdapter.KEY_IMAGE_PATH) : null);
 	    }
 	}
 
@@ -73,16 +72,16 @@ public class GeatteEdit extends Activity {
 		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
 	    mDescText.setText(cursor.getString(
 		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
-	    byte[] byteArr = cursor.getBlob(
-		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_IMAGE));
 
-	    mSnapView.setImageBitmap(BitmapFactory.decodeByteArray(byteArr, 0, byteArr.length));
+	    String savedImagePath = cursor.getString(
+		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
+	    mSnapView.setImageBitmap(BitmapFactory.decodeFile(savedImagePath));
 	}
 
 	// in new created mode, save the image to image view
 	if (mRowId == null || mRowId == 0L) {
-	    if (mImageBitmap != null) {
-		mSnapView.setImageBitmap(mImageBitmap);
+	    if (imagePath != null) {
+		mSnapView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
 	    }
 	}
     }
@@ -115,11 +114,11 @@ public class GeatteEdit extends Activity {
 	    if (id > 0) {
 		mRowId = id;
 	    }
-	    mDbHelper.insertImage(mRowId, mImageBitmap);
+	    mDbHelper.insertImage(mRowId, imagePath);
 	    Log.d(Constants.LOGTAG, " " + GeatteEdit.CLASSTAG + " create new interest for id = " + mRowId);
 	} else {
 	    mDbHelper.updateInterest(mRowId, title, desc);
-	    mDbHelper.updateImage(mRowId, mImageBitmap);
+	    mDbHelper.updateImage(mRowId, imagePath);
 	    Log.d(Constants.LOGTAG, " " + GeatteEdit.CLASSTAG + " update interest for id = " + mRowId);
 	}
     }

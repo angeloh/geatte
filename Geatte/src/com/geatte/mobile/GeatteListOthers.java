@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 /**
  * "List" of friends geattes screen
@@ -31,7 +30,7 @@ public class GeatteListOthers extends ListActivity {
     //private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
     //private static final int NUM_RESULTS_PER_PAGE = 8;
 
-    private TextView empty;
+    //private TextView empty;
     private ProgressDialog progressDialog;
     private GeatteDBAdapter dbHelper;
 
