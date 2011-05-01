@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.geatte.mobile;
+package com.geatte.android.app;
 
 public final class R {
     public static final class attr {
@@ -15,35 +15,39 @@ public final class R {
         public static final int android_normal=0x7f020001;
         public static final int android_pressed=0x7f020002;
         public static final int custom_button=0x7f020003;
-        public static final int ic_tab_grey=0x7f020004;
-        public static final int ic_tab_white=0x7f020005;
-        public static final int icon=0x7f020006;
-        public static final int tab_buttons=0x7f020007;
+        public static final int ic_btn_next=0x7f020004;
+        public static final int ic_tab_grey=0x7f020005;
+        public static final int ic_tab_white=0x7f020006;
+        public static final int icon=0x7f020007;
+        public static final int tab_buttons=0x7f020008;
     }
     public static final class id {
+        public static final int app_register_btn=0x7f060002;
+        public static final int app_register_prog_bar=0x7f060003;
+        public static final int app_register_prog_text=0x7f060004;
         public static final int app_snap_button=0x7f060001;
         public static final int app_top_label=0x7f060000;
-        public static final int button=0x7f060012;
-        public static final int checkbox=0x7f060014;
-        public static final int desc=0x7f06000a;
-        public static final int desc_detail=0x7f060005;
-        public static final int desc_label_detail=0x7f060004;
-        public static final int edit_desc_label=0x7f060009;
-        public static final int edit_img=0x7f06000b;
-        public static final int edit_title_label=0x7f060007;
-        public static final int edit_top_label=0x7f060006;
-        public static final int edittext=0x7f060013;
-        public static final int empty=0x7f06000d;
-        public static final int image_detail=0x7f060002;
-        public static final int my_geatte_img=0x7f06000f;
-        public static final int my_geatte_row=0x7f06000e;
-        public static final int my_geatte_title=0x7f060010;
-        public static final int my_geatte_vote=0x7f060011;
-        public static final int ratingbar=0x7f060016;
-        public static final int send_button=0x7f06000c;
-        public static final int title=0x7f060008;
-        public static final int title_detail=0x7f060003;
-        public static final int togglebutton=0x7f060015;
+        public static final int button=0x7f060015;
+        public static final int checkbox=0x7f060017;
+        public static final int desc=0x7f06000d;
+        public static final int desc_detail=0x7f060008;
+        public static final int desc_label_detail=0x7f060007;
+        public static final int edit_desc_label=0x7f06000c;
+        public static final int edit_img=0x7f06000e;
+        public static final int edit_title_label=0x7f06000a;
+        public static final int edit_top_label=0x7f060009;
+        public static final int edittext=0x7f060016;
+        public static final int empty=0x7f060010;
+        public static final int image_detail=0x7f060005;
+        public static final int my_geatte_img=0x7f060012;
+        public static final int my_geatte_row=0x7f060011;
+        public static final int my_geatte_title=0x7f060013;
+        public static final int my_geatte_vote=0x7f060014;
+        public static final int ratingbar=0x7f060019;
+        public static final int send_button=0x7f06000f;
+        public static final int title=0x7f06000b;
+        public static final int title_detail=0x7f060006;
+        public static final int togglebutton=0x7f060018;
     }
     public static final class layout {
         public static final int geatte_app=0x7f030000;
@@ -67,6 +71,11 @@ public final class R {
         public static final int menu_delete=0x7f040004;
         public static final int menu_get_next_page=0x7f040006;
         public static final int no_geattes=0x7f040003;
+        public static final int register=0x7f040010;
+        public static final int register_progress_text_conn=0x7f040011;
+        public static final int register_progress_text_error=0x7f040014;
+        public static final int register_progress_text_reg=0x7f040012;
+        public static final int register_progress_text_unreg=0x7f040013;
         public static final int send_geatte_button_label=0x7f04000f;
         public static final int snap_geatte_button_label=0x7f040000;
         public static final int take_picture=0x7f040001;

@@ -1,4 +1,6 @@
-package com.geatte.mobile;
+package com.geatte.android.app;
+
+import com.geatte.android.app.R;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -51,7 +53,7 @@ public class GeatteListOthers extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.v(Constants.LOGTAG, " " + GeatteListOthers.CLASSTAG + " onCreate");
+	Log.v(Config.LOGTAG, " " + GeatteListOthers.CLASSTAG + " onCreate");
 
 	this.setContentView(R.layout.geatte_list);
 

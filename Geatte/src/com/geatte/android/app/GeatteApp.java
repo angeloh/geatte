@@ -1,13 +1,22 @@
-package com.geatte.mobile;
+package com.geatte.android.app;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import com.geatte.android.c2dm.C2DMessaging;
+import com.geatte.android.c2dm.DeviceRegistrar;
+import com.geatte.android.app.R;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +25,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class GeatteApp extends Activity {
 
@@ -37,6 +48,15 @@ public class GeatteApp extends Activity {
 		startActivityForResult(intent, ACTIVITY_SNAP);
 	    }
 	});
+
+	Button nextButton = (Button) findViewById(R.id.app_register_btn);
+	nextButton.setOnClickListener(new OnClickListener() {
+	    public void onClick(View v) {
+		setRegisterView();
+	    }
+	});
+
+	registerReceiver(mUpdateUIReceiver, new IntentFilter(Config.INTENT_ACTION_UPDATE_UI));
 
 	/*	        // custom button
 	        final Button button = (Button) findViewById(R.id.button);
@@ -99,6 +119,97 @@ public class GeatteApp extends Activity {
     }
 
     @Override
+    public void onDestroy() {
+	unregisterReceiver(mUpdateUIReceiver);
+	super.onDestroy();
+    }
+
+    private final BroadcastReceiver mUpdateUIReceiver = new BroadcastReceiver() {
+	@Override
+	public void onReceive(Context context, Intent intent) {
+	    handleConnectingUpdate(intent.getIntExtra(
+		    DeviceRegistrar.STATUS_EXTRA, DeviceRegistrar.ERROR_STATUS));
+	}
+    };
+
+    private void handleConnectingUpdate(int status) {
+	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
+	progressBar.setVisibility(ProgressBar.INVISIBLE);
+
+	TextView progTextView = (TextView) findViewById(R.id.app_register_prog_text);
+	if (status == DeviceRegistrar.REGISTERED_STATUS) {
+	    progTextView.setText(R.string.register_progress_text_reg);
+	} else if (status == DeviceRegistrar.UNREGISTERED_STATUS) {
+	    progTextView.setText(R.string.register_progress_text_unreg);
+	} else {
+	    progTextView.setText(R.string.register_progress_text_error);
+
+	}
+    }
+
+    private void setRegisterView() {
+	final Button nextButton = (Button) findViewById(R.id.app_register_btn);
+
+	// Display accounts
+	final String accounts[] = getGoogleAccounts();
+	if (accounts.length == 0) {
+	    //	    TextView promptText = (TextView) findViewById(R.id.select_text);
+	    //	    promptText.setText(R.string.no_accounts);
+	    //	    TextView nextText = (TextView) findViewById(R.id.click_next_text);
+	    //	    nextText.setVisibility(TextView.INVISIBLE);
+	    nextButton.setEnabled(false);
+	    Log.d(Config.LOGTAG_C2DM, " " + GeatteApp.CLASSTAG + " No google accounts available!!");
+
+	} else {
+	    //	    ListView listView = (ListView) findViewById(R.id.select_account);
+	    //	    listView.setAdapter(new ArrayAdapter<String>(this,
+	    //		    R.layout.account, accounts));
+	    //	    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	    //	    listView.setItemChecked(mAccountSelectedPosition, true);
+	    Log.d(Config.LOGTAG_C2DM, " " + GeatteApp.CLASSTAG + " google account available : " + accounts[0]);
+
+	    nextButton.setOnClickListener(new OnClickListener() {
+		public void onClick(View v) {
+		    register((String) accounts[0]);
+		}
+	    });
+	}
+
+    }
+
+    private String[] getGoogleAccounts() {
+	ArrayList<String> accountNames = new ArrayList<String>();
+	Account[] accounts = AccountManager.get(this).getAccounts();
+	for (Account account : accounts) {
+	    if (account.type.equals("com.google")) {
+		accountNames.add(account.name);
+	    }
+	}
+
+	String[] result = new String[accountNames.size()];
+	accountNames.toArray(result);
+	return result;
+    }
+
+    private void register(String account) {
+	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
+	progressBar.setVisibility(ProgressBar.VISIBLE);
+	TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
+	textView.setVisibility(ProgressBar.VISIBLE);
+
+	//	Context context = getApplicationContext();
+	//	final SharedPreferences prefs = context.getSharedPreferences(
+	//		Config.PREFERENCE_KEY,
+	//		Context.MODE_PRIVATE);
+	//
+	//	SharedPreferences.Editor editor = prefs.edit();
+	//	editor.putString("accountName", account);
+	//	editor.commit();
+
+	C2DMessaging.register(this, Config.C2DM_SENDER);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	if (requestCode== 0 && resultCode == Activity.RESULT_OK){
 	    Bitmap x = (Bitmap) data.getExtras().get("data");
@@ -152,7 +263,7 @@ public class GeatteApp extends Activity {
 		    .getName());
 	    return file.getAbsolutePath();
 	} catch (Exception e) {
-	    Log.w(Constants.LOGTAG, " " + GeatteApp.CLASSTAG + " Exception :" , e);
+	    Log.w(Config.LOGTAG, " " + GeatteApp.CLASSTAG + " Exception :" , e);
 	}
 	return null;
     }

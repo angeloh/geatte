@@ -17,5 +17,47 @@
         android:layout_marginLeft="10px" android:layout_marginBottom="5px"
         android:layout_below="@id/app_top_label"
         android:text="@string/snap_geatte_button_label" />
+    
+    <Button android:id="@+id/app_register_btn"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"      
+        android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+        android:layout_below="@id/app_snap_button"
+        android:text="@string/register" />
+    
+    <!--   
+    <Button
+        android:id="@+id/app_register_btn"
+        android:text="@string/register"
+        android:layout_marginTop="5px"
+        android:layout_marginLeft="10px" 
+        android:layout_marginBottom="5px"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_snap_button"
+        android:drawableRight="@drawable/ic_btn_next"/>
+    -->
+    <ProgressBar android:id="@+id/app_register_prog_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_register_btn"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="0dip"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:visibility="invisible"/>
+        
+    <TextView
+        android:id="@+id/app_register_prog_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register_progress_text_conn"
+        android:textColor="#A0A0A0"
+        android:layout_below="@id/app_register_prog_bar"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="0dip"
+        android:layout_marginBottom="10dip"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.geatte.mobile;
+package com.geatte.android.app;
 
 import android.content.ContentValues;
 import android.content.Context;

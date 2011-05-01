@@ -1,4 +1,6 @@
-package com.geatte.mobile;
+package com.geatte.android.app;
+
+import com.geatte.android.app.R;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -115,11 +117,11 @@ public class GeatteEdit extends Activity {
 		mRowId = id;
 	    }
 	    mDbHelper.insertImage(mRowId, imagePath);
-	    Log.d(Constants.LOGTAG, " " + GeatteEdit.CLASSTAG + " create new interest for id = " + mRowId);
+	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " create new interest for id = " + mRowId);
 	} else {
 	    mDbHelper.updateInterest(mRowId, title, desc);
 	    mDbHelper.updateImage(mRowId, imagePath);
-	    Log.d(Constants.LOGTAG, " " + GeatteEdit.CLASSTAG + " update interest for id = " + mRowId);
+	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " update interest for id = " + mRowId);
 	}
     }
 

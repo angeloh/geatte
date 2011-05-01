@@ -20,4 +20,10 @@
     <string name="comment_label">Comment:</string>
     
     <string name="send_geatte_button_label">Send Geatte</string>
+    
+    <string name="register">Register</string>
+    <string name="register_progress_text_conn">Connecting...</string>
+    <string name="register_progress_text_reg">Registered</string>
+    <string name="register_progress_text_unreg">Unregistered</string>
+    <string name="register_progress_text_error">Error to register</string>
 </resources>

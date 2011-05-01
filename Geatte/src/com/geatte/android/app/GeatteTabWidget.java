@@ -1,4 +1,6 @@
-package com.geatte.mobile;
+package com.geatte.android.app;
+
+import com.geatte.android.app.R;
 
 import android.app.TabActivity;
 import android.content.Intent;

@@ -1,4 +1,6 @@
-package com.geatte.mobile;
+package com.geatte.android.app;
+
+import com.geatte.android.app.R;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -90,7 +92,7 @@ public class GeatteDetail extends Activity {
     @Override
     protected void onResume() {
 	super.onResume();
-	Log.v(Constants.LOGTAG, " " + GeatteDetail.CLASSTAG + " onResume");
+	Log.v(Config.LOGTAG, " " + GeatteDetail.CLASSTAG + " onResume");
 	populateFields();
     }
 
