@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/xmlschema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemalocation="http://java.sun.com/xml/ns/javaee
+  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>greetServlet</servlet-name>
+		<servlet-class>com.geatte.app.server.GreetingServiceImpl
+		</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>RegisterServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.RegisterServlet
+		</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>UnregisterServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.UnregisterServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>SendServlet</servlet-name>
+		<servlet-class>com.geatte.app.server.SendServlet
+		</servlet-class>
+	</servlet>
+	
+		<servlet>
+		<servlet-name>AuthServlet</servlet-name>
+		<servlet-class>com.geatte.app.server.AuthServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>RegisterServlet</servlet-name>
+		<url-pattern>/register</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>UnregisterServlet</servlet-name>
+		<url-pattern>/unregister</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SendServlet</servlet-name>
+		<url-pattern>/send</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AuthServlet</servlet-name>
+		<url-pattern>/signin</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AuthServlet</servlet-name>
+		<url-pattern>/signout</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>greetServlet</servlet-name>
+		<url-pattern>/geatteserver/greet</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>GeatteServer.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>
