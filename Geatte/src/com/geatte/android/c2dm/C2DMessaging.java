@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 
 /**
  * Utilities for device registration.
@@ -21,7 +20,7 @@ public class C2DMessaging {
     public static final String LAST_REGISTRATION_CHANGE = "last_registration_change";
     public static final String BACKOFF = "backoff";
     public static final String GSF_PACKAGE = "com.google.android.gsf";
-
+    //public static final String GSF_PACKAGE = "com.geatte.android.app";
 
     public static final long DEFAULT_BACKOFF = 300;
 
@@ -60,7 +59,8 @@ public class C2DMessaging {
 	final SharedPreferences prefs = context.getSharedPreferences(
 		Config.PREFERENCE_KEY,
 		Context.MODE_PRIVATE);
-	String registrationId = prefs.getString("dm_registration", "");
+
+	String registrationId = prefs.getString(Config.PREF_REGISTRATION_ID, null);
 	return registrationId;
     }
 
@@ -71,43 +71,42 @@ public class C2DMessaging {
 	return prefs.getLong(LAST_REGISTRATION_CHANGE, 0);
     }
 
-    static long getBackoff(Context context) {
-	final SharedPreferences prefs = context.getSharedPreferences(
-		Config.PREFERENCE_KEY,
-		Context.MODE_PRIVATE);
-	return prefs.getLong(BACKOFF, DEFAULT_BACKOFF);
-    }
+    //    static long getBackoff(Context context) {
+    //	final SharedPreferences prefs = context.getSharedPreferences(
+    //		Config.PREFERENCE_KEY,
+    //		Context.MODE_PRIVATE);
+    //	return prefs.getLong(BACKOFF, DEFAULT_BACKOFF);
+    //    }
 
-    static void setBackoff(Context context, long backoff) {
-	final SharedPreferences prefs = context.getSharedPreferences(
-		Config.PREFERENCE_KEY,
-		Context.MODE_PRIVATE);
-	Editor editor = prefs.edit();
-	editor.putLong(BACKOFF, backoff);
-	editor.commit();
-
-    }
-
-    // package
-    static void clearRegistrationId(Context context) {
-	final SharedPreferences prefs = context.getSharedPreferences(
-		Config.PREFERENCE_KEY,
-		Context.MODE_PRIVATE);
-	Editor editor = prefs.edit();
-	editor.putString("dm_registration", "");
-	editor.putLong(LAST_REGISTRATION_CHANGE, System.currentTimeMillis());
-	editor.commit();
-
-    }
+    //    static void setBackoff(Context context, long backoff) {
+    //	final SharedPreferences prefs = context.getSharedPreferences(
+    //		Config.PREFERENCE_KEY,
+    //		Context.MODE_PRIVATE);
+    //	Editor editor = prefs.edit();
+    //	editor.putLong(BACKOFF, backoff);
+    //	editor.commit();
+    //    }
 
     // package
-    static void setRegistrationId(Context context, String registrationId) {
-	final SharedPreferences prefs = context.getSharedPreferences(
-		Config.PREFERENCE_KEY,
-		Context.MODE_PRIVATE);
-	Editor editor = prefs.edit();
-	editor.putString("dm_registration", registrationId);
-	editor.commit();
+    //    static void clearRegistrationId(Context context) {
+    //	final SharedPreferences prefs = context.getSharedPreferences(
+    //		Config.PREFERENCE_KEY,
+    //		Context.MODE_PRIVATE);
+    //	Editor editor = prefs.edit();
+    //	editor.putString("dm_registration", "");
+    //	editor.putLong(LAST_REGISTRATION_CHANGE, System.currentTimeMillis());
+    //	editor.commit();
+    //
+    //    }
 
-    }
+    // package
+    //    static void setRegistrationId(Context context, String registrationId) {
+    //	final SharedPreferences prefs = context.getSharedPreferences(
+    //		Config.PREFERENCE_KEY,
+    //		Context.MODE_PRIVATE);
+    //	Editor editor = prefs.edit();
+    //	editor.putString("dm_registration", registrationId);
+    //	editor.commit();
+    //
+    //    }
 }

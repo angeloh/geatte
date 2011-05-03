@@ -17,10 +17,9 @@ import android.util.Log;
  * strings used in the protocol.
  */
 public abstract class C2DMBaseReceiver extends IntentService {
-    private static final String C2DM_RETRY = "com.google.android.c2dm.intent.RETRY";
-
-    public static final String REGISTRATION_CALLBACK_INTENT = "com.google.android.c2dm.intent.REGISTRATION";
-    private static final String C2DM_INTENT = "com.google.android.c2dm.intent.RECEIVE";
+    public static final String C2DM_RETRY_ACTION = "com.google.android.c2dm.intent.RETRY";
+    public static final String C2DM_REGISTRATION_ACTION = "com.google.android.c2dm.intent.REGISTRATION";
+    public static final String C2DM_RECEIVE_ACTION = "com.google.android.c2dm.intent.RECEIVE";
 
     // Extras in the registration callback intents.
     public static final String EXTRA_UNREGISTERED = "unregistered";
@@ -82,11 +81,14 @@ public abstract class C2DMBaseReceiver extends IntentService {
     public final void onHandleIntent(Intent intent) {
 	try {
 	    Context context = getApplicationContext();
-	    if (intent.getAction().equals(REGISTRATION_CALLBACK_INTENT)) {
+	    if (intent.getAction().equals(C2DM_REGISTRATION_ACTION)) {
+		Log.d(Config.LOGTAG_C2DM, "Registration CALLBACK STARTED!!");
 		handleRegistration(context, intent);
-	    } else if (intent.getAction().equals(C2DM_INTENT)) {
+	    } else if (intent.getAction().equals(C2DM_RECEIVE_ACTION)) {
+		Log.d(Config.LOGTAG_C2DM, "Got MESSAGE!!");
 		onMessage(context, intent);
-	    } else if (intent.getAction().equals(C2DM_RETRY)) {
+	    } else if (intent.getAction().equals(C2DM_RETRY_ACTION)) {
+		Log.d(Config.LOGTAG_C2DM, "Registration RETRY STARTED!!");
 		C2DMessaging.register(context, senderId);
 	    }
 	} finally {
@@ -110,10 +112,8 @@ public abstract class C2DMBaseReceiver extends IntentService {
     public static void runIntentInService(Context context, Intent intent) {
 	if (mWakeLock == null) {
 	    // This is called from BroadcastReceiver, there is no init.
-	    PowerManager pm =
-		(PowerManager) context.getSystemService(Context.POWER_SERVICE);
-	    mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-		    WAKELOCK_KEY);
+	    PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+	    mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_KEY);
 	}
 	mWakeLock.acquire();
 
@@ -139,34 +139,57 @@ public abstract class C2DMBaseReceiver extends IntentService {
 
 	if (removed != null) {
 	    // Remember we are unregistered
-	    C2DMessaging.clearRegistrationId(context);
+	    //C2DMessaging.clearRegistrationId(context);
 	    onUnregistered(context);
 	    return;
 	} else if (error != null) {
 	    // we are not registered, can try again
-	    C2DMessaging.clearRegistrationId(context);
+	    //C2DMessaging.clearRegistrationId(context);
 	    // Registration failed
 	    Log.e(Config.LOGTAG_C2DM, "Registration error " + error);
 	    onError(context, error);
 	    if ("SERVICE_NOT_AVAILABLE".equals(error)) {
-		//long backoffTimeMs = C2DMessaging.getBackoff(context);
+		//		long backoffTimeMs = C2DMessaging.getBackoff(context);
 		long backoffTimeMs = C2DMessaging.DEFAULT_BACKOFF;
 
 		Log.d(Config.LOGTAG_C2DM, "Scheduling registration retry, backoff = " + backoffTimeMs);
-		Intent retryIntent = new Intent(C2DM_RETRY);
+		Intent retryIntent = new Intent(C2DM_RETRY_ACTION);
 		PendingIntent retryPIntent = PendingIntent.getBroadcast(context, 0 /* requestCode */, retryIntent, 0 /* flags */);
 
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.ELAPSED_REALTIME, backoffTimeMs, retryPIntent);
 
+
+		//		new Thread(new Runnable() {
+		//		    public void run() {
+		//			Intent retryIntent = new Intent(C2DM_RETRY_ACTION);
+		//			Log.w(Config.LOGTAG_C2DM, "Start a RETRY intent");
+		//			context.sendBroadcast(retryIntent);
+		//			//			context.startService(retryIntent);
+		//		    }
+		//		}).start();
+
+		//Log.w(Config.LOGTAG_C2DM, "Start a RETRY intent");
+		//C2DMessaging.register(this, Config.C2DM_SENDER);
+
 		// Next retry should wait longer.
 		//backoffTimeMs *= 2;
-		C2DMessaging.setBackoff(context, backoffTimeMs);
+		//C2DMessaging.setBackoff(context, backoffTimeMs);
+	    }else if(error == "ACCOUNT_MISSING"){
+		Log.d(Config.LOGTAG_C2DM, "ACCOUNT_MISSING");
+	    }else if(error == "AUTHENTICATION_FAILED"){
+		Log.d(Config.LOGTAG_C2DM, "AUTHENTICATION_FAILED");
+	    }else if(error == "TOO_MANY_REGISTRATIONS"){
+		Log.d(Config.LOGTAG_C2DM, "TOO_MANY_REGISTRATIONS");
+	    }else if(error == "INVALID_SENDER"){
+		Log.d(Config.LOGTAG_C2DM, "INVALID_SENDER");
+	    }else if(error == "PHONE_REGISTRATION_ERROR"){
+		Log.d(Config.LOGTAG_C2DM, "PHONE_REGISTRATION_ERROR");
 	    }
 	} else {
 	    try {
 		onRegistered(context, registrationId);
-		C2DMessaging.setRegistrationId(context, registrationId);
+		//C2DMessaging.setRegistrationId(context, registrationId);
 	    } catch (IOException ex) {
 		Log.e(Config.LOGTAG_C2DM, "Registration error " + ex.getMessage());
 	    }

@@ -1,6 +1,7 @@
 package com.geatte.android.c2dm;
 
 import com.geatte.android.app.Config;
+import com.geatte.android.app.DeviceRegistrar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,6 +41,15 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     };
 
     @Override
+    public void onUnregistered(Context context) {
+	final SharedPreferences prefs = context.getSharedPreferences(
+		Config.PREFERENCE_KEY,
+		Context.MODE_PRIVATE);
+	String registrationId = prefs.getString(Config.PREF_REGISTRATION_ID, null);
+	DeviceRegistrar.unregisterWithServer(context, registrationId);
+    }
+
+    @Override
     public void onError(Context context, String errorId) {
 	final SharedPreferences prefs = context.getSharedPreferences(
 		Config.PREFERENCE_KEY,
@@ -60,14 +70,14 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    String message = extras.getString(Config.C2DM_MESSAGE_EXTRA);
 	    System.out.println(extras.get("payload"));
 	    if (accountName != null) {
-		if (Log.isLoggable(Config.LOGTAG_C2DM, Log.DEBUG)) {
-		    Log.d(Config.LOGTAG_C2DM, "Messaging request received for account " + accountName);
-		}
+		//if (Log.isLoggable(Config.LOGTAG_C2DM, Log.DEBUG)) {
+		Log.d(Config.LOGTAG_C2DM, "Messaging request received for account " + accountName);
+		//}
 	    }
 	    if (message != null) {
-		if (Log.isLoggable(Config.LOGTAG_C2DM, Log.DEBUG)) {
-		    Log.d(Config.LOGTAG_C2DM, "Messaging request received for message " + message);
-		}
+		//if (Log.isLoggable(Config.LOGTAG_C2DM, Log.DEBUG)) {
+		Log.d(Config.LOGTAG_C2DM, "Messaging request received for message " + message);
+		//}
 	    }
 	    // Now do something smart based on the information
 	}

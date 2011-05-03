@@ -1,26 +1,18 @@
-/*
- * Copyright 2010 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.geatte.android.c2dm;
+package com.geatte.android.app;
 
-import com.geatte.android.app.Config;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.provider.Settings.Secure;
 import android.util.Log;
 
 /**
@@ -33,8 +25,8 @@ public class DeviceRegistrar {
     public static final int UNREGISTERED_STATUS = 3;
     public static final int ERROR_STATUS = 4;
 
-    //private static final String REGISTER_PATH = "/register";
-    //    private static final String UNREGISTER_PATH = "/unregister";
+    private static final String REGISTER_PATH = "/register";
+    private static final String UNREGISTER_PATH = "/unregister";
 
     /*public static void registerWithServer(final Context context,
 	    final String deviceRegistrationID) {
@@ -77,13 +69,27 @@ public class DeviceRegistrar {
 		Intent updateUIIntent = new Intent(Config.INTENT_ACTION_UPDATE_UI);
 		try {
 		    if (registrationId != null && registrationId.length() > 0) {
-			final SharedPreferences prefs = context.getSharedPreferences(
-				Config.PREFERENCE_KEY,
-				Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString(Config.PREF_REGISTRATION_ID, registrationId);
-			editor.commit();
-			updateUIIntent.putExtra(STATUS_EXTRA, REGISTERED_STATUS);
+			HttpResponse res = makeRequest(context, registrationId, REGISTER_PATH);
+			if (res.getStatusLine().getStatusCode() == 200) {
+			    final SharedPreferences prefs = context.getSharedPreferences(
+				    Config.PREFERENCE_KEY,
+				    Context.MODE_PRIVATE);
+			    SharedPreferences.Editor editor = prefs.edit();
+			    editor.putString(Config.PREF_REGISTRATION_ID, registrationId);
+			    editor.commit();
+			    updateUIIntent.putExtra(STATUS_EXTRA, REGISTERED_STATUS);
+			    Log.d(Config.LOGTAG_C2DM, "Registration OK " +
+				    String.valueOf(res.getStatusLine().getStatusCode()));
+			} else if (res.getStatusLine().getStatusCode() == 400) {
+			    updateUIIntent.putExtra(STATUS_EXTRA, AUTH_ERROR_STATUS);
+			    Log.w(Config.LOGTAG_C2DM, "Registration error " +
+				    String.valueOf(res.getStatusLine().getStatusCode()));
+			} else {
+			    Log.w(Config.LOGTAG_C2DM, "Registration error " +
+				    String.valueOf(res.getStatusLine().getStatusCode()));
+			    updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
+			}
+
 		    } else {
 			Log.w(Config.LOGTAG_C2DM, "Registration error, null registrationID");
 			updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
@@ -105,13 +111,22 @@ public class DeviceRegistrar {
 		Intent updateUIIntent = new Intent(Config.INTENT_ACTION_UPDATE_UI);
 		try {
 		    if (registrationId != null && registrationId.length() > 0) {
-			final SharedPreferences prefs = context.getSharedPreferences(
-				Config.PREFERENCE_KEY,
-				Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.remove(Config.PREF_REGISTRATION_ID);
-			editor.commit();
-			updateUIIntent.putExtra(STATUS_EXTRA, UNREGISTERED_STATUS);
+			HttpResponse res = makeRequest(context, registrationId, UNREGISTER_PATH);
+			if (res.getStatusLine().getStatusCode() == 200) {
+			    final SharedPreferences prefs = context.getSharedPreferences(
+				    Config.PREFERENCE_KEY,
+				    Context.MODE_PRIVATE);
+			    SharedPreferences.Editor editor = prefs.edit();
+			    editor.remove(Config.PREF_REGISTRATION_ID);
+			    editor.commit();
+			    updateUIIntent.putExtra(STATUS_EXTRA, UNREGISTERED_STATUS);
+			    Log.d(Config.LOGTAG_C2DM, "Unregistration OK " +
+				    String.valueOf(res.getStatusLine().getStatusCode()));
+			} else {
+			    Log.w(Config.LOGTAG_C2DM, "Unregistration error " +
+				    String.valueOf(res.getStatusLine().getStatusCode()));
+			    updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
+			}
 		    } else {
 			Log.w(Config.LOGTAG_C2DM, "Registration error, null registrationID");
 			updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
@@ -157,12 +172,12 @@ public class DeviceRegistrar {
 	}).start();
     }*/
 
-    /*private static HttpResponse makeRequest(Context context, String deviceRegistrationID,
+    private static HttpResponse makeRequest(Context context, String deviceRegistrationID,
 	    String urlPath) throws Exception {
 	final SharedPreferences prefs = context.getSharedPreferences(
 		Config.PREFERENCE_KEY,
 		Context.MODE_PRIVATE);
-	String accountName = prefs.getString("accountName", null);
+	String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
 
 	List<NameValuePair> params = new ArrayList<NameValuePair>();
 	params.add(new BasicNameValuePair("devregid", deviceRegistrationID));
@@ -176,8 +191,10 @@ public class DeviceRegistrar {
 	params.add(new BasicNameValuePair("deviceName", isTablet(context) ? "Tablet" : "Phone"));
 
 	AppEngineClient client = new AppEngineClient(context, accountName);
+	//return client.makeRequestNoAuth(urlPath, params);
 	return client.makeRequest(urlPath, params);
-    }*/
+
+    }
 
     static boolean isTablet (Context context) {
 	// TODO: This hacky stuff goes away when we allow users to target devices

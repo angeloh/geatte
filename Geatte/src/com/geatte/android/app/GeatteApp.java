@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.geatte.android.c2dm.C2DMessaging;
-import com.geatte.android.c2dm.DeviceRegistrar;
 import com.geatte.android.app.R;
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -17,6 +16,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,6 +33,9 @@ public class GeatteApp extends Activity {
     private static final String CLASSTAG = GeatteApp.class.getSimpleName();
     private static final int ACTIVITY_SNAP = 0;
     private static final int ACTIVITY_CREATE = 1;
+
+    private boolean mPendingAuth = false;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class GeatteApp extends Activity {
 	});
 
 	registerReceiver(mUpdateUIReceiver, new IntentFilter(Config.INTENT_ACTION_UPDATE_UI));
+	registerReceiver(mAuthPermissionReceiver, new IntentFilter(Config.INTENT_ACTION_AUTH_PERMISSION));
 
 	/*	        // custom button
 	        final Button button = (Button) findViewById(R.id.button);
@@ -119,6 +123,20 @@ public class GeatteApp extends Activity {
     }
 
     @Override
+    protected void onResume() {
+	super.onResume();
+	if (mPendingAuth) {
+	    mPendingAuth = false;
+	    String regId = C2DMessaging.getRegistrationId(this);
+	    if (regId != null && !regId.equals("")) {
+		DeviceRegistrar.registerWithServer(this, regId);
+	    } else {
+		C2DMessaging.register(this, Config.C2DM_SENDER);
+	    }
+	}
+    }
+
+    @Override
     public void onDestroy() {
 	unregisterReceiver(mUpdateUIReceiver);
 	super.onDestroy();
@@ -146,6 +164,20 @@ public class GeatteApp extends Activity {
 
 	}
     }
+
+    private final BroadcastReceiver mAuthPermissionReceiver = new BroadcastReceiver() {
+	@Override
+	public void onReceive(Context context, Intent intent) {
+	    Bundle extras = intent.getBundleExtra("AccountManagerBundle");
+	    if (extras != null) {
+		Intent authIntent = (Intent) extras.get(AccountManager.KEY_INTENT);
+		if (authIntent != null) {
+		    mPendingAuth = true;
+		    startActivity(authIntent);
+		}
+	    }
+	}
+    };
 
     private void setRegisterView() {
 	final Button nextButton = (Button) findViewById(R.id.app_register_btn);
@@ -191,20 +223,20 @@ public class GeatteApp extends Activity {
 	return result;
     }
 
-    private void register(String account) {
+    private void register(String userEmail) {
 	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
 	progressBar.setVisibility(ProgressBar.VISIBLE);
 	TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
 	textView.setVisibility(ProgressBar.VISIBLE);
 
-	//	Context context = getApplicationContext();
-	//	final SharedPreferences prefs = context.getSharedPreferences(
-	//		Config.PREFERENCE_KEY,
-	//		Context.MODE_PRIVATE);
-	//
-	//	SharedPreferences.Editor editor = prefs.edit();
-	//	editor.putString("accountName", account);
-	//	editor.commit();
+	Context context = getApplicationContext();
+	final SharedPreferences prefs = context.getSharedPreferences(
+		Config.PREFERENCE_KEY,
+		Context.MODE_PRIVATE);
+
+	SharedPreferences.Editor editor = prefs.edit();
+	editor.putString(Config.PREF_USER_EMAIL, userEmail);
+	editor.commit();
 
 	C2DMessaging.register(this, Config.C2DM_SENDER);
     }

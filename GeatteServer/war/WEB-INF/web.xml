@@ -25,7 +25,7 @@
 			com.geatte.app.server.UnregisterServlet
 		</servlet-class>
 	</servlet>
-	
+	<!-- 
 	<servlet>
 		<servlet-name>SendServlet</servlet-name>
 		<servlet-class>com.geatte.app.server.SendServlet
@@ -37,7 +37,7 @@
 		<servlet-class>com.geatte.app.server.AuthServlet
 		</servlet-class>
 	</servlet>
-	
+	-->
 	<servlet-mapping>
 		<servlet-name>RegisterServlet</servlet-name>
 		<url-pattern>/register</url-pattern>
@@ -47,7 +47,7 @@
 		<servlet-name>UnregisterServlet</servlet-name>
 		<url-pattern>/unregister</url-pattern>
 	</servlet-mapping>
-	
+	<!-- 
 	<servlet-mapping>
 		<servlet-name>SendServlet</servlet-name>
 		<url-pattern>/send</url-pattern>
@@ -62,7 +62,7 @@
 		<servlet-name>AuthServlet</servlet-name>
 		<url-pattern>/signout</url-pattern>
 	</servlet-mapping>
-
+    -->
 	<servlet-mapping>
 		<servlet-name>greetServlet</servlet-name>
 		<url-pattern>/geatteserver/greet</url-pattern>

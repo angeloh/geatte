@@ -1,2 +1,3 @@
 # Module geatteserver
 # RPC service class, partial path of RPC policy file
+com.geatte.app.client.GreetingService, 7650088E7D0FA97239C45C47059F7235.gwt.rpc

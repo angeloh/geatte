@@ -4,7 +4,6 @@
 	android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="8" />
 
-
 	<!--
 		Only this application can receive the messages and registration result
 	-->
@@ -68,7 +67,7 @@
 			android:permission="com.google.android.c2dm.permission.SEND">
 			<!-- Receive the actual message -->
 			<intent-filter>
-				<action android:name="com.google.android.c2dm.permission.RECEIVE" />
+				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
 				<category android:name="com.geatte.android.app" />
 			</intent-filter>
 			<!-- Receive the registration id -->
