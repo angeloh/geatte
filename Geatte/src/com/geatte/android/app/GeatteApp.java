@@ -168,7 +168,7 @@ public class GeatteApp extends Activity {
     private final BroadcastReceiver mAuthPermissionReceiver = new BroadcastReceiver() {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-	    Bundle extras = intent.getBundleExtra("AccountManagerBundle");
+	    Bundle extras = intent.getBundleExtra(Config.EXTRA_KEY_ACCOUNT_BUNDLE);
 	    if (extras != null) {
 		Intent authIntent = (Intent) extras.get(AccountManager.KEY_INTENT);
 		if (authIntent != null) {

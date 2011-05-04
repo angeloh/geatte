@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.oauth.OAuthService;
-import com.google.appengine.api.oauth.OAuthServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -40,6 +38,20 @@ public class RequestInfo {
     private ServletContext ctx;
     public String deviceRegistrationID;
 
+    /**
+     * Authenticate using the req, fetch devices.
+     */
+    private RequestInfo() {
+    }
+
+    public RequestInfo(String userN, ServletContext ctx) {
+	this.userName = userN;
+	this.ctx = ctx;
+	if (ctx != null) {
+	    initDevices(ctx);
+	}
+    }
+
     // Request parameters - transitioning to JSON, but need to support existing
     // code.
     Map<String, String[]> parameterMap;
@@ -55,6 +67,7 @@ public class RequestInfo {
      * @return null if authentication fails.
      * @throws IOException
      */
+    @SuppressWarnings("unchecked")
     public static RequestInfo processRequest(HttpServletRequest req, HttpServletResponse resp, ServletContext ctx)
     throws IOException {
 
@@ -62,30 +75,32 @@ public class RequestInfo {
 	if (req.getHeader("X-Same-Domain") == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + " (Missing X-Same-Domain header)");
-	    log.warning("Missing X-Same-Domain");
+	    log.warning("RequestInfo:processRequest() : Missing X-Same-Domain");
 	    return null;
 	}
 
 	User user = null;
-	RequestInfo ri = new RequestInfo();
-	ri.ctx = ctx;
-	OAuthService oauthService = OAuthServiceFactory.getOAuthService();
-	try {
-	    user = oauthService.getCurrentUser();
-	    if (user != null) {
-		ri.userName = user.getEmail();
-	    }
-	} catch (Throwable t) {
-	    log.log(Level.SEVERE, "Oauth error ", t);
-	    user = null;
-	}
+	RequestInfo reqInfo = new RequestInfo();
+	reqInfo.ctx = ctx;
+	//	OAuthService oauthService = OAuthServiceFactory.getOAuthService();
+	//	try {
+	//	    user = oauthService.getCurrentUser();
+	//	    if (user != null) {
+	//		ri.userName = user.getEmail();
+	//	    }
+	//	} catch (Throwable t) {
+	//	    log.log(Level.SEVERE, "Oauth error ", t);
+	//	    user = null;
+	//	}
 
 	if (user == null) {
+	    log.info("RequestInfo:processRequest() : user is null, try ClientLogin");
 	    // Try ClientLogin
 	    UserService userService = UserServiceFactory.getUserService();
 	    user = userService.getCurrentUser();
 	    if (user != null) {
-		ri.userName = user.getEmail();
+		reqInfo.userName = user.getEmail();
+		log.info("RequestInfo:processRequest() : get user email thru ClientLogin :" + reqInfo.userName);
 	    }
 	}
 
@@ -102,35 +117,40 @@ public class RequestInfo {
 		body.append(tmp, 0, cnt);
 	    }
 	    try {
-		ri.jsonParams = new JSONObject(body.toString());
+		reqInfo.jsonParams = new JSONObject(body.toString());
+		log.info("RequestInfo:processRequest() : reqInfo.jsonParams :" + reqInfo.jsonParams.toString());
 	    } catch (JSONException e) {
 		resp.setStatus(500);
 		return null;
 	    }
 	} else {
-	    ri.parameterMap = req.getParameterMap();
+	    reqInfo.parameterMap = req.getParameterMap();
+
+	    log.info("RequestInfo:processRequest() : reqInfo.parameterMap :" + reqInfo.parameterMap.toString());
 	}
 
-	ri.deviceRegistrationID = ri.getParameter("devregid");
-	if (ri.deviceRegistrationID != null) {
-	    ri.deviceRegistrationID = ri.deviceRegistrationID.trim();
-	    if ("".equals(ri.deviceRegistrationID)) {
-		ri.deviceRegistrationID = null;
+	reqInfo.deviceRegistrationID = reqInfo.getParameter("devregid");
+	log.info("RequestInfo:processRequest() : reqInfo.deviceRegistrationID = " + reqInfo.deviceRegistrationID);
+	if (reqInfo.deviceRegistrationID != null) {
+	    reqInfo.deviceRegistrationID = reqInfo.deviceRegistrationID.trim();
+	    if ("".equals(reqInfo.deviceRegistrationID)) {
+		reqInfo.deviceRegistrationID = null;
 	    }
+	    log.info("RequestInfo:processRequest() : after trim() reqInfo.deviceRegistrationID = " + reqInfo.deviceRegistrationID);
 	}
 
-	if (ri.userName == null) {
+	if (reqInfo.userName == null) {
 	    resp.setStatus(200);
 	    resp.getWriter().println(LOGIN_REQUIRED_STATUS);
-	    log.warning("Missing user");
+	    log.warning("RequestInfo:processRequest() : Missing user");
 	    return null;
 	}
 
 	if (ctx != null) {
-	    ri.initDevices(ctx);
+	    reqInfo.initDevices(ctx);
 	}
 
-	return ri;
+	return reqInfo;
     }
 
     public String getParameter(String name) {
@@ -145,23 +165,10 @@ public class RequestInfo {
 	}
     }
 
-    /**
-     * Authenticate using the req, fetch devices.
-     */
-    private RequestInfo() {
-    }
 
     @Override
     public String toString() {
 	return userName + " " + devices.size() + " " + jsonParams;
-    }
-
-    public RequestInfo(String userN, ServletContext ctx) {
-	this.userName = userN;
-	this.ctx = ctx;
-	if (ctx != null) {
-	    initDevices(ctx);
-	}
     }
 
     private void initDevices(ServletContext ctx) {
@@ -183,8 +190,9 @@ public class RequestInfo {
 		    pm.deletePersistent(first);
 		}
 	    }
+	    log.log(Level.INFO, "RequestInfo:initDevices() : loading devices " + devices.size() + " for user = " + userName);
 	} catch (Exception e) {
-	    log.log(Level.WARNING, "Error loading registrations ", e);
+	    log.log(Level.WARNING, "RequestInfo:initDevices() : Error loading registrations ", e);
 	} finally {
 	    pm.close();
 	}
@@ -206,15 +214,25 @@ public class RequestInfo {
 		if (deviceInfo.getDeviceRegistrationID().equals(regId)) {
 		    pm.deletePersistent(deviceInfo);
 		    // Keep looping in case of duplicates
+
+		    log.log(Level.INFO, "RequestInfo:deleteRegistration() : deleted deviceInfo for " + deviceInfo.getDeviceRegistrationID());
 		}
 	    }
 	} catch (JDOObjectNotFoundException e) {
-	    log.warning("User unknown");
+	    log.warning("RequestInfo:deleteRegistration() : User unknown");
 	} catch (Exception e) {
-	    log.warning("Error unregistering device: " + e.getMessage());
+	    log.warning("RequestInfo:deleteRegistration() : Error unregistering device: " + e.getMessage());
 	} finally {
 	    pm.close();
 	}
 
+    }
+
+    public String getDeviceRegistrationID() {
+	return deviceRegistrationID;
+    }
+
+    public void setDeviceRegistrationID(String deviceRegistrationID) {
+	this.deviceRegistrationID = deviceRegistrationID;
     }
 }

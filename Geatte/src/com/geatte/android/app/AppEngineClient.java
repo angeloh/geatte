@@ -66,21 +66,24 @@ public class AppEngineClient {
 	HttpPost post = new HttpPost(uri);
 	UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
 	post.setEntity(entity);
-	//post.setHeader("Cookie", ascidCookie);
+	// post.setHeader("Cookie", ascidCookie);
 	post.setHeader("X-Same-Domain", "1"); // XSRF
 	HttpResponse res = client.execute(post);
 	return res;
     }
 
-    private HttpResponse makeRequestNoRetry(String urlPath, List<NameValuePair> params, boolean newToken)
+    private HttpResponse makeRequestNoRetry(String urlPath, List<NameValuePair> params, boolean renewToken)
     throws Exception {
 
 	// Get auth token for account
 	Account account = new Account(mUserEmail, "com.google");
 	String authToken = getAuthToken(mContext, account);
-	if (authToken == null)
+	if (authToken == null) {
+	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : authToken is null");
 	    throw new PendingAuthException(mUserEmail);
-	if (newToken) { // invalidate the cached token
+	}
+	if (renewToken) { // invalidate the cached token
+	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : renew authToken");
 	    AccountManager accountManager = AccountManager.get(mContext);
 	    accountManager.invalidateAuthToken(account.type, authToken);
 	    authToken = getAuthToken(mContext, account);
@@ -90,6 +93,9 @@ public class AppEngineClient {
 	DefaultHttpClient client = new DefaultHttpClient();
 	String continueURL = BASE_URL;
 	URI uri = new URI(AUTH_URL + "?continue=" + URLEncoder.encode(continueURL, "UTF-8") + "&auth=" + authToken);
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : get auth cookie, trying to connect to "
+		+ uri.toString());
+
 	HttpGet method = new HttpGet(uri);
 	final HttpParams getParams = new BasicHttpParams();
 	HttpClientParams.setRedirecting(getParams, false); // continue is not
@@ -99,6 +105,9 @@ public class AppEngineClient {
 	HttpResponse res = client.execute(method);
 	Header[] headers = res.getHeaders("Set-Cookie");
 	if (res.getStatusLine().getStatusCode() != 302 || headers.length == 0) {
+	    Log.d(Config.LOGTAG_C2DM,
+		    "AppEngineClient:makeRequestNoRetry() : failed to continue to make request " +
+	    "because status code is not 302 or header lendth is zero");
 	    return res;
 	}
 
@@ -112,6 +121,8 @@ public class AppEngineClient {
 	    }
 	}
 
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : got ACSID cookie = " + ascidCookie);
+
 	// Make POST request
 	uri = new URI(BASE_URL + urlPath);
 	HttpPost post = new HttpPost(uri);
@@ -119,6 +130,11 @@ public class AppEngineClient {
 	post.setEntity(entity);
 	post.setHeader("Cookie", ascidCookie);
 	post.setHeader("X-Same-Domain", "1"); // XSRF
+
+	Log
+	.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : make post request to uri = "
+		+ uri.toString());
+
 	res = client.execute(post);
 	return res;
     }
@@ -127,17 +143,20 @@ public class AppEngineClient {
 	String authToken = null;
 	AccountManager accountManager = AccountManager.get(context);
 	try {
-	    AccountManagerFuture<Bundle> future = accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, false, null, null);
+	    AccountManagerFuture<Bundle> future = accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, false, null,
+		    null);
 	    Bundle bundle = future.getResult();
 	    authToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
 	    // User will be asked for "App Engine" permission.
 	    if (authToken == null) {
 		// No auth token - will need to ask permission from user.
 		Intent intent = new Intent(Config.INTENT_ACTION_AUTH_PERMISSION);
-		intent.putExtra("AccountManagerBundle", bundle);
+		intent.putExtra(Config.EXTRA_KEY_ACCOUNT_BUNDLE, bundle);
 		context.sendBroadcast(intent);
 
-		Log.w(Config.LOGTAG_C2DM, "there is no auth token available for this account : " + account);
+		Log.w(Config.LOGTAG_C2DM,
+			"AppEngineClient:getAuthToken() : there is no auth token available for this account = "
+			+ account + ", try to run intent " + Config.INTENT_ACTION_AUTH_PERMISSION);
 	    }
 	} catch (OperationCanceledException e) {
 	    Log.w(Config.LOGTAG_C2DM, e.getMessage());

@@ -125,10 +125,14 @@ public class C2DMessaging {
 	    }
 	}
 
+	log.info("C2DMessaging.sendNoRetry() : the data to post : " + postDataBuilder.toString());
+
 	byte[] postData = postDataBuilder.toString().getBytes(UTF8);
 
 	// Hit the dm URL.
 	URL url = new URL(serverConfig.getC2DMUrl());
+
+	log.info("C2DMessaging.sendNoRetry() : build connection to C2DM url : " + url.toString());
 
 	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	conn.setDoOutput(true);
@@ -138,6 +142,12 @@ public class C2DMessaging {
 	conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
 	String authToken = serverConfig.getToken();
 	conn.setRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+
+	if (authToken == null || authToken.trim().equals("")) {
+	    log.info("C2DMessaging.sendNoRetry() : authToken is null : " + authToken);
+	} else {
+	    log.info("C2DMessaging.sendNoRetry() : send authToken to C2DM : " + authToken);
+	}
 
 	OutputStream out = conn.getOutputStream();
 	out.write(postData);
@@ -153,7 +163,7 @@ public class C2DMessaging {
 	    // is updating the token, or Update-Client-Auth was received by
 	    // another server,
 	    // and next retry will get the good one from database.
-	    log.warning("Unauthorized - need token");
+	    log.warning("C2DMessaging.sendNoRetry() : Unauthorized - need token" + ", responseCode : " + responseCode);
 	    serverConfig.invalidateCachedToken();
 	    return false;
 	}
@@ -161,7 +171,7 @@ public class C2DMessaging {
 	// Check for updated token header
 	String updatedAuthToken = conn.getHeaderField(UPDATE_CLIENT_AUTH);
 	if (updatedAuthToken != null && !authToken.equals(updatedAuthToken)) {
-	    log.info("Got updated auth token from datamessaging servers: " + updatedAuthToken);
+	    log.info("C2DMessaging.sendNoRetry() : Got updated auth token from datamessaging servers: " + updatedAuthToken);
 	    serverConfig.updateToken(updatedAuthToken);
 	}
 
@@ -170,23 +180,22 @@ public class C2DMessaging {
 	// NOTE: You *MUST* use exponential backoff if you receive a 503
 	// response code.
 	// Since App Engine's task queue mechanism automatically does this for
-	// tasks that
-	// return non-success error codes, this is not explicitly implemented
+	// tasks that return non-success error codes, this is not explicitly implemented
 	// here.
 	// If we weren't using App Engine, we'd need to manually implement this.
 	if (responseLine == null || responseLine.equals("")) {
-	    log.info("Got " + responseCode + " response from Google AC2DM endpoint.");
+	    log.info("C2DMessaging.sendNoRetry() : Got " + responseCode + " response from Google AC2DM endpoint.");
 	    throw new IOException("Got empty response from Google AC2DM endpoint.");
 	}
 
 	String[] responseParts = responseLine.split("=", 2);
 	if (responseParts.length != 2) {
-	    log.warning("Invalid message from google: " + responseCode + " " + responseLine);
+	    log.warning("C2DMessaging.sendNoRetry() : Invalid message from google: " + responseCode + " " + responseLine);
 	    throw new IOException("Invalid response from Google " + responseCode + " " + responseLine);
 	}
 
 	if (responseParts[0].equals("id")) {
-	    log.info("Successfully sent data message to device: " + responseLine);
+	    log.info("C2DMessaging.sendNoRetry() : Successfully sent data message to device: " + responseLine);
 	    return true;
 	}
 
@@ -198,7 +207,7 @@ public class C2DMessaging {
 	    throw new IOException(err);
 	} else {
 	    // 500 or unparseable response - server error, needs to retry
-	    log.warning("Invalid response from google " + responseLine + " " + responseCode);
+	    log.warning("C2DMessaging.sendNoRetry() : Invalid response from google " + responseLine + " " + responseCode);
 	    return false;
 	}
     }

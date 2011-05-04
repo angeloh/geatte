@@ -66,35 +66,51 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	log.log(Level.INFO, "RegisterServlet.doPOST() : START RegisterServlet.doPOST()");
+
 	resp.setContentType("text/plain");
 
 	RequestInfo reqInfo = RequestInfo.processRequest(req, resp, getServletContext());
 	if (reqInfo == null) {
+	    log.severe("RegisterServlet.doPOST() : can not load RequestInfo!!");
 	    return;
 	}
 
 	if (reqInfo.deviceRegistrationID == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + "(Must specify devregid)");
-	    log.severe("Missing registration id ");
+	    log.severe("RegisterServlet.doPOST() : Missing registration id, reqInfo.deviceRegistrationID is null");
 	    return;
+	} else {
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : reqInfo.deviceRegistrationID = "
+		    + reqInfo.deviceRegistrationID);
 	}
 
 	String deviceName = reqInfo.getParameter("deviceName");
+
+	log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a deviceName = " + deviceName);
+
 	if (deviceName == null) {
 	    deviceName = "Phone";
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : use default deviceName = " + deviceName);
 	}
 	// TODO: generate the device name by adding a number suffix for multiple
 	// devices of same type. Change android app to send model/type.
 
 	String deviceType = reqInfo.getParameter("deviceType");
+
+	log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a deviceType = " + deviceType);
+
 	if (deviceType == null) {
 	    deviceType = DeviceInfo.TYPE_AC2DM;
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : use default deviceType = " + deviceType);
 	}
 
 	// Because the deviceRegistrationId isn't static, we use a static
 	// identifier for the device. (Can be null in older clients)
 	String deviceId = reqInfo.getParameter("deviceId");
+
+	log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a deviceId = " + deviceId);
 
 	// Context-shared PMF.
 	PersistenceManager pm = C2DMessaging.getPMF(getServletContext()).getPersistenceManager();
@@ -103,6 +119,8 @@ public class RegisterServlet extends HttpServlet {
 	    List<DeviceInfo> registrations = reqInfo.devices;
 
 	    if (registrations.size() > MAX_DEVICES) {
+		log.log(Level.INFO, "RegisterServlet.doPOST() : user has too many devices, registrations.size = "
+			+ registrations.size());
 		// we could return an error - but user can't handle it yet.
 		// we can't let it grow out of bounds.
 		// TODO: we should also define a 'ping' message and
@@ -110,6 +128,9 @@ public class RegisterServlet extends HttpServlet {
 		// unused registrations
 		DeviceInfo oldest = registrations.get(0);
 		if (oldest.getRegistrationTimestamp() == null) {
+		    log.log(Level.INFO,
+			    "RegisterServlet.doPOST() : user has too many devices, trying to remove old one = "
+			    + oldest.getDeviceRegistrationID());
 		    pm.deletePersistent(oldest);
 		} else {
 		    long oldestTime = oldest.getRegistrationTimestamp().getTime();
@@ -119,6 +140,9 @@ public class RegisterServlet extends HttpServlet {
 			    oldestTime = oldest.getRegistrationTimestamp().getTime();
 			}
 		    }
+		    log.log(Level.INFO,
+			    "RegisterServlet.doPOST() : user has too many devices, trying to remove old one = "
+			    + oldest.getDeviceRegistrationID());
 		    pm.deletePersistent(oldest);
 		}
 	    }
@@ -133,9 +157,15 @@ public class RegisterServlet extends HttpServlet {
 	    } catch (JDOObjectNotFoundException e) {
 	    }
 	    if (device == null) {
+		log.log(Level.INFO, "RegisterServlet.doPOST() : can not find a deviceInfo by key = " + key
+			+ ", create a new one");
+
 		device = new DeviceInfo(key, reqInfo.deviceRegistrationID);
 		device.setType(deviceType);
 	    } else {
+		log.log(Level.INFO, "RegisterServlet.doPOST() : find a deviceInfo by key = " + key
+			+ ", update deviceRegistrationID to " + reqInfo.deviceRegistrationID);
+
 		// update registration id
 		device.setDeviceRegistrationID(reqInfo.deviceRegistrationID);
 		device.setRegistrationTimestamp(new Date());
@@ -145,20 +175,23 @@ public class RegisterServlet extends HttpServlet {
 	    // TODO: only need to write if something changed, for chrome nothing
 	    // changes, we just create a new channel
 	    pm.makePersistent(device);
-	    log.log(Level.INFO, "Registered device " + reqInfo.userName + " " + deviceType);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : Registered device userName = " + reqInfo.userName
+		    + ", deviceType = " + deviceType + ", deviceRegistrationID = " + reqInfo.deviceRegistrationID);
 
-	    //TODO
-	    //	    if (device.getType().equals(DeviceInfo.TYPE_CHROME)) {
-	    //		String channelId = ChannelServiceFactory.getChannelService()
-	    //		.createChannel(reqInfo.deviceRegistrationID);
-	    //		resp.getWriter().println(OK_STATUS + " " + channelId);
-	    //	    } else {
+	    // TODO
+	    // if (device.getType().equals(DeviceInfo.TYPE_CHROME)) {
+	    // String channelId = ChannelServiceFactory.getChannelService()
+	    // .createChannel(reqInfo.deviceRegistrationID);
+	    // resp.getWriter().println(OK_STATUS + " " + channelId);
+	    // } else {
 	    resp.getWriter().println(OK_STATUS);
-	    //	    }
+	    // }
+
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : END RegisterServlet.doPOST()");
 	} catch (Exception e) {
 	    resp.setStatus(500);
 	    resp.getWriter().println(ERROR_STATUS + " (Error registering device)");
-	    log.log(Level.WARNING, "Error registering device.", e);
+	    log.log(Level.WARNING, "RegisterServlet.doPOST() : Error registering device.", e);
 	} finally {
 	    pm.close();
 	}

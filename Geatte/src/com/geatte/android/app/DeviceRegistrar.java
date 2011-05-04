@@ -182,13 +182,19 @@ public class DeviceRegistrar {
 	List<NameValuePair> params = new ArrayList<NameValuePair>();
 	params.add(new BasicNameValuePair("devregid", deviceRegistrationID));
 
+	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter devregid =" + deviceRegistrationID);
+
 	String deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 	if (deviceId != null) {
 	    params.add(new BasicNameValuePair("deviceId", deviceId));
+
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter deviceId =" + deviceId);
 	}
 
 	// TODO: Allow device name to be configured
 	params.add(new BasicNameValuePair("deviceName", isTablet(context) ? "Tablet" : "Phone"));
+
+	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter deviceName =" + (isTablet(context) ? "Tablet" : "Phone"));
 
 	AppEngineClient client = new AppEngineClient(context, accountName);
 	//return client.makeRequestNoAuth(urlPath, params);

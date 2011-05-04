@@ -10,6 +10,8 @@ public class Config {
     public static final String INTENT_ACTION_UPDATE_UI = "com.geatte.android.app.UPDATE_UI";
     public static final String INTENT_ACTION_AUTH_PERMISSION = "com.geatte.android.app.AUTH_PERMISSION";
 
+    public static final String EXTRA_KEY_ACCOUNT_BUNDLE = "account_manager_bundle";
+
     /**
      * C2DM Configs
      */

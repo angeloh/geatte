@@ -23,7 +23,7 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
 
 /**
- * Persistent config info for the server - authentication token 
+ * Persistent config info for the server - authentication token
  */
 @PersistenceCapable
 public final class C2DMConfig {
@@ -37,65 +37,64 @@ public final class C2DMConfig {
 
     @Persistent
     private String oauth2RefreshToken;
-    
-    @Persistent 
+
+    @Persistent
     private String clientId;
-   
-    @Persistent 
+
+    @Persistent
     private String clientSecret;
-   
 
-    public static final String DATAMESSAGING_SEND_ENDPOINT =
-        "https://android.apis.google.com/c2dm/send";
 
-    @Persistent 
+    public static final String DATAMESSAGING_SEND_ENDPOINT = "https://android.apis.google.com/c2dm/send";
+
+    @Persistent
     private String c2dmUrl;
 
     public String getAuthToken() {
-        return (authToken == null) ? "" : authToken;
+	return (authToken == null) ? "" : authToken;
     }
 
     public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+	this.authToken = authToken;
     }
-    
+
     public void setKey(Key key) {
-        this.key = key;
+	this.key = key;
     }
-    
+
     public void setC2DMUrl(String url) {
-        this.c2dmUrl = url;
+	this.c2dmUrl = url;
     }
-    
+
     public String getC2DMUrl() {
-        if (c2dmUrl == null) {
-            return DATAMESSAGING_SEND_ENDPOINT;
-        } else {
-            return c2dmUrl;
-        }
+	if (c2dmUrl == null) {
+	    return DATAMESSAGING_SEND_ENDPOINT;
+	} else {
+	    return c2dmUrl;
+	}
     }
 
     public void setOauth2RefreshToken(String oauth2RefreshToken) {
-        this.oauth2RefreshToken = oauth2RefreshToken;
+	this.oauth2RefreshToken = oauth2RefreshToken;
     }
 
     public String getOauth2RefreshToken() {
-        return oauth2RefreshToken;
+	return oauth2RefreshToken;
     }
 
     public void setOAuth2ClientId(String clientId) {
-        this.clientId = clientId;
+	this.clientId = clientId;
     }
 
     public String getOAuth2ClientId() {
-        return clientId;
+	return clientId;
     }
 
     public void setOAuth2ClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
+	this.clientSecret = clientSecret;
     }
 
     public String getOAuth2ClientSecret() {
-        return clientSecret;
+	return clientSecret;
     }
 }
