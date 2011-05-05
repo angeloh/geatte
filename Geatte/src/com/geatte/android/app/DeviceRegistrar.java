@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
@@ -191,6 +192,13 @@ public class DeviceRegistrar {
 	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter deviceId =" + deviceId);
 	}
 
+	String phoneNumber = getPhoneNumber(context);
+	if (phoneNumber != null) {
+	    params.add(new BasicNameValuePair("phoneNumber", phoneNumber));
+
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter phoneNumber =" + phoneNumber);
+	}
+
 	// TODO: Allow device name to be configured
 	params.add(new BasicNameValuePair("deviceName", isTablet(context) ? "Tablet" : "Phone"));
 
@@ -207,5 +215,11 @@ public class DeviceRegistrar {
 	int xlargeBit = 4; // Configuration.SCREENLAYOUT_SIZE_XLARGE;  // upgrade to HC SDK to get this
 	Configuration config = context.getResources().getConfiguration();
 	return (config.screenLayout & xlargeBit) == xlargeBit;
+    }
+
+    static String getPhoneNumber(Context context) {
+	TelephonyManager mTelephonyMgr =
+	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+	return mTelephonyMgr.getLine1Number();
     }
 }

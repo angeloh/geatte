@@ -43,22 +43,32 @@ public class DeviceInfo {
     public static final String TYPE_CHROME = "chrome";
 
     /**
-     * User-email # device-id
+     * The device id
      *
-     * Device-id can be specified by device, default is hash of abs(registration
-     * id).
-     *
-     * user@example.com#1234
+     * Device-id can be specified by device
      */
     @PrimaryKey
     @Persistent
     private Key key;
 
     /**
+     * The phone number
+     */
+    @Persistent
+    private String phoneNumber;
+
+    /**
      * The ID used for sending messages to.
      */
     @Persistent
     private String deviceRegistrationID;
+
+    /**
+     * The email address
+     */
+    @Persistent
+    private String userEmail;
+
 
     /**
      * Current supported types:
@@ -73,7 +83,7 @@ public class DeviceInfo {
      * Friendly name for the device. May be edited by the user.
      */
     @Persistent
-    private String name;
+    private String deviceName;
 
     /**
      * For statistics - and to provide hints to the user.
@@ -85,63 +95,80 @@ public class DeviceInfo {
     private Boolean debug;
 
     public DeviceInfo(Key key, String deviceRegistrationID) {
-        this.key = key;
-        this.deviceRegistrationID = deviceRegistrationID;
-        this.setRegistrationTimestamp(new Date()); // now
+	this.key = key;
+	this.deviceRegistrationID = deviceRegistrationID;
+	this.setRegistrationTimestamp(new Date()); // now
     }
 
     public DeviceInfo(Key key) {
-        this.key = key;
+	this.key = key;
     }
 
     public Key getKey() {
-        return key;
+	return key;
     }
 
     public void setKey(Key key) {
-        this.key = key;
+	this.key = key;
+    }
+
+    public String getPhoneNumber() {
+	return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+	this.phoneNumber = phoneNumber;
     }
 
     // Accessor methods for properties added later (hence can be null)
 
     public String getDeviceRegistrationID() {
-        return deviceRegistrationID;
+	return deviceRegistrationID;
     }
 
     public void setDeviceRegistrationID(String deviceRegistrationID) {
-        this.deviceRegistrationID = deviceRegistrationID;
+	this.deviceRegistrationID = deviceRegistrationID;
     }
 
+    public String getUserEmail() {
+	return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+	this.userEmail = userEmail;
+    }
+
+
     public boolean getDebug() {
-        return (debug != null ? debug.booleanValue() : false);
+	return (debug != null ? debug.booleanValue() : false);
     }
 
     public void setDebug(boolean debug) {
-        this.debug = new Boolean(debug);
+	this.debug = new Boolean(debug);
     }
 
     public void setType(String type) {
-        this.type = type;
+	this.type = type;
     }
 
     public String getType() {
-        return type != null ? type : "";
+	return type != null ? type : "";
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDeviceName(String name) {
+	this.deviceName = name;
     }
 
-    public String getName() {
-        return name != null ? name : "";
+    public String getDeviceName() {
+	return deviceName != null ? deviceName : "";
     }
 
     public void setRegistrationTimestamp(Date registrationTimestamp) {
-        this.registrationTimestamp = registrationTimestamp;
+	this.registrationTimestamp = registrationTimestamp;
     }
 
     public Date getRegistrationTimestamp() {
-        return registrationTimestamp;
+	return registrationTimestamp;
     }
 
     /**
@@ -149,16 +176,16 @@ public class DeviceInfo {
      */
     @SuppressWarnings("unchecked")
     public static List<DeviceInfo> getDeviceInfoForUser(PersistenceManager pm, String user) {
-        Query query = pm.newQuery(DeviceInfo.class);
-        query.setFilter("key >= '" +
-                user + "' && key < '" + user + "$'");
-        List<DeviceInfo> qresult = (List<DeviceInfo>) query.execute();
-        // Copy to array - we need to close the query
-        List<DeviceInfo> result = new ArrayList<DeviceInfo>();
-        for (DeviceInfo di : qresult) {
-            result.add(di);
-        }
-        query.closeAll();
-        return result;
+	Query query = pm.newQuery(DeviceInfo.class);
+	query.setFilter("key >= '" +
+		user + "' && key < '" + user + "$'");
+	List<DeviceInfo> qresult = (List<DeviceInfo>) query.execute();
+	// Copy to array - we need to close the query
+	List<DeviceInfo> result = new ArrayList<DeviceInfo>();
+	for (DeviceInfo di : qresult) {
+	    result.add(di);
+	}
+	query.closeAll();
+	return result;
     }
 }

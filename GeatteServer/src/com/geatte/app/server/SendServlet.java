@@ -30,7 +30,7 @@ import com.google.appengine.api.channel.ChannelServiceFactory;
 @SuppressWarnings("serial")
 public class SendServlet extends HttpServlet {
     static final Logger log =
-        Logger.getLogger(SendServlet.class.getName());
+	Logger.getLogger(SendServlet.class.getName());
     private static final String OK_STATUS = "OK";
     private static final String DEVICE_NOT_REGISTERED_STATUS = "DEVICE_NOT_REGISTERED";
     private static final String ERROR_STATUS = "ERROR";
@@ -39,155 +39,155 @@ public class SendServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("text/plain");
+	resp.setContentType("text/plain");
 
-        RequestInfo reqInfo = RequestInfo.processRequest(req, resp, 
-                getServletContext());
-        if (reqInfo == null) {
-            return;
-        }
-        
-        String sel = reqInfo.getParameter("sel");
-        if (sel == null) sel = "";  // optional
+	RequestInfo reqInfo = RequestInfo.processRequest(req, resp,
+		getServletContext());
+	if (reqInfo == null) {
+	    return;
+	}
 
-        String title = reqInfo.getParameter("title");
-        if (title == null) title = "";  // optional
+	String sel = reqInfo.getParameter("sel");
+	if (sel == null) sel = "";  // optional
 
-        String url = reqInfo.getParameter("url");
-        if (url == null) {
-            resp.setStatus(400);
-            resp.getWriter().println(ERROR_STATUS + " (Must specify url parameter)");
-            return;
-        }
+	String title = reqInfo.getParameter("title");
+	if (title == null) title = "";  // optional
 
-        String deviceName = reqInfo.getParameter("deviceName");
-        String[] deviceNames = deviceName != null ? 
-                deviceName.split(",") : null;
+	String url = reqInfo.getParameter("url");
+	if (url == null) {
+	    resp.setStatus(400);
+	    resp.getWriter().println(ERROR_STATUS + " (Must specify url parameter)");
+	    return;
+	}
 
-        String deviceType = reqInfo.getParameter("deviceType");
+	String deviceName = reqInfo.getParameter("deviceName");
+	String[] deviceNames = deviceName != null ?
+		deviceName.split(",") : null;
 
-        String id = doSendToDevice(url, title, sel, reqInfo,
-                deviceNames, deviceType);
-        
-        if (id.startsWith(ERROR_STATUS)) {
-            resp.setStatus(500);
-        }
-        resp.getWriter().println(id);
+		String deviceType = reqInfo.getParameter("deviceType");
+
+		String id = doSendToDevice(url, title, sel, reqInfo,
+			deviceNames, deviceType);
+
+		if (id.startsWith(ERROR_STATUS)) {
+		    resp.setStatus(500);
+		}
+		resp.getWriter().println(id);
     }
 
-    protected String doSendToDevice(String url, String title, 
-            String sel, RequestInfo reqInfo,
-            String deviceNames[], String deviceType) throws IOException {
+    protected String doSendToDevice(String url, String title,
+	    String sel, RequestInfo reqInfo,
+	    String deviceNames[], String deviceType) throws IOException {
 
-        // ok = we sent to at least one device.
-        boolean ok = false;
+	// ok = we sent to at least one device.
+	boolean ok = false;
 
-        // Send push message to phone
-        C2DMessaging push = C2DMessaging.get(getServletContext());
-        boolean res = false;
+	// Send push message to phone
+	C2DMessaging push = C2DMessaging.get(getServletContext());
+	boolean res = false;
 
-        String collapseKey = "" + url.hashCode();
-        
-        boolean reqDebug = "1".equals(reqInfo.getParameter("debug"));
+	String collapseKey = "" + url.hashCode();
 
-        int ac2dmCnt = 0;
-        
-        for (DeviceInfo deviceInfo : reqInfo.devices) {
-            if ("ac2dm".equals(deviceInfo.getType())) {
-                ac2dmCnt++;
-            }
-            if (deviceNames != null) {
-                boolean found = false;
-                for (int i = 0; i < deviceNames.length; i++) {
-                    if (deviceNames[i].equals(deviceInfo.getName())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) continue;  // user-specified device name
-            }
+	boolean reqDebug = "1".equals(reqInfo.getParameter("debug"));
 
-            if (deviceType != null && !deviceType.equals(deviceInfo.getType())) {
-                continue;  // user-specified device type
-            }
+	int ac2dmCnt = 0;
 
-            try {
-                if (deviceInfo.getType().equals(DeviceInfo.TYPE_CHROME)) {
-                    res = doSendViaBrowserChannel(url, deviceInfo);
-                } else {
-                    res = doSendViaC2dm(url, title, sel, push, collapseKey,
-                            deviceInfo, reqDebug);
-                }
+	for (DeviceInfo deviceInfo : reqInfo.devices) {
+	    if ("ac2dm".equals(deviceInfo.getType())) {
+		ac2dmCnt++;
+	    }
+	    if (deviceNames != null) {
+		boolean found = false;
+		for (int i = 0; i < deviceNames.length; i++) {
+		    if (deviceNames[i].equals(deviceInfo.getDeviceName())) {
+			found = true;
+			break;
+		    }
+		}
+		if (!found) continue;  // user-specified device name
+	    }
 
-                if (res) {
-                    log.info("Link sent to phone! collapse_key:" + collapseKey);
-                    ok = true;
-                } else {
-                    log.warning("Error: Unable to send link to device: " + 
-                            deviceInfo.getDeviceRegistrationID());
-                }
-            } catch (IOException ex) {
-                if ("NotRegistered".equals(ex.getMessage()) ||
-                        "InvalidRegistration".equals(ex.getMessage())) {
-                    // Prune device, it no longer works
-                    reqInfo.deleteRegistration(deviceInfo.getDeviceRegistrationID());
-                    reqInfo.devices.remove(deviceInfo);
-                    ac2dmCnt--;
-                } else {
-                    throw ex;
-                }
-            }
-        }
+	    if (deviceType != null && !deviceType.equals(deviceInfo.getType())) {
+		continue;  // user-specified device type
+	    }
 
-        if (ok) {
-            // TODO: return a count of devices we sent to, maybe names as well
-            return OK_STATUS;
-        } else {
-            // Show the 'no devices' if only the browser is registered.
-            // We should also clarify that 'error status' mean no matching 
-            // device found ( when the extension allow specifying the destination )
-            if (ac2dmCnt == 0 && "ac2dm".equals(deviceType)) {
-                log.warning("No device registered for " + reqInfo.userName);
-                return DEVICE_NOT_REGISTERED_STATUS;
-            } else {
-                return ERROR_STATUS + " (Unable to send link)";
-            }
-        }
+	    try {
+		if (deviceInfo.getType().equals(DeviceInfo.TYPE_CHROME)) {
+		    res = doSendViaBrowserChannel(url, deviceInfo);
+		} else {
+		    res = doSendViaC2dm(url, title, sel, push, collapseKey,
+			    deviceInfo, reqDebug);
+		}
+
+		if (res) {
+		    log.info("Link sent to phone! collapse_key:" + collapseKey);
+		    ok = true;
+		} else {
+		    log.warning("Error: Unable to send link to device: " +
+			    deviceInfo.getDeviceRegistrationID());
+		}
+	    } catch (IOException ex) {
+		if ("NotRegistered".equals(ex.getMessage()) ||
+			"InvalidRegistration".equals(ex.getMessage())) {
+		    // Prune device, it no longer works
+		    reqInfo.deleteRegistration(deviceInfo.getDeviceRegistrationID());
+		    reqInfo.devices.remove(deviceInfo);
+		    ac2dmCnt--;
+		} else {
+		    throw ex;
+		}
+	    }
+	}
+
+	if (ok) {
+	    // TODO: return a count of devices we sent to, maybe names as well
+	    return OK_STATUS;
+	} else {
+	    // Show the 'no devices' if only the browser is registered.
+	    // We should also clarify that 'error status' mean no matching
+	    // device found ( when the extension allow specifying the destination )
+	    if (ac2dmCnt == 0 && "ac2dm".equals(deviceType)) {
+		log.warning("No device registered for " + reqInfo.userName);
+		return DEVICE_NOT_REGISTERED_STATUS;
+	    } else {
+		return ERROR_STATUS + " (Unable to send link)";
+	    }
+	}
     }
 
     private boolean doSendViaC2dm(String url, String title, String sel, C2DMessaging push,
-            String collapseKey, DeviceInfo deviceInfo, boolean reqDebug) throws IOException {
+	    String collapseKey, DeviceInfo deviceInfo, boolean reqDebug) throws IOException {
 
-        // Trim title, sel if needed.
-        if (url.length() + title.length() + sel.length() > 1000) {
-            // Shorten the title - C2DM has a 1024 limit, some padding for keys
-            if (title.length() > 16) {
-                title = title.substring(0, 16);
-            }
-            // still not enough ?
-            if (title.length() + url.length() + sel.length() > 1000) {
-                // how much space we have for sel ?
-                int space = 1000 - url.length() - title.length();
-                if (space > 0 && sel.length() > space) {
-                    sel = sel.substring(0, space);
-                } // else: we'll get an error sending
-            }
-        }
+	// Trim title, sel if needed.
+	if (url.length() + title.length() + sel.length() > 1000) {
+	    // Shorten the title - C2DM has a 1024 limit, some padding for keys
+	    if (title.length() > 16) {
+		title = title.substring(0, 16);
+	    }
+	    // still not enough ?
+	    if (title.length() + url.length() + sel.length() > 1000) {
+		// how much space we have for sel ?
+		int space = 1000 - url.length() - title.length();
+		if (space > 0 && sel.length() > space) {
+		    sel = sel.substring(0, space);
+		} // else: we'll get an error sending
+	    }
+	}
 
-        boolean res;
-        res = push.sendNoRetry(deviceInfo.getDeviceRegistrationID(),
-                collapseKey,
-                "url", url,
-                "title", title,
-                "sel", sel,
-                "debug", deviceInfo.getDebug() || reqDebug ? "1" : null);
-        return res;
+	boolean res;
+	res = push.sendNoRetry(deviceInfo.getDeviceRegistrationID(),
+		collapseKey,
+		"url", url,
+		"title", title,
+		"sel", sel,
+		"debug", deviceInfo.getDebug() || reqDebug ? "1" : null);
+	return res;
     }
 
     private boolean doSendViaBrowserChannel(String url, DeviceInfo deviceInfo) {
-        String channelToken = deviceInfo.getDeviceRegistrationID();
-        ChannelServiceFactory.getChannelService().sendMessage(
-                new ChannelMessage(channelToken, url));
-        return true;
+	String channelToken = deviceInfo.getDeviceRegistrationID();
+	ChannelServiceFactory.getChannelService().sendMessage(
+		new ChannelMessage(channelToken, url));
+	return true;
     }
 }
