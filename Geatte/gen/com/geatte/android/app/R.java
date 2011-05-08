@@ -79,6 +79,7 @@ public final class R {
         public static final int send_geatte_button_label=0x7f04000f;
         public static final int snap_geatte_button_label=0x7f040000;
         public static final int take_picture=0x7f040001;
+        public static final int upload_text_error=0x7f040015;
         public static final int vote_label=0x7f04000d;
     }
     public static final class style {

@@ -26,4 +26,6 @@
     <string name="register_progress_text_reg">Registered</string>
     <string name="register_progress_text_unreg">Unregistered</string>
     <string name="register_progress_text_error">Error to register</string>
+    
+    <string name="upload_text_error">Error to upload</string>
 </resources>

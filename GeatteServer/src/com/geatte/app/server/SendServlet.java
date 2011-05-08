@@ -147,7 +147,7 @@ public class SendServlet extends HttpServlet {
 	    // We should also clarify that 'error status' mean no matching
 	    // device found ( when the extension allow specifying the destination )
 	    if (ac2dmCnt == 0 && "ac2dm".equals(deviceType)) {
-		log.warning("No device registered for " + reqInfo.userName);
+		log.warning("No device registered for " + reqInfo.getUserEmail());
 		return DEVICE_NOT_REGISTERED_STATUS;
 	    } else {
 		return ERROR_STATUS + " (Unable to send link)";

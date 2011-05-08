@@ -25,6 +25,13 @@
 			com.geatte.app.server.UnregisterServlet
 		</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>GeatteUploadServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteUploadServlet
+		</servlet-class>
+	</servlet>
 	<!-- 
 	<servlet>
 		<servlet-name>SendServlet</servlet-name>
@@ -46,6 +53,11 @@
 	<servlet-mapping>
 		<servlet-name>UnregisterServlet</servlet-name>
 		<url-pattern>/unregister</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>GeatteUploadServlet</servlet-name>
+		<url-pattern>/geatteupload</url-pattern>
 	</servlet-mapping>
 	<!-- 
 	<servlet-mapping>

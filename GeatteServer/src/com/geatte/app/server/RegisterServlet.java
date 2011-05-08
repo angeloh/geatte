@@ -42,16 +42,16 @@ public class RegisterServlet extends HttpServlet {
 	resp.setContentType("application/json");
 	JSONObject regs = new JSONObject();
 	try {
-	    regs.put("user", reqInfo.userName);
+	    regs.put("userEmail", reqInfo.getUserEmail());
 
 	    JSONArray devices = new JSONArray();
 	    for (DeviceInfo di : reqInfo.devices) {
 		JSONObject dijson = new JSONObject();
 		dijson.put("key", di.getKey().toString());
-		dijson.put("name", di.getDeviceName());
+		dijson.put("deviceName", di.getDeviceName());
 		dijson.put("type", di.getType());
-		dijson.put("regid", di.getDeviceRegistrationID());
-		dijson.put("ts", di.getRegistrationTimestamp());
+		dijson.put("registrationId", di.getDeviceRegistrationID());
+		dijson.put("timestamp", di.getRegistrationTimestamp());
 		devices.put(dijson);
 	    }
 	    regs.put("devices", devices);
@@ -78,29 +78,30 @@ public class RegisterServlet extends HttpServlet {
 
 	// Because the deviceRegistrationId isn't static, we use a static
 	// identifier for the device. (Can be null in older clients)
-	String deviceId = reqInfo.getParameter("deviceId");
+	String deviceId = reqInfo.getParameter(Config.DEVICE_ID_PARAM);
 
 	if (deviceId == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify deviceId)");
-	    log.severe("RegisterServlet.doPOST() : Missing device id, deviceId is null");
+	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.DEVICE_ID_PARAM + ")");
+	    log.severe("RegisterServlet.doPOST() : Missing device id, " + Config.DEVICE_ID_PARAM + " is null");
 	    return;
 	} else {
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a deviceId = " + deviceId);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.DEVICE_ID_PARAM + " = " + deviceId);
 	}
 
-	String phoneNumber = reqInfo.getParameter("phoneNumber");
+	String phoneNumber = reqInfo.getParameter(Config.PHONE_NUMBER_PARAM);
 
 	if (phoneNumber == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify phoneNumber)");
-	    log.severe("RegisterServlet.doPOST() : Missing phone number, phoneNumber is null");
+	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.PHONE_NUMBER_PARAM + ")");
+	    log.severe("RegisterServlet.doPOST() : Missing phone number, " + Config.PHONE_NUMBER_PARAM + " is null");
 	    return;
 	} else {
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a phoneNumber = " + phoneNumber);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.PHONE_NUMBER_PARAM + " = "
+		    + phoneNumber);
 	}
 
 	if (reqInfo.deviceRegistrationID == null) {
 	    resp.setStatus(400);
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify devregid)");
+	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.DEV_REG_ID_PARAM + ")");
 	    log.severe("RegisterServlet.doPOST() : Missing registration id, reqInfo.deviceRegistrationID is null");
 	    return;
 	} else {
@@ -108,24 +109,28 @@ public class RegisterServlet extends HttpServlet {
 		    + reqInfo.deviceRegistrationID);
 	}
 
-	String deviceName = reqInfo.getParameter("deviceName");
+	String deviceName = reqInfo.getParameter(Config.DEVICE_NAME_PARAM);
 
 	if (deviceName == null) {
 	    deviceName = "Phone";
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : use default deviceName = " + deviceName);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : use default " + Config.DEVICE_NAME_PARAM + " = "
+		    + deviceName);
 	} else {
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a deviceName = " + deviceName);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.DEVICE_NAME_PARAM + " = "
+		    + deviceName);
 	}
 	// TODO: generate the device name by adding a number suffix for multiple
 	// devices of same type. Change android app to send model/type.
 
-	String deviceType = reqInfo.getParameter("deviceType");
+	String deviceType = reqInfo.getParameter(Config.DEVICE_TYPE_PARAM);
 
 	if (deviceType == null) {
 	    deviceType = DeviceInfo.TYPE_AC2DM;
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : use default deviceType = " + deviceType);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : use default " + Config.DEVICE_TYPE_PARAM + " = "
+		    + deviceType);
 	} else {
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a deviceType = " + deviceType);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.DEVICE_TYPE_PARAM + " = "
+		    + deviceType);
 	}
 
 	// Context-shared PMF.
@@ -164,8 +169,10 @@ public class RegisterServlet extends HttpServlet {
 	    }
 
 	    // Get device if it already exists, else create
-	    //String suffix = (deviceId != null ? "#" + Long.toHexString(Math.abs(deviceId.hashCode())) : "");
-	    //Key key = KeyFactory.createKey(DeviceInfo.class.getSimpleName(), reqInfo.userName + suffix);
+	    // String suffix = (deviceId != null ? "#" +
+	    // Long.toHexString(Math.abs(deviceId.hashCode())) : "");
+	    // Key key = KeyFactory.createKey(DeviceInfo.class.getSimpleName(),
+	    // reqInfo.userName + suffix);
 	    Key key = KeyFactory.createKey(DeviceInfo.class.getSimpleName(), deviceId);
 
 	    DeviceInfo device = null;
@@ -174,13 +181,13 @@ public class RegisterServlet extends HttpServlet {
 	    } catch (JDOObjectNotFoundException e) {
 	    }
 	    if (device == null) {
-		log.log(Level.INFO, "RegisterServlet.doPOST() : can not find a deviceInfo by key = " + key
+		log.log(Level.INFO, "RegisterServlet.doPOST() : can not find a DeviceInfo by key = " + key
 			+ ", create a new one");
 
 		device = new DeviceInfo(key, reqInfo.deviceRegistrationID);
 		device.setType(deviceType);
 	    } else {
-		log.log(Level.INFO, "RegisterServlet.doPOST() : find a deviceInfo by key = " + key
+		log.log(Level.INFO, "RegisterServlet.doPOST() : find a DeviceInfo by key = " + key
 			+ ", update deviceRegistrationID to " + reqInfo.deviceRegistrationID);
 
 		// update registration id
@@ -189,14 +196,15 @@ public class RegisterServlet extends HttpServlet {
 	    }
 
 	    device.setPhoneNumber(phoneNumber); // update phoneNumber
-	    device.setUserEmail(reqInfo.userName); // update user email
+	    device.setUserEmail(reqInfo.getUserEmail()); // update user email
 	    device.setDeviceName(deviceName); // update display name
 	    // TODO: only need to write if something changed, for chrome nothing
 	    // changes, we just create a new channel
 	    pm.makePersistent(device);
 
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : Registered device userEmail = " + reqInfo.userName
-		    + ", deviceType = " + deviceType + ", deviceRegistrationID = " + reqInfo.deviceRegistrationID + ", key = " + key);
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : Registered device userEmail = " + reqInfo.getUserEmail()
+		    + ", deviceType = " + deviceType + ", deviceRegistrationID = " + reqInfo.deviceRegistrationID
+		    + ", key = " + key);
 
 	    // TODO
 	    // if (device.getType().equals(DeviceInfo.TYPE_CHROME)) {

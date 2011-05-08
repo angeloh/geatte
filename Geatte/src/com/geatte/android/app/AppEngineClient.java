@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -30,8 +31,8 @@ import android.util.Log;
  * AppEngine client. Handles auth.
  */
 public class AppEngineClient {
-    static final String BASE_URL = "https://geatte.appspot.com";
-    private static final String AUTH_URL = BASE_URL + "/_ah/login";
+
+    private static final String AUTH_URL = Config.BASE_URL + "/_ah/login";
     private static final String AUTH_TOKEN_TYPE = "ah";
 
     private final Context mContext;
@@ -42,13 +43,13 @@ public class AppEngineClient {
 	this.mUserEmail = accountName;
     }
 
-    public HttpResponse makeRequestNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
+    /*    public HttpResponse makeRequestNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
 	HttpResponse res = makeRequestNoRetryNoAuth(urlPath, params);
 	if (res.getStatusLine().getStatusCode() == 500) {
 	    res = makeRequestNoRetryNoAuth(urlPath, params);
 	}
 	return res;
-    }
+    }*/
 
     public HttpResponse makeRequest(String urlPath, List<NameValuePair> params) throws Exception {
 	HttpResponse res = makeRequestNoRetry(urlPath, params, false);
@@ -58,11 +59,19 @@ public class AppEngineClient {
 	return res;
     }
 
-    private HttpResponse makeRequestNoRetryNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
+    public HttpResponse makeRequest(String urlPath,  HttpEntity httpEntity) throws Exception {
+	HttpResponse res = makeRequestNoRetry(urlPath, httpEntity, false);
+	if (res.getStatusLine().getStatusCode() == 500) {
+	    res = makeRequestNoRetry(urlPath, httpEntity, true);
+	}
+	return res;
+    }
+
+    /*    private HttpResponse makeRequestNoRetryNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
 
 	// Make POST request
 	DefaultHttpClient client = new DefaultHttpClient();
-	URI uri = new URI(BASE_URL + urlPath);
+	URI uri = new URI(Config.BASE_URL + urlPath);
 	HttpPost post = new HttpPost(uri);
 	UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
 	post.setEntity(entity);
@@ -70,20 +79,65 @@ public class AppEngineClient {
 	post.setHeader("X-Same-Domain", "1"); // XSRF
 	HttpResponse res = client.execute(post);
 	return res;
-    }
+    }*/
 
     private HttpResponse makeRequestNoRetry(String urlPath, List<NameValuePair> params, boolean renewToken)
     throws Exception {
 
+	StringBuilder ascidCookie = new StringBuilder();
+	HttpResponse res = getServerAscidCookie(renewToken, ascidCookie);
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : got ACSID cookie = "
+		+ ascidCookie.toString());
+
+	// Make POST request
+	URI uri = new URI(Config.BASE_URL + urlPath);
+	HttpPost post = new HttpPost(uri);
+	UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
+	post.setEntity(entity);
+	post.setHeader("Cookie", ascidCookie.toString());
+	post.setHeader("X-Same-Domain", "1"); // XSRF
+
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : make post request to uri = "
+		+ uri.toString());
+
+	DefaultHttpClient client = new DefaultHttpClient();
+	res = client.execute(post);
+	return res;
+    }
+
+    private HttpResponse makeRequestNoRetry(String urlPath, HttpEntity httpEntity, boolean renewToken)
+    throws Exception {
+
+	StringBuilder ascidCookie = new StringBuilder();
+	HttpResponse res = getServerAscidCookie(renewToken, ascidCookie);
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : got ACSID cookie = "
+		+ ascidCookie.toString());
+
+	// Make POST request
+	URI uri = new URI(Config.BASE_URL + urlPath);
+	HttpPost post = new HttpPost(uri);
+	post.setEntity(httpEntity);
+	post.setHeader("Cookie", ascidCookie.toString());
+	post.setHeader("X-Same-Domain", "1"); // XSRF
+
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : make post request to uri = "
+		+ uri.toString());
+
+	DefaultHttpClient client = new DefaultHttpClient();
+	res = client.execute(post);
+	return res;
+    }
+
+    private HttpResponse getServerAscidCookie(boolean renewToken, StringBuilder cookie) throws Exception {
 	// Get auth token for account
 	Account account = new Account(mUserEmail, "com.google");
 	String authToken = getAuthToken(mContext, account);
 	if (authToken == null) {
-	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : authToken is null");
+	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:getServerAscidCookie() : authToken is null");
 	    throw new PendingAuthException(mUserEmail);
 	}
 	if (renewToken) { // invalidate the cached token
-	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : renew authToken");
+	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:getServerAscidCookie() : renew authToken");
 	    AccountManager accountManager = AccountManager.get(mContext);
 	    accountManager.invalidateAuthToken(account.type, authToken);
 	    authToken = getAuthToken(mContext, account);
@@ -91,9 +145,9 @@ public class AppEngineClient {
 
 	// Get ACSID cookie
 	DefaultHttpClient client = new DefaultHttpClient();
-	String continueURL = BASE_URL;
+	String continueURL = Config.BASE_URL;
 	URI uri = new URI(AUTH_URL + "?continue=" + URLEncoder.encode(continueURL, "UTF-8") + "&auth=" + authToken);
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : get auth cookie, trying to connect to "
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:getServerAscidCookie() : get auth cookie, trying to connect to "
 		+ uri.toString());
 
 	HttpGet method = new HttpGet(uri);
@@ -106,7 +160,7 @@ public class AppEngineClient {
 	Header[] headers = res.getHeaders("Set-Cookie");
 	if (res.getStatusLine().getStatusCode() != 302 || headers.length == 0) {
 	    Log.d(Config.LOGTAG_C2DM,
-		    "AppEngineClient:makeRequestNoRetry() : failed to continue to make request " +
+		    "AppEngineClient:getServerAscidCookie() : failed to continue to make request " +
 	    "because status code is not 302 or header lendth is zero");
 	    return res;
 	}
@@ -120,23 +174,8 @@ public class AppEngineClient {
 		ascidCookie = pairs[0];
 	    }
 	}
-
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : got ACSID cookie = " + ascidCookie);
-
-	// Make POST request
-	uri = new URI(BASE_URL + urlPath);
-	HttpPost post = new HttpPost(uri);
-	UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
-	post.setEntity(entity);
-	post.setHeader("Cookie", ascidCookie);
-	post.setHeader("X-Same-Domain", "1"); // XSRF
-
-	Log
-	.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetry() : make post request to uri = "
-		+ uri.toString());
-
-	res = client.execute(post);
-	return res;
+	cookie.append(ascidCookie);
+	return null;
     }
 
     private String getAuthToken(Context context, Account account) {

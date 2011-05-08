@@ -181,28 +181,30 @@ public class DeviceRegistrar {
 	String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
 
 	List<NameValuePair> params = new ArrayList<NameValuePair>();
-	params.add(new BasicNameValuePair("devregid", deviceRegistrationID));
+	params.add(new BasicNameValuePair(Config.DEV_REG_ID_PARAM, deviceRegistrationID));
 
-	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter devregid =" + deviceRegistrationID);
+	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_REG_ID_PARAM + "=" + deviceRegistrationID);
 
 	String deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 	if (deviceId != null) {
-	    params.add(new BasicNameValuePair("deviceId", deviceId));
+	    params.add(new BasicNameValuePair(Config.DEVICE_ID_PARAM, deviceId));
 
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter deviceId =" + deviceId);
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_ID_PARAM + "=" + deviceId);
 	}
 
 	String phoneNumber = getPhoneNumber(context);
 	if (phoneNumber != null) {
-	    params.add(new BasicNameValuePair("phoneNumber", phoneNumber));
+	    params.add(new BasicNameValuePair(Config.PHONE_NUMBER_PARAM, phoneNumber));
 
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter phoneNumber =" + phoneNumber);
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.PHONE_NUMBER_PARAM + "=" + phoneNumber);
 	}
 
 	// TODO: Allow device name to be configured
-	params.add(new BasicNameValuePair("deviceName", isTablet(context) ? "Tablet" : "Phone"));
+	params.add(new BasicNameValuePair(Config.DEVICE_NAME_PARAM, isTablet(context) ? "Tablet" : "Phone"));
 
-	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter deviceName =" + (isTablet(context) ? "Tablet" : "Phone"));
+	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_NAME_PARAM + "=" + (isTablet(context) ? "Tablet" : "Phone"));
+
+	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request urlPath =" + urlPath);
 
 	AppEngineClient client = new AppEngineClient(context, accountName);
 	//return client.makeRequestNoAuth(urlPath, params);
@@ -210,14 +212,14 @@ public class DeviceRegistrar {
 
     }
 
-    static boolean isTablet (Context context) {
+    public static boolean isTablet (Context context) {
 	// TODO: This hacky stuff goes away when we allow users to target devices
 	int xlargeBit = 4; // Configuration.SCREENLAYOUT_SIZE_XLARGE;  // upgrade to HC SDK to get this
 	Configuration config = context.getResources().getConfiguration();
 	return (config.screenLayout & xlargeBit) == xlargeBit;
     }
 
-    static String getPhoneNumber(Context context) {
+    public static String getPhoneNumber(Context context) {
 	TelephonyManager mTelephonyMgr =
 	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 	return mTelephonyMgr.getLine1Number();

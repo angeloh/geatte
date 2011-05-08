@@ -41,6 +41,8 @@ public class GeatteApp extends Activity {
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.geatte_app);
+	// setup google account and save to context prefs
+	getGoogleAccount();
 
 	Button cameraButton = (Button) findViewById(R.id.app_snap_button);
 	cameraButton.setOnClickListener( new OnClickListener(){
@@ -124,6 +126,7 @@ public class GeatteApp extends Activity {
 
     @Override
     protected void onResume() {
+	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onResume() START");
 	super.onResume();
 	if (mPendingAuth) {
 	    mPendingAuth = false;
@@ -134,6 +137,7 @@ public class GeatteApp extends Activity {
 		C2DMessaging.register(this, Config.C2DM_SENDER);
 	    }
 	}
+	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onResume() END");
     }
 
     @Override
@@ -179,9 +183,7 @@ public class GeatteApp extends Activity {
 	}
     };
 
-    private void setRegisterView() {
-	final Button nextButton = (Button) findViewById(R.id.app_register_btn);
-
+    private boolean getGoogleAccount() {
 	// Display accounts
 	final String accounts[] = getGoogleAccounts();
 	if (accounts.length == 0) {
@@ -189,8 +191,8 @@ public class GeatteApp extends Activity {
 	    //	    promptText.setText(R.string.no_accounts);
 	    //	    TextView nextText = (TextView) findViewById(R.id.click_next_text);
 	    //	    nextText.setVisibility(TextView.INVISIBLE);
-	    nextButton.setEnabled(false);
 	    Log.d(Config.LOGTAG_C2DM, " " + GeatteApp.CLASSTAG + " No google accounts available!!");
+	    return false;
 
 	} else {
 	    //	    ListView listView = (ListView) findViewById(R.id.select_account);
@@ -200,9 +202,38 @@ public class GeatteApp extends Activity {
 	    //	    listView.setItemChecked(mAccountSelectedPosition, true);
 	    Log.d(Config.LOGTAG_C2DM, " " + GeatteApp.CLASSTAG + " google account available : " + accounts[0]);
 
+	    Context context = getApplicationContext();
+	    final SharedPreferences prefs = context.getSharedPreferences(
+		    Config.PREFERENCE_KEY,
+		    Context.MODE_PRIVATE);
+
+	    SharedPreferences.Editor editor = prefs.edit();
+	    editor.putString(Config.PREF_USER_EMAIL, accounts[0]);
+	    editor.commit();
+	    return true;
+	}
+    }
+
+    private void setRegisterView() {
+	final Button nextButton = (Button) findViewById(R.id.app_register_btn);
+
+	final SharedPreferences prefs = getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY,
+		Context.MODE_PRIVATE);
+	String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
+
+	if (accountName == null) {
+	    nextButton.setEnabled(false);
+	    Log.d(Config.LOGTAG_C2DM, " " + GeatteApp.CLASSTAG + ":setRegisterView() : No google account '"
+		    + Config.PREF_USER_EMAIL + "' in prefs");
+	    //TODO forward user to add account
+
+	} else {
+	    Log.d(Config.LOGTAG_C2DM, " " + GeatteApp.CLASSTAG + ":setRegisterView() : user prefs google account "
+		    + Config.PREF_USER_EMAIL + " = " + accountName);
+
 	    nextButton.setOnClickListener(new OnClickListener() {
 		public void onClick(View v) {
-		    register((String) accounts[0]);
+		    register();
 		}
 	    });
 	}
@@ -223,21 +254,11 @@ public class GeatteApp extends Activity {
 	return result;
     }
 
-    private void register(String userEmail) {
+    private void register() {
 	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
 	progressBar.setVisibility(ProgressBar.VISIBLE);
 	TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
 	textView.setVisibility(ProgressBar.VISIBLE);
-
-	Context context = getApplicationContext();
-	final SharedPreferences prefs = context.getSharedPreferences(
-		Config.PREFERENCE_KEY,
-		Context.MODE_PRIVATE);
-
-	SharedPreferences.Editor editor = prefs.edit();
-	editor.putString(Config.PREF_USER_EMAIL, userEmail);
-	editor.commit();
-
 	C2DMessaging.register(this, Config.C2DM_SENDER);
     }
 

@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import com.geatte.app.client.GreetingService;
 import com.google.android.c2dm.server.C2DMessaging;
-import com.google.appengine.api.datastore.Key;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -66,9 +65,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 	PersistenceManager pm = C2DMessaging.getPMF(getServletContext()).getPersistenceManager();
 	List<DeviceInfo> devices = new ArrayList<DeviceInfo>();
 	try {
-	    devices = DeviceInfo.getDeviceInfoForUser(pm, user);
+	    devices = DeviceInfo.getDeviceInfoForUserEmail(pm, user);
 	    // cleanup for multi-device
-	    if (devices.size() > 1) {
+	    /*if (devices.size() > 1) {
 		// Make sure there is no 'bare' registration
 		// Keys are sorted - check the first
 		DeviceInfo first = devices.get(0);
@@ -79,7 +78,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 		    devices.remove(0);
 		    pm.deletePersistent(first);
 		}
-	    }
+	    }*/
 	} catch (Exception e) {
 	    log.log(Level.WARNING, "Error loading registrations ", e);
 	} finally {

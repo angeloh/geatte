@@ -1,19 +1,3 @@
-/*
- * Copyright 2010 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.geatte.app.server;
 
 import java.util.ArrayList;
@@ -171,15 +155,15 @@ public class DeviceInfo {
 	return registrationTimestamp;
     }
 
-    /**
-     * Helper function - will query all registrations for a user.
-     */
     @SuppressWarnings("unchecked")
-    public static List<DeviceInfo> getDeviceInfoForUser(PersistenceManager pm, String user) {
+    public static List<DeviceInfo> getDeviceInfoForUserEmail(PersistenceManager pm, String userEmail) {
 	Query query = pm.newQuery(DeviceInfo.class);
-	query.setFilter("key >= '" +
-		user + "' && key < '" + user + "$'");
-	List<DeviceInfo> qresult = (List<DeviceInfo>) query.execute();
+	//query.setFilter("key >= '" + user + "' && key < '" + user + "$'");
+
+	query.setFilter("userEmail == userEmailParam");
+	query.declareParameters("String userEmailParam");
+
+	List<DeviceInfo> qresult = (List<DeviceInfo>) query.execute(userEmail);
 	// Copy to array - we need to close the query
 	List<DeviceInfo> result = new ArrayList<DeviceInfo>();
 	for (DeviceInfo di : qresult) {
@@ -187,5 +171,10 @@ public class DeviceInfo {
 	}
 	query.closeAll();
 	return result;
+    }
+
+    public static DeviceInfo getDeviceInfoForDeviceId(PersistenceManager pm, String deviceId) {
+	DeviceInfo dInfo = pm.getObjectById(DeviceInfo.class, deviceId);
+	return dInfo;
     }
 }

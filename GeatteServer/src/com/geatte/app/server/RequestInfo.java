@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.android.c2dm.server.C2DMessaging;
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -33,7 +32,7 @@ public class RequestInfo {
 
     public List<DeviceInfo> devices = new ArrayList<DeviceInfo>();
 
-    public String userName;
+    private String userEmail;
 
     private ServletContext ctx;
     public String deviceRegistrationID;
@@ -44,8 +43,8 @@ public class RequestInfo {
     private RequestInfo() {
     }
 
-    public RequestInfo(String userN, ServletContext ctx) {
-	this.userName = userN;
+    public RequestInfo(String userEmail, ServletContext ctx) {
+	this.userEmail = userEmail;
 	this.ctx = ctx;
 	if (ctx != null) {
 	    initDevices(ctx);
@@ -58,7 +57,7 @@ public class RequestInfo {
     JSONObject jsonParams;
 
     public boolean isAuth() {
-	return userName != null;
+	return userEmail != null;
     }
 
     /**
@@ -99,8 +98,8 @@ public class RequestInfo {
 	    UserService userService = UserServiceFactory.getUserService();
 	    user = userService.getCurrentUser();
 	    if (user != null) {
-		reqInfo.userName = user.getEmail();
-		log.info("RequestInfo:processRequest() : get user email thru ClientLogin :" + reqInfo.userName);
+		reqInfo.userEmail = user.getEmail();
+		log.info("RequestInfo:processRequest() : get user email thru ClientLogin :" + reqInfo.userEmail);
 	    }
 	}
 
@@ -129,7 +128,7 @@ public class RequestInfo {
 	    log.info("RequestInfo:processRequest() : reqInfo.parameterMap :" + reqInfo.parameterMap.toString());
 	}
 
-	reqInfo.deviceRegistrationID = reqInfo.getParameter("devregid");
+	reqInfo.deviceRegistrationID = reqInfo.getParameter(Config.DEV_REG_ID_PARAM);
 	log.info("RequestInfo:processRequest() : reqInfo.deviceRegistrationID = " + reqInfo.deviceRegistrationID);
 	if (reqInfo.deviceRegistrationID != null) {
 	    reqInfo.deviceRegistrationID = reqInfo.deviceRegistrationID.trim();
@@ -139,10 +138,10 @@ public class RequestInfo {
 	    log.info("RequestInfo:processRequest() : after trim() reqInfo.deviceRegistrationID = " + reqInfo.deviceRegistrationID);
 	}
 
-	if (reqInfo.userName == null) {
-	    resp.setStatus(200);
+	if (reqInfo.userEmail == null) {
+	    resp.setStatus(400);
 	    resp.getWriter().println(LOGIN_REQUIRED_STATUS);
-	    log.warning("RequestInfo:processRequest() : Missing user");
+	    log.warning("RequestInfo:processRequest() : can not get login user email!!");
 	    return null;
 	}
 
@@ -168,7 +167,7 @@ public class RequestInfo {
 
     @Override
     public String toString() {
-	return userName + " " + devices.size() + " " + jsonParams;
+	return userEmail + " " + devices.size() + " " + jsonParams;
     }
 
     private void initDevices(ServletContext ctx) {
@@ -176,9 +175,9 @@ public class RequestInfo {
 	PersistenceManager pm = C2DMessaging.getPMF(ctx).getPersistenceManager();
 
 	try {
-	    devices = DeviceInfo.getDeviceInfoForUser(pm, userName);
+	    devices = DeviceInfo.getDeviceInfoForUserEmail(pm, userEmail);
 	    // cleanup for multi-device
-	    if (devices.size() > 1) {
+	    /*if (devices.size() > 1) {
 		// Make sure there is no 'bare' registration
 		// Keys are sorted - check the first
 		DeviceInfo first = devices.get(0);
@@ -189,8 +188,8 @@ public class RequestInfo {
 		    devices.remove(0);
 		    pm.deletePersistent(first);
 		}
-	    }
-	    log.log(Level.INFO, "RequestInfo:initDevices() : loading devices " + devices.size() + " for user = " + userName);
+	    }*/
+	    log.log(Level.INFO, "RequestInfo:initDevices() : loading devices " + devices.size() + " for user = " + userEmail);
 	} catch (Exception e) {
 	    log.log(Level.WARNING, "RequestInfo:initDevices() : Error loading registrations ", e);
 	} finally {
@@ -208,7 +207,7 @@ public class RequestInfo {
 	}
 	PersistenceManager pm = C2DMessaging.getPMF(ctx).getPersistenceManager();
 	try {
-	    List<DeviceInfo> registrations = DeviceInfo.getDeviceInfoForUser(pm, userName);
+	    List<DeviceInfo> registrations = DeviceInfo.getDeviceInfoForUserEmail(pm, userEmail);
 	    for (int i = 0; i < registrations.size(); i++) {
 		DeviceInfo deviceInfo = registrations.get(i);
 		if (deviceInfo.getDeviceRegistrationID().equals(regId)) {
@@ -235,4 +234,13 @@ public class RequestInfo {
     public void setDeviceRegistrationID(String deviceRegistrationID) {
 	this.deviceRegistrationID = deviceRegistrationID;
     }
+
+    public String getUserEmail() {
+	return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+	this.userEmail = userEmail;
+    }
+
 }

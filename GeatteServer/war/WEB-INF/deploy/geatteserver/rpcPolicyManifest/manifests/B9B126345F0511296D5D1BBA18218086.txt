@@ -1,2 +1,0 @@
-serviceClass: com.geatte.app.client.GreetingService
-path: 7650088E7D0FA97239C45C47059F7235.gwt.rpc

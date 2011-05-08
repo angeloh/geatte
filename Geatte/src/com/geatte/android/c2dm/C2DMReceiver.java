@@ -32,7 +32,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    Log.d(Config.LOGTAG_C2DM, "Registration ID arrived: Fantastic!!!");
 	    Log.d(Config.LOGTAG_C2DM, registrationId);
 	} else {
-	    Log.e("C2DM", "Registration ID is null!!!");
+	    Log.e(Config.LOGTAG_C2DM, "Registration ID is null!!!");
 	}
 
 	//TODO if null, donot call REST at all
@@ -42,15 +42,18 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
     @Override
     public void onUnregistered(Context context) {
+	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onUnregistered() START");
 	final SharedPreferences prefs = context.getSharedPreferences(
 		Config.PREFERENCE_KEY,
 		Context.MODE_PRIVATE);
 	String registrationId = prefs.getString(Config.PREF_REGISTRATION_ID, null);
 	DeviceRegistrar.unregisterWithServer(context, registrationId);
+	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onUnregistered() END");
     }
 
     @Override
     public void onError(Context context, String errorId) {
+	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onError() START");
 	final SharedPreferences prefs = context.getSharedPreferences(
 		Config.PREFERENCE_KEY,
 		Context.MODE_PRIVATE);
@@ -58,6 +61,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	DeviceRegistrar.unregisterWithServer(context, registrationId);
 	Toast.makeText(context, "Messaging registration error: " + errorId,
 		Toast.LENGTH_LONG).show();
+	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onError() END");
     }
 
     @Override
