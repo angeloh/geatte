@@ -18,10 +18,10 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.labs.taskqueue.Queue;
-import com.google.appengine.api.labs.taskqueue.QueueFactory;
-import com.google.appengine.api.labs.taskqueue.TaskHandle;
-import com.google.appengine.api.labs.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskHandle;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 public class C2DMessaging {
     private static final String UPDATE_CLIENT_AUTH = "Update-Client-Auth";
@@ -34,7 +34,7 @@ public class C2DMessaging {
 
     public static final String PARAM_COLLAPSE_KEY = "collapse_key";
 
-    private static final String UTF8 = "UTF-8";
+    public static final String UTF8 = "UTF-8";
 
     /**
      * Jitter - random interval to wait before retry.
@@ -140,12 +140,9 @@ public class C2DMessaging {
 	int responseCode = conn.getResponseCode();
 
 	if (responseCode == HttpServletResponse.SC_UNAUTHORIZED || responseCode == HttpServletResponse.SC_FORBIDDEN) {
-	    // The token is too old - return false to retry later, will fetch
-	    // the token
-	    // from DB. This happens if the password is changed or token
-	    // expires. Either admin
-	    // is updating the token, or Update-Client-Auth was received by
-	    // another server,
+	    // The token is too old - return false to retry later, will fetch the token
+	    // from DB. This happens if the password is changed or token expires. Either admin
+	    // is updating the token, or Update-Client-Auth was received by another server,
 	    // and next retry will get the good one from database.
 	    log.warning("C2DMessaging.sendNoRetry() : Unauthorized - need token" + ", responseCode : " + responseCode);
 	    serverConfig.invalidateCachedToken();
@@ -161,8 +158,7 @@ public class C2DMessaging {
 
 	String responseLine = new BufferedReader(new InputStreamReader(conn.getInputStream())).readLine();
 
-	// NOTE: You *MUST* use exponential backoff if you receive a 503
-	// response code.
+	// NOTE: You *MUST* use exponential backoff if you receive a 503 response code.
 	// Since App Engine's task queue mechanism automatically does this for
 	// tasks that return non-success error codes, this is not explicitly implemented
 	// here.
@@ -186,8 +182,6 @@ public class C2DMessaging {
 	if (responseParts[0].equals("Error")) {
 	    String err = responseParts[1];
 	    log.warning("Got error response from Google datamessaging endpoint: " + err);
-	    // No retry.
-	    // TODO(costin): show a nicer error to the user.
 	    throw new IOException(err);
 	} else {
 	    // 500 or unparseable response - server error, needs to retry
@@ -262,7 +256,7 @@ public class C2DMessaging {
     private void retry(String token, String collapseKey, Map<String, String[]> params, boolean delayWhileIdle) {
 	Queue dmQueue = QueueFactory.getQueue("c2dm");
 	try {
-	    TaskOptions url = TaskOptions.Builder.url(C2DMRetryServlet.URI).param(C2DMessaging.PARAM_REGISTRATION_ID,
+	    TaskOptions url = TaskOptions.Builder.withUrl(C2DMRetryServlet.URI).param(C2DMessaging.PARAM_REGISTRATION_ID,
 		    token).param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
 	    if (delayWhileIdle) {
 		url.param(PARAM_DELAY_WHILE_IDLE, "1");

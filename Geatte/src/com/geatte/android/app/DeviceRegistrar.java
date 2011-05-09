@@ -208,7 +208,7 @@ public class DeviceRegistrar {
 
 	AppEngineClient client = new AppEngineClient(context, accountName);
 	//return client.makeRequestNoAuth(urlPath, params);
-	return client.makeRequest(urlPath, params);
+	return client.makeRequestWithParams(urlPath, params);
 
     }
 

@@ -32,6 +32,14 @@
 			com.geatte.app.server.GeatteUploadServlet
 		</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>GeatteSendServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteSendServlet
+		</servlet-class>
+	</servlet>
+	
 	<!-- 
 	<servlet>
 		<servlet-name>SendServlet</servlet-name>
@@ -79,6 +87,21 @@
 		<servlet-name>greetServlet</servlet-name>
 		<url-pattern>/geatteserver/greet</url-pattern>
 	</servlet-mapping>
+	
+		<servlet-mapping>
+		<servlet-name>GeatteSendServlet</servlet-name>
+		<url-pattern>/tasks/geattesend</url-pattern>
+	</servlet-mapping>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>tasks</web-resource-name>
+			<url-pattern>/tasks/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

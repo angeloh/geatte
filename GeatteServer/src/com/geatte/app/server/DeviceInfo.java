@@ -173,6 +173,24 @@ public class DeviceInfo {
 	return result;
     }
 
+    @SuppressWarnings("unchecked")
+    public static List<DeviceInfo> getDeviceInfoForNumber(PersistenceManager pm, String number) {
+	Query query = pm.newQuery(DeviceInfo.class);
+
+	query.setFilter("phoneNumber == phoneNumberParam");
+	query.declareParameters("String phoneNumberParam");
+
+	List<DeviceInfo> qresult = (List<DeviceInfo>) query.execute(number);
+	// Copy to array - we need to close the query
+	List<DeviceInfo> result = new ArrayList<DeviceInfo>();
+	for (DeviceInfo di : qresult) {
+	    result.add(di);
+	}
+	query.closeAll();
+	return result;
+    }
+
+
     public static DeviceInfo getDeviceInfoForDeviceId(PersistenceManager pm, String deviceId) {
 	DeviceInfo dInfo = pm.getObjectById(DeviceInfo.class, deviceId);
 	return dInfo;

@@ -78,17 +78,31 @@ public class GeatteEdit extends Activity {
 
 	sendButton.setOnClickListener(new View.OnClickListener() {
 	    public void onClick(View view) {
-		if (mImagePath == null || mSavedImagePath == null) {
+		if (mImagePath == null && mSavedImagePath == null) {
 		    Toast.makeText(getApplicationContext(), "Please select image", Toast.LENGTH_SHORT).show();
 		} else {
 		    mDialog = ProgressDialog.show(GeatteEdit.this, "Uploading", "Please wait...", true);
 		    new ImageUploadTask().execute();
 		}
-		setResult(RESULT_OK);
-		finish();
+		//setResult(RESULT_OK);
+		//finish();
 	    }
 
 	});
+    }
+
+    @Override
+    protected void onDestroy() {
+	Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): START");
+	super.onDestroy();
+	if (mDialog != null) {
+	    Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): cancel mDialog");
+	    mDialog.cancel();
+	}
+	if (mDbHelper != null) {
+	    mDbHelper.close();
+	}
+	Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): END");
     }
 
     private void populateFields() {
@@ -194,7 +208,7 @@ public class GeatteEdit extends Activity {
 		String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
 
 		AppEngineClient client = new AppEngineClient(getApplicationContext(), accountName);
-		HttpResponse response = client.makeRequest(UPLOAD_PATH, entity);
+		HttpResponse response = client.makeRequestWithEntity(UPLOAD_PATH, entity);
 
 		// httpPost.setEntity(entity);
 		// HttpResponse response = httpClient.execute(httpPost,
@@ -212,8 +226,15 @@ public class GeatteEdit extends Activity {
 		    return sResponse;
 		}
 	    } catch (Exception e) {
-		if (mDialog.isShowing()) {
-		    mDialog.dismiss();
+		if (mDialog != null && mDialog.isShowing()) {
+		    try {
+			Log.d(Config.LOGTAG, "ImageUploadTask:doInBackground(): try to dismiss mDialog");
+			mDialog.dismiss();
+			mDialog = null;
+		    } catch (Exception ex) {
+			// nothing
+			Log.d(Config.LOGTAG, "ImageUploadTask:doInBackground(): failed to dismiss mDialog");
+		    }
 		}
 		Toast.makeText(getApplicationContext(), getString(R.string.upload_text_error), Toast.LENGTH_LONG)
 		.show();
@@ -230,10 +251,17 @@ public class GeatteEdit extends Activity {
 	@Override
 	protected void onPostExecute(String sResponse) {
 	    try {
-		if (mDialog.isShowing()) {
-		    mDialog.dismiss();
+		if (mDialog != null && mDialog.isShowing()) {
+		    try {
+			Log.d(Config.LOGTAG, "ImageUploadTask:onPostExecute(): try to dismiss mDialog");
+			mDialog.dismiss();
+			mDialog = null;
+		    } catch (Exception e) {
+			// nothing
+			Log.d(Config.LOGTAG, "ImageUploadTask:onPostExecute(): failed to dismiss mDialog");
+		    }
 		}
-
+		Log.d(Config.LOGTAG, "ImageUploadTask:onPostExecute(): get response :" + sResponse);
 		// TODO server response
 		if (sResponse != null) {
 		    // JSONObject JResponse = new JSONObject(sResponse);
@@ -244,13 +272,17 @@ public class GeatteEdit extends Activity {
 		    // Toast.LENGTH_LONG).show();
 		    // } else {
 		    Toast.makeText(getApplicationContext(), "Geatte uploaded successfully, GeatteId = " + sResponse,
-			    Toast.LENGTH_SHORT).show();
+			    Toast.LENGTH_LONG).show();
 		    // }
 		}
+		setResult(RESULT_OK);
 	    } catch (Exception e) {
 		Toast.makeText(getApplicationContext(), getString(R.string.upload_text_error), Toast.LENGTH_LONG)
 		.show();
 		Log.e(Config.LOGTAG, e.getMessage(), e);
+		setResult(RESULT_CANCELED);
+	    } finally {
+		finish();
 	    }
 	}
     }

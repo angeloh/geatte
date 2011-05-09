@@ -67,21 +67,27 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     @Override
     protected void onMessage(Context context, Intent intent) {
 	Log.d(Config.LOGTAG_C2DM, "onMessage: Fantastic!!!");
-	// Extract the payload from the message
 	Bundle extras = intent.getExtras();
 	if (extras != null) {
 	    String accountName = extras.getString(Config.C2DM_ACCOUNT_EXTRA);
-	    String message = extras.getString(Config.C2DM_MESSAGE_EXTRA);
-	    System.out.println(extras.get("payload"));
 	    if (accountName != null) {
-		//if (Log.isLoggable(Config.LOGTAG_C2DM, Log.DEBUG)) {
 		Log.d(Config.LOGTAG_C2DM, "Messaging request received for account " + accountName);
-		//}
 	    }
+	    String message = extras.getString(Config.C2DM_MESSAGE_EXTRA);
 	    if (message != null) {
-		//if (Log.isLoggable(Config.LOGTAG_C2DM, Log.DEBUG)) {
 		Log.d(Config.LOGTAG_C2DM, "Messaging request received for message " + message);
-		//}
+	    }
+	    String payload = (String) extras.get(Config.C2DM_MESSAGE_PAYLOAD);
+	    if (payload != null) {
+		Log.d(Config.LOGTAG_C2DM, "Messaging request received for payload " + payload);
+	    }
+	    String geatteid = (String) extras.get(Config.C2DM_MESSAGE_GEATTE_ID);
+	    if (geatteid != null) {
+		Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatteid " + geatteid);
+	    }
+	    geatteid = extras.getString(Config.C2DM_MESSAGE_GEATTE_ID);
+	    if (geatteid != null) {
+		Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatteid " + geatteid);
 	    }
 	    // Now do something smart based on the information
 	}

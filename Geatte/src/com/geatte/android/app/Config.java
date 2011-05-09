@@ -17,6 +17,8 @@ public class Config {
     public static final String C2DM_ACCOUNT_EXTRA = "account_name";
     public static final String C2DM_MESSAGE_EXTRA = "message";
     public static final String C2DM_MESSAGE_SYNC = "sync";
+    public static final String C2DM_MESSAGE_GEATTE_ID = "geatteid";
+    public static final String C2DM_MESSAGE_PAYLOAD = "payload";
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
 
     // prefs
