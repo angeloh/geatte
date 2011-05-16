@@ -34,7 +34,7 @@ public class GeatteSendServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
 
-	String toNumbers = req.getParameter(Config.TO_NUMBER_PARAM);
+	String toNumbers = req.getParameter(Config.GEATTE_TO_NUMBER_PARAM);
 	log.info("GeatteSendServlet:doPost() : send geatte to numbers = " + toNumbers);
 	//String geatteId = req.getParameter(Config.GEATTE_ID_PARAM);
 	String retryCount = req.getHeader(RETRY_COUNT);

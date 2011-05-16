@@ -88,14 +88,14 @@ public class RegisterServlet extends HttpServlet {
 	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.DEVICE_ID_PARAM + " = " + deviceId);
 	}
 
-	String phoneNumber = reqInfo.getParameter(Config.PHONE_NUMBER_PARAM);
+	String phoneNumber = reqInfo.getParameter(Config.DEV_PHONE_NUMBER_PARAM);
 
 	if (phoneNumber == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.PHONE_NUMBER_PARAM + ")");
-	    log.severe("RegisterServlet.doPOST() : Missing phone number, " + Config.PHONE_NUMBER_PARAM + " is null");
+	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.DEV_PHONE_NUMBER_PARAM + ")");
+	    log.severe("RegisterServlet.doPOST() : Missing phone number, " + Config.DEV_PHONE_NUMBER_PARAM + " is null");
 	    return;
 	} else {
-	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.PHONE_NUMBER_PARAM + " = "
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.DEV_PHONE_NUMBER_PARAM + " = "
 		    + phoneNumber);
 	}
 

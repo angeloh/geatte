@@ -76,15 +76,15 @@ public class GeatteList extends ListActivity {
 	this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving my geattes", true, false);
 
 	// Get all of the rows from the database and create the item list
-	Cursor myGeattesCursor = dbHelper.fetchAllNotes();
+	Cursor myGeattesCursor = dbHelper.fetchAllInterests();
 	startManagingCursor(myGeattesCursor);
 
 	// Create an array to specify the fields we want to display in the list
-	String[] from = new String[]{GeatteDBAdapter.KEY_IMAGE_PATH, GeatteDBAdapter.KEY_INTEREST_TITLE};
+	String[] from = new String[]{GeatteDBAdapter.KEY_IMAGE_PATH, GeatteDBAdapter.KEY_INTEREST_TITLE, GeatteDBAdapter.KEY_INTEREST_DESC};
 	//String[] from = new String[]{GeatteDBAdapter.KEY_INTEREST_TITLE};
 
 	// and an array of the fields we want to bind those fields to
-	int[] to = new int[]{R.id.my_geatte_img, R.id.my_geatte_title};
+	int[] to = new int[]{R.id.my_geatte_img, R.id.my_geatte_title, R.id.my_geatte_desc};
 	//int[] to = new int[]{R.id.my_geatte_title};
 
 	// Now create a simple cursor adapter and set it to display

@@ -196,9 +196,9 @@ public class GeatteEdit extends Activity {
 		byte[] data = bos.toByteArray();
 
 		String myNumber = DeviceRegistrar.getPhoneNumber(getApplicationContext());
-		entity.addPart(Config.FROM_NUMBER_PARAM, new StringBody(myNumber));
+		entity.addPart(Config.GEATTE_FROM_NUMBER_PARAM, new StringBody(myNumber));
 		// TODO to number list
-		entity.addPart(Config.TO_NUMBER_PARAM, new StringBody("TONUMBER"));
+		entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("TONUMBER"));
 		entity.addPart(Config.GEATTE_TITLE_PARAM, new StringBody(title));
 		entity.addPart(Config.GEATTE_DESC_PARAM, new StringBody(desc));
 		entity.addPart(Config.GEATTE_IMAGE_PARAM, new ByteArrayBody(data, imageFileName));

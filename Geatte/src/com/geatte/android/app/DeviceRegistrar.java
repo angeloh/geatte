@@ -194,9 +194,9 @@ public class DeviceRegistrar {
 
 	String phoneNumber = getPhoneNumber(context);
 	if (phoneNumber != null) {
-	    params.add(new BasicNameValuePair(Config.PHONE_NUMBER_PARAM, phoneNumber));
+	    params.add(new BasicNameValuePair(Config.DEV_PHONE_NUMBER_PARAM, phoneNumber));
 
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.PHONE_NUMBER_PARAM + "=" + phoneNumber);
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_PHONE_NUMBER_PARAM + "=" + phoneNumber);
 	}
 
 	// TODO: Allow device name to be configured

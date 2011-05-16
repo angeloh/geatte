@@ -77,7 +77,7 @@ public class GeatteListOthers extends ListActivity {
 	this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving my geattes", true, false);
 
 	// Get all of the rows from the database and create the item list
-	Cursor myGeattesCursor = dbHelper.fetchAllNotes();
+	Cursor myGeattesCursor = dbHelper.fetchAllInterests();
 	startManagingCursor(myGeattesCursor);
 
 	// Create an array to specify the fields we want to display in the list (only TITLE)

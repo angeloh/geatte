@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/my_geatte_row"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">    
-
-	<ImageView android:id="@+id/my_geatte_img"
-		android:layout_width="54dip"
-		android:layout_height="54dip"
-		android:layout_marginTop="8dip"
-		android:layout_marginRight="8dip"
-		android:layout_marginLeft="8dip"
-		android:layout_marginBottom="4dip"
-	/>
-    <LinearLayout
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip">
+    
+    <ImageView
+        android:id="@+id/my_geatte_img"
         android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="6dip"/>
+
+    <TextView  
+        android:id="@+id/my_geatte_desc"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip" 
+        android:layout_toRightOf="@id/my_geatte_img"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:singleLine="true"
+        android:ellipsize="marquee"/>
+        
+    <TextView
+    	android:id="@+id/my_geatte_title"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_toRightOf="@id/my_geatte_img"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/my_geatte_desc"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical"/>
 
-        <TextView android:id="@+id/my_geatte_title"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView android:id="@+id/my_geatte_vote"
-            android:textSize="12sp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

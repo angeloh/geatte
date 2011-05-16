@@ -42,14 +42,25 @@ public class GeatteDBAdapter {
     public static final String KEY_FRIEND_INTEREST_ID = "_id";
     public static final String KEY_FRIEND_INTEREST_TITLE = "f_title";
     public static final String KEY_FRIEND_INTEREST_DESC = "f_desc";
+    public static final String KEY_FRIEND_INTEREST_FROM = "f_from_number";
+    //public static final String KEY_FRIEND_INTEREST_IMAGE = "f_image";
+    public static final String KEY_FRIEND_INTEREST_CREATED_DATE = "f_created_date";
 
-    private static final String TAG = "GeatteReviewAdapter";
+    //TABLE fi_images
+    public static final String KEY_FI_IMAGE_ID = "_id";
+    public static final String KEY_FI_IMAGE_AS_ID = "fi_image_id";
+    public static final String KEY_FI_IMAGE_INTEREST_ID = "fi_interest";
+    public static final String KEY_FI_IMAGE_PATH = "fi_image_path";
+
+    private static final String TAG = "GeatteDBAdapter";
     private static final String DATABASE_NAME = "geattedb";
     private static final int DATABASE_VERSION = 2;
 
     private static final String DB_TABLE_INTERESTS = "interests";
     private static final String DB_TABLE_FEEDBACKS = "feedbacks";
     private static final String DB_TABLE_IMAGES = "images";
+    private static final String DB_TABLE_FRIEND_INTERESTS = "friend_interests";
+    private static final String DB_TABLE_FI_IMAGES = "fi_images";
     /**
      * Database creation sql statement
      */
@@ -64,15 +75,31 @@ public class GeatteDBAdapter {
 	KEY_FEEDBACK_VOTE + " TEXT," +
 	KEY_FEEDBACK_COMMENT + " TEXT," +
 	KEY_FEEDBACK_INTEREST_ID + " INTEGER," +
-	"FOREIGN KEY (" +KEY_FEEDBACK_INTEREST_ID +") REFERENCES interests (" + KEY_INTEREST_ID + ")" +
+	"FOREIGN KEY (" +KEY_FEEDBACK_INTEREST_ID +") REFERENCES " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_ID + ")" +
 	");";
 
     private static final String DB_CREATE_IMAGES =
 	"CREATE TABLE " + DB_TABLE_IMAGES + " (" + KEY_IMAGE_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
-	KEY_IMAGE_PATH + " TEXT," +
+	KEY_IMAGE_PATH +" TEXT NOT NULL," +
 	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
 	KEY_IMAGE_INTEREST_ID + " INTEGER," +
-	"FOREIGN KEY (" + KEY_IMAGE_INTEREST_ID + ") REFERENCES interests (" + KEY_INTEREST_ID + ")" +
+	"FOREIGN KEY (" + KEY_IMAGE_INTEREST_ID + ") REFERENCES " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_ID + ")" +
+	");";
+
+    private static final String DB_CREATE_FRIEND_INTERESTS =
+	"CREATE TABLE " + DB_TABLE_FRIEND_INTERESTS + " (" + KEY_FRIEND_INTEREST_ID +" TEXT PRIMARY KEY," +
+	KEY_FRIEND_INTEREST_TITLE +" TEXT NOT NULL," +
+	KEY_FRIEND_INTEREST_DESC +" TEXT," +
+	KEY_FRIEND_INTEREST_FROM +" TEXT NOT NULL," +
+	KEY_FRIEND_INTEREST_CREATED_DATE +" TEXT" +
+	");";
+
+    private static final String DB_CREATE_FI_IMAGES =
+	"CREATE TABLE " + DB_TABLE_FI_IMAGES + " (" + KEY_FI_IMAGE_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
+	KEY_FI_IMAGE_PATH +" TEXT NOT NULL," +
+	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
+	KEY_FI_IMAGE_INTEREST_ID + " INTEGER," +
+	"FOREIGN KEY (" + KEY_FI_IMAGE_INTEREST_ID + ") REFERENCES " + DB_TABLE_FRIEND_INTERESTS + " (" + KEY_FRIEND_INTEREST_ID + ")" +
 	");";
 
     private DatabaseHelper mDbHelper;
@@ -90,6 +117,8 @@ public class GeatteDBAdapter {
 	    db.execSQL(DB_CREATE_INTERESTS);
 	    db.execSQL(DB_CREATE_FEEDBACKS);
 	    db.execSQL(DB_CREATE_IMAGES);
+	    db.execSQL(DB_CREATE_FRIEND_INTERESTS);
+	    db.execSQL(DB_CREATE_FI_IMAGES);
 	}
 
 	/*	private void processDelete(long rowId) {
@@ -106,6 +135,8 @@ public class GeatteDBAdapter {
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_INTERESTS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_FEEDBACKS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_IMAGES);
+	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_FRIEND_INTERESTS);
+	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_FI_IMAGES);
 
 	    onCreate(db);
 	}
@@ -182,12 +213,51 @@ public class GeatteDBAdapter {
     }
 
     /**
+     * Insert friend's interest to db
+     * 
+     * @param geatteId geatte id sent from server
+     * @param title geatte title
+     * @param desc geatte desc
+     * @param fromNumber geatte sent from
+     * @param imagePath image path
+     * @param createdDate created date
+     * @return the row ID of the newly inserted row
+     */
+    public long insertFriendInterest(String geatteId, String title, String desc, String fromNumber, String createdDate) {
+	if (geatteId == null || fromNumber == null) {
+	    return -1;
+	}
+	if (title == null) {
+	    title = "New Geatte";
+	}
+	ContentValues initialValues = new ContentValues();
+	initialValues.put(KEY_FRIEND_INTEREST_ID, geatteId);
+	initialValues.put(KEY_FRIEND_INTEREST_TITLE, title);
+	initialValues.put(KEY_FRIEND_INTEREST_DESC, desc);
+	initialValues.put(KEY_FRIEND_INTEREST_FROM, fromNumber);
+	initialValues.put(KEY_FRIEND_INTEREST_CREATED_DATE, createdDate);
+
+	return mDb.insert(DB_TABLE_FRIEND_INTERESTS, null, initialValues);
+    }
+
+    public long insertFIImage(String geatteId, String imagePath) {
+	if (geatteId == null || imagePath == null) {
+	    return -1;
+	}
+	ContentValues initialValues = new ContentValues();
+	initialValues.put(KEY_FI_IMAGE_INTEREST_ID, geatteId);
+	initialValues.put(KEY_FI_IMAGE_PATH, imagePath);
+
+	return mDb.insert(DB_TABLE_FI_IMAGES, null, initialValues);
+    }
+
+    /**
      * Delete the note with the given rowId
      * 
      * @param rowId id of note to delete
      * @return true if deleted, false otherwise
      */
-    public boolean deleteNote(long rowId) {
+    public boolean deleteInterest(long rowId) {
 	mDb.delete(DB_TABLE_FEEDBACKS, KEY_FEEDBACK_INTEREST_ID + "=" + rowId, null);
 	mDb.delete(DB_TABLE_IMAGES, KEY_IMAGE_INTEREST_ID + "=" + rowId, null);
 	return mDb.delete(DB_TABLE_INTERESTS, KEY_INTEREST_ID + "=" + rowId, null) > 0;
@@ -198,7 +268,7 @@ public class GeatteDBAdapter {
      * 
      * @return Cursor over all notes
      */
-    public Cursor fetchAllNotes() {
+    public Cursor fetchAllInterests() {
 	String query = "SELECT " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +

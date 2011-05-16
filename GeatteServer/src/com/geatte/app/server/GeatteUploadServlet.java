@@ -59,24 +59,24 @@ public class GeatteUploadServlet extends HttpServlet {
 	    return;
 	}
 
-	String fromNumber = reqInfo.getParameter(Config.FROM_NUMBER_PARAM);
+	String fromNumber = reqInfo.getParameter(Config.GEATTE_FROM_NUMBER_PARAM);
 
 	if (fromNumber == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.FROM_NUMBER_PARAM + ")");
-	    log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.FROM_NUMBER_PARAM + " is null");
+	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_FROM_NUMBER_PARAM + ")");
+	    log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.GEATTE_FROM_NUMBER_PARAM + " is null");
 	    return;
 	} else {
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.FROM_NUMBER_PARAM + " = " + fromNumber);
+	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.GEATTE_FROM_NUMBER_PARAM + " = " + fromNumber);
 	}
 
-	String toNumber = reqInfo.getParameter(Config.TO_NUMBER_PARAM);
+	String toNumber = reqInfo.getParameter(Config.GEATTE_TO_NUMBER_PARAM);
 
 	if (toNumber == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.TO_NUMBER_PARAM + ")");
-	    log.severe("GeatteUploadServlet.doPOST() : Missing to number, " + Config.TO_NUMBER_PARAM + " is null");
+	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TO_NUMBER_PARAM + ")");
+	    log.severe("GeatteUploadServlet.doPOST() : Missing to number, " + Config.GEATTE_TO_NUMBER_PARAM + " is null");
 	    return;
 	} else {
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.TO_NUMBER_PARAM + " = "
+	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.GEATTE_TO_NUMBER_PARAM + " = "
 		    + toNumber);
 	}
 
@@ -152,9 +152,9 @@ public class GeatteUploadServlet extends HttpServlet {
 		InputStream stream = item.openStream();
 
 		if (item.isFormField()) {
-		    if (item.getFieldName().equals(Config.FROM_NUMBER_PARAM)) {
+		    if (item.getFieldName().equals(Config.GEATTE_FROM_NUMBER_PARAM)) {
 			mFromNumberField = Streams.asString(stream);
-		    } else if (item.getFieldName().equals(Config.TO_NUMBER_PARAM)) {
+		    } else if (item.getFieldName().equals(Config.GEATTE_TO_NUMBER_PARAM)) {
 			mToNumberField = Streams.asString(stream);
 		    } else if (item.getFieldName().equals(Config.GEATTE_TITLE_PARAM)) {
 			mGeatteTitleField = Streams.asString(stream);
@@ -172,14 +172,14 @@ public class GeatteUploadServlet extends HttpServlet {
 
 	    if (mFromNumberField == null) {
 		res.setStatus(400);
-		res.getWriter().println(ERROR_STATUS + "(Must specify " + Config.FROM_NUMBER_PARAM + ")");
-		log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.FROM_NUMBER_PARAM + " is null");
+		res.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_FROM_NUMBER_PARAM + ")");
+		log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.GEATTE_FROM_NUMBER_PARAM + " is null");
 		return;
 	    }
 	    if (mToNumberField == null) {
 		res.setStatus(400);
-		res.getWriter().println(ERROR_STATUS + "(Must specify " + Config.TO_NUMBER_PARAM + ")");
-		log.severe("GeatteUploadServlet.doPOST() : Missing to number, " + Config.TO_NUMBER_PARAM + " is null");
+		res.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TO_NUMBER_PARAM + ")");
+		log.severe("GeatteUploadServlet.doPOST() : Missing to number, " + Config.GEATTE_TO_NUMBER_PARAM + " is null");
 		return;
 	    }
 	    if (mGeatteTitleField == null) {
@@ -195,8 +195,10 @@ public class GeatteUploadServlet extends HttpServlet {
 	    String geatteId = null;
 	    if ((geatteId = saveToDb(res)) != null ) {
 		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : ready to send geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
+		// the message push to device
 		Map<String, String[]> params = new HashMap<String, String[]>();
 		params.put("data.geatteid", new String[]{geatteId});
+
 		submitGeatteTask(mToNumberField, params);
 		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : sent geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
 	    }
@@ -242,10 +244,10 @@ public class GeatteUploadServlet extends HttpServlet {
 
 	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : Saved geatteInfo fromNumber = " + mFromNumberField
 		    + ", toNumber = " + mToNumberField + ", geatteTitile = " + mGeatteTitleField
-		    + ", geatteDesc = " + mGeatteDescField + ", key = " + geatteInfo.getKey().toString());
+		    + ", geatteDesc = " + mGeatteDescField + ", id = " + geatteInfo.getId().toString());
 
-	    res.getWriter().println(geatteInfo.getKey());
-	    return Long.toString(geatteInfo.getKey().getId());
+	    res.getWriter().println(geatteInfo.getId().toString());
+	    return geatteInfo.getId().toString();
 
 	} catch (Exception e) {
 	    res.setStatus(400);
@@ -265,7 +267,7 @@ public class GeatteUploadServlet extends HttpServlet {
 	Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
-	    .param(Config.TO_NUMBER_PARAM, toNumbers).param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
+	    .param(Config.GEATTE_TO_NUMBER_PARAM, toNumbers).param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
 	    if (delayWhileIdle) {
 		url.param(C2DMessaging.PARAM_DELAY_WHILE_IDLE, "1");
 	    }
