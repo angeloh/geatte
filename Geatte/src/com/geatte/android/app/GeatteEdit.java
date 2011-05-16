@@ -93,8 +93,8 @@ public class GeatteEdit extends Activity {
 
     @Override
     protected void onDestroy() {
-	Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): START");
 	super.onDestroy();
+	Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): START");
 	if (mDialog != null) {
 	    Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): cancel mDialog");
 	    mDialog.cancel();

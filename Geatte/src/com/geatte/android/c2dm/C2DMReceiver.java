@@ -158,6 +158,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 		List<NameValuePair> qparams = new ArrayList<NameValuePair>();
 		qparams.add(new BasicNameValuePair(Config.GEATTE_ID_PARAM, geatteid));
+		GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
 
 		try {
 
@@ -168,7 +169,6 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		    HttpResponse response = client.execute(httpget);
 
 		    JSONObject JResponse = null;
-		    //if ("application/json".equals(response.getEntity().getContentType())) {
 		    BufferedReader reader = new BufferedReader(
 			    new InputStreamReader(
 				    response.getEntity().getContent(), "UTF-8"));
@@ -187,9 +187,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		    } catch (JSONException e) {
 			Log.e(Config.LOGTAG, " " + TAG, e);
 		    }
-		    //}
 
-		    GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
 		    dbHelper.open();
 
 		    if (JResponse != null) {
@@ -265,6 +263,8 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		    Log.e(Config.LOGTAG, " " + TAG, e);
 		} catch (URISyntaxException e) {
 		    Log.e(Config.LOGTAG, " " + TAG, e);
+		} finally {
+		    dbHelper.close();
 		}
 
 	    }

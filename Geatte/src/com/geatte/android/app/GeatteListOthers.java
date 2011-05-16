@@ -34,7 +34,7 @@ public class GeatteListOthers extends ListActivity {
 
     //private TextView empty;
     private ProgressDialog progressDialog;
-    private GeatteDBAdapter dbHelper;
+    private GeatteDBAdapter mDbHelper;
 
     /*    private final Handler handler = new Handler() {
 	@Override
@@ -60,8 +60,8 @@ public class GeatteListOthers extends ListActivity {
 	//this.empty = (TextView) findViewById(R.id.empty);
 
 	// create db helper
-	dbHelper = new GeatteDBAdapter(this);
-	dbHelper.open();
+	mDbHelper = new GeatteDBAdapter(this);
+	mDbHelper.open();
 	fillData();
 
 	// set list properties
@@ -72,12 +72,23 @@ public class GeatteListOthers extends ListActivity {
 	registerForContextMenu(listView);
     }
 
+    @Override
+    protected void onDestroy() {
+	super.onDestroy();
+	Log.d(Config.LOGTAG, "GeatteListOthers:onDestroy(): START");
+
+	if (mDbHelper != null) {
+	    mDbHelper.close();
+	}
+	Log.d(Config.LOGTAG, "GeatteListOthers:onDestroy(): END");
+    }
+
     private void fillData() {
 
 	this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving my geattes", true, false);
 
 	// Get all of the rows from the database and create the item list
-	Cursor myGeattesCursor = dbHelper.fetchAllInterests();
+	Cursor myGeattesCursor = mDbHelper.fetchAllInterests();
 	startManagingCursor(myGeattesCursor);
 
 	// Create an array to specify the fields we want to display in the list (only TITLE)

@@ -73,6 +73,17 @@ public class GeatteDetail extends Activity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+	super.onDestroy();
+	Log.d(Config.LOGTAG, "GeatteDetail:onDestroy(): START");
+
+	if (mDbHelper != null) {
+	    mDbHelper.close();
+	}
+	Log.d(Config.LOGTAG, "GeatteDetail:onDestroy(): END");
+    }
+
     private void populateFields() {
 	if (mRowId != null) {
 	    Cursor cursor = mDbHelper.fetchNote(mRowId);
