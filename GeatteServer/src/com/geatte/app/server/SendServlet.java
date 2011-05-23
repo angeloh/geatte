@@ -41,7 +41,7 @@ public class SendServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	resp.setContentType("text/plain");
 
-	RequestInfo reqInfo = RequestInfo.processRequest(req, resp,
+	GeatteRegisterRequestInfo reqInfo = GeatteRegisterRequestInfo.processRequest(req, resp,
 		getServletContext());
 	if (reqInfo == null) {
 	    return;
@@ -76,7 +76,7 @@ public class SendServlet extends HttpServlet {
     }
 
     protected String doSendToDevice(String url, String title,
-	    String sel, RequestInfo reqInfo,
+	    String sel, GeatteRegisterRequestInfo reqInfo,
 	    String deviceNames[], String deviceType) throws IOException {
 
 	// ok = we sent to at least one device.

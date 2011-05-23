@@ -13,11 +13,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import com.geatte.app.shared.DBHelper;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
@@ -56,7 +56,7 @@ public class C2DMessaging {
 
     public synchronized static C2DMessaging get(ServletContext servletContext) {
 	if (singleton == null) {
-	    C2DMConfigLoader serverConfig = new C2DMConfigLoader(getPMF(servletContext));
+	    C2DMConfigLoader serverConfig = new C2DMConfigLoader(DBHelper.getPMF(servletContext));
 	    singleton = new C2DMessaging(serverConfig);
 	}
 	return singleton;
@@ -72,21 +72,6 @@ public class C2DMessaging {
 
     C2DMConfigLoader getServerConfig() {
 	return serverConfig;
-    }
-
-    /**
-     * Initialize PMF - we use a context attribute, so other servlets can be
-     * share the same instance. This is similar with a shared static field, but
-     * avoids dependencies.
-     */
-    public static PersistenceManagerFactory getPMF(ServletContext ctx) {
-	PersistenceManagerFactory pmfFactory = (PersistenceManagerFactory) ctx
-	.getAttribute(PersistenceManagerFactory.class.getName());
-	if (pmfFactory == null) {
-	    pmfFactory = JDOHelper.getPersistenceManagerFactory("transactions-optional");
-	    ctx.setAttribute(PersistenceManagerFactory.class.getName(), pmfFactory);
-	}
-	return pmfFactory;
     }
 
     public boolean sendNoRetry(String registrationId, String collapse, Map<String, String[]> params,

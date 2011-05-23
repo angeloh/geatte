@@ -10,6 +10,9 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.geatte.android.app.R;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -32,12 +35,12 @@ public class GeatteEdit extends Activity {
 
     private static final String CLASSTAG = GeatteEdit.class.getSimpleName();
     private static final String UPLOAD_PATH = "/geatteupload";
-    // public static final String EXTRA_IMAGE = "extra_image";
 
     private EditText mTitleText;
     private EditText mDescText;
     private ImageView mSnapView;
     private Long mRowId;
+    private String mGeatteId;
     private String mImagePath;
     private String mSavedImagePath;
     private GeatteDBAdapter mDbHelper;
@@ -82,7 +85,7 @@ public class GeatteEdit extends Activity {
 		    Toast.makeText(getApplicationContext(), "Please select image", Toast.LENGTH_SHORT).show();
 		} else {
 		    mDialog = ProgressDialog.show(GeatteEdit.this, "Uploading", "Please wait...", true);
-		    new ImageUploadTask().execute();
+		    new GeatteUploadTask().execute();
 		}
 		//setResult(RESULT_OK);
 		//finish();
@@ -108,7 +111,7 @@ public class GeatteEdit extends Activity {
     private void populateFields() {
 	// in edit mode
 	if (mRowId != null && mRowId != 0L) {
-	    Cursor cursor = mDbHelper.fetchNote(mRowId);
+	    Cursor cursor = mDbHelper.fetchMyInterest(mRowId);
 	    startManagingCursor(cursor);
 	    mTitleText.setText(cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
 	    mDescText.setText(cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
@@ -154,7 +157,10 @@ public class GeatteEdit extends Activity {
 		mRowId = id;
 	    }
 	    mDbHelper.insertImage(mRowId, mImagePath);
-	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " create new interest for id = " + mRowId);
+	    if (mGeatteId != null) {
+		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
+	    }
+	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " create new interest for id = " + mRowId + ", geatteId = " + mGeatteId);
 	} else {
 	    mDbHelper.updateInterest(mRowId, title, desc);
 	    mDbHelper.updateImage(mRowId, mImagePath);
@@ -162,17 +168,12 @@ public class GeatteEdit extends Activity {
 	}
     }
 
-    class ImageUploadTask extends AsyncTask<Void, Void, String> {
+    class GeatteUploadTask extends AsyncTask<String, String, String> {
 	@Override
-	protected String doInBackground(Void... unsued) {
+	protected String doInBackground(String... strings) {
 	    try {
 		String title = mTitleText.getText().toString();
 		String desc = mDescText.getText().toString();
-
-		// HttpClient httpClient = new DefaultHttpClient();
-		// HttpContext localContext = new BasicHttpContext();
-		// HttpPost httpPost = new HttpPost(Config.BASE_URL +
-		// UPLOAD_PATH);
 
 		Bitmap bitmap = null;
 		String imageFileName = null;
@@ -185,7 +186,7 @@ public class GeatteEdit extends Activity {
 		}
 
 		if (bitmap == null) {
-		    Log.e(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " bitmap is null, invalid imagePath = "
+		    Log.e(Config.LOGTAG, "GeatteUploadTask:doInBackground(): bitmap is null, invalid imagePath = "
 			    + mImagePath + " or mSavedImagePath = " + mSavedImagePath);
 		}
 
@@ -198,7 +199,7 @@ public class GeatteEdit extends Activity {
 		String myNumber = DeviceRegistrar.getPhoneNumber(getApplicationContext());
 		entity.addPart(Config.GEATTE_FROM_NUMBER_PARAM, new StringBody(myNumber));
 		// TODO to number list
-		entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("TONUMBER"));
+		entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("15555215554"));
 		entity.addPart(Config.GEATTE_TITLE_PARAM, new StringBody(title));
 		entity.addPart(Config.GEATTE_DESC_PARAM, new StringBody(desc));
 		entity.addPart(Config.GEATTE_IMAGE_PARAM, new ByteArrayBody(data, imageFileName));
@@ -210,77 +211,90 @@ public class GeatteEdit extends Activity {
 		AppEngineClient client = new AppEngineClient(getApplicationContext(), accountName);
 		HttpResponse response = client.makeRequestWithEntity(UPLOAD_PATH, entity);
 
-		// httpPost.setEntity(entity);
-		// HttpResponse response = httpClient.execute(httpPost,
-		// localContext);
+		if (response.getStatusLine().getStatusCode() == 400
+			|| response.getStatusLine().getStatusCode() == 500) {
+		    Log.e(Config.LOGTAG, "GeatteUploadTask Error: " + response.getStatusLine().getStatusCode() + " " + response.getEntity().getContent());
+		    return null;
+		}
+
 		if (response.getEntity() != null) {
-		    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
-		    "UTF-8"));
-		    String sResponse = reader.readLine();
-		    Log.d(Config.LOGTAG, "ImageUploadTask Response: " + sResponse);
-		    if (response.getStatusLine().getStatusCode() == 400
-			    || response.getStatusLine().getStatusCode() == 500) {
-			Log.e(Config.LOGTAG, "ImageUploadTask Error: " + sResponse);
-			return null;
+
+		    JSONObject JResponse = null;
+		    BufferedReader reader = new BufferedReader(
+			    new InputStreamReader(
+				    response.getEntity().getContent(), "UTF-8"));
+
+		    char[] tmp = new char[2048];
+		    StringBuffer body = new StringBuffer();
+		    while (true) {
+			int cnt = reader.read(tmp);
+			if (cnt <= 0) {
+			    break;
+			}
+			body.append(tmp, 0, cnt);
 		    }
-		    return sResponse;
+		    try {
+			JResponse = new JSONObject(body.toString());
+		    } catch (JSONException e) {
+			Log.e(Config.LOGTAG, "GeatteUploadTask:doInBackground(): unable to read response after upload geatte to server", e);
+		    }
+
+		    if (JResponse != null) {
+			mGeatteId = JResponse.getString(Config.GEATTE_ID_PARAM);
+			Log.d(Config.LOGTAG, " GeatteUploadTask:doInBackground : GOT geatteId = " + mGeatteId);
+		    }
+
+		    Log.d(Config.LOGTAG, "GeatteUploadTask Response: " + JResponse);
+
+		    return mGeatteId;
 		}
 	    } catch (Exception e) {
+		Log.e(Config.LOGTAG, e.getMessage(), e);
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "ImageUploadTask:doInBackground(): try to dismiss mDialog");
+			Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): try to dismiss mDialog");
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception ex) {
-			// nothing
-			Log.d(Config.LOGTAG, "ImageUploadTask:doInBackground(): failed to dismiss mDialog");
+			Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
 		    }
 		}
-		Toast.makeText(getApplicationContext(), getString(R.string.upload_text_error), Toast.LENGTH_LONG)
-		.show();
-		Log.e(Config.LOGTAG, e.getMessage(), e);
+		this.publishProgress(getString(R.string.upload_text_error));
 	    }
 	    return null;
 	}
 
 	@Override
-	protected void onProgressUpdate(Void... unsued) {
-
+	protected void onProgressUpdate(String... values) {
+	    super.onProgressUpdate(values);
+	    if (values.length > 0) {
+		Toast.makeText(getApplicationContext(), values[0], Toast.LENGTH_LONG).show();
+	    }
 	}
 
 	@Override
-	protected void onPostExecute(String sResponse) {
+	protected void onPostExecute(String geatteId) {
 	    try {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "ImageUploadTask:onPostExecute(): try to dismiss mDialog");
+			Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): try to dismiss mDialog");
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception e) {
-			// nothing
-			Log.d(Config.LOGTAG, "ImageUploadTask:onPostExecute(): failed to dismiss mDialog");
+			Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): failed to dismiss mDialog");
 		    }
 		}
-		Log.d(Config.LOGTAG, "ImageUploadTask:onPostExecute(): get response :" + sResponse);
-		// TODO server response
-		if (sResponse != null) {
-		    // JSONObject JResponse = new JSONObject(sResponse);
-		    // int success = JResponse.getInt("SUCCESS");
-		    // String message = JResponse.getString("MESSAGE");
-		    // if (success == 0) {
-		    // Toast.makeText(getApplicationContext(), message,
-		    // Toast.LENGTH_LONG).show();
-		    // } else {
-		    Toast.makeText(getApplicationContext(), "Geatte uploaded successfully, GeatteId = " + sResponse,
+		if (geatteId != null) {
+		    Toast.makeText(getApplicationContext(), "Geatte uploaded successfully, GeatteId = " + geatteId,
 			    Toast.LENGTH_LONG).show();
-		    // }
+
 		}
 		setResult(RESULT_OK);
 	    } catch (Exception e) {
-		Toast.makeText(getApplicationContext(), getString(R.string.upload_text_error), Toast.LENGTH_LONG)
-		.show();
 		Log.e(Config.LOGTAG, e.getMessage(), e);
 		setResult(RESULT_CANCELED);
+		Toast.makeText(getApplicationContext(), getString(R.string.upload_text_error), Toast.LENGTH_LONG)
+		.show();
 	    } finally {
 		finish();
 	    }

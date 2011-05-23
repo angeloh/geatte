@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- GeatteVoteBar related attributes -->
+	<declare-styleable name="GeatteVoteBar">
+		<attr name="yes_label" format="string" />
+		<attr name="no_label" format="string" />
+	</declare-styleable>
+</resources>

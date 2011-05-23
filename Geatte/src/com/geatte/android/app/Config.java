@@ -21,7 +21,11 @@ public class Config {
     public static final String C2DM_MESSAGE_PAYLOAD = "payload";
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
     public static final String C2DM_MESSAGE_GEATTE_ID = "geatteid";
-    public static final String C2DM_MESSAGE_GEATTE_MESSAGE = "geatte_message";
+    //public static final String C2DM_MESSAGE_GEATTE_MESSAGE = "geatte_message";
+    public static final String C2DM_MESSAGE_GEATTEID_VOTE = "geatteid_vote";
+    public static final String C2DM_MESSAGE_GEATTE_VOTER = "geatte_voter";
+    public static final String C2DM_MESSAGE_GEATTE_VOTE_RESP = "geatte_vote_resp";
+    public static final String C2DM_MESSAGE_GEATTE_VOTE_FEEDBACK = "geatte_vote_feedback";
 
     // prefs
     public static final String PREFERENCE_KEY = "com.geatte.android.app";
@@ -46,5 +50,9 @@ public class Config {
     public static final String GEATTE_DESC_PARAM = "desc";
     public static final String GEATTE_IMAGE_PARAM = "image";
     public static final String GEATTE_CREATED_DATE_PARAM = "createDate";
+
+    public static final String FRIEND_GEATTE_VOTER = "friendGeatteVoter";
+    public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";
+    public static final String FRIEND_GEATTE_FEEDBACK = "friendGeatteFeedback";
 
 }

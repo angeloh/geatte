@@ -54,6 +54,13 @@
 		</servlet-class>
 	</servlet>
 	
+    <servlet>
+		<servlet-name>GeatteVoteServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteVoteServlet
+		</servlet-class>
+	</servlet>
+	
 	<!-- 
 	<servlet>
 		<servlet-name>SendServlet</servlet-name>
@@ -91,6 +98,12 @@
 		<servlet-name>GeatteImageGetServlet</servlet-name>
 		<url-pattern>/geatteimageget</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>GeatteVoteServlet</servlet-name>
+		<url-pattern>/geattevote</url-pattern>
+	</servlet-mapping>
+	
 	<!-- 
 	<servlet-mapping>
 		<servlet-name>SendServlet</servlet-name>
@@ -112,7 +125,7 @@
 		<url-pattern>/geatteserver/greet</url-pattern>
 	</servlet-mapping>
 	
-		<servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>GeatteSendServlet</servlet-name>
 		<url-pattern>/tasks/geattesend</url-pattern>
 	</servlet-mapping>

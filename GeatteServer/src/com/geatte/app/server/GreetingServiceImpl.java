@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import com.geatte.app.client.GreetingService;
+import com.geatte.app.shared.DBHelper;
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -62,7 +63,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements Greetin
 
     private List<DeviceInfo> getDevices(String user) {
 	// Context-shared PMF.
-	PersistenceManager pm = C2DMessaging.getPMF(getServletContext()).getPersistenceManager();
+	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
 	List<DeviceInfo> devices = new ArrayList<DeviceInfo>();
 	try {
 	    devices = DeviceInfo.getDeviceInfoForUserEmail(pm, user);

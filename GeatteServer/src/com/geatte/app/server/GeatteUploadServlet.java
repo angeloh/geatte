@@ -2,6 +2,7 @@ package com.geatte.app.server;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.IOUtils;
 
+import com.geatte.app.shared.DBHelper;
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
@@ -33,6 +35,8 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
 
 @SuppressWarnings("serial")
 public class GeatteUploadServlet extends HttpServlet {
@@ -53,7 +57,7 @@ public class GeatteUploadServlet extends HttpServlet {
 
 	resp.setContentType("text/plain");
 
-	RequestInfo reqInfo = RequestInfo.processRequest(req, resp, getServletContext());
+	GeatteRegisterRequestInfo reqInfo = GeatteRegisterRequestInfo.processRequest(req, resp, getServletContext());
 	if (reqInfo == null) {
 	    log.severe("GeatteUploadServlet.doPOST() : can not load RequestInfo!!");
 	    return;
@@ -125,7 +129,7 @@ public class GeatteUploadServlet extends HttpServlet {
     }
 
     @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res)
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
 	log.log(Level.INFO, "GeatteUploadServlet.doPOST() : START GeatteUploadServlet.doPOST()");
 	try {
@@ -137,14 +141,14 @@ public class GeatteUploadServlet extends HttpServlet {
 		log.log(Level.INFO,"GeatteUploadServlet.doPOST() : get user email thru ClientLogin :" + mUserEmail);
 	    }
 	    if (mUserEmail == null) {
-		res.setStatus(500);
-		res.getWriter().println(ERROR_STATUS + "(Login is required)");
+		resp.setStatus(500);
+		resp.getWriter().println(ERROR_STATUS + "(Login is required)");
 		log.warning("RequestInfo:processRequest() : can not get login user email!!");
 		return;
 	    }
 
 	    ServletFileUpload upload = new ServletFileUpload();
-	    res.setContentType("text/plain");
+	    resp.setContentType("application/json");
 
 	    FileItemIterator iterator = upload.getItemIterator(req);
 	    while (iterator.hasNext()) {
@@ -171,14 +175,14 @@ public class GeatteUploadServlet extends HttpServlet {
 	    }
 
 	    if (mFromNumberField == null) {
-		res.setStatus(400);
-		res.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_FROM_NUMBER_PARAM + ")");
+		resp.setStatus(400);
+		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_FROM_NUMBER_PARAM + ")");
 		log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.GEATTE_FROM_NUMBER_PARAM + " is null");
 		return;
 	    }
 	    if (mToNumberField == null) {
-		res.setStatus(400);
-		res.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TO_NUMBER_PARAM + ")");
+		resp.setStatus(400);
+		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TO_NUMBER_PARAM + ")");
 		log.severe("GeatteUploadServlet.doPOST() : Missing to number, " + Config.GEATTE_TO_NUMBER_PARAM + " is null");
 		return;
 	    }
@@ -186,14 +190,14 @@ public class GeatteUploadServlet extends HttpServlet {
 		mGeatteTitleField = "new geatte";
 	    }
 	    if (mImageBlobField == null) {
-		res.setStatus(400);
-		res.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_IMAGE_PARAM + ")");
+		resp.setStatus(400);
+		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_IMAGE_PARAM + ")");
 		log.severe("GeatteUploadServlet.doPOST() : Missing image, " + Config.GEATTE_IMAGE_PARAM + " is null");
 		return;
 	    }
 	    //after save to db, send geatte to contacts
 	    String geatteId = null;
-	    if ((geatteId = saveToDb(res)) != null ) {
+	    if ((geatteId = saveToDb(resp)) != null ) {
 		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : ready to send geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
 		// the message push to device
 		Map<String, String[]> params = new HashMap<String, String[]>();
@@ -201,8 +205,20 @@ public class GeatteUploadServlet extends HttpServlet {
 
 		submitGeatteTask(mToNumberField, params);
 		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : sent geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
-	    }
 
+		JSONObject geatteJson = new JSONObject();
+		try {
+		    geatteJson.put(Config.GEATTE_ID_PARAM, geatteId);
+		    PrintWriter out = resp.getWriter();
+		    geatteJson.write(out);
+		    log.log(Level.INFO, "GeatteInfoGetServlet.doGet() : Successfully send a geatte, return geatte id in JSON = " + geatteId);
+		} catch (JSONException e) {
+		    throw new IOException(e);
+		}
+	    }
+	    else {
+		log.warning("GeatteUploadServlet.doPOST() : unable to save user's geatte to db");
+	    }
 
 	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : END GeatteUploadServlet.doPOST()");
 	} catch (Exception ex) {
@@ -210,9 +226,9 @@ public class GeatteUploadServlet extends HttpServlet {
 	}
     }
 
-    private String saveToDb(HttpServletResponse res) throws IOException {
+    private String saveToDb(HttpServletResponse resp) throws IOException {
 	// Context-shared PMF.
-	PersistenceManager pm = C2DMessaging.getPMF(getServletContext()).getPersistenceManager();
+	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
 
 	try {
 	    // Get geatte if it already exists, else create
@@ -246,12 +262,12 @@ public class GeatteUploadServlet extends HttpServlet {
 		    + ", toNumber = " + mToNumberField + ", geatteTitile = " + mGeatteTitleField
 		    + ", geatteDesc = " + mGeatteDescField + ", id = " + geatteInfo.getId().toString());
 
-	    res.getWriter().println(geatteInfo.getId().toString());
+	    //res.getWriter().println(geatteInfo.getId().toString());
 	    return geatteInfo.getId().toString();
 
 	} catch (Exception e) {
-	    res.setStatus(400);
-	    res.getWriter().println(ERROR_STATUS + " (Error saving geatteInfo)");
+	    resp.setStatus(400);
+	    resp.getWriter().println(ERROR_STATUS + " (Error saving geatteInfo)");
 	    log.log(Level.SEVERE, "GeatteUploadServlet.doPOST() : Error saving geatteInfo.", e);
 	} finally {
 	    pm.close();

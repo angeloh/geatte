@@ -17,4 +17,8 @@ public class Config {
     public static final String GEATTE_IMAGE_PARAM = "image";
     public static final String GEATTE_CREATED_DATE_PARAM = "createDate";
 
+    public static final String FRIEND_GEATTE_VOTER = "friendGeatteVoter";
+    public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";
+    public static final String FRIEND_GEATTE_FEEDBACK = "friendGeatteFeedback";
+
 }

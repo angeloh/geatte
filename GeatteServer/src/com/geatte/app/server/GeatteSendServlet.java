@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.geatte.app.shared.DBHelper;
 import com.google.android.c2dm.server.C2DMessaging;
 
 /**
@@ -86,7 +87,7 @@ public class GeatteSendServlet extends HttpServlet {
 
     private List<String> splitNumbers(String numbers) {
 	//TODO: fakenumber
-	numbers = "15555215554";
+	//	numbers = "15555215554";
 
 	if (numbers == null || numbers.isEmpty()) {
 	    return null;
@@ -98,7 +99,7 @@ public class GeatteSendServlet extends HttpServlet {
 
     private List<DeviceInfo> getDevices(List<String> numberList) {
 	// Context-shared PMF.
-	PersistenceManager pm = C2DMessaging.getPMF(getServletContext()).getPersistenceManager();
+	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
 	List<DeviceInfo> allDevices = new ArrayList<DeviceInfo>();
 	try {
 	    for (String number : numberList) {

@@ -29,7 +29,8 @@ import org.json.JSONObject;
 
 import com.geatte.android.app.Config;
 import com.geatte.android.app.DeviceRegistrar;
-import com.geatte.android.app.GeatteComing;
+import com.geatte.android.app.GeatteFeedback;
+import com.geatte.android.app.GeatteVote;
 import com.geatte.android.app.GeatteDBAdapter;
 import com.geatte.android.app.R;
 import android.app.Notification;
@@ -52,15 +53,15 @@ import android.widget.Toast;
 
 /**
  * Broadcast receiver that handles Android Cloud to Data Messaging (AC2DM)
- * messages, initiated by the JumpNote App Engine server and routed/delivered by
- * Google AC2DM servers. The only currently defined message is 'sync'.
+ * messages, initiated by the Geatte App Engine server and routed/delivered by
+ * Google AC2DM servers.
  */
 public class C2DMReceiver extends C2DMBaseReceiver {
     static final String TAG = C2DMReceiver.class.getSimpleName();
     // Notification title
-    public static String NOTIF_TITLE = "geatteid";
+    // public static String NOTIF_TITLE = "geatteid";
     // Notification id
-    private static final int NOTIF_CONNECTED = 0;
+    // private static final int NOTIF_CONNECTED = 0;
     // Notification manager to displaying arrived push notifications
     // private NotificationManager	mNotifMan;
 
@@ -141,132 +142,17 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	Bundle extras = intent.getExtras();
 	if (extras != null) {
 
-	    String geatteid = extras.getString(Config.C2DM_MESSAGE_GEATTE_ID);
-	    if (geatteid != null) {
-		//showNotification("Got new geatte message : " + geatteMessage);
-		Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatteid " + geatteid);
+	    String geatteId = extras.getString(Config.C2DM_MESSAGE_GEATTE_ID);
+	    if (geatteId != null) {
+		processNewGeatte(context, geatteId);
+	    }
 
-		//fetch coming message
-		DefaultHttpClient client = new DefaultHttpClient();
-		//		HttpGet get = new HttpGet(Config.BASE_URL + Config.GEATTE_INFO_GET_URL);
-
-		//		final HttpParams getParams = new BasicHttpParams();
-		//		getParams.setParameter(Config.GEATTE_ID_PARAM, geatteid);
-		//		get.setParams(getParams);
-
-		//		get.getParams().setParameter(Config.GEATTE_ID_PARAM, geatteid);
-
-		List<NameValuePair> qparams = new ArrayList<NameValuePair>();
-		qparams.add(new BasicNameValuePair(Config.GEATTE_ID_PARAM, geatteid));
-		GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
-
-		try {
-
-		    URI uri = URIUtils.createURI("https", "geatte.appspot.com", -1, Config.GEATTE_INFO_GET_URL,
-			    URLEncodedUtils.format(qparams, "UTF-8"), null);
-		    Log.d(Config.LOGTAG_C2DM, "Sending request to geatte info to url = " + uri.toString());
-		    HttpGet httpget = new HttpGet(uri);
-		    HttpResponse response = client.execute(httpget);
-
-		    JSONObject JResponse = null;
-		    BufferedReader reader = new BufferedReader(
-			    new InputStreamReader(
-				    response.getEntity().getContent(), "UTF-8"));
-
-		    char[] tmp = new char[2048];
-		    StringBuffer body = new StringBuffer();
-		    while (true) {
-			int cnt = reader.read(tmp);
-			if (cnt <= 0) {
-			    break;
-			}
-			body.append(tmp, 0, cnt);
-		    }
-		    try {
-			JResponse = new JSONObject(body.toString());
-		    } catch (JSONException e) {
-			Log.e(Config.LOGTAG, " " + TAG, e);
-		    }
-
-		    dbHelper.open();
-
-		    if (JResponse != null) {
-			String geatteId = JResponse.getString(Config.GEATTE_ID_PARAM);
-			Log.d(Config.LOGTAG, " " + TAG + "GOT geatteId = " + geatteId);
-
-			String fromNumber = JResponse.getString(Config.GEATTE_FROM_NUMBER_PARAM);
-			Log.d(Config.LOGTAG, " " + TAG + "GOT fromNumber = " + fromNumber);
-
-			String title = JResponse.getString(Config.GEATTE_TITLE_PARAM);
-			Log.d(Config.LOGTAG, " " + TAG + "GOT title = " + title);
-
-			String desc = JResponse.getString(Config.GEATTE_DESC_PARAM);
-			Log.d(Config.LOGTAG, " " + TAG + "GOT desc = " + desc);
-
-			String createdDate = JResponse.getString(Config.GEATTE_CREATED_DATE_PARAM);
-			Log.d(Config.LOGTAG, " " + TAG + "GOT createdDate = " + createdDate);
-
-			dbHelper.insertFriendInterest(geatteId, title, desc, fromNumber, createdDate);
-			Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + " to DB SUCCESSUL!");
-
-			// fetch coming image
-			//client = new DefaultHttpClient();
-			//get = new HttpGet(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL);
-			//response =  client.execute(get);
-
-			if ((geatteId != null) && !geatteId.equals("")) {
-			    try {
-				URL url = new URL(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL + "?" + Config.GEATTE_ID_PARAM + "=" + geatteId);
-				URLConnection conn = url.openConnection();
-				conn.connect();
-				BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-				Bitmap bm = BitmapFactory.decodeStream(bis);
-				bis.close();
-
-				String imagePath = saveToFile(bm);
-				if (imagePath != null) {
-				    Log.d(Config.LOGTAG, " " + TAG + "GOT image from server imagePath = " + imagePath);
-				    dbHelper.insertFIImage(geatteId, imagePath);
-				    Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + ", image = " + imagePath + " to DB SUCCESSUL!");
-				    //reviewImage.setImageResource(R.drawable.no_review_image);
-				}
-				else {
-				    Log.w(Config.LOGTAG, " " + TAG + "geatteId = " + geatteId + " has no image.");
-				}
-
-				// send notification
-				Intent intentNotify = new Intent(this, GeatteComing.class);
-				intent.putExtra(Config.GEATTE_ID_PARAM, geatteId);
-				intent.putExtra(Config.GEATTE_FROM_NUMBER_PARAM, fromNumber);
-				intent.putExtra(Config.GEATTE_TITLE_PARAM, title);
-				intent.putExtra(Config.GEATTE_DESC_PARAM, desc);
-				intent.putExtra(Config.GEATTE_CREATED_DATE_PARAM, createdDate);
-				intent.putExtra(Config.GEATTE_IMAGE_GET_URL, imagePath);
-				// Simply open the parent activity
-				C2DMReceiver.generateNotification(context, "You got a new Geatte", title, intentNotify);
-
-			    } catch (IOException e) {
-				Log.e(Config.LOGTAG, " " + TAG, e);
-			    }
-			} else {
-			    Log.e(Config.LOGTAG, " " + TAG + " geatteId is null, drop this message without saving.");
-			}
-		    } else {
-			Log.e(Config.LOGTAG, " " + TAG + " json response is null when try to retrieve geatte info for geatteid " + geatteid);
-		    }
-
-		} catch (ClientProtocolException e) {
-		    Log.e(Config.LOGTAG, " " + TAG, e);
-		} catch (IOException e) {
-		    Log.e(Config.LOGTAG, " " + TAG, e);
-		} catch (JSONException e) {
-		    Log.e(Config.LOGTAG, " " + TAG, e);
-		} catch (URISyntaxException e) {
-		    Log.e(Config.LOGTAG, " " + TAG, e);
-		} finally {
-		    dbHelper.close();
-		}
-
+	    String voteGeatteId = extras.getString(Config.C2DM_MESSAGE_GEATTEID_VOTE);
+	    String voter = extras.getString(Config.C2DM_MESSAGE_GEATTE_VOTER);
+	    String voteResp = extras.getString(Config.C2DM_MESSAGE_GEATTE_VOTE_RESP);
+	    String voteFeedback = extras.getString(Config.C2DM_MESSAGE_GEATTE_VOTE_FEEDBACK);
+	    if (voteGeatteId != null && voter != null && voteResp != null) {
+		processNewGeatteVote(context, voteGeatteId, voter, voteResp, voteFeedback);
 	    }
 
 	    /*if (title != null && url != null && url.startsWith("http")) {
@@ -298,28 +184,188 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	}
     }
 
-    // Display the topbar notification
-    private void showNotification(String text) {
-	Notification n = new Notification();
+    private void processNewGeatte(Context context, String geatteid) {
+	//showNotification("Got new geatte message : " + geatteMessage);
+	Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatteid " + geatteid);
 
-	n.flags |= Notification.FLAG_SHOW_LIGHTS;
-	n.flags |= Notification.FLAG_AUTO_CANCEL;
+	//fetch coming message
+	DefaultHttpClient client = new DefaultHttpClient();
+	//		HttpGet get = new HttpGet(Config.BASE_URL + Config.GEATTE_INFO_GET_URL);
 
-	n.defaults = Notification.DEFAULT_ALL;
+	//		final HttpParams getParams = new BasicHttpParams();
+	//		getParams.setParameter(Config.GEATTE_ID_PARAM, geatteid);
+	//		get.setParams(getParams);
 
-	n.icon = R.drawable.icon;
-	n.when = System.currentTimeMillis();
+	//		get.getParams().setParameter(Config.GEATTE_ID_PARAM, geatteid);
 
-	Intent intent = new Intent(this, GeatteComing.class);
-	intent.putExtra(Config.EXTRA_KEY_GEATTE_MESSAGE, text);
-	// Simply open the parent activity
-	PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+	List<NameValuePair> qparams = new ArrayList<NameValuePair>();
+	qparams.add(new BasicNameValuePair(Config.GEATTE_ID_PARAM, geatteid));
+	GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
 
-	// Change the name of the notification here
-	n.setLatestEventInfo(this, NOTIF_TITLE, text, pi);
+	try {
 
-	//mNotifMan.notify(NOTIF_CONNECTED, n);
+	    URI uri = URIUtils.createURI("https", "geatte.appspot.com", -1, Config.GEATTE_INFO_GET_URL,
+		    URLEncodedUtils.format(qparams, "UTF-8"), null);
+	    Log.d(Config.LOGTAG_C2DM, "Sending request to geatte info to url = " + uri.toString());
+	    HttpGet httpget = new HttpGet(uri);
+	    HttpResponse response = client.execute(httpget);
+
+	    JSONObject JResponse = null;
+	    BufferedReader reader = new BufferedReader(
+		    new InputStreamReader(
+			    response.getEntity().getContent(), "UTF-8"));
+
+	    char[] tmp = new char[2048];
+	    StringBuffer body = new StringBuffer();
+	    while (true) {
+		int cnt = reader.read(tmp);
+		if (cnt <= 0) {
+		    break;
+		}
+		body.append(tmp, 0, cnt);
+	    }
+	    try {
+		JResponse = new JSONObject(body.toString());
+	    } catch (JSONException e) {
+		Log.e(Config.LOGTAG, " " + TAG, e);
+	    }
+
+	    dbHelper.open();
+
+	    if (JResponse != null) {
+		String geatteId = JResponse.getString(Config.GEATTE_ID_PARAM);
+		Log.d(Config.LOGTAG, " " + TAG + "GOT geatteId = " + geatteId);
+
+		String fromNumber = JResponse.getString(Config.GEATTE_FROM_NUMBER_PARAM);
+		Log.d(Config.LOGTAG, " " + TAG + "GOT fromNumber = " + fromNumber);
+
+		String title = JResponse.getString(Config.GEATTE_TITLE_PARAM);
+		Log.d(Config.LOGTAG, " " + TAG + "GOT title = " + title);
+
+		String desc = JResponse.getString(Config.GEATTE_DESC_PARAM);
+		Log.d(Config.LOGTAG, " " + TAG + "GOT desc = " + desc);
+
+		String createdDate = JResponse.getString(Config.GEATTE_CREATED_DATE_PARAM);
+		Log.d(Config.LOGTAG, " " + TAG + "GOT createdDate = " + createdDate);
+
+		dbHelper.insertFriendInterest(geatteId, title, desc, fromNumber, createdDate);
+		Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + " to DB SUCCESSUL!");
+
+		// fetch coming image
+		//client = new DefaultHttpClient();
+		//get = new HttpGet(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL);
+		//response =  client.execute(get);
+
+		if ((geatteId != null) && !geatteId.equals("")) {
+		    try {
+			URL url = new URL(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL + "?" + Config.GEATTE_ID_PARAM + "=" + geatteId);
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+			Bitmap bm = BitmapFactory.decodeStream(bis);
+			bis.close();
+
+			String imagePath = saveToFile(bm);
+			if (imagePath != null) {
+			    Log.d(Config.LOGTAG, " " + TAG + "GOT image from server imagePath = " + imagePath);
+			    dbHelper.insertFIImage(geatteId, imagePath);
+			    Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + ", image = " + imagePath + " to DB SUCCESSUL!");
+			    //reviewImage.setImageResource(R.drawable.no_review_image);
+			}
+			else {
+			    Log.w(Config.LOGTAG, " " + TAG + "geatteId = " + geatteId + " has no image.");
+			}
+
+			// send notification
+			Intent intentNotify = new Intent(this, GeatteVote.class);
+			intentNotify.putExtra(Config.GEATTE_ID_PARAM, geatteId);
+			//				intentNotify.putExtra(Config.GEATTE_FROM_NUMBER_PARAM, fromNumber);
+			//				intentNotify.putExtra(Config.GEATTE_TITLE_PARAM, title);
+			//				intentNotify.putExtra(Config.GEATTE_DESC_PARAM, desc);
+			//				intentNotify.putExtra(Config.GEATTE_CREATED_DATE_PARAM, createdDate);
+			//				intentNotify.putExtra(Config.GEATTE_IMAGE_GET_URL, imagePath);
+			C2DMReceiver.generateNotification(context, "You got a new Geatte", title, intentNotify);
+
+		    } catch (IOException e) {
+			Log.e(Config.LOGTAG, " " + TAG, e);
+		    }
+		} else {
+		    Log.e(Config.LOGTAG, " " + TAG + " geatteId is null, drop this message without saving.");
+		}
+	    } else {
+		Log.e(Config.LOGTAG, " " + TAG + " json response is null when try to retrieve geatte info for geatteid " + geatteid);
+	    }
+
+	} catch (ClientProtocolException e) {
+	    Log.e(Config.LOGTAG, " " + TAG, e);
+	} catch (IOException e) {
+	    Log.e(Config.LOGTAG, " " + TAG, e);
+	} catch (JSONException e) {
+	    Log.e(Config.LOGTAG, " " + TAG, e);
+	} catch (URISyntaxException e) {
+	    Log.e(Config.LOGTAG, " " + TAG, e);
+	} finally {
+	    dbHelper.close();
+	}
     }
+
+
+    private void processNewGeatteVote(Context context, String voteGeatteId, String voter, String voteResp, String voteFeedback) {
+	Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatte vote id = " + voteGeatteId);
+
+	GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
+
+	try {
+
+	    dbHelper.open();
+
+	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteGeatteId = " + voteGeatteId);
+
+	    Log.d(Config.LOGTAG, " " + TAG + "GOT voter = " + voter);
+
+	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteResp = " + voteResp);
+
+	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteFeedback = " + voteFeedback);
+
+	    // send notification
+	    Intent intentNotify = new Intent(this, GeatteFeedback.class);
+	    intentNotify.putExtra(Config.GEATTE_ID_PARAM, voteGeatteId);
+	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTER, voter);
+	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTE_RESP, voteResp);
+	    intentNotify.putExtra(Config.FRIEND_GEATTE_FEEDBACK, voteFeedback);
+	    C2DMReceiver.generateNotification(context, "You got a new Geatte Feedback from ", voter, intentNotify);
+
+
+
+	} catch (Exception e) {
+	    Log.e(Config.LOGTAG, " " + TAG, e);
+	} finally {
+	    dbHelper.close();
+	}
+    }
+
+    // Display the topbar notification
+    //    private void showNotification(String text) {
+    //	Notification n = new Notification();
+    //
+    //	n.flags |= Notification.FLAG_SHOW_LIGHTS;
+    //	n.flags |= Notification.FLAG_AUTO_CANCEL;
+    //
+    //	n.defaults = Notification.DEFAULT_ALL;
+    //
+    //	n.icon = R.drawable.icon;
+    //	n.when = System.currentTimeMillis();
+    //
+    //	Intent intent = new Intent(this, GeatteVote.class);
+    //	intent.putExtra(Config.EXTRA_KEY_GEATTE_MESSAGE, text);
+    //	// Simply open the parent activity
+    //	PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+    //
+    //	// Change the name of the notification here
+    //	n.setLatestEventInfo(this, NOTIF_TITLE, text, pi);
+    //
+    //	//mNotifMan.notify(NOTIF_CONNECTED, n);
+    //    }
 
     public static void generateNotification(Context context, String msg, String title, Intent intent) {
 	int icon = R.drawable.icon;
@@ -395,28 +441,27 @@ public class C2DMReceiver extends C2DMBaseReceiver {
      * Register or unregister based on phone sync settings. Called on each
      * performSync by the SyncAdapter.
      */
-    /*
-     * public static void refreshAppC2DMRegistrationState(Context context) { //
-     * Determine if there are any auto-syncable accounts. If there are, make
-     * sure we are // registered with the C2DM servers. If not, unregister the
-     * application. boolean autoSyncDesired = false; if
-     * (ContentResolver.getMasterSyncAutomatically()) { AccountManager am =
-     * AccountManager.get(context); Account[] accounts =
-     * am.getAccountsByType(Config.GOOGLE_ACCOUNT_TYPE); for (Account account :
-     * accounts) { if (ContentResolver.getIsSyncable(account,
-     * JumpNoteContract.AUTHORITY) > 0 &&
-     * ContentResolver.getSyncAutomatically(account,
-     * JumpNoteContract.AUTHORITY)) { autoSyncDesired = true; break; } } }
-     * 
-     * boolean autoSyncEnabled =
-     * !C2DMessaging.getRegistrationId(context).equals("");
-     * 
-     * if (autoSyncEnabled != autoSyncDesired) { Log.i(TAG,
-     * "System-wide desirability for JumpNote auto sync has changed; " +
-     * (autoSyncDesired ? "registering" : "unregistering") +
-     * " application with C2DM servers.");
-     * 
-     * if (autoSyncDesired == true) { C2DMessaging.register(context,
-     * Config.C2DM_SENDER); } else { C2DMessaging.unregister(context); } } }
-     */
+    //    public static void refreshAppC2DMRegistrationState(Context context) { //
+    //	Determine if there are any auto-syncable accounts. If there are, make
+    //	sure we are // registered with the C2DM servers. If not, unregister the
+    //	application. boolean autoSyncDesired = false; if
+    //	(ContentResolver.getMasterSyncAutomatically()) { AccountManager am =
+    //	    AccountManager.get(context); Account[] accounts =
+    //		am.getAccountsByType(Config.GOOGLE_ACCOUNT_TYPE); for (Account account :
+    //		    accounts) { if (ContentResolver.getIsSyncable(account,
+    //			    JumpNoteContract.AUTHORITY) > 0 &&
+    //			    ContentResolver.getSyncAutomatically(account,
+    //				    JumpNoteContract.AUTHORITY)) { autoSyncDesired = true; break; } } }
+    //
+    //	boolean autoSyncEnabled =
+    //	    !C2DMessaging.getRegistrationId(context).equals("");
+    //
+    //	if (autoSyncEnabled != autoSyncDesired) { Log.i(TAG,
+    //		"System-wide desirability for JumpNote auto sync has changed; " +
+    //		(autoSyncDesired ? "registering" : "unregistering") +
+    //	" application with C2DM servers.");
+    //
+    //	if (autoSyncDesired == true) { C2DMessaging.register(context,
+    //		Config.C2DM_SENDER); } else { C2DMessaging.unregister(context); } } }
+
 }

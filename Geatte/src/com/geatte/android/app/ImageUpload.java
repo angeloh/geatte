@@ -134,7 +134,7 @@ public class ImageUpload extends Activity {
 	}
     }
 
-    class ImageUploadTask extends AsyncTask<Void, Void, String> {
+    class ImageUploadTask extends AsyncTask<Void, String, String> {
 	@Override
 	protected String doInBackground(Void... unsued) {
 	    try {
@@ -160,20 +160,23 @@ public class ImageUpload extends Activity {
 		String sResponse = reader.readLine();
 		return sResponse;
 	    } catch (Exception e) {
-		if (dialog.isShowing())
-		    dialog.dismiss();
-		Toast.makeText(getApplicationContext(), /*getString(R.string.exception_message)*/ "", Toast.LENGTH_LONG)
-		.show();
 		Log.e(e.getClass().getName(), e.getMessage(), e);
-		return null;
+		if (dialog.isShowing()) {
+		    dialog.dismiss();
+		}
+		//		Toast.makeText(getApplicationContext(), /*getString(R.string.exception_message)*/ "", Toast.LENGTH_LONG)
+		//		.show();
+		this.publishProgress(getString(R.string.upload_image_error));
 	    }
-
-	    // (null);
+	    return null;
 	}
 
 	@Override
-	protected void onProgressUpdate(Void... unsued) {
-
+	protected void onProgressUpdate(String... values) {
+	    super.onProgressUpdate(values);
+	    if (values.length > 0) {
+		Toast.makeText(getApplicationContext(), values[0], Toast.LENGTH_LONG).show();
+	    }
 	}
 
 	@Override

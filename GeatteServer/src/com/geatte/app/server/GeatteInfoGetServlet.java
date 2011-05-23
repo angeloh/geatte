@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.android.c2dm.server.C2DMessaging;
+import com.geatte.app.shared.DBHelper;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
 
@@ -58,7 +58,7 @@ public class GeatteInfoGetServlet extends HttpServlet {
 	    //Object id = JDOHelper.getObjectId(geatteId);
 
 	    // Context-shared PMF.
-	    PersistenceManager pm = C2DMessaging.getPMF(getServletContext()).getPersistenceManager();
+	    PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
 	    //Object id = pm.newObjectIdInstance(GeatteInfo.class, geatteId);
 	    //if (id == null) {
 	    //		log.log(Level.WARNING, "GeatteInfoGetServlet.doGet() : unable to construct key object of GeatteInfo for geatteId = " + geatteId);

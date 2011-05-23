@@ -9,6 +9,22 @@ package com.geatte.android.app;
 
 public final class R {
     public static final class attr {
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int no_label=0x7f010001;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int yes_label=0x7f010000;
     }
     public static final class drawable {
         public static final int android_focused=0x7f020000;
@@ -27,8 +43,8 @@ public final class R {
         public static final int app_register_prog_text=0x7f060004;
         public static final int app_snap_button=0x7f060001;
         public static final int app_top_label=0x7f060000;
-        public static final int button=0x7f060015;
-        public static final int checkbox=0x7f060017;
+        public static final int button=0x7f060017;
+        public static final int checkbox=0x7f060019;
         public static final int desc=0x7f06000d;
         public static final int desc_detail=0x7f060008;
         public static final int desc_label_detail=0x7f060007;
@@ -36,18 +52,20 @@ public final class R {
         public static final int edit_img=0x7f06000e;
         public static final int edit_title_label=0x7f06000a;
         public static final int edit_top_label=0x7f060009;
-        public static final int edittext=0x7f060016;
+        public static final int edittext=0x7f060018;
         public static final int empty=0x7f060010;
+        public static final int geatte_vote_btn_no=0x7f060016;
+        public static final int geatte_vote_btn_yes=0x7f060015;
+        public static final int geatte_vote_img=0x7f060014;
         public static final int image_detail=0x7f060005;
-        public static final int my_geatte_img=0x7f060012;
-        public static final int my_geatte_row=0x7f060011;
+        public static final int my_geatte_desc=0x7f060012;
+        public static final int my_geatte_img=0x7f060011;
         public static final int my_geatte_title=0x7f060013;
-        public static final int my_geatte_vote=0x7f060014;
-        public static final int ratingbar=0x7f060019;
+        public static final int ratingbar=0x7f06001b;
         public static final int send_button=0x7f06000f;
         public static final int title=0x7f06000b;
         public static final int title_detail=0x7f060006;
-        public static final int togglebutton=0x7f060018;
+        public static final int togglebutton=0x7f06001a;
     }
     public static final class layout {
         public static final int geatte_app=0x7f030000;
@@ -56,7 +74,10 @@ public final class R {
         public static final int geatte_list=0x7f030003;
         public static final int geatte_row=0x7f030004;
         public static final int geatte_tabs=0x7f030005;
-        public static final int main=0x7f030006;
+        public static final int geatte_vote=0x7f030006;
+        public static final int geatte_vote_bar=0x7f030007;
+        public static final int geatte_vote_btn=0x7f030008;
+        public static final int main=0x7f030009;
     }
     public static final class string {
         public static final int app_name=0x7f040002;
@@ -79,7 +100,9 @@ public final class R {
         public static final int send_geatte_button_label=0x7f04000f;
         public static final int snap_geatte_button_label=0x7f040000;
         public static final int take_picture=0x7f040001;
+        public static final int upload_image_error=0x7f040016;
         public static final int upload_text_error=0x7f040015;
+        public static final int upload_vote_error=0x7f040017;
         public static final int vote_label=0x7f04000d;
     }
     public static final class style {
@@ -93,4 +116,49 @@ public final class R {
         public static final int spinner_item_dropdown=0x7f050005;
         public static final int view_text=0x7f050003;
     }
+    public static final class styleable {
+        /**  GeatteVoteBar related attributes 
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #GeatteVoteBar_no_label com.geatte.android.app:no_label}</code></td><td></td></tr>
+           <tr><td><code>{@link #GeatteVoteBar_yes_label com.geatte.android.app:yes_label}</code></td><td></td></tr>
+           </table>
+           @see #GeatteVoteBar_no_label
+           @see #GeatteVoteBar_yes_label
+         */
+        public static final int[] GeatteVoteBar = {
+            0x7f010000, 0x7f010001
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.geatte.android.app.R.attr#no_label}
+          attribute's value can be found in the {@link #GeatteVoteBar} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:no_label
+        */
+        public static final int GeatteVoteBar_no_label = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.geatte.android.app.R.attr#yes_label}
+          attribute's value can be found in the {@link #GeatteVoteBar} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:yes_label
+        */
+        public static final int GeatteVoteBar_yes_label = 0;
+    };
 }

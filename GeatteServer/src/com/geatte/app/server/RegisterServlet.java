@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.android.c2dm.server.C2DMessaging;
+import com.geatte.app.shared.DBHelper;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.repackaged.org.json.JSONArray;
@@ -34,7 +34,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-	RequestInfo reqInfo = RequestInfo.processRequest(req, resp, getServletContext());
+	GeatteRegisterRequestInfo reqInfo = GeatteRegisterRequestInfo.processRequest(req, resp, getServletContext());
 	if (reqInfo == null) {
 	    return;
 	}
@@ -70,7 +70,7 @@ public class RegisterServlet extends HttpServlet {
 
 	resp.setContentType("text/plain");
 
-	RequestInfo reqInfo = RequestInfo.processRequest(req, resp, getServletContext());
+	GeatteRegisterRequestInfo reqInfo = GeatteRegisterRequestInfo.processRequest(req, resp, getServletContext());
 	if (reqInfo == null) {
 	    log.severe("RegisterServlet.doPOST() : can not load RequestInfo!!");
 	    return;
@@ -134,7 +134,7 @@ public class RegisterServlet extends HttpServlet {
 	}
 
 	// Context-shared PMF.
-	PersistenceManager pm = C2DMessaging.getPMF(getServletContext()).getPersistenceManager();
+	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
 
 	try {
 	    List<DeviceInfo> registrations = reqInfo.devices;

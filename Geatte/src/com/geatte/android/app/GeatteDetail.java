@@ -86,7 +86,7 @@ public class GeatteDetail extends Activity {
 
     private void populateFields() {
 	if (mRowId != null) {
-	    Cursor cursor = mDbHelper.fetchNote(mRowId);
+	    Cursor cursor = mDbHelper.fetchMyInterest(mRowId);
 	    startManagingCursor(cursor);
 	    mTitleText.setText(cursor.getString(
 		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));

@@ -1,0 +1,9 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <include
+        layout="@layout/geatte_vote_btn"
+        android:id="@+id/geatte_vote_btn_yes" />
+        
+    <include
+        layout="@layout/geatte_vote_btn"
+        android:id="@+id/geatte_vote_btn_no" />
+</merge>

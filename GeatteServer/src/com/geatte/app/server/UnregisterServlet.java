@@ -31,7 +31,7 @@ public class UnregisterServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/plain");
 
-        RequestInfo reqInfo = RequestInfo.processRequest(req, resp, 
+        GeatteRegisterRequestInfo reqInfo = GeatteRegisterRequestInfo.processRequest(req, resp, 
                 getServletContext());
         if (reqInfo == null) {
             return;
