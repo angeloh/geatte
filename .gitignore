@@ -1,0 +1,20 @@
+# Eclipse
+.classpath
+.project
+.settings
+.metadata
+GeatteServer/.settings/com.google.appengine.eclipse.core.prefs
+
+# server
+GeatteServer/war/geatteserver/*.cache.html
+GeatteServer/war/geatteserver/*.gwt.rpc
+GeatteServer/war/WEB-INF/deploy
+GeatteServer/war/WEB-INF/classes/
+GeatteServer/.gwt/
+
+# app
+Geatte/bin/
+GeatteTest/bin/
+
+# misc
+RemoteSystemsTempFiles
