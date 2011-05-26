@@ -137,15 +137,31 @@ public class GeatteVote extends Activity {
     private void populateFields() {
 	if (mGeatteId != null) {
 	    Cursor cursor = mDbHelper.fetchFriendInterest(mGeatteId);
+	    if (cursor.isAfterLast()) {
+		Log.w(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " unable to get record from db for geatte id = " + mGeatteId);
+	    }
 	    startManagingCursor(cursor);
 	    //	    mTitleText.setText(cursor.getString(
 	    //		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
 	    //	    mDescText.setText(cursor.getString(
 	    //		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
 
-	    String savedFIImagePath = cursor.getString(
-		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
-	    mGeatteVoteImage.setImageBitmap(BitmapFactory.decodeFile(savedFIImagePath));
+	    try {
+		String savedFIImagePath = cursor.getString(
+			cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
+		if (mGeatteVoteImage == null) {
+		    Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " mGeatteVoteImage is null ");
+		}
+		if (savedFIImagePath == null) {
+		    Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " savedFIImagePath is null ");
+		}
+		if (BitmapFactory.decodeFile(savedFIImagePath) == null) {
+		    Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " BitmapFactory.decodeFile(savedFIImagePath) is null ");
+		}
+		mGeatteVoteImage.setImageBitmap(BitmapFactory.decodeFile(savedFIImagePath));
+	    } catch (Exception ex) {
+		Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " ERROR ", ex);
+	    }
 
 	}
     }

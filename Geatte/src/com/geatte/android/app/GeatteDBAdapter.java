@@ -22,7 +22,7 @@ public class GeatteDBAdapter {
 
     //TABLE feedbacks
     public static final String KEY_FEEDBACK_ID = "_id";
-    public static final String KEY_FEEDBACK_INTEREST_ID = "interest";
+    public static final String KEY_FEEDBACK_GEATTE_ID = "geatte_id";
     public static final String KEY_FEEDBACK_VOTER = "voter";
     public static final String KEY_FEEDBACK_VOTE = "vote";
     public static final String KEY_FEEDBACK_COMMENT = "feedback";
@@ -77,8 +77,8 @@ public class GeatteDBAdapter {
 	KEY_FEEDBACK_VOTER + " TEXT," +
 	KEY_FEEDBACK_VOTE + " TEXT," +
 	KEY_FEEDBACK_COMMENT + " TEXT," +
-	KEY_FEEDBACK_INTEREST_ID + " INTEGER," +
-	"FOREIGN KEY (" +KEY_FEEDBACK_INTEREST_ID +") REFERENCES " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_ID + ")" +
+	KEY_FEEDBACK_GEATTE_ID + " TEXT," +
+	"FOREIGN KEY (" +KEY_FEEDBACK_GEATTE_ID +") REFERENCES " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_GEATTE_ID + ")" +
 	");";
 
     private static final String DB_CREATE_IMAGES =
@@ -101,7 +101,7 @@ public class GeatteDBAdapter {
 	"CREATE TABLE " + DB_TABLE_FI_IMAGES + " (" + KEY_FI_IMAGE_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
 	KEY_FI_IMAGE_PATH +" TEXT NOT NULL," +
 	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
-	KEY_FI_IMAGE_INTEREST_ID + " INTEGER," +
+	KEY_FI_IMAGE_INTEREST_ID + " TEXT," +
 	"FOREIGN KEY (" + KEY_FI_IMAGE_INTEREST_ID + ") REFERENCES " + DB_TABLE_FRIEND_INTERESTS + " (" + KEY_FRIEND_INTEREST_ID + ")" +
 	");";
 
@@ -194,21 +194,8 @@ public class GeatteDBAdapter {
     }
 
     public long insertFeedback(String geatteId, String voter, String vote, String comment) {
-
-	Cursor cursor = mDb.query(DB_TABLE_INTERESTS, new String []{KEY_INTEREST_ID}, KEY_INTEREST_GEATTE_ID + "=" + geatteId, null, null, null, null);
-
-	long interestId = 0;
-	if (cursor != null) {
-	    cursor.moveToFirst();
-	    interestId = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_INTEREST_ID));
-	}
-
-	if (interestId == 0) {
-	    Log.e(Config.LOGTAG, "unable to get interest id for geatte id = " + geatteId + ", use 0 instead!!");
-	}
-
 	ContentValues initialValues = new ContentValues();
-	initialValues.put(KEY_FEEDBACK_INTEREST_ID, interestId);
+	initialValues.put(KEY_FEEDBACK_GEATTE_ID, geatteId);
 	initialValues.put(KEY_FEEDBACK_VOTER, voter);
 	initialValues.put(KEY_FEEDBACK_VOTE, vote);
 	initialValues.put(KEY_FEEDBACK_COMMENT, comment);
@@ -275,7 +262,10 @@ public class GeatteDBAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deleteInterest(long rowId) {
-	mDb.delete(DB_TABLE_FEEDBACKS, KEY_FEEDBACK_INTEREST_ID + "=" + rowId, null);
+	String geatteId = getGeatteIdFromInterestId((int)rowId);
+	if (geatteId != null) {
+	    mDb.delete(DB_TABLE_FEEDBACKS, KEY_FEEDBACK_GEATTE_ID + "=" + geatteId, null);
+	}
 	mDb.delete(DB_TABLE_IMAGES, KEY_IMAGE_INTEREST_ID + "=" + rowId, null);
 	return mDb.delete(DB_TABLE_INTERESTS, KEY_INTEREST_ID + "=" + rowId, null) > 0;
     }
@@ -348,6 +338,41 @@ public class GeatteDBAdapter {
 	return cursor;
     }
 
+    /**
+     * Return a Cursor positioned at the interest that matches the given geatteId
+     * 
+     * @param geatteId geatteId
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchMyInterest(String geatteId) throws SQLException {
+	int interestId = this.getInterestIdFromGeatteId(geatteId);
+	return fetchMyInterest(interestId);
+    }
+
+    /**
+     * Return a Cursor positioned at the feedbacks that matches the given geatteId
+     * 
+     * @param geatteId geatteId
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchMyInterestFeedback(String geatteId) throws SQLException {
+	String query = "SELECT " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_GEATTE_ID + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTER + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTE + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_COMMENT + " " +
+	"FROM " +
+	DB_TABLE_FEEDBACKS +
+	" WHERE " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_GEATTE_ID + "=\"" + geatteId + "\"";
+
+	Log.i(Config.LOGTAG, "fetch feedbacks query string = " + query);
+
+	Cursor cursor = mDb.rawQuery(query, null);
+	return cursor;
+    }
+
     public Cursor fetchFriendInterest(String geatteId) throws SQLException {
 	String query = "SELECT " +
 	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_ID + ", " +
@@ -416,6 +441,43 @@ public class GeatteDBAdapter {
 	} else {
 	    return false;
 	}
+    }
+
+    public String getGeatteIdFromInterestId(int interestId){
+	Cursor cursor = mDb.query(DB_TABLE_INTERESTS, new String []{KEY_INTEREST_GEATTE_ID}, KEY_INTEREST_ID + "=" + interestId, null, null, null, null);
+
+	String geatteId = null;
+	if (cursor != null) {
+	    if(cursor.moveToFirst()) {
+		geatteId = cursor.getString(cursor.getColumnIndexOrThrow(KEY_INTEREST_GEATTE_ID));
+	    }
+	}
+
+	if (geatteId == null) {
+	    Log.e(Config.LOGTAG, "unable to get geatte id for interest id = " + interestId + ", return null!!");
+	}
+
+	return geatteId;
+
+    }
+
+    public int getInterestIdFromGeatteId(String geatteId){
+	if (geatteId == null) {
+	    return -1;
+	}
+	Cursor cursor = mDb.query(DB_TABLE_INTERESTS, new String []{KEY_INTEREST_ID}, KEY_INTEREST_GEATTE_ID + "='" + geatteId +"'", null, null, null, null);
+
+	int interestId = -1;
+	if (cursor != null) {
+	    if (cursor.moveToFirst()) {
+		interestId = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_INTEREST_ID));
+	    }
+	}
+
+	if (interestId == -1) {
+	    Log.e(Config.LOGTAG, "unable to get interest id for geatte id = " + geatteId + ", return -1!!");
+	}
+	return interestId;
     }
 
     /*private byte[] getBitmapAsByteArray(Bitmap bitmap) {

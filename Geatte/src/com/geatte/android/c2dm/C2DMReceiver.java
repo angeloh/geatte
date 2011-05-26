@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 import com.geatte.android.app.Config;
 import com.geatte.android.app.DeviceRegistrar;
-import com.geatte.android.app.GeatteFeedback;
+import com.geatte.android.app.GeatteFeedbackActivity;
 import com.geatte.android.app.GeatteVote;
 import com.geatte.android.app.GeatteDBAdapter;
 import com.geatte.android.app.R;
@@ -328,7 +328,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteFeedback = " + voteFeedback);
 
 	    // send notification
-	    Intent intentNotify = new Intent(this, GeatteFeedback.class);
+	    Intent intentNotify = new Intent(this, GeatteFeedbackActivity.class);
 	    intentNotify.putExtra(Config.GEATTE_ID_PARAM, voteGeatteId);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTER, voter);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTE_RESP, voteResp);

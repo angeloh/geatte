@@ -159,10 +159,15 @@ public class GeatteEdit extends Activity {
 	    mDbHelper.insertImage(mRowId, mImagePath);
 	    if (mGeatteId != null) {
 		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
+		Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " add geatte id " + mGeatteId + " to interest = " + mRowId);
 	    }
 	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " create new interest for id = " + mRowId + ", geatteId = " + mGeatteId);
 	} else {
 	    mDbHelper.updateInterest(mRowId, title, desc);
+	    if (mGeatteId != null) {
+		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
+		Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
+	    }
 	    mDbHelper.updateImage(mRowId, mImagePath);
 	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " update interest for id = " + mRowId);
 	}

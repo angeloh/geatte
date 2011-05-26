@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:padding="5dp">
+	
+	<TextView android:id="@+id/app_top_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_marginLeft="10px"
+		android:layout_marginBottom="15px" style="@style/label_top"
+		android:text="@string/edit_top_label" />
+ 
+    <Button android:id="@+id/app_snap_button"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"      
+        android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+        android:layout_below="@id/app_top_label"
+        android:text="@string/snap_geatte_button_label" />
+    
+    <Button android:id="@+id/app_register_btn"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"      
+        android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+        android:layout_below="@id/app_snap_button"
+        android:text="@string/register" />
+
+    <ProgressBar android:id="@+id/app_register_prog_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_register_btn"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="0dip"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:visibility="invisible"/>
+        
+    <TextView
+        android:id="@+id/app_register_prog_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register_progress_text_conn"
+        android:textColor="#A0A0A0"
+        android:layout_below="@id/app_register_prog_bar"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="0dip"
+        android:layout_marginBottom="10dip"
+        android:visibility="invisible"/>
+
+</FrameLayout>

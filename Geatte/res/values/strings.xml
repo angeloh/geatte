@@ -3,6 +3,7 @@
     <string name="snap_geatte_button_label">Snap A Geatte</string>
     <string name="take_picture">Take a picture</string>
     <string name="app_name">Geatte</string>
+    <string name="app_url">http://geatte.com</string>
     <string name="no_geattes">No Geattes Yet</string>
     
     <string name="menu_delete">Delete Geatte</string>
