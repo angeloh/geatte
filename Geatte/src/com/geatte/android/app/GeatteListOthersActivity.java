@@ -20,9 +20,9 @@ import android.widget.SimpleCursorAdapter;
  * "List" of friends geattes screen
  * 
  */
-public class GeatteListOthers extends ListActivity {
+public class GeatteListOthersActivity extends ListActivity {
 
-    private static final String CLASSTAG = GeatteListOthers.class.getSimpleName();
+    private static final String CLASSTAG = GeatteListOthersActivity.class.getSimpleName();
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_SHOW = 1;
 
@@ -53,7 +53,7 @@ public class GeatteListOthers extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.v(Config.LOGTAG, " " + GeatteListOthers.CLASSTAG + " onCreate");
+	Log.v(Config.LOGTAG, " " + GeatteListOthersActivity.CLASSTAG + " onCreate");
 
 	this.setContentView(R.layout.geatte_list);
 
@@ -112,7 +112,7 @@ public class GeatteListOthers extends ListActivity {
 	super.onCreateOptionsMenu(menu);
 	//menu.add(0, GeatteList.MENU_GET_NEXT_PAGE, 0, R.string.menu_get_next_page).setIcon(
 	//	android.R.drawable.ic_menu_more);
-	menu.add(0, GeatteListOthers.MENU_ADD_GEATTE, 0, R.string.menu_add_more_geatte).setIcon(
+	menu.add(0, GeatteListOthersActivity.MENU_ADD_GEATTE, 0, R.string.menu_add_more_geatte).setIcon(
 		android.R.drawable.ic_menu_edit);
 	return true;
     }

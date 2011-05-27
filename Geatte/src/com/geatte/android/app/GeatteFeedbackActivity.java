@@ -103,7 +103,7 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		}
 		adapter.notifyDataSetChanged();
 	    }
-	},8000);
+	},500);
 	Log.d(Config.LOGTAG, "END GeatteFeedbackActivity:onCreate");
     }
 

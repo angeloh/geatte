@@ -5,6 +5,8 @@
     <string name="app_name">Geatte</string>
     <string name="app_url">http://geatte.com</string>
     <string name="no_geattes">No Geattes Yet</string>
+    <string name="show_all_feedbacks">Show All feedbacks</string>
+    <string name="show_geattetab">GeatteTab</string>
     
     <string name="menu_delete">Delete Geatte</string>
 	<string name="menu_add_more_geatte">Add more geatte</string>

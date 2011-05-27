@@ -4,18 +4,34 @@
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:padding="6dip">
     
-    <ImageView
+    <!-- ImageView
         android:id="@+id/my_geatte_img"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="6dip"/>
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="1dip"
+        android:layout_marginRight="2dip"/
+    
+    <ImageView
+        android:id="@+id/my_geatte_img"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="6dp"
+        android:scaleType="centerInside"
+    />-->
+
+	<ImageView
+		style="?attr/gdThumbnailItemViewStyleThumbnail"
+		android:id="@+id/my_geatte_img"
+		android:layout_height="?attr/gdItemViewPreferredHeight"
+		android:scaleType="centerInside" />
 
     <TextView  
         android:id="@+id/my_geatte_desc"
         android:layout_width="fill_parent"
-        android:layout_height="26dip" 
+        android:layout_height="20dip" 
         android:layout_toRightOf="@id/my_geatte_img"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

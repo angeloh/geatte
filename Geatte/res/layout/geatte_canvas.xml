@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="fill_parent"
-	android:layout_width="fill_parent"
-	android:padding="5dp">
-	
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:gravity="center_horizontal" android:padding="10px"
+	>
+
 	<TextView android:id="@+id/app_top_label"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:layout_marginLeft="10px"
-		android:layout_marginBottom="15px" style="@style/label_top"
+		android:layout_height="wrap_content" 
+		android:layout_marginLeft="10px"
+		android:layout_marginBottom="15px" 
+		style="@style/label_top"
 		android:text="@string/edit_top_label" />
  
     <Button android:id="@+id/app_snap_button"  
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"      
-        android:layout_marginLeft="10px" android:layout_marginBottom="5px"
+        android:layout_marginLeft="10px" 
+        android:layout_marginBottom="5px"
         android:layout_below="@id/app_top_label"
         android:text="@string/snap_geatte_button_label" />
+    
+    <Button android:id="@+id/app_show_all_feedback_btn"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"      
+        android:layout_marginLeft="10px" 
+        android:layout_marginBottom="5px"
+        android:layout_below="@id/app_snap_button"
+        android:text="@string/show_all_feedbacks" />
+    
+    <Button android:id="@+id/app_show_geattetab_btn"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"      
+        android:layout_marginLeft="10px"
+        android:layout_marginBottom="5px"
+        android:layout_below="@id/app_show_all_feedback_btn"
+        android:text="@string/show_geattetab" />
     
     <Button android:id="@+id/app_register_btn"  
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"      
-        android:layout_marginLeft="10px" android:layout_marginBottom="5px"
-        android:layout_below="@id/app_snap_button"
+        android:layout_marginLeft="10px" 
+        android:layout_marginBottom="5px"
+        android:layout_below="@id/app_show_geattetab_btn"
         android:text="@string/register" />
 
     <ProgressBar android:id="@+id/app_register_prog_bar"
@@ -48,4 +68,4 @@
         android:layout_marginBottom="10dip"
         android:visibility="invisible"/>
 
-</FrameLayout>
+</RelativeLayout>

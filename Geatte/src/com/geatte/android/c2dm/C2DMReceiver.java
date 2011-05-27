@@ -327,6 +327,9 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteFeedback = " + voteFeedback);
 
+	    dbHelper.insertFeedback(voteGeatteId, voter, voteResp, voteFeedback);
+	    Log.d(Config.LOGTAG, " " + TAG + "Saved feedback for geatteId = " + voteGeatteId + ", voter = " + voter + " to DB SUCCESSUL!");
+
 	    // send notification
 	    Intent intentNotify = new Intent(this, GeatteFeedbackActivity.class);
 	    intentNotify.putExtra(Config.GEATTE_ID_PARAM, voteGeatteId);
@@ -334,8 +337,6 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTE_RESP, voteResp);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_FEEDBACK, voteFeedback);
 	    C2DMReceiver.generateNotification(context, "You got a new Geatte Feedback from ", voter, intentNotify);
-
-
 
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, " " + TAG, e);

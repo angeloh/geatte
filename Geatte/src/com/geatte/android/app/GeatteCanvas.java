@@ -35,6 +35,8 @@ public class GeatteCanvas extends GDActivity {
     private static final String CLASSTAG = GeatteCanvas.class.getSimpleName();
     private static final int ACTIVITY_SNAP = 0;
     private static final int ACTIVITY_CREATE = 1;
+    private static final int ACTIVITY_ALL_FEEDBACK = 2;
+    private static final int ACTIVITY_SHOW_GEATTETAB = 3;
     private boolean mPendingAuth = false;
 
     @Override
@@ -45,8 +47,8 @@ public class GeatteCanvas extends GDActivity {
 	// setup google account and save to context prefs
 	getGoogleAccount();
 
-	//setActionBarContentView(R.layout.geatte_canvas);
-	setActionBarContentView(R.layout.geatte_app);
+	setActionBarContentView(R.layout.geatte_canvas);
+	//setActionBarContentView(R.layout.geatte_app);
 
 	addActionBarItem(Type.Info);
 
@@ -60,8 +62,24 @@ public class GeatteCanvas extends GDActivity {
 	    }
 	});
 
-	Button nextButton = (Button) findViewById(R.id.app_register_btn);
-	nextButton.setOnClickListener(new OnClickListener() {
+	Button showAllFeedbackButton = (Button) findViewById(R.id.app_show_all_feedback_btn);
+	showAllFeedbackButton.setOnClickListener( new OnClickListener(){
+	    public void onClick(View v ){
+		Intent i = new Intent(GeatteCanvas.this.getApplicationContext(), GeatteAllFeedbackActivity.class);
+		startActivity(i);
+	    }
+	});
+
+	Button showGeatteTab = (Button) findViewById(R.id.app_show_geattetab_btn);
+	showGeatteTab.setOnClickListener( new OnClickListener(){
+	    public void onClick(View v ){
+		Intent i = new Intent(GeatteCanvas.this, GeatteTabActivity.class);
+		startActivity(i);
+	    }
+	});
+
+	Button registerButton = (Button) findViewById(R.id.app_register_btn);
+	registerButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
 		setRegisterView();
 	    }
@@ -184,14 +202,14 @@ public class GeatteCanvas extends GDActivity {
     }
 
     private void setRegisterView() {
-	final Button nextButton = (Button) findViewById(R.id.app_register_btn);
+	final Button regButton = (Button) findViewById(R.id.app_register_btn);
 
 	final SharedPreferences prefs = getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY,
 		Context.MODE_PRIVATE);
 	String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
 
 	if (accountName == null) {
-	    nextButton.setEnabled(false);
+	    regButton.setEnabled(false);
 	    Log.d(Config.LOGTAG_C2DM, " " + GeatteCanvas.CLASSTAG + ":setRegisterView() : No google account '"
 		    + Config.PREF_USER_EMAIL + "' in prefs");
 	    //TODO forward user to add account
@@ -200,7 +218,7 @@ public class GeatteCanvas extends GDActivity {
 	    Log.d(Config.LOGTAG_C2DM, " " + GeatteCanvas.CLASSTAG + ":setRegisterView() : user prefs google account "
 		    + Config.PREF_USER_EMAIL + " = " + accountName);
 
-	    nextButton.setOnClickListener(new OnClickListener() {
+	    regButton.setOnClickListener(new OnClickListener() {
 		public void onClick(View v) {
 		    register();
 		}
@@ -233,7 +251,7 @@ public class GeatteCanvas extends GDActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	if (requestCode== 0 && resultCode == Activity.RESULT_OK){
+	if (requestCode == ACTIVITY_SNAP && resultCode == Activity.RESULT_OK){
 	    Bitmap x = (Bitmap) data.getExtras().get("data");
 	    String path = saveToFile(x);
 	    Intent i = new Intent(this, GeatteEdit.class);

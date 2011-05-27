@@ -52,7 +52,7 @@
 		<activity android:name=".GeatteList" android:label="@string/app_name">
 		</activity>
 
-		<activity android:name=".GeatteListOthers" android:label="@string/app_name">
+		<activity android:name=".GeatteListOthersActivity" android:label="@string/app_name">
 		</activity>
 
 		<activity android:name=".GeatteEdit" android:label="@string/edit_geatte">
@@ -61,10 +61,16 @@
 		<activity android:name=".GeatteDetail" android:label="@string/app_name">
 		</activity>
 		
-		<activity android:name="GeatteVote" android:label="@string/app_name">
+		<activity android:name=".GeatteVote" android:label="@string/app_name">
 		</activity>
 		
-		<activity android:name="GeatteFeedbackActivity" android:label="@string/app_name">
+		<activity android:name=".GeatteFeedbackActivity" android:label="@string/app_name">
+		</activity>
+		
+		<activity android:name=".GeatteAllFeedbackActivity" android:label="@string/app_name">
+		</activity>
+		
+		<activity android:name=".GeatteTabActivity" android:label="@string/app_name">
 		</activity>
 
 		<!-- In order to use the c2dm library, an

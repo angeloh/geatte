@@ -1,5 +1,8 @@
 package com.geatte.android.app;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -19,6 +22,7 @@ public class GeatteDBAdapter {
     public static final String KEY_INTEREST_GEATTE_ID = "geatte_id";
     public static final String KEY_INTEREST_TITLE = "title";
     public static final String KEY_INTEREST_DESC = "desc";
+    public static final String KEY_INTEREST_CREATED_DATE = "created_date";
 
     //TABLE feedbacks
     public static final String KEY_FEEDBACK_ID = "_id";
@@ -26,6 +30,7 @@ public class GeatteDBAdapter {
     public static final String KEY_FEEDBACK_VOTER = "voter";
     public static final String KEY_FEEDBACK_VOTE = "vote";
     public static final String KEY_FEEDBACK_COMMENT = "feedback";
+    public static final String KEY_FEEDBACK_UPDATED_DATE = "updated_date";
 
     //TABLE images
     public static final String KEY_IMAGE_ID = "_id";
@@ -55,6 +60,7 @@ public class GeatteDBAdapter {
 
     private static final String DATABASE_NAME = "geattedb";
     private static final int DATABASE_VERSION = 2;
+    private static final int CURSOR_LIMIT = 50;
 
     private static final String DB_TABLE_INTERESTS = "interests";
     private static final String DB_TABLE_FEEDBACKS = "feedbacks";
@@ -69,7 +75,8 @@ public class GeatteDBAdapter {
 	"CREATE TABLE " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 	KEY_INTEREST_GEATTE_ID +" TEXT," +
 	KEY_INTEREST_TITLE +" TEXT NOT NULL," +
-	KEY_INTEREST_DESC +" TEXT" +
+	KEY_INTEREST_DESC +" TEXT," +
+	KEY_INTEREST_CREATED_DATE + " DATE" +
 	");";
 
     private static final String DB_CREATE_FEEDBACKS =
@@ -77,6 +84,7 @@ public class GeatteDBAdapter {
 	KEY_FEEDBACK_VOTER + " TEXT," +
 	KEY_FEEDBACK_VOTE + " TEXT," +
 	KEY_FEEDBACK_COMMENT + " TEXT," +
+	KEY_FEEDBACK_UPDATED_DATE + " DATE," +
 	KEY_FEEDBACK_GEATTE_ID + " TEXT," +
 	"FOREIGN KEY (" +KEY_FEEDBACK_GEATTE_ID +") REFERENCES " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_GEATTE_ID + ")" +
 	");";
@@ -189,6 +197,9 @@ public class GeatteDBAdapter {
 	ContentValues initialValues = new ContentValues();
 	initialValues.put(KEY_INTEREST_TITLE, title);
 	initialValues.put(KEY_INTEREST_DESC, desc);
+	// set the format to sql date time
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	initialValues.put(KEY_INTEREST_CREATED_DATE, dateFormat.format(new Date()));
 
 	return mDb.insert(DB_TABLE_INTERESTS, null, initialValues);
     }
@@ -199,6 +210,9 @@ public class GeatteDBAdapter {
 	initialValues.put(KEY_FEEDBACK_VOTER, voter);
 	initialValues.put(KEY_FEEDBACK_VOTE, vote);
 	initialValues.put(KEY_FEEDBACK_COMMENT, comment);
+	// set the format to sql date time
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	initialValues.put(KEY_FEEDBACK_UPDATED_DATE, dateFormat.format(new Date()));
 
 	return mDb.insert(DB_TABLE_FEEDBACKS, null, initialValues);
     }
@@ -280,12 +294,15 @@ public class GeatteDBAdapter {
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + ", " +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_ID + " AS " + KEY_IMAGE_AS_ID + ", " +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_PATH + " " +
 	" FROM " +
 	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
-	DB_TABLE_IMAGES + "." + KEY_IMAGE_INTEREST_ID;
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_INTEREST_ID +
+	" ORDER BY " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + " DESC" +
+	" LIMIT " + CURSOR_LIMIT;
 
 	/*	String query = "SELECT " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
@@ -362,7 +379,8 @@ public class GeatteDBAdapter {
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_GEATTE_ID + ", " +
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTER + ", " +
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTE + ", " +
-	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_COMMENT + " " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_COMMENT + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " " +
 	"FROM " +
 	DB_TABLE_FEEDBACKS +
 	" WHERE " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_GEATTE_ID + "=\"" + geatteId + "\"";
@@ -371,6 +389,35 @@ public class GeatteDBAdapter {
 
 	Cursor cursor = mDb.rawQuery(query, null);
 	return cursor;
+    }
+
+    /**
+     * Return a Cursor for all feedbacks (latest 50)
+     * 
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchAllMyInterestFeedback() throws SQLException {
+	String query = "SELECT " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_GEATTE_ID + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTER + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTE + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_COMMENT + ", " +
+	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " " +
+	"FROM " + DB_TABLE_FEEDBACKS +
+	" ORDER BY " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " DESC" +
+	" LIMIT " + CURSOR_LIMIT;
+
+	Log.i(Config.LOGTAG, "fetch all feedbacks query string = " + query);
+
+	try {
+	    Cursor cursor = mDb.rawQuery(query, null);
+	    Log.i(Config.LOGTAG, "return cursor fetchAllMyInterestFeedback()");
+	    return cursor;
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch all feedbacks ", ex);
+	}
+	return null;
     }
 
     public Cursor fetchFriendInterest(String geatteId) throws SQLException {
@@ -420,6 +467,9 @@ public class GeatteDBAdapter {
 	ContentValues args = new ContentValues();
 	args.put(KEY_INTEREST_TITLE, title);
 	args.put(KEY_INTEREST_DESC, desc);
+	// set the format to sql date time
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	args.put(KEY_INTEREST_CREATED_DATE, dateFormat.format(new Date()));
 
 	return mDb.update(DB_TABLE_INTERESTS, args, KEY_INTEREST_ID + "=" + rowId, null) > 0;
     }
