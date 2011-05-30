@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 /**
  * "List" of friends geattes screen
@@ -23,32 +24,16 @@ import android.widget.SimpleCursorAdapter;
 public class GeatteListOthersActivity extends ListActivity {
 
     private static final String CLASSTAG = GeatteListOthersActivity.class.getSimpleName();
-    private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_SHOW = 1;
 
-    private static final int MENU_ADD_GEATTE = Menu.FIRST;
-    private static final int MENU_DELETE_GEATTE = Menu.FIRST + 1;
+    private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
+    //private static final int MENU_DELETE_GEATTE = Menu.FIRST + 1;
 
-    //private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
-    //private static final int NUM_RESULTS_PER_PAGE = 8;
+    private static final int NUM_RESULTS_PER_PAGE = 8;
 
-    //private TextView empty;
+    private int mStartFrom = 1;
+    private TextView empty;
     private ProgressDialog progressDialog;
     private GeatteDBAdapter mDbHelper;
-
-    /*    private final Handler handler = new Handler() {
-	@Override
-	public void handleMessage(final Message msg) {
-	    Log.v(Constants.LOGTAG, " " + ReviewList.CLASSTAG + " worker thread done, setup ReviewAdapter");
-	    progressDialog.dismiss();
-	    if ((reviews == null) || (reviews.size() == 0)) {
-		empty.setText("No Data");
-	    } else {
-		reviewAdapter = new ReviewAdapter(ReviewList.this, reviews);
-		setListAdapter(reviewAdapter);
-	    }
-	}
-    };*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,63 +42,76 @@ public class GeatteListOthersActivity extends ListActivity {
 
 	this.setContentView(R.layout.geatte_list);
 
-	//this.empty = (TextView) findViewById(R.id.empty);
+	this.empty = (TextView) findViewById(R.id.empty);
 
-	// create db helper
-	mDbHelper = new GeatteDBAdapter(this);
-	mDbHelper.open();
+	// get start from, an int, from extras
+	mStartFrom = getIntent().getIntExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, 1);
+
 	fillData();
+    }
 
-	// set list properties
-	final ListView listView = getListView();
-	//listView.setItemsCanFocus(false);
-	//listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-	//listView.setEmptyView(this.empty);
-	registerForContextMenu(listView);
+    @Override
+    protected void onResume() {
+	super.onResume();
+	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onResume(): START");
+
+	// get start from, an int, from extras
+	//mStartFrom = getIntent().getIntExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, 1);
+	fillData();
+	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onResume(): END");
     }
 
     @Override
     protected void onDestroy() {
 	super.onDestroy();
-	Log.d(Config.LOGTAG, "GeatteListOthers:onDestroy(): START");
+	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onDestroy(): START");
 
-	if (mDbHelper != null) {
-	    mDbHelper.close();
-	}
-	Log.d(Config.LOGTAG, "GeatteListOthers:onDestroy(): END");
+	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onDestroy(): END");
     }
 
     private void fillData() {
 
+	// create db helper
+	mDbHelper = new GeatteDBAdapter(this);
+	mDbHelper.open();
+
 	this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving my geattes", true, false);
 
 	// Get all of the rows from the database and create the item list
-	Cursor myGeattesCursor = mDbHelper.fetchAllInterests();
+	Cursor myGeattesCursor = mDbHelper.fetchFriendInterestsLimit(NUM_RESULTS_PER_PAGE, mStartFrom);
 	startManagingCursor(myGeattesCursor);
 
 	// Create an array to specify the fields we want to display in the list (only TITLE)
-	//String[] from = new String[]{GeatteDBAdapter.KEY_INTEREST_TITLE, GeatteDBAdapter.KEY_IMAGE_IMAGE};
-	String[] from = new String[]{GeatteDBAdapter.KEY_INTEREST_TITLE};
+	String[] from = new String[]{GeatteDBAdapter.KEY_FI_IMAGE_PATH, GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE, GeatteDBAdapter.KEY_FRIEND_INTEREST_DESC};
 
 	// and an array of the fields we want to bind those fields to
-	//int[] to = new int[]{R.id.my_geatte_title, R.id.my_geatte_img};
-	int[] to = new int[]{R.id.my_geatte_title};
+	int[] to = new int[]{R.id.fi_geatte_img, R.id.fi_geatte_desc, R.id.fi_geatte_title};
 
 	// Now create a simple cursor adapter and set it to display
 	SimpleCursorAdapter cursorAdapter =
-	    new SimpleCursorAdapter(this, R.layout.geatte_row, myGeattesCursor, from, to);
+	    new SimpleCursorAdapter(this, R.layout.geatte_row_fi, myGeattesCursor, from, to);
 	setListAdapter(cursorAdapter);
 
 	progressDialog.dismiss();
+
+	// set list properties
+	final ListView listView = getListView();
+	//listView.setItemsCanFocus(false);
+	//listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	listView.setEmptyView(this.empty);
+	registerForContextMenu(listView);
+
+	if (mDbHelper != null) {
+	    mDbHelper.close();
+	}
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	super.onCreateOptionsMenu(menu);
-	//menu.add(0, GeatteList.MENU_GET_NEXT_PAGE, 0, R.string.menu_get_next_page).setIcon(
-	//	android.R.drawable.ic_menu_more);
-	menu.add(0, GeatteListOthersActivity.MENU_ADD_GEATTE, 0, R.string.menu_add_more_geatte).setIcon(
-		android.R.drawable.ic_menu_edit);
+	menu.add(0, GeatteListOthersActivity.MENU_GET_NEXT_PAGE, 0, R.string.menu_get_next_page).setIcon(
+		android.R.drawable.ic_menu_more);
+
 	return true;
     }
 
@@ -121,38 +119,31 @@ public class GeatteListOthersActivity extends ListActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
 	    ContextMenuInfo menuInfo) {
 	super.onCreateContextMenu(menu, v, menuInfo);
-	menu.add(0, MENU_DELETE_GEATTE, 0, R.string.menu_delete);
+	//	menu.add(0, MENU_DELETE_GEATTE, 0, R.string.menu_delete);
     }
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-	//Intent intent = null;
+	Intent intent = null;
 	switch (item.getItemId()) {
-	/*case MENU_GET_NEXT_PAGE:
+	case MENU_GET_NEXT_PAGE:
 	    // increment the startFrom value and call this Activity again
-	    intent = new Intent(Constants.INTENT_ACTION_VIEW_LIST);
-	    intent.putExtra(Constants.STARTFROM_EXTRA, getIntent().getIntExtra(Constants.STARTFROM_EXTRA, 1)
-		    + ReviewList.NUM_RESULTS_PER_PAGE);
+	    intent = new Intent(this, GeatteTabActivity.class);
+	    intent.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mStartFrom + GeatteListOthersActivity.NUM_RESULTS_PER_PAGE);
+	    intent.putExtra(Config.EXTRA_CURRENT_TAB, GeatteTabActivity.TABS.FRIENDINTERESTS.getIndex());
 	    startActivity(intent);
-	    return true;*/
-	case MENU_ADD_GEATTE:
-	    createGeatte();
 	    return true;
 	}
 	return super.onMenuItemSelected(featureId, item);
     }
 
-    private void createGeatte() {
-	Intent i = new Intent(this, GeatteEdit.class);
-	startActivityForResult(i, ACTIVITY_CREATE);
-    }
-
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 	super.onListItemClick(l, v, position, id);
-	Intent i = new Intent(this, GeatteDetail.class);
-	i.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, id);
-	startActivityForResult(i, ACTIVITY_SHOW);
+	//	Intent intent = new Intent(this, GeatteVotingActivity.class);
+	//	intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, id);
+	//	intent.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mStartFrom);
+	//	startActivityForResult(intent, ACTIVITY_SHOW);
     }
 
     @Override

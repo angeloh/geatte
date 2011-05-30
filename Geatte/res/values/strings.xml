@@ -17,12 +17,15 @@
     <string name="edit_title_label">Title:</string>
     <string name="edit_desc_label">Description:</string>
     <string name="edit_image_label">Image:</string>
+    <string name="edit_title_text_default">Enter Geatte Title</string>
+    <string name="edit_desc_text_default">Enter Geatte Desc</string>
     
     <string name="desc_label">Description:</string>
     <string name="vote_label">Vote:</string>
     <string name="comment_label">Comment:</string>
     
-    <string name="send_geatte_button_label">Send Geatte</string>
+    <string name="send_geatte_text">Send Geatte</string>
+    <string name="send_to_text">Send To</string>
     
     <string name="register">Register</string>
     <string name="register_progress_text_conn">Connecting...</string>
@@ -33,4 +36,12 @@
     <string name="upload_text_error">Error to upload geatte info</string>
     <string name="upload_image_error">Error to upload geatte image</string>
     <string name="upload_vote_error">Error to upload geatte vote</string>
+    
+    <string name="voting_yes">Yes</string>
+    <string name="voting_no">No</string>
+    <string name="voting_maybe">Maybe</string>
+    <string name="voting_comment">Write</string>
+    <string name="voting_send">Send</string>
+    <string name="voting_choose_answer">Choose an answer first!</string>
+    <string name="voting_a_geatte">Vote A Geatte</string>
 </resources>

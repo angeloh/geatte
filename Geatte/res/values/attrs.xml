@@ -5,4 +5,19 @@
 		<attr name="yes_label" format="string" />
 		<attr name="no_label" format="string" />
 	</declare-styleable>
+	
+	<attr name="GeatteDrawableMargin" format="dimension" />
+	
+	<attr name="GeatteTextAppearanceLarge" format="reference" />
+	<attr name="GeatteTextAppearanceMedium" format="reference" />
+	<attr name="GeatteTextAppearanceSmall" format="reference" />
+	<attr name="GeatteItemViewPreferredLargeHeight" format="dimension" />
+	<attr name="GeatteItemViewPreferredHeight" format="dimension" />
+	<attr name="GeatteItemViewPreferredHalfHeight" format="dimension" />
+	
+	<attr name="GeatteThumbnailBitmapItemStyle" format="reference" />
+	<attr name="GeatteThumbnailBitmapItemStyleText" format="reference" />
+	<attr name="GeatteThumbnailBitmapItemStyleSubtitle" format="reference" />
+	<attr name="GeatteThumbnailBitmapItemStyleLabel" format="reference" />
+	<attr name="GeatteThumbnailBitmapItemStyleThumbnail" format="reference" />
 </resources>

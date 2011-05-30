@@ -29,7 +29,7 @@ public class GeatteTabWidget extends TabActivity {
 	tabHost.addTab(spec);
 
 	// Do the same for the other tabs
-	intent = new Intent().setClass(this, GeatteList.class);
+	intent = new Intent().setClass(this, GeatteListActivity.class);
 	spec = tabHost.newTabSpec("GeatteList").setIndicator("My Interests",
 		res.getDrawable(R.drawable.tab_buttons))
 		.setContent(intent);

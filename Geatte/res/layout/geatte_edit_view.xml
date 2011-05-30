@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">	
+	<FrameLayout
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:background="@android:color/white"
+		android:layout_marginBottom="3px">
+		<ImageView
+			android:id="@+id/edit_img"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:scaleType="centerInside"/>
+	</FrameLayout>
+
+	<!-- TextView android:id="@+id/edit_top_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:layout_marginLeft="10px"
+		android:layout_marginBottom="15px" 
+		style="@style/label_top"
+		android:text="@string/edit_top_label" /-->
+
+	<!--TextView android:id="@+id/edit_title_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/edit_top_label"
+		android:layout_marginLeft="10px" 
+		android:layout_marginBottom="5px"
+		style="@style/label" 
+		android:text="@string/edit_title_label" /-->
+	
+	<EditText android:id="@+id/title"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:hint="@string/edit_title_text_default"
+		style="@style/edit_text" />	
+		
+	<!-- TextView android:id="@+id/edit_desc_label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/title"
+		android:layout_marginLeft="10px" 
+		android:layout_marginBottom="5px"
+		style="@style/label" 
+		android:text="@string/edit_desc_label" /-->
+
+	<EditText android:id="@+id/desc"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:hint="@string/edit_desc_text_default"
+		style="@style/edit_text" />
+	
+    <!-- Button
+    	android:id="@+id/send_to_button"
+    	android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+		android:drawableTop="@drawable/contact"
+		android:text="@string/send_to_text" /-->
+	
+	<Button
+    	android:id="@+id/send_to_button"
+    	android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+		android:drawableLeft="@drawable/contact"
+		android:text="@string/send_geatte_text" />
+
+</LinearLayout>

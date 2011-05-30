@@ -81,6 +81,7 @@ public class RegisterServlet extends HttpServlet {
 	String deviceId = reqInfo.getParameter(Config.DEVICE_ID_PARAM);
 
 	if (deviceId == null) {
+	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.DEVICE_ID_PARAM + ")");
 	    log.severe("RegisterServlet.doPOST() : Missing device id, " + Config.DEVICE_ID_PARAM + " is null");
 	    return;
@@ -91,6 +92,7 @@ public class RegisterServlet extends HttpServlet {
 	String phoneNumber = reqInfo.getParameter(Config.DEV_PHONE_NUMBER_PARAM);
 
 	if (phoneNumber == null) {
+	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.DEV_PHONE_NUMBER_PARAM + ")");
 	    log.severe("RegisterServlet.doPOST() : Missing phone number, " + Config.DEV_PHONE_NUMBER_PARAM + " is null");
 	    return;

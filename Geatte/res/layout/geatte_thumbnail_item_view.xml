@@ -1,37 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.geatte.android.view.ThumbnailBitmapItemView
+<!-- com.geatte.android.view.ThumbnailBitmapItemView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	style="?attr/gdThumbnailItemViewStyle"
 	android:layout_height="wrap_content"
 	android:minHeight="?attr/gdItemViewPreferredHeight"
 	android:paddingLeft="?attr/gdItemViewPreferredPaddingLeft">
-	
 	<ImageView
 		style="?attr/gdThumbnailItemViewStyleThumbnail"
 		android:id="@+id/gd_thumbnail"
 		android:layout_height="?attr/gdItemViewPreferredHeight"
-
+		android:scaleType="centerInside" /-->
+<com.geatte.android.view.ThumbnailBitmapItemView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="?attr/gdThumbnailItemViewStyle"
+	android:layout_height="wrap_content"
+	android:minHeight="128dp"
+	android:paddingLeft="?attr/gdItemViewPreferredPaddingLeft">
+	
+	<ImageView
+		style="?attr/GeatteThumbnailBitmapItemStyleThumbnail"
+		android:id="@+id/gd_thumbnail"
 		android:scaleType="centerInside" />
 
 	<TextView
-		style="?attr/gdThumbnailItemViewStyleText"
+		style="?attr/GeatteThumbnailBitmapItemStyleText"
 		android:id="@+id/gd_text"
 		android:layout_width="fill_parent"
 		android:layout_toRightOf="@id/gd_thumbnail"
-		
 		android:gravity="bottom"
 		android:singleLine="true"
 		android:ellipsize="end" />
 
-	<TextView
-		style="?attr/gdThumbnailItemViewStyleSubtitle"
-		android:id="@+id/gd_subtitle"
-		android:layout_width="fill_parent"
+    <TextView 
+        android:id="@+id/desc_label_detail"
+        style="?attr/GeatteThumbnailBitmapItemStyleLabel"
+        android:layout_width="wrap_content"
 		android:layout_toRightOf="@id/gd_thumbnail"
 		android:layout_below="@+id/gd_text"
 		android:layout_alignLeft="@id/gd_text"
+		android:text="@string/desc_label" />
+
+	<TextView
+		style="?attr/GeatteThumbnailBitmapItemStyleSubtitle"
+		android:id="@+id/gd_subtitle"
+		android:layout_width="fill_parent"
+		android:layout_toRightOf="@id/gd_thumbnail"
+		android:layout_below="@+id/desc_label_detail"
+		android:layout_alignLeft="@id/desc_label_detail"
 		android:layout_alignParentBottom="true"
-		
 		android:gravity="top"
 		android:singleLine="true"
 		android:ellipsize="end" />

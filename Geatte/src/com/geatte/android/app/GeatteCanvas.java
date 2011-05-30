@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -38,6 +39,7 @@ public class GeatteCanvas extends GDActivity {
     private static final int ACTIVITY_ALL_FEEDBACK = 2;
     private static final int ACTIVITY_SHOW_GEATTETAB = 3;
     private boolean mPendingAuth = false;
+    private String mImagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,6 @@ public class GeatteCanvas extends GDActivity {
 	getGoogleAccount();
 
 	setActionBarContentView(R.layout.geatte_canvas);
-	//setActionBarContentView(R.layout.geatte_app);
 
 	addActionBarItem(Type.Info);
 
@@ -57,7 +58,12 @@ public class GeatteCanvas extends GDActivity {
 	    public void onClick(View v ){
 		//Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
 		Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE );
-		//intent.putExtra( MediaStore.EXTRA_OUTPUT, outputFileUri );
+		mImagePath = createImagePath();
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mImagePath)));
+		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + mImagePath);
+
+		//intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getTmpImagePath())));
+		//Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + getTmpImagePath());
 		startActivityForResult(intent, ACTIVITY_SNAP);
 	    }
 	});
@@ -250,13 +256,40 @@ public class GeatteCanvas extends GDActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	if (requestCode == ACTIVITY_SNAP && resultCode == Activity.RESULT_OK){
-	    Bitmap x = (Bitmap) data.getExtras().get("data");
-	    String path = saveToFile(x);
-	    Intent i = new Intent(this, GeatteEdit.class);
-	    i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, path);
-	    startActivityForResult(i, ACTIVITY_CREATE);
+	    //Bitmap x = (Bitmap) intent.getExtras().get("data");
+	    //String path = saveToFile(imgBitmap);
+
+	    ////File fi = new File(getTmpImagePath());
+	    File fi = new File(mImagePath);
+
+	    //Bitmap captureBmp = Media.getBitmap(getContentResolver(), Uri.fromFile(fi) );
+	    //uri = Uri.parse(android.provider.MediaStore.Images.Media.insertImage(getContentResolver(), fi.getAbsolutePath(), null, null));
+	    if (fi.exists()) {
+		//		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		//		bitmapOptions.inSampleSize = 6;
+		//		Bitmap imgBitmap = BitmapFactory.decodeFile(fi.getAbsolutePath(), bitmapOptions);
+		//		String pathToPicture = saveToFile(imgBitmap);
+		//		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + pathToPicture);
+		//
+		//		Intent i = new Intent(this, GeatteEditActivity.class);
+		//		i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, pathToPicture);
+		//		startActivityForResult(i, ACTIVITY_CREATE);
+		//		if (!fi.delete()) {
+		//		    Log.d(Config.LOGTAG, "Failed to delete " + fi.getAbsolutePath());
+		//		}
+
+		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + mImagePath);
+
+		Intent i = new Intent(this, GeatteEditActivity.class);
+		i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
+		startActivityForResult(i, ACTIVITY_CREATE);
+
+	    } else {
+		Log.d(Config.LOGTAG, "file not exist " + fi.getAbsolutePath());
+	    }
+
 	}
     }
 
@@ -289,5 +322,58 @@ public class GeatteCanvas extends GDActivity {
 	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :" , e);
 	}
 	return null;
+    }
+
+    public String createImagePath() {
+	String filename;
+	Date date = new Date();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+	filename = sdf.format(date);
+
+	try {
+	    String path = Environment.getExternalStorageDirectory().toString();
+	    File dir = new File(path, "/geatte/images/");
+	    if (!dir.isDirectory()) {
+		dir.mkdirs();
+	    }
+
+	    File file = new File(dir, filename + ".jpg");
+	    return file.getAbsolutePath();
+	} catch (Exception e) {
+	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :" , e);
+	}
+	return null;
+    }
+
+    public String getTmpImagePath() {
+	try {
+	    String externalDir = Environment.getExternalStorageDirectory().toString();
+	    File tmpfile = new File(externalDir, "/tmpgeatte");
+	    if (!tmpfile.exists()) {
+		tmpfile.getParentFile().mkdirs();
+		tmpfile.createNewFile();
+	    }
+
+	    return tmpfile.getAbsolutePath();
+	} catch (Exception e) {
+	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :" , e);
+	}
+	return null;
+    }
+
+    public boolean hasImageCaptureBug() {
+
+	// list of known devices that have the bug
+	ArrayList<String> devices = new ArrayList<String>();
+	devices.add("android-devphone1/dream_devphone/dream");
+	devices.add("generic/sdk/generic");
+	devices.add("vodafone/vfpioneer/sapphire");
+	devices.add("tmobile/kila/dream");
+	devices.add("verizon/voles/sholes");
+	devices.add("google_ion/google_ion/sapphire");
+
+	return devices.contains(android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
+		+ android.os.Build.DEVICE);
+
     }
 }

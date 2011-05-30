@@ -21,12 +21,28 @@
 
 	<style name="Theme.Geatte" parent="@style/Theme.GreenDroid.NoTitleBar">
 	
+		<item name="android:windowBackground">@color/translucent_white</item>
+		
 		<item name="gdActionBarTitleColor">@android:color/white</item>
 		<item name="gdActionBarBackground">@drawable/action_bar_background</item>
 		<item name="gdActionBarDividerDrawable">@drawable/action_bar_divider</item>
 		<item name="gdActionBarDividerWidth">2px</item>
 		<item name="gdActionBarApplicationDrawable">@drawable/geatte_application_logo</item>
-	
+		
+		<item name="GeatteDrawableMargin">@dimen/geatte_drawable_margin</item>
+		
+		<item name="GeatteTextAppearanceLarge">@style/Geatte.TextAppearance.Large</item>
+		<item name="GeatteTextAppearanceMedium">@style/Geatte.TextAppearance.Medium</item>
+		<item name="GeatteTextAppearanceSmall">@style/Geatte.TextAppearance.Small</item>
+		
+		<item name="GeatteItemViewPreferredLargeHeight">@dimen/geatte_item_view_large_height</item>
+		<item name="GeatteItemViewPreferredHeight">@dimen/geatte_item_view_height</item>
+		<item name="GeatteItemViewPreferredHalfHeight">@dimen/geatte_item_view_half_height</item>
+		
+		<item name="GeatteThumbnailBitmapItemStyleText">@style/Geatte.ThumbnailBitmapItem.Text</item>
+		<item name="GeatteThumbnailBitmapItemStyleSubtitle">@style/Geatte.ThumbnailBitmapItem.Subtitle</item>
+		<item name="GeatteThumbnailBitmapItemStyleLabel">@style/Geatte.ThumbnailBitmapItem.Label</item>
+		<item name="GeatteThumbnailBitmapItemStyleThumbnail">@style/Geatte.ThumbnailBitmapItem.Thumbnail</item>
 	</style>
 	
 </resources>

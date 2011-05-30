@@ -30,8 +30,8 @@ import org.json.JSONObject;
 import com.geatte.android.app.Config;
 import com.geatte.android.app.DeviceRegistrar;
 import com.geatte.android.app.GeatteFeedbackActivity;
-import com.geatte.android.app.GeatteVote;
 import com.geatte.android.app.GeatteDBAdapter;
+import com.geatte.android.app.GeatteVotingActivity;
 import com.geatte.android.app.R;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -152,7 +152,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    String voteResp = extras.getString(Config.C2DM_MESSAGE_GEATTE_VOTE_RESP);
 	    String voteFeedback = extras.getString(Config.C2DM_MESSAGE_GEATTE_VOTE_FEEDBACK);
 	    if (voteGeatteId != null && voter != null && voteResp != null) {
-		processNewGeatteVote(context, voteGeatteId, voter, voteResp, voteFeedback);
+		processNewGeatteFeedback(context, voteGeatteId, voter, voteResp, voteFeedback);
 	    }
 
 	    /*if (title != null && url != null && url.startsWith("http")) {
@@ -277,7 +277,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 			}
 
 			// send notification
-			Intent intentNotify = new Intent(this, GeatteVote.class);
+			Intent intentNotify = new Intent(this, GeatteVotingActivity.class);
 			intentNotify.putExtra(Config.GEATTE_ID_PARAM, geatteId);
 			//				intentNotify.putExtra(Config.GEATTE_FROM_NUMBER_PARAM, fromNumber);
 			//				intentNotify.putExtra(Config.GEATTE_TITLE_PARAM, title);
@@ -310,7 +310,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     }
 
 
-    private void processNewGeatteVote(Context context, String voteGeatteId, String voter, String voteResp, String voteFeedback) {
+    private void processNewGeatteFeedback(Context context, String voteGeatteId, String voter, String voteResp, String voteFeedback) {
 	Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatte vote id = " + voteGeatteId);
 
 	GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);

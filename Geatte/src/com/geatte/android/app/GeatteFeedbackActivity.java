@@ -4,7 +4,6 @@ import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.DescriptionItem;
 import greendroid.widget.item.Item;
-import greendroid.widget.item.ProgressItem;
 import greendroid.widget.item.SeparatorItem;
 import greendroid.widget.item.ThumbnailItem;
 import greendroid.widget.itemview.ItemView;
@@ -33,37 +32,79 @@ public class GeatteFeedbackActivity extends GDListActivity {
 	setTitle(R.string.app_name);
 
 	Bundle extras = getIntent().getExtras();
-	final String geatteId = (String) (extras != null ? extras.get(Config.GEATTE_ID_PARAM) : null);
+	final String geatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
+	Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra geatteId = " + geatteId);
+	final Long interestId = extras != null ? extras.getLong(GeatteDBAdapter.KEY_INTEREST_ID) : null;
+	Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra interestId = " + interestId);
 
 	List<Item> items = new ArrayList<Item>();
 	final ThumbnailItem warnItem;
 	final ThumbnailBitmapItem geatteItem;
 
-	if (geatteId == null) {
+	if (geatteId != null || interestId != null) {
+	    ThumbnailBitmapItem item = createItemsFromFetchResult(geatteId, interestId, items);
+	    if (item == null) {
+		geatteItem = null;
+		warnItem = new ThumbnailItem("No geatte available", null, R.drawable.android_pressed);
+	    } else {
+		geatteItem = item;
+		warnItem = null;
+	    }
+	}
+	else {
 	    warnItem = new ThumbnailItem("Invalid geatte", null, R.drawable.android_pressed);
 	    geatteItem = null;
 	}
-	else {
-	    // create db helper
-	    GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
-	    mDbHelper.open();
 
-	    Cursor myInterestCur = mDbHelper.fetchMyInterest(geatteId);
-	    if (myInterestCur.isAfterLast()) {
-		warnItem = new ThumbnailItem("No geatte available", null, R.drawable.android_pressed);
-		geatteItem = null;
-	    } else {
-		//	    String savedImagePath = cursor.getString(
-		//		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
-		//	    mInterestImage.setImageBitmap(BitmapFactory.decodeFile(savedImagePath));
-		String title = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
-		String desc = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC));
-		String savedImagePath = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
-		geatteItem = new ThumbnailBitmapItem(title, desc, savedImagePath);
-		warnItem = null;
+	//	final ProgressItem progressItem = new ProgressItem("Retrieving feedbacks", true);
+	//	items.add(progressItem);
+
+	final ThumbnailBitmapItemAdapter adapter = new ThumbnailBitmapItemAdapter(this, items);
+	setListAdapter(adapter);
+
+	mHandler.postDelayed(new Runnable() {
+	    public void run() {
+		//		adapter.remove(progressItem);
+		if (geatteItem != null) {
+		    adapter.insert(geatteItem, 0);
+		} else {
+		    adapter.insert(warnItem, 0);
+		}
+		adapter.notifyDataSetChanged();
 	    }
+	},500);
+	Log.d(Config.LOGTAG, "END GeatteFeedbackActivity:onCreate");
+    }
 
+    private ThumbnailBitmapItem createItemsFromFetchResult(String geatteId, Long interestId, List<Item> items) {
+	ThumbnailBitmapItem geatteItem = null;
 
+	GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
+	mDbHelper.open();
+
+	if (interestId != null) {
+	    geatteId = mDbHelper.getGeatteIdFromInterestId(interestId);
+	}
+	Cursor myInterestCur = null;
+	if (geatteId != null) {
+	    myInterestCur = mDbHelper.fetchMyInterest(geatteId);
+	} else {
+	    myInterestCur = mDbHelper.fetchMyInterest(interestId);
+	}
+	if (myInterestCur.isAfterLast()) {
+	    geatteItem = null;
+	} else {
+	    //	    String savedImagePath = cursor.getString(
+	    //		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
+	    //	    mInterestImage.setImageBitmap(BitmapFactory.decodeFile(savedImagePath));
+	    String title = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
+	    String desc = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC));
+	    String savedImagePath = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
+	    geatteItem = new ThumbnailBitmapItem(title, desc, savedImagePath);
+
+	}
+
+	if (geatteId != null) {
 	    Cursor feedbackCur = mDbHelper.fetchMyInterestFeedback(geatteId);
 	    feedbackCur.moveToFirst();
 	    while (feedbackCur.isAfterLast() == false) {
@@ -84,27 +125,9 @@ public class GeatteFeedbackActivity extends GDListActivity {
 
 	    }
 	    feedbackCur.close();
-	    mDbHelper.close();
 	}
-
-	final ProgressItem progressItem = new ProgressItem("Retrieving feedbacks", true);
-	items.add(progressItem);
-
-	final ThumbnailBitmapItemAdapter adapter = new ThumbnailBitmapItemAdapter(this, items);
-	setListAdapter(adapter);
-
-	mHandler.postDelayed(new Runnable() {
-	    public void run() {
-		adapter.remove(progressItem);
-		if (geatteItem != null) {
-		    adapter.insert(geatteItem, 0);
-		} else {
-		    adapter.insert(warnItem, 0);
-		}
-		adapter.notifyDataSetChanged();
-	    }
-	},500);
-	Log.d(Config.LOGTAG, "END GeatteFeedbackActivity:onCreate");
+	mDbHelper.close();
+	return geatteItem;
     }
 
     /**

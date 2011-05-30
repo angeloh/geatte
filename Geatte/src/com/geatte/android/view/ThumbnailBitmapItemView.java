@@ -5,6 +5,7 @@ import com.geatte.android.app.R;
 import greendroid.widget.item.Item;
 import greendroid.widget.itemview.ItemView;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -39,7 +40,11 @@ public class ThumbnailBitmapItemView extends RelativeLayout implements ItemView 
 	final ThumbnailBitmapItem item = (ThumbnailBitmapItem) object;
 	mTextView.setText(item.text);
 	mSubtitleView.setText(item.subtitle);
-	mThumbnailView.setImageBitmap(BitmapFactory.decodeFile(item.imagePath));
+
+	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+	bitmapOptions.inSampleSize = 8;
+	Bitmap imgBitmap = BitmapFactory.decodeFile(item.imagePath, bitmapOptions);
+	mThumbnailView.setImageBitmap(imgBitmap);
     }
 
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
  * Show Geatte detail for review item user selected.
  * 
  */
+@Deprecated
 public class GeatteDetail extends Activity {
 
     private static final String CLASSTAG = GeatteDetail.class.getSimpleName();

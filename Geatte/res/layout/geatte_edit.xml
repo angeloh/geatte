@@ -39,9 +39,10 @@
 	
 	<ImageView android:id="@+id/edit_img"
 		android:layout_width="fill_parent"
-		android:layout_height="150px"
+		android:layout_height="wrap_content"
 		android:layout_below="@id/desc"
-		android:layout_marginLeft="10px" android:layout_marginBottom="5px" />
+		android:layout_marginLeft="5px" 
+		android:layout_marginBottom="5px" />
 		
 	<!-- 
 	<TextView android:id="@+id/edit_desc_label"
@@ -62,6 +63,6 @@
         android:layout_height="wrap_content"      
         android:layout_marginLeft="10px" android:layout_marginBottom="5px"
         android:layout_below="@id/edit_img"
-        android:text="@string/send_geatte_button_label" />
+        android:text="@string/send_geatte_text" />
 
 </RelativeLayout>

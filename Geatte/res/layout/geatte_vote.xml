@@ -7,7 +7,7 @@
     	android:id="@+id/geatte_vote_img"
         android:layout_width="fill_parent" 
         android:layout_height="fill_parent" 
-        android:scaleType="center"/>
+        android:scaleType="centerInside"/>
     
     <com.geatte.android.app.GeatteVoteBar
         android:layout_width="fill_parent" 

@@ -60,7 +60,7 @@ public class GeatteDBAdapter {
 
     private static final String DATABASE_NAME = "geattedb";
     private static final int DATABASE_VERSION = 2;
-    private static final int CURSOR_LIMIT = 50;
+    private static final int CURSOR_LIMIT = 8;
 
     private static final String DB_TABLE_INTERESTS = "interests";
     private static final String DB_TABLE_FEEDBACKS = "feedbacks";
@@ -285,11 +285,13 @@ public class GeatteDBAdapter {
     }
 
     /**
-     * Return a Cursor over the list of all notes in the database
+     * Return a Cursor over the list of my interests in the database given limit and offset
      * 
+     * @param limit query limit
+     * @param offset query offset
      * @return Cursor over all notes
      */
-    public Cursor fetchAllInterests() {
+    public Cursor fetchMyInterestsLimit(int limit, int offset) {
 	String query = "SELECT " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
@@ -302,7 +304,8 @@ public class GeatteDBAdapter {
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_INTEREST_ID +
 	" ORDER BY " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + " DESC" +
-	" LIMIT " + CURSOR_LIMIT;
+	" LIMIT " + limit +
+	" OFFSET " + offset;
 
 	/*	String query = "SELECT " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
@@ -311,7 +314,7 @@ public class GeatteDBAdapter {
 	" FROM " +
 	DB_TABLE_INTERESTS;*/
 
-	Log.i(Config.LOGTAG, "fetch all interests query string = " + query);
+	Log.i(Config.LOGTAG, "fetch my interests query string = " + query);
 
 	Cursor cursor = mDb.rawQuery(query, null);
 	return cursor;
@@ -335,7 +338,7 @@ public class GeatteDBAdapter {
 	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_INTEREST_ID +
-	" WHERE " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=\"" + rowId + "\"";
+	" WHERE " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" + rowId;
 
 	/*	String query = "SELECT " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
@@ -363,7 +366,7 @@ public class GeatteDBAdapter {
      * @throws SQLException if note could not be found/retrieved
      */
     public Cursor fetchMyInterest(String geatteId) throws SQLException {
-	int interestId = this.getInterestIdFromGeatteId(geatteId);
+	long interestId = this.getInterestIdFromGeatteId(geatteId);
 	return fetchMyInterest(interestId);
     }
 
@@ -392,7 +395,7 @@ public class GeatteDBAdapter {
     }
 
     /**
-     * Return a Cursor for all feedbacks (latest 50)
+     * Return a Cursor for all feedbacks
      * 
      * @return Cursor positioned to matching interest, if found
      * @throws SQLException if note could not be found/retrieved
@@ -405,8 +408,7 @@ public class GeatteDBAdapter {
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_COMMENT + ", " +
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " " +
 	"FROM " + DB_TABLE_FEEDBACKS +
-	" ORDER BY " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " DESC" +
-	" LIMIT " + CURSOR_LIMIT;
+	" ORDER BY " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " DESC";
 
 	Log.i(Config.LOGTAG, "fetch all feedbacks query string = " + query);
 
@@ -418,6 +420,37 @@ public class GeatteDBAdapter {
 	    Log.e(Config.LOGTAG, "ERROR to fetch all feedbacks ", ex);
 	}
 	return null;
+    }
+
+    /**
+     * Return a Cursor over the list of friends' interests in the database given limit and offset
+     * 
+     * @param limit query limit
+     * @param offset query offset
+     * @return Cursor over friends' interests
+     */
+    public Cursor fetchFriendInterestsLimit(int limit, int offset) throws SQLException {
+	String query = "SELECT " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_ID + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_TITLE + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_DESC + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_FROM + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_CREATED_DATE + ", " +
+	DB_TABLE_FI_IMAGES + "." + KEY_FI_IMAGE_ID + " AS " + KEY_FI_IMAGE_AS_ID + ", " +
+	DB_TABLE_FI_IMAGES + "." + KEY_FI_IMAGE_PATH + " " +
+	"FROM " +
+	DB_TABLE_FRIEND_INTERESTS + " JOIN " + DB_TABLE_FI_IMAGES + " ON " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_ID + "=" +
+	DB_TABLE_FI_IMAGES + "." + KEY_FI_IMAGE_INTEREST_ID +
+	" ORDER BY " + DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_CREATED_DATE + " DESC" +
+	" LIMIT " + limit +
+	" OFFSET " + offset;
+
+	Log.i(Config.LOGTAG, "fetch friend's interest query string = " + query);
+
+	Cursor cursor = mDb.rawQuery(query, null);
+
+	return cursor;
     }
 
     public Cursor fetchFriendInterest(String geatteId) throws SQLException {
@@ -493,7 +526,7 @@ public class GeatteDBAdapter {
 	}
     }
 
-    public String getGeatteIdFromInterestId(int interestId){
+    public String getGeatteIdFromInterestId(long interestId){
 	Cursor cursor = mDb.query(DB_TABLE_INTERESTS, new String []{KEY_INTEREST_GEATTE_ID}, KEY_INTEREST_ID + "=" + interestId, null, null, null, null);
 
 	String geatteId = null;
@@ -504,20 +537,20 @@ public class GeatteDBAdapter {
 	}
 
 	if (geatteId == null) {
-	    Log.e(Config.LOGTAG, "unable to get geatte id for interest id = " + interestId + ", return null!!");
+	    Log.w(Config.LOGTAG, "unable to get geatte id for interest id = " + interestId + ", return null!!");
 	}
 
 	return geatteId;
 
     }
 
-    public int getInterestIdFromGeatteId(String geatteId){
+    public long getInterestIdFromGeatteId(String geatteId){
 	if (geatteId == null) {
 	    return -1;
 	}
 	Cursor cursor = mDb.query(DB_TABLE_INTERESTS, new String []{KEY_INTEREST_ID}, KEY_INTEREST_GEATTE_ID + "='" + geatteId +"'", null, null, null, null);
 
-	int interestId = -1;
+	long interestId = -1;
 	if (cursor != null) {
 	    if (cursor.moveToFirst()) {
 		interestId = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_INTEREST_ID));
@@ -525,7 +558,7 @@ public class GeatteDBAdapter {
 	}
 
 	if (interestId == -1) {
-	    Log.e(Config.LOGTAG, "unable to get interest id for geatte id = " + geatteId + ", return -1!!");
+	    Log.w(Config.LOGTAG, "unable to get interest id for geatte id = " + geatteId + ", return -1!!");
 	}
 	return interestId;
     }

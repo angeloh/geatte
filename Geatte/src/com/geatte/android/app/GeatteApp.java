@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+@Deprecated
 public class GeatteApp extends Activity {
 
     private static final String CLASSTAG = GeatteApp.class.getSimpleName();
@@ -284,7 +285,7 @@ public class GeatteApp extends Activity {
 		//
 	    }*/
 	    String path = saveToFile(x);
-	    Intent i = new Intent(this, GeatteEdit.class);
+	    Intent i = new Intent(this, GeatteEditActivity.class);
 	    i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, path);
 	    startActivityForResult(i, ACTIVITY_CREATE);
 	}

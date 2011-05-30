@@ -29,9 +29,10 @@ import android.widget.Toast;
  * Show Geatte from friends
  * 
  */
-public class GeatteVote extends Activity {
+@Deprecated
+public class GeatteVoteActivity extends Activity {
 
-    private static final String CLASSTAG = GeatteVote.class.getSimpleName();
+    private static final String CLASSTAG = GeatteVoteActivity.class.getSimpleName();
     private static final String GEATTE_VOTE_UPLOAD_PATH = "/geattevote";
     /*private static final int MENU_CALL_REVIEW = Menu.FIRST + 2;
     private static final int MENU_MAP_REVIEW = Menu.FIRST + 1;
@@ -86,12 +87,12 @@ public class GeatteVote extends Activity {
 	//	String desc = extras != null ? extras.getString(Config.GEATTE_DESC_PARAM) : null;
 	//	String createdDate = extras != null ? extras.getString(Config.GEATTE_CREATED_DATE_PARAM) : null;
 	//	String imagePath = extras != null ? extras.getString(Config.GEATTE_IMAGE_GET_URL) : null;
-	Log.d(Config.LOGTAG, " " +  GeatteVote.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
+	Log.d(Config.LOGTAG, " " +  GeatteVoteActivity.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
 	populateFields();
 	final Button yesButton = (Button) findViewById(R.id.geatte_vote_btn_yes);
 	yesButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		mDialog = ProgressDialog.show(GeatteVote.this, "Sending YES to Your friend", "Please wait...", true);
+		mDialog = ProgressDialog.show(GeatteVoteActivity.this, "Sending YES to Your friend", "Please wait...", true);
 		new VoteUploadTask().execute("YES");
 	    }
 	});
@@ -99,7 +100,7 @@ public class GeatteVote extends Activity {
 	final Button noButton = (Button) findViewById(R.id.geatte_vote_btn_no);
 	noButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		mDialog = ProgressDialog.show(GeatteVote.this, "Sending NO to Your friend", "Please wait...", true);
+		mDialog = ProgressDialog.show(GeatteVoteActivity.this, "Sending NO to Your friend", "Please wait...", true);
 		new VoteUploadTask().execute("NO");
 	    }
 	});
@@ -138,7 +139,7 @@ public class GeatteVote extends Activity {
 	if (mGeatteId != null) {
 	    Cursor cursor = mDbHelper.fetchFriendInterest(mGeatteId);
 	    if (cursor.isAfterLast()) {
-		Log.w(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " unable to get record from db for geatte id = " + mGeatteId);
+		Log.w(Config.LOGTAG, " " + GeatteVoteActivity.CLASSTAG + " unable to get record from db for geatte id = " + mGeatteId);
 	    }
 	    startManagingCursor(cursor);
 	    //	    mTitleText.setText(cursor.getString(
@@ -150,17 +151,17 @@ public class GeatteVote extends Activity {
 		String savedFIImagePath = cursor.getString(
 			cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
 		if (mGeatteVoteImage == null) {
-		    Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " mGeatteVoteImage is null ");
+		    Log.e(Config.LOGTAG, " " + GeatteVoteActivity.CLASSTAG + " mGeatteVoteImage is null ");
 		}
 		if (savedFIImagePath == null) {
-		    Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " savedFIImagePath is null ");
+		    Log.e(Config.LOGTAG, " " + GeatteVoteActivity.CLASSTAG + " savedFIImagePath is null ");
 		}
 		if (BitmapFactory.decodeFile(savedFIImagePath) == null) {
-		    Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " BitmapFactory.decodeFile(savedFIImagePath) is null ");
+		    Log.e(Config.LOGTAG, " " + GeatteVoteActivity.CLASSTAG + " BitmapFactory.decodeFile(savedFIImagePath) is null ");
 		}
 		mGeatteVoteImage.setImageBitmap(BitmapFactory.decodeFile(savedFIImagePath));
 	    } catch (Exception ex) {
-		Log.e(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " ERROR ", ex);
+		Log.e(Config.LOGTAG, " " + GeatteVoteActivity.CLASSTAG + " ERROR ", ex);
 	    }
 
 	}
@@ -169,7 +170,7 @@ public class GeatteVote extends Activity {
     @Override
     protected void onResume() {
 	super.onResume();
-	Log.v(Config.LOGTAG, " " + GeatteVote.CLASSTAG + " onResume");
+	Log.v(Config.LOGTAG, " " + GeatteVoteActivity.CLASSTAG + " onResume");
 	populateFields();
     }
 

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<FrameLayout
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<ImageView
+			android:id="@+id/voting_image_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:scaleType="centerInside"/>
+			
+		<greendroid.widget.AsyncImageView
+			android:id="@+id/voting_thumbnail"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="bottom|right"
+			greendroid:defaultSrc="@drawable/pause"/>
+
+	</FrameLayout>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="@android:drawable/bottom_bar"
+		android:paddingTop="4dp">
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/green_light"
+			android:text="@string/voting_yes"
+			android:onClick="onYes" />
+			
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/warning"
+			android:text="@string/voting_maybe"
+			android:onClick="onMaybe" />
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/red_light"
+			android:text="@string/voting_no"
+			android:onClick="onNo" />
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/write"
+			android:text="@string/voting_comment"
+			android:onClick="onComment" />
+			
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/send"
+			android:text="@string/voting_send"
+			android:onClick="onSend" />
+
+	</LinearLayout>
+
+</LinearLayout>

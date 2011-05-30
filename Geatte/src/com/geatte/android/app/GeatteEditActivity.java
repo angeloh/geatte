@@ -1,5 +1,7 @@
 package com.geatte.android.app;
 
+import greendroid.app.GDActivity;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.geatte.android.app.R;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,18 +27,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class GeatteEdit extends Activity {
+public class GeatteEditActivity extends GDActivity {
 
-    private static final String CLASSTAG = GeatteEdit.class.getSimpleName();
+    private static final String CLASSTAG = GeatteEditActivity.class.getSimpleName();
     private static final String UPLOAD_PATH = "/geatteupload";
 
-    private EditText mTitleText;
-    private EditText mDescText;
+    private EditText mTitleEditText;
+    private EditText mDescEditText;
     private ImageView mSnapView;
     private Long mRowId;
     private String mGeatteId;
@@ -48,18 +50,20 @@ public class GeatteEdit extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+	Log.d(Config.LOGTAG, "GeatteEdit:onCreate(): START");
 	super.onCreate(savedInstanceState);
 	mDbHelper = new GeatteDBAdapter(this);
 	mDbHelper.open();
 
-	setContentView(R.layout.geatte_edit);
+	//setContentView(R.layout.geatte_edit);
+	setActionBarContentView(R.layout.geatte_edit_view);
 	setTitle(R.string.edit_geatte);
 
-	mTitleText = (EditText) findViewById(R.id.title);
-	mDescText = (EditText) findViewById(R.id.desc);
+	mTitleEditText = (EditText) findViewById(R.id.title);
+	mDescEditText = (EditText) findViewById(R.id.desc);
 	mSnapView = (ImageView) findViewById(R.id.edit_img);
 
-	Button sendButton = (Button) findViewById(R.id.send_button);
+	Button sendButton = (Button) findViewById(R.id.send_to_button);
 
 	mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
 		.getSerializable(GeatteDBAdapter.KEY_INTEREST_ID);
@@ -74,17 +78,45 @@ public class GeatteEdit extends Activity {
 	    if (mImagePath == null) {
 		Bundle extras = getIntent().getExtras();
 		mImagePath = (String) (extras != null ? extras.get(GeatteDBAdapter.KEY_IMAGE_PATH) : null);
+		Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " snap a new picture in " + mImagePath);
 	    }
 	}
 
 	populateFields();
+
+	mTitleEditText.setOnClickListener(new OnClickListener() {
+	    String name = mTitleEditText.getText().toString();
+	    String origVal = getResources().getText(R.string.edit_title_text_default).toString();
+
+	    @Override
+	    public void onClick(View v) {
+		if(name.equals(origVal));
+		{
+		    mTitleEditText.setText("");
+		}
+
+	    }
+	});
+
+	mDescEditText.setOnClickListener(new OnClickListener() {
+	    String name = mDescEditText.getText().toString();
+	    String origVal = getResources().getText(R.string.edit_desc_text_default).toString();
+
+	    @Override
+	    public void onClick(View v) {
+		if(name.equals(origVal));
+		{
+		    mDescEditText.setText("");
+		}
+	    }
+	});
 
 	sendButton.setOnClickListener(new View.OnClickListener() {
 	    public void onClick(View view) {
 		if (mImagePath == null && mSavedImagePath == null) {
 		    Toast.makeText(getApplicationContext(), "Please select image", Toast.LENGTH_SHORT).show();
 		} else {
-		    mDialog = ProgressDialog.show(GeatteEdit.this, "Uploading", "Please wait...", true);
+		    mDialog = ProgressDialog.show(GeatteEditActivity.this, "Uploading", "Please wait...", true);
 		    new GeatteUploadTask().execute();
 		}
 		//setResult(RESULT_OK);
@@ -92,6 +124,7 @@ public class GeatteEdit extends Activity {
 	    }
 
 	});
+	Log.d(Config.LOGTAG, "GeatteEdit:onCreate(): END");
     }
 
     @Override
@@ -113,17 +146,25 @@ public class GeatteEdit extends Activity {
 	if (mRowId != null && mRowId != 0L) {
 	    Cursor cursor = mDbHelper.fetchMyInterest(mRowId);
 	    startManagingCursor(cursor);
-	    mTitleText.setText(cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
-	    mDescText.setText(cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
+	    mTitleEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
+	    mDescEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
 
 	    mSavedImagePath = cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
-	    mSnapView.setImageBitmap(BitmapFactory.decodeFile(mSavedImagePath));
+	    //mSnapView.setImageBitmap(BitmapFactory.decodeFile(mSavedImagePath));
+	    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+	    bitmapOptions.inSampleSize = 6;
+	    Bitmap imgBitmap = BitmapFactory.decodeFile(mSavedImagePath, bitmapOptions);
+	    mSnapView.setImageBitmap(imgBitmap);
 	}
 
 	// in new created mode, save the image to image view
 	if (mRowId == null || mRowId == 0L) {
 	    if (mImagePath != null) {
-		mSnapView.setImageBitmap(BitmapFactory.decodeFile(mImagePath));
+		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		bitmapOptions.inSampleSize = 6;
+		Bitmap imgBitmap = BitmapFactory.decodeFile(mImagePath, bitmapOptions);
+		mSnapView.setImageBitmap(imgBitmap);
+		//mSnapView.setImageBitmap(BitmapFactory.decodeFile(mImagePath));
 	    }
 	}
     }
@@ -131,14 +172,14 @@ public class GeatteEdit extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 	super.onSaveInstanceState(outState);
-	saveState();
+	updateState();
 	outState.putSerializable(GeatteDBAdapter.KEY_INTEREST_ID, mRowId);
     }
 
     @Override
     protected void onPause() {
 	super.onPause();
-	saveState();
+	updateState();
     }
 
     @Override
@@ -148,28 +189,48 @@ public class GeatteEdit extends Activity {
     }
 
     private void saveState() {
-	String title = mTitleText.getText().toString();
-	String desc = mDescText.getText().toString();
+	String title = mTitleEditText.getText().toString();
+	String desc = mDescEditText.getText().toString();
 
 	if (mRowId == null || mRowId == 0L) {
 	    long id = mDbHelper.insertInterest(title, desc);
-	    if (id > 0) {
+	    if (id >= 0) {
 		mRowId = id;
+		Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " create new interest for id = " + mRowId + ", geatteId = " + mGeatteId);
+		mDbHelper.insertImage(mRowId, mImagePath);
+		Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " insert geatte image for id " + mGeatteId + " and interest = " + mRowId);
+		if (mGeatteId != null) {
+		    mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
+		    Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " add geatte id " + mGeatteId + " to interest = " + mRowId);
+		}
 	    }
-	    mDbHelper.insertImage(mRowId, mImagePath);
-	    if (mGeatteId != null) {
-		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
-		Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " add geatte id " + mGeatteId + " to interest = " + mRowId);
+	    else {
+		Log.w(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " unable to insert this interest!!");
 	    }
-	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " create new interest for id = " + mRowId + ", geatteId = " + mGeatteId);
+
 	} else {
 	    mDbHelper.updateInterest(mRowId, title, desc);
 	    if (mGeatteId != null) {
 		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
-		Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
+		Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
 	    }
 	    mDbHelper.updateImage(mRowId, mImagePath);
-	    Log.d(Config.LOGTAG, " " + GeatteEdit.CLASSTAG + " update interest for id = " + mRowId);
+	    Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " update interest for id = " + mRowId);
+	}
+    }
+
+    private void updateState() {
+	String title = mTitleEditText.getText().toString();
+	String desc = mDescEditText.getText().toString();
+
+	if (mRowId != null && mRowId != 0L) {
+	    mDbHelper.updateInterest(mRowId, title, desc);
+	    if (mGeatteId != null) {
+		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
+		Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
+	    }
+	    mDbHelper.updateImage(mRowId, mImagePath);
+	    Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " update interest for id = " + mRowId);
 	}
     }
 
@@ -177,16 +238,22 @@ public class GeatteEdit extends Activity {
 	@Override
 	protected String doInBackground(String... strings) {
 	    try {
-		String title = mTitleText.getText().toString();
-		String desc = mDescText.getText().toString();
+		String title = mTitleEditText.getText().toString();
+		String desc = mDescEditText.getText().toString();
 
 		Bitmap bitmap = null;
 		String imageFileName = null;
 		if (mImagePath != null) {
-		    bitmap = BitmapFactory.decodeFile(mImagePath);
+		    //bitmap = BitmapFactory.decodeFile(mImagePath);
+		    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		    bitmapOptions.inSampleSize = 6;
+		    bitmap = BitmapFactory.decodeFile(mImagePath, bitmapOptions);
 		    imageFileName = new File(mImagePath).getName();
 		} else {
-		    bitmap = BitmapFactory.decodeFile(mSavedImagePath);
+		    //bitmap = BitmapFactory.decodeFile(mSavedImagePath);
+		    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		    bitmapOptions.inSampleSize = 6;
+		    bitmap = BitmapFactory.decodeFile(mSavedImagePath, bitmapOptions);
 		    imageFileName = new File(mSavedImagePath).getName();
 		}
 
@@ -286,13 +353,14 @@ public class GeatteEdit extends Activity {
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception e) {
-			Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): failed to dismiss mDialog");
+			Log.w(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): failed to dismiss mDialog", e);
 		    }
 		}
 		if (geatteId != null) {
-		    Toast.makeText(getApplicationContext(), "Geatte uploaded successfully, GeatteId = " + geatteId,
+		    saveState();
+		    Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): save my interest to db, geatteId = " + geatteId + ", interestId = " + mRowId);
+		    Toast.makeText(getApplicationContext(), "Geatte uploaded successfully, geatteId = " + geatteId,
 			    Toast.LENGTH_LONG).show();
-
 		}
 		setResult(RESULT_OK);
 	    } catch (Exception e) {

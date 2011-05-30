@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <greendroid.widget.ActionBarHost
-	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@id/gd_action_bar_host"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:id="@id/gd_action_bar_host"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
 	android:orientation="vertical">
 
 	<greendroid.widget.ActionBar android:id="@id/gd_action_bar"
 		android:layout_height="@dimen/gd_action_bar_height"
-		android:layout_width="fill_parent" android:background="?attr/gdActionBarBackground" />
+		android:layout_width="fill_parent" 
+		android:background="?attr/gdActionBarBackground" />
 
 	<FrameLayout android:id="@id/gd_action_bar_content_view"
-		android:layout_height="0dp" android:layout_width="fill_parent"
+		android:layout_height="0dp" 
+		android:layout_width="fill_parent"
 		android:layout_weight="1">
 		
 		<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-			android:id="@android:id/tabhost" android:layout_width="fill_parent"
+			android:id="@android:id/tabhost" 
+			android:layout_width="fill_parent"
 			android:layout_height="fill_parent">
 			<LinearLayout android:orientation="vertical"
-				android:layout_width="fill_parent" android:layout_height="fill_parent"
-				android:padding="5dp">
-				<TabWidget android:id="@android:id/tabs"
-					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent">
 				<FrameLayout android:id="@android:id/tabcontent"
-					android:layout_width="fill_parent" android:layout_height="fill_parent"
-					android:padding="5dp" />
+					android:layout_width="fill_parent" 
+					android:layout_height="fill_parent"
+					android:layout_alignParentTop="true"
+					android:padding="5dp" 
+					android:layout_weight="1"
+					android:layout_above="@android:id/tabs"/>
+				<TabWidget android:id="@android:id/tabs"
+					android:layout_width="fill_parent" 
+					android:layout_height="wrap_content" 
+					android:layout_weight="0"/>
+				
 			</LinearLayout>
 		</TabHost>
 		

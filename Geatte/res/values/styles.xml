@@ -8,12 +8,12 @@
 
 	<style name="label">
 		<item name="android:textSize">18sp</item>
-		<item name="android:textColor">#ffffff</item>
+		<item name="android:textColor">@color/translucent_black</item>
 	</style>
 
 	<style name="edit_text">
 		<item name="android:textSize">16sp</item>
-		<item name="android:textColor">#000000</item>
+		<item name="android:textColor">@color/translucent_black</item>
 	</style>
 
 	<style name="view_text">
@@ -25,6 +25,7 @@
 		<item name="android:textSize">16sp</item>
 		<item name="android:textColor">#000000</item>
 	</style>
+
 	<style name="spinner_item_dropdown">
 		<item name="android:textSize">16sp</item>
 		<item name="android:textColor">#000000</item>
@@ -32,9 +33,57 @@
 
 	<!--  this is the style for the container ListView, not the rows -->
 	<style name="geatte_list">
-		<item name="android:background">#000000</item>
+		<!-- item name="android:background">#FFFFFF</item-->
+		<item name="android:cacheColorHint">#00000000</item>
+		<item name="android:divider">#808080</item>
+		<item name="android:dividerHeight">2px</item>
+	</style>
+	
+	<style name="Geatte" />
+	<style name="Geatte.ThumbnailBitmapItem" />
+
+	<style name="Geatte.TextAppearance">
+		<item name="android:textColor">@color/translucent_black</item>
+		<item name="android:textColorHint">#000000</item>
+		<item name="android:textColorLink">#5C5CFF</item>
+		<item name="android:textSize">16sp</item>
+		<item name="android:textStyle">normal</item>
+	</style>
+	
+	<style name="Geatte.TextAppearance.Large">
+		<item name="android:textSize">22sp</item>
+	</style>
+	
+	<style name="Geatte.TextAppearance.Medium">
+		<item name="android:textSize">18sp</item>
+	</style>
+	
+	<style name="Geatte.TextAppearance.Small">
+		<item name="android:textSize">14sp</item>
+		<item name="android:textColor">?android:attr/textColorSecondary</item>
+	</style>
+	
+	<!-- Styles for the ThumbnailBitmapItem -->
+	<style name="Geatte.ThumbnailBitmapItem.Text">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
 	</style>
 
+	<style name="Geatte.ThumbnailBitmapItem.Subtitle">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	</style>
+
+	<style name="Geatte.ThumbnailBitmapItem.Label">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
+	</style>
+		
+	<style name="Geatte.ThumbnailBitmapItem.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredLargeHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredLargeHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
 
 
 </resources>

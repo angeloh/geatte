@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+	<dimen name="geatte_drawable_margin">6dp</dimen>
+	
+	<dimen name="geatte_item_view_large_height">128dp</dimen>	
+	<dimen name="geatte_item_view_height">64dp</dimen>
+	<dimen name="geatte_item_view_half_height">32dp</dimen>
+</resources>
