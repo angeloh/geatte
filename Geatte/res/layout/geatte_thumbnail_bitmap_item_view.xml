@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.geatte.android.view.ThumbnailBitmapItemView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="?attr/gdThumbnailItemViewStyle"
+	android:layout_height="wrap_content"
+	android:minHeight="128dp"
+	android:paddingLeft="?attr/gdItemViewPreferredPaddingLeft">
+	
+	<ImageView
+		style="?attr/GeatteThumbnailBitmapItemStyleThumbnail"
+		android:id="@+id/geatte_bitmap_item_thumbnail"
+		android:scaleType="centerInside" />
+
+	<TextView
+		style="?attr/GeatteThumbnailBitmapItemStyleTitle"
+		android:id="@+id/geatte_bitmap_item_title"
+		android:layout_width="fill_parent"
+		android:layout_toRightOf="@id/geatte_bitmap_item_thumbnail"
+		android:gravity="bottom"
+		android:singleLine="true"
+		android:ellipsize="end" />
+
+    <TextView
+    	style="?attr/GeatteThumbnailBitmapItemStyleLabel"
+        android:id="@+id/geatte_bitmap_item_label"
+        android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/geatte_bitmap_item_thumbnail"
+		android:layout_below="@+id/geatte_bitmap_item_title"
+		android:layout_alignLeft="@id/geatte_bitmap_item_title"
+		android:text="@string/desc_label" />
+
+	<TextView
+		style="?attr/GeatteThumbnailBitmapItemStyleDesc"
+		android:id="@+id/geatte_bitmap_item_desc"
+		android:layout_width="fill_parent"
+		android:layout_toRightOf="@id/geatte_bitmap_item_thumbnail"
+		android:layout_below="@+id/geatte_bitmap_item_label"
+		android:layout_alignLeft="@id/geatte_bitmap_item_label"
+		android:gravity="top"
+		android:ellipsize="marquee" />
+
+</com.geatte.android.view.ThumbnailBitmapItemView>

@@ -11,13 +11,25 @@
 	<attr name="GeatteTextAppearanceLarge" format="reference" />
 	<attr name="GeatteTextAppearanceMedium" format="reference" />
 	<attr name="GeatteTextAppearanceSmall" format="reference" />
+	<attr name="GeatteTextAppearanceSmallSecondary" format="reference" />
 	<attr name="GeatteItemViewPreferredLargeHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredHalfHeight" format="dimension" />
+	<attr name="GeatteItemViewPreferredQuarterHeight" format="dimension" />
 	
 	<attr name="GeatteThumbnailBitmapItemStyle" format="reference" />
-	<attr name="GeatteThumbnailBitmapItemStyleText" format="reference" />
-	<attr name="GeatteThumbnailBitmapItemStyleSubtitle" format="reference" />
+	<attr name="GeatteThumbnailBitmapItemStyleTitle" format="reference" />
 	<attr name="GeatteThumbnailBitmapItemStyleLabel" format="reference" />
+	<attr name="GeatteThumbnailBitmapItemStyleDesc" format="reference" />
 	<attr name="GeatteThumbnailBitmapItemStyleThumbnail" format="reference" />
+	
+	<attr name="GeatteSeparatorThumbnailItemStyle" format="reference" />
+	<attr name="GeatteSeparatorThumbnailItemStyleText" format="reference" />
+	<attr name="GeatteSeparatorThumbnailItemStyleThumbnail" format="reference" />
+	
+	<attr name="GeatteThumbnailItemStyle" format="reference" />
+	<attr name="GeatteThumbnailItemStyleTitle" format="reference" />
+	<attr name="GeatteThumbnailItemStyleSubtitle" format="reference" />
+	<attr name="GeatteThumbnailItemStyleThumbnail" format="reference" />
+	
 </resources>

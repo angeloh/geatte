@@ -5,6 +5,8 @@ public class Config {
     public static final String LOGTAG = "GeatteApp";
     public static final String LOGTAG_C2DM = "C2DM";
 
+    public static enum LIKE {YES, NO, MAYBE};
+
     //    public static final String INTENT_ACTION_VIEW_DETAIL = "com.geatte.android.app.VIEW_DETAIL";
     //    public static final String INTENT_ACTION_VIEW_LIST = "com.geatte.android.app.VIEW_LIST";
     public static final String INTENT_ACTION_UPDATE_UI = "com.geatte.android.app.UPDATE_UI";

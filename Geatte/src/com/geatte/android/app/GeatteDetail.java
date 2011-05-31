@@ -71,7 +71,9 @@ public class GeatteDetail extends Activity {
 	}
 
 	populateFields();
-
+	if (mDbHelper != null) {
+	    mDbHelper.close();
+	}
     }
 
     @Override
@@ -79,9 +81,6 @@ public class GeatteDetail extends Activity {
 	super.onDestroy();
 	Log.d(Config.LOGTAG, "GeatteDetail:onDestroy(): START");
 
-	if (mDbHelper != null) {
-	    mDbHelper.close();
-	}
 	Log.d(Config.LOGTAG, "GeatteDetail:onDestroy(): END");
     }
 

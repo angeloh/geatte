@@ -2,18 +2,26 @@ package com.geatte.android.app;
 
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
-import greendroid.widget.item.DescriptionItem;
 import greendroid.widget.item.Item;
 import greendroid.widget.item.ProgressItem;
-import greendroid.widget.item.SeparatorItem;
 import greendroid.widget.item.ThumbnailItem;
+import greendroid.widget.itemview.ItemView;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cyrilmottier.android.greendroid.R;
+import com.geatte.android.view.GeatteThumbnailItem;
+import com.geatte.android.view.SeparatorThumbnailItem;
+import com.geatte.android.view.ThumbnailBitmapItem;
+
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class GeatteAllFeedbackActivity extends GDListActivity {
 
@@ -28,65 +36,131 @@ public class GeatteAllFeedbackActivity extends GDListActivity {
 	List<Item> items = new ArrayList<Item>();
 	final ThumbnailItem warnItem;
 
-	// create db helper
-	GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
-	mDbHelper.open();
-	Cursor feedbackCur = mDbHelper.fetchAllMyInterestFeedback();
+	final GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
+	Cursor feedbackCur = null;
+	try {
+	    mDbHelper.open();
+	    feedbackCur = mDbHelper.fetchAllMyInterestFeedback();
 
-	Log.d(Config.LOGTAG, "Got cursor for all feedbacks");
+	    Log.d(Config.LOGTAG, "Got cursor for all feedbacks");
 
-	feedbackCur.moveToFirst();
-	if (feedbackCur.isAfterLast()) {
-	    Log.d(Config.LOGTAG, "No feedback available!!");
-	    warnItem = new ThumbnailItem("No feedback available", null, R.drawable.android_pressed);
-	} else {
-	    warnItem = null;
-	}
-
-	int counter = 0;
-	while (feedbackCur.isAfterLast() == false) {
-	    ++counter;
-	    Log.d(Config.LOGTAG, "Process feedback = " + counter);
-	    items.add(new SeparatorItem(feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER))));
-
-	    String vote = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTE));
-	    if (vote.equals("YES")) {
-		items.add(new ThumbnailItem(vote, null, R.drawable.android_focused));
+	    feedbackCur.moveToFirst();
+	    if (feedbackCur.isAfterLast()) {
+		Log.d(Config.LOGTAG, "No feedback available!!");
+		warnItem = new ThumbnailItem("No feedback available", null, R.drawable.empty);
 	    } else {
-		items.add(new ThumbnailItem(vote, null, R.drawable.android_normal));
+		warnItem = null;
 	    }
 
-	    String comment = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_COMMENT));
-	    if (comment != null) {
-		items.add(new DescriptionItem(comment));
-	    }
-	    feedbackCur.moveToNext();
+	    int counter = 0;
+	    while (feedbackCur.isAfterLast() == false) {
+		++counter;
+		Log.d(Config.LOGTAG, "Process feedback = " + counter);
 
-	}
-	feedbackCur.close();
-	mDbHelper.close();
+		String geatteId = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_GEATTE_ID));
+		String vote = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTE));
+		String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
+		String comment = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_COMMENT));
+		// get voter contact thumbnail
 
-	final ProgressItem progressItem = new ProgressItem("Retrieving feedbacks", true);
-	items.add(progressItem);
-
-	final ItemAdapter adapter = new ItemAdapter(this, items);
-	setListAdapter(adapter);
-
-	mHandler.postDelayed(new Runnable() {
-	    public void run() {
-		if (warnItem != null) {
-		    adapter.insert(warnItem, 0);
+		String interestTitle = null;
+		Cursor myInterestCur = mDbHelper.fetchMyInterest(geatteId);
+		try {
+		    interestTitle = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
+		} catch (Exception ex) {
+		    Log.e(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate error to fetch interest geatteId = " + geatteId, ex);
+		} finally{
+		    myInterestCur.close();
 		}
-		adapter.remove(progressItem);
-		adapter.notifyDataSetChanged();
+
+		StringBuilder sb = new StringBuilder("said ").append(vote).append(" for ").append(interestTitle);
+
+		items.add(new GeatteThumbnailItem(sb.toString(), comment, R.drawable.profile));
+
+		feedbackCur.moveToNext();
+
 	    }
-	},500);
+
+	    final ProgressItem progressItem = new ProgressItem("Retrieving feedbacks", true);
+	    items.add(progressItem);
+
+	    final ThumbnailBitmapItemAdapter adapter = new ThumbnailBitmapItemAdapter(this, items);
+	    setListAdapter(adapter);
+
+	    mHandler.postDelayed(new Runnable() {
+		public void run() {
+		    if (warnItem != null) {
+			adapter.insert(warnItem, 0);
+		    }
+		    adapter.remove(progressItem);
+		    adapter.notifyDataSetChanged();
+		}
+	    },500);
+	} catch (Exception e) {
+	    Log.e(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate ERROR ", e);
+	} finally {
+	    if (feedbackCur != null) {
+		feedbackCur.close();
+	    }
+	    mDbHelper.close();
+	}
 	Log.d(Config.LOGTAG, "END GeatteAllFeedbackActivity:onCreate");
+    }
+
+    /**
+     * A ThumbnailBitmapItemAdapter is an extension of an ItemAdapter for
+     * ThumbnailBitmapItem, SeparatorThumbnailItem, GeatteThumbnailItem
+     * to return associated view.
+     */
+    private class ThumbnailBitmapItemAdapter extends ItemAdapter {
+
+	private Context mContext;
+
+	public ThumbnailBitmapItemAdapter(Context context, Item[] items) {
+	    super(context, items);
+	    mContext = context;
+	}
+
+	public ThumbnailBitmapItemAdapter(Context context, List<Item> items) {
+	    super(context, items);
+	    mContext = context;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+
+	    final Item item = (Item) getItem(position);
+	    if (item instanceof ThumbnailBitmapItem) {
+		ItemView cell = item.newView(mContext, null);
+		cell.prepareItemView();
+		cell.setObject(item);
+		return (View) cell;
+	    } else if (item instanceof SeparatorThumbnailItem) {
+		ItemView cell = item.newView(mContext, null);
+		cell.prepareItemView();
+		cell.setObject(item);
+		return (View) cell;
+	    } else if (item instanceof GeatteThumbnailItem) {
+		ItemView cell = item.newView(mContext, null);
+		cell.prepareItemView();
+		cell.setObject(item);
+		return (View) cell;
+	    } else {
+		return super.getView(position, convertView, parent);
+	    }
+	}
+
     }
 
     @Override
     public void onDestroy() {
 	super.onDestroy();
+    }
+
+    @Override
+    public int createLayout() {
+	Log.d(Config.LOGTAG, "creating the geatte feedback layout");
+	return R.layout.geatte_feedback_list_content;
     }
 
 }

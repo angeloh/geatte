@@ -19,7 +19,7 @@ public class ImageCursorViewBinder implements ViewBinder {
 		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
 
 	    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	    bitmapOptions.inSampleSize = 8;
+	    bitmapOptions.inSampleSize = 16;
 	    Bitmap imgBitmap = BitmapFactory.decodeFile(savedImagePath, bitmapOptions);
 	    imageView.setImageBitmap(imgBitmap);
 	    return true;

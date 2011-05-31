@@ -73,36 +73,38 @@ public class GeatteListOthersActivity extends ListActivity {
 
 	// create db helper
 	mDbHelper = new GeatteDBAdapter(this);
-	mDbHelper.open();
+	try {
+	    mDbHelper.open();
 
-	this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving my geattes", true, false);
+	    this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving my geattes", true, false);
 
-	// Get all of the rows from the database and create the item list
-	Cursor myGeattesCursor = mDbHelper.fetchFriendInterestsLimit(NUM_RESULTS_PER_PAGE, mStartFrom);
-	startManagingCursor(myGeattesCursor);
+	    // Get all of the rows from the database and create the item list
+	    Cursor myGeattesCursor = mDbHelper.fetchFriendInterestsLimit(NUM_RESULTS_PER_PAGE, mStartFrom);
+	    startManagingCursor(myGeattesCursor);
 
-	// Create an array to specify the fields we want to display in the list (only TITLE)
-	String[] from = new String[]{GeatteDBAdapter.KEY_FI_IMAGE_PATH, GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE, GeatteDBAdapter.KEY_FRIEND_INTEREST_DESC};
+	    // Create an array to specify the fields we want to display in the list (only TITLE)
+	    String[] from = new String[]{GeatteDBAdapter.KEY_FI_IMAGE_PATH, GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE, GeatteDBAdapter.KEY_FRIEND_INTEREST_DESC};
 
-	// and an array of the fields we want to bind those fields to
-	int[] to = new int[]{R.id.fi_geatte_img, R.id.fi_geatte_desc, R.id.fi_geatte_title};
+	    // and an array of the fields we want to bind those fields to
+	    int[] to = new int[]{R.id.fi_geatte_img, R.id.fi_geatte_desc, R.id.fi_geatte_title};
 
-	// Now create a simple cursor adapter and set it to display
-	SimpleCursorAdapter cursorAdapter =
-	    new SimpleCursorAdapter(this, R.layout.geatte_row_fi, myGeattesCursor, from, to);
-	setListAdapter(cursorAdapter);
+	    // Now create a simple cursor adapter and set it to display
+	    SimpleCursorAdapter cursorAdapter =
+		new SimpleCursorAdapter(this, R.layout.geatte_row_fi, myGeattesCursor, from, to);
+	    setListAdapter(cursorAdapter);
 
-	progressDialog.dismiss();
+	    progressDialog.dismiss();
 
-	// set list properties
-	final ListView listView = getListView();
-	//listView.setItemsCanFocus(false);
-	//listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-	listView.setEmptyView(this.empty);
-	registerForContextMenu(listView);
-
-	if (mDbHelper != null) {
-	    mDbHelper.close();
+	    // set list properties
+	    final ListView listView = getListView();
+	    //listView.setItemsCanFocus(false);
+	    //listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	    listView.setEmptyView(this.empty);
+	    registerForContextMenu(listView);
+	} finally {
+	    if (mDbHelper != null) {
+		mDbHelper.close();
+	    }
 	}
     }
 

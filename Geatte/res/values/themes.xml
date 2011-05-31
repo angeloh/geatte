@@ -34,15 +34,26 @@
 		<item name="GeatteTextAppearanceLarge">@style/Geatte.TextAppearance.Large</item>
 		<item name="GeatteTextAppearanceMedium">@style/Geatte.TextAppearance.Medium</item>
 		<item name="GeatteTextAppearanceSmall">@style/Geatte.TextAppearance.Small</item>
+		<item name="GeatteTextAppearanceSmallSecondary">@style/Geatte.TextAppearance.Small.Secondary</item>
 		
 		<item name="GeatteItemViewPreferredLargeHeight">@dimen/geatte_item_view_large_height</item>
 		<item name="GeatteItemViewPreferredHeight">@dimen/geatte_item_view_height</item>
 		<item name="GeatteItemViewPreferredHalfHeight">@dimen/geatte_item_view_half_height</item>
+		<item name="GeatteItemViewPreferredQuarterHeight">@dimen/geatte_item_view_quarter_height</item>
 		
-		<item name="GeatteThumbnailBitmapItemStyleText">@style/Geatte.ThumbnailBitmapItem.Text</item>
-		<item name="GeatteThumbnailBitmapItemStyleSubtitle">@style/Geatte.ThumbnailBitmapItem.Subtitle</item>
+		<item name="GeatteThumbnailBitmapItemStyleTitle">@style/Geatte.ThumbnailBitmapItem.Title</item>
 		<item name="GeatteThumbnailBitmapItemStyleLabel">@style/Geatte.ThumbnailBitmapItem.Label</item>
+		<item name="GeatteThumbnailBitmapItemStyleDesc">@style/Geatte.ThumbnailBitmapItem.Desc</item>
 		<item name="GeatteThumbnailBitmapItemStyleThumbnail">@style/Geatte.ThumbnailBitmapItem.Thumbnail</item>
+		
+		<item name="GeatteSeparatorThumbnailItemStyle">@style/Geatte.SeparatorThumbnailItem</item>
+		<item name="GeatteSeparatorThumbnailItemStyleText">@style/Geatte.SeparatorThumbnailItem.Text</item>
+		<item name="GeatteSeparatorThumbnailItemStyleThumbnail">@style/Geatte.SeparatorThumbnailItem.Thumbnail</item>
+		
+		<item name="GeatteThumbnailItemStyle">@style/Geatte.GeatteThumbnailItem</item>
+		<item name="GeatteThumbnailItemStyleTitle">@style/Geatte.GeatteThumbnailItem.Title</item>
+		<item name="GeatteThumbnailItemStyleSubtitle">@style/Geatte.GeatteThumbnailItem.Subtitle</item>
+		<item name="GeatteThumbnailItemStyleThumbnail">@style/Geatte.GeatteThumbnailItem.Thumbnail</item>
 	</style>
 	
 </resources>

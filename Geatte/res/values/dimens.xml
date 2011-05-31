@@ -7,4 +7,5 @@
 	<dimen name="geatte_item_view_large_height">128dp</dimen>	
 	<dimen name="geatte_item_view_height">64dp</dimen>
 	<dimen name="geatte_item_view_half_height">32dp</dimen>
+	<dimen name="geatte_item_view_quarter_height">16dp</dimen>
 </resources>

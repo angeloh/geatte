@@ -40,7 +40,6 @@
 	</style>
 	
 	<style name="Geatte" />
-	<style name="Geatte.ThumbnailBitmapItem" />
 
 	<style name="Geatte.TextAppearance">
 		<item name="android:textColor">@color/translucent_black</item>
@@ -60,23 +59,28 @@
 	
 	<style name="Geatte.TextAppearance.Small">
 		<item name="android:textSize">14sp</item>
+	</style>
+	
+	<style name="Geatte.TextAppearance.Small.Secondary">
+		<item name="android:textSize">14sp</item>
 		<item name="android:textColor">?android:attr/textColorSecondary</item>
 	</style>
 	
 	<!-- Styles for the ThumbnailBitmapItem -->
-	<style name="Geatte.ThumbnailBitmapItem.Text">
+	<style name="Geatte.ThumbnailBitmapItem" />
+	<style name="Geatte.ThumbnailBitmapItem.Title">
 		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
 		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
 	</style>
 
-	<style name="Geatte.ThumbnailBitmapItem.Subtitle">
-		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
-		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	<style name="Geatte.ThumbnailBitmapItem.Label">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredQuarterHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmallSecondary</item>
 	</style>
 
-	<style name="Geatte.ThumbnailBitmapItem.Label">
+	<style name="Geatte.ThumbnailBitmapItem.Desc">
 		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
-		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
 	</style>
 		
 	<style name="Geatte.ThumbnailBitmapItem.Thumbnail">
@@ -85,5 +89,40 @@
 		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
 	</style>
 
+	<!-- Styles for the SeparatorThumbnailItem -->
+	<style name="Geatte.SeparatorThumbnailItem">
+		<item name="android:background">#737CA1</item>
+	</style>
+	
+	<style name="Geatte.SeparatorThumbnailItem.Text">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
+	</style>
 
+	<style name="Geatte.SeparatorThumbnailItem.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
+	
+	<!-- Styles for the GeatteThumbnailItem -->
+	<style name="Geatte.GeatteThumbnailItem">
+		<!-- item name="android:background">#737CA1</item-->
+	</style>
+	
+	<style name="Geatte.GeatteThumbnailItem.Title">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
+	</style>
+	
+	<style name="Geatte.GeatteThumbnailItem.Subtitle">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredQuarterHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	</style>
+
+	<style name="Geatte.GeatteThumbnailItem.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
 </resources>

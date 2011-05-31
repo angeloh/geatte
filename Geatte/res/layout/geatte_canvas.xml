@@ -5,39 +5,45 @@
 	android:gravity="center_horizontal" android:padding="10px"
 	>
 
-	<TextView android:id="@+id/app_top_label"
+	<!-- TextView android:id="@+id/app_top_label"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
 		android:layout_marginLeft="10px"
 		android:layout_marginBottom="15px" 
 		style="@style/label_top"
-		android:text="@string/edit_top_label" />
+		android:text="@string/edit_top_label" /-->
  
     <Button android:id="@+id/app_snap_button"  
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"      
-        android:layout_marginLeft="10px" 
-        android:layout_marginBottom="5px"
-        android:layout_below="@id/app_top_label"
+        android:layout_width="fill_parent" 
+        android:layout_height="80dp"      
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="10px"
+        android:layout_marginBottom="20px"
+        android:drawableTop="@drawable/snap"
+        android:background="@color/rosy_brown"
         android:text="@string/snap_geatte_button_label" />
-    
-    <Button android:id="@+id/app_show_all_feedback_btn"  
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"      
-        android:layout_marginLeft="10px" 
-        android:layout_marginBottom="5px"
+ 
+     <Button android:id="@+id/app_show_geattetab_btn"  
+        android:layout_width="fill_parent" 
+        android:layout_height="80dp"      
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="20px"
         android:layout_below="@id/app_snap_button"
+        android:drawableTop="@drawable/tabs"
+        android:background="@color/light_gold"
+        android:text="@string/show_geattetab" />
+        
+    <Button android:id="@+id/app_show_all_feedback_btn"  
+        android:layout_width="fill_parent" 
+        android:layout_height="80dp"      
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="20px"
+        android:layout_below="@id/app_show_geattetab_btn"
+        android:drawableTop="@drawable/feedbacks"
+        android:background="@color/light_blue"
         android:text="@string/show_all_feedbacks" />
     
-    <Button android:id="@+id/app_show_geattetab_btn"  
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"      
-        android:layout_marginLeft="10px"
-        android:layout_marginBottom="5px"
-        android:layout_below="@id/app_show_all_feedback_btn"
-        android:text="@string/show_geattetab" />
-    
-    <Button android:id="@+id/app_register_btn"  
+    <!--Button android:id="@+id/app_register_btn"  
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"      
         android:layout_marginLeft="10px" 
@@ -66,6 +72,6 @@
         android:layout_marginLeft="5dip"
         android:layout_marginTop="0dip"
         android:layout_marginBottom="10dip"
-        android:visibility="invisible"/>
+        android:visibility="invisible"/-->
 
 </RelativeLayout>

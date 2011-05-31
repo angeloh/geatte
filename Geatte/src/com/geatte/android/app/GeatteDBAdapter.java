@@ -288,10 +288,11 @@ public class GeatteDBAdapter {
      * Return a Cursor over the list of my interests in the database given limit and offset
      * 
      * @param limit query limit
-     * @param offset query offset
+     * @param startFrom query startFrom, 1 to n
      * @return Cursor over all notes
      */
-    public Cursor fetchMyInterestsLimit(int limit, int offset) {
+    public Cursor fetchMyInterestsLimit(int limit, int startFrom) {
+	int offset = startFrom - 1;
 	String query = "SELECT " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
@@ -426,10 +427,11 @@ public class GeatteDBAdapter {
      * Return a Cursor over the list of friends' interests in the database given limit and offset
      * 
      * @param limit query limit
-     * @param offset query offset
+     * @param startFrom query startFrom, 1 to n
      * @return Cursor over friends' interests
      */
-    public Cursor fetchFriendInterestsLimit(int limit, int offset) throws SQLException {
+    public Cursor fetchFriendInterestsLimit(int limit, int startFrom) throws SQLException {
+	int offset = startFrom - 1;
 	String query = "SELECT " +
 	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_ID + ", " +
 	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_TITLE + ", " +

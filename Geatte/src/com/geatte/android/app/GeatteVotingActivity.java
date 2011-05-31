@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 public class GeatteVotingActivity extends GDActivity {
 
-    public static enum LIKE {YES, NO, MAYBE};
     private static final String CLASSTAG = GeatteVotingActivity.class.getSimpleName();
     private static final String GEATTE_VOTE_UPLOAD_PATH = "/geattevote";
     private ImageView mGeatteVoteImage;
@@ -45,8 +44,6 @@ public class GeatteVotingActivity extends GDActivity {
 
 	Bundle extras = getIntent().getExtras();
 	mGeatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
-
-
 
 	Log.d(Config.LOGTAG, " " +  GeatteVotingActivity.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
 	populateFields();
@@ -72,23 +69,24 @@ public class GeatteVotingActivity extends GDActivity {
 
     private void populateFields() {
 	if (mGeatteId != null) {
-	    GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
-	    dbHelper.open();
-	    Cursor cursor = dbHelper.fetchFriendInterest(mGeatteId);
-	    dbHelper.close();
-	    if (cursor.isAfterLast()) {
-		Log.w(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " unable to get record from db for geatte id = " + mGeatteId);
-	    }
-	    //	    mTitleText.setText(cursor.getString(
-	    //		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
-	    //	    mDescText.setText(cursor.getString(
-	    //		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
-
+	    final GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
+	    Cursor fiCursor = null;
 	    try {
-		String savedFIImagePath = cursor.getString(
-			cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
-		String savedFITitle = cursor.getString(
-			cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE));
+		dbHelper.open();
+		fiCursor = dbHelper.fetchFriendInterest(mGeatteId);
+
+		if (fiCursor.isAfterLast()) {
+		    Log.w(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " unable to get record from db for geatte id = " + mGeatteId);
+		}
+		//	    mTitleText.setText(cursor.getString(
+		//		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
+		//	    mDescText.setText(cursor.getString(
+		//		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC)));
+
+		String savedFIImagePath = fiCursor.getString(
+			fiCursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
+		String savedFITitle = fiCursor.getString(
+			fiCursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE));
 
 
 		if (mGeatteVoteImage == null) {
@@ -109,8 +107,13 @@ public class GeatteVotingActivity extends GDActivity {
 
 	    } catch (Exception ex) {
 		Log.e(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " ERROR ", ex);
+	    } finally {
+		fiCursor.close();
+		dbHelper.close();
 	    }
 
+	} else {
+	    Log.e(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " can not populate the fields when mGeatteId is null ");
 	}
     }
 
@@ -205,17 +208,17 @@ public class GeatteVotingActivity extends GDActivity {
     }
 
     public void onYes(View v) {
-	mLike = LIKE.YES.toString();
+	mLike = Config.LIKE.YES.toString();
 	mVotingThumbnail.setDefaultImageResource(R.drawable.green_light);
     }
 
     public void onMaybe(View v) {
-	mLike = LIKE.MAYBE.toString();
+	mLike = Config.LIKE.MAYBE.toString();
 	mVotingThumbnail.setDefaultImageResource(R.drawable.warning);
     }
 
     public void onNo(View v) {
-	mLike = LIKE.NO.toString();
+	mLike = Config.LIKE.NO.toString();
 	mVotingThumbnail.setDefaultImageResource(R.drawable.red_light);
     }
 

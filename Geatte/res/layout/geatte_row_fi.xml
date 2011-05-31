@@ -25,6 +25,7 @@
 		style="@style/Geatte.TextAppearance.Medium"
 		android:id="@+id/fi_geatte_title"
 		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
 		android:layout_toRightOf="@id/fi_geatte_img"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"

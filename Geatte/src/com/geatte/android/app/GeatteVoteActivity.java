@@ -105,6 +105,9 @@ public class GeatteVoteActivity extends Activity {
 	    }
 	});
 
+	if (mDbHelper != null) {
+	    mDbHelper.close();
+	}
     }
 
     @Override
@@ -114,9 +117,6 @@ public class GeatteVoteActivity extends Activity {
 	if (mDialog != null) {
 	    Log.d(Config.LOGTAG, "GeatteVote:onDestroy(): cancel mDialog");
 	    mDialog.cancel();
-	}
-	if (mDbHelper != null) {
-	    mDbHelper.close();
 	}
 	Log.d(Config.LOGTAG, "GeatteVote:onDestroy(): END");
     }

@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 public class ThumbnailBitmapItemView extends RelativeLayout implements ItemView {
 
-    private TextView mTextView;
-    private TextView mSubtitleView;
+    private TextView mTitleView;
+    private TextView mDescView;
     private ImageView mThumbnailView;
 
     public ThumbnailBitmapItemView(Context context) {
@@ -31,15 +31,15 @@ public class ThumbnailBitmapItemView extends RelativeLayout implements ItemView 
     }
 
     public void prepareItemView() {
-	mTextView = (TextView) findViewById(R.id.gd_text);
-	mSubtitleView = (TextView) findViewById(R.id.gd_subtitle);
-	mThumbnailView = (ImageView) findViewById(R.id.gd_thumbnail);
+	mTitleView = (TextView) findViewById(R.id.geatte_bitmap_item_title);
+	mDescView = (TextView) findViewById(R.id.geatte_bitmap_item_desc);
+	mThumbnailView = (ImageView) findViewById(R.id.geatte_bitmap_item_thumbnail);
     }
 
     public void setObject(Item object) {
 	final ThumbnailBitmapItem item = (ThumbnailBitmapItem) object;
-	mTextView.setText(item.text);
-	mSubtitleView.setText(item.subtitle);
+	mTitleView.setText(item.text);
+	mDescView.setText(item.subtitle);
 
 	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
 	bitmapOptions.inSampleSize = 8;

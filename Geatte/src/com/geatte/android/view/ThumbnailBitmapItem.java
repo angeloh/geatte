@@ -13,14 +13,14 @@ public class ThumbnailBitmapItem extends SubtitleItem {
 
     String imagePath = null;
 
-    public ThumbnailBitmapItem(String text, String subtitle, String imagePath) {
-	super(text, subtitle);
+    public ThumbnailBitmapItem(String title, String desc, String imagePath) {
+	super(title, desc);
 	this.imagePath = imagePath;
     }
 
     @Override
     public ItemView newView(Context context, ViewGroup parent) {
-	return createCellFromXml(context, R.layout.geatte_thumbnail_item_view, parent);
+	return createCellFromXml(context, R.layout.geatte_thumbnail_bitmap_item_view, parent);
     }
 
 }

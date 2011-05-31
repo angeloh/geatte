@@ -200,7 +200,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 	List<NameValuePair> qparams = new ArrayList<NameValuePair>();
 	qparams.add(new BasicNameValuePair(Config.GEATTE_ID_PARAM, geatteid));
-	GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
+	final GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
 
 	try {
 
@@ -313,7 +313,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     private void processNewGeatteFeedback(Context context, String voteGeatteId, String voter, String voteResp, String voteFeedback) {
 	Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatte vote id = " + voteGeatteId);
 
-	GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
+	final GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
 
 	try {
 

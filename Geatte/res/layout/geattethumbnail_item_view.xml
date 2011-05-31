@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.geatte.android.view.GeatteThumbnailItemView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="?attr/GeatteThumbnailItemStyle"
+	android:layout_height="wrap_content"
+	android:minHeight="80dp"
+	android:paddingLeft="?attr/gdItemViewPreferredPaddingLeft">
+	
+	<ImageView
+		style="?attr/GeatteThumbnailItemStyleThumbnail"
+		android:id="@+id/geatte_thumbnail_item_thumbnail"
+		android:scaleType="centerInside" />
+
+	<TextView
+		style="?attr/GeatteThumbnailItemStyleTitle"
+		android:id="@+id/geatte_thumbnail_item_title"
+		android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/geatte_thumbnail_item_thumbnail"
+		android:ellipsize="end" />
+
+	<TextView
+		style="?attr/GeatteThumbnailItemStyleSubtitle"
+		android:id="@+id/geatte_thumbnail_item_subtitle"
+		android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/geatte_thumbnail_item_thumbnail"
+		android:ellipsize="marquee" />
+
+</com.geatte.android.view.GeatteThumbnailItemView>
