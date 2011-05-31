@@ -7,7 +7,7 @@
     <string name="no_geattes">No Geattes Yet</string>
     <string name="show_all_feedbacks">Show All feedbacks</string>
     <string name="show_geattetab">GeatteTab</string>
-    
+
     <string name="menu_delete">Delete Geatte</string>
 	<string name="menu_add_more_geatte">Add more geatte</string>
 	<string name="menu_get_next_page">Get next page</string>
@@ -44,4 +44,25 @@
     <string name="voting_send">Send</string>
     <string name="voting_choose_answer">Choose an answer first!</string>
     <string name="voting_a_geatte">Vote A Geatte</string>
+    
+    <string name="setup_back">Back</string>
+    <string name="setup_next">Next</string>
+    <string name="setup_finish">Finish</string>
+    <string name="intro_exit">Exit</string>
+	<string name="select_account_text">Select an account to use:</string>
+	<string name="no_accounts">There are no accounts setup on this phone.</string>
+	<string name="connect_error_text">Error: Unable to connect.</string>
+	<string name="auth_error_text">Error: Google Apps accounts not supported.</string>
+	<string name="select_account_click_next_text">Click Next to finish the setup of Geatte.</string>
+	<string name="select_account_connecting_text">Connecting...</string>
+	<string name="connected_with_account_text">Your phone is connected to Geatte using this account:</string>
+	
+    <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->
+    <string name="intro_text">
+        Geaate is a shopping feedback app for you and your friends.
+    </string>
+    
+    <string name="setup_complete_text">
+        Setup complete. You can start using Geatte to ask feedbacks from your friends and vote firends\' Geatte requests.
+    </string>
 </resources>

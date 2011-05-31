@@ -19,6 +19,10 @@ public class Config {
 
     public static final String EXTRA_CURRENT_TAB = "0";
 
+    //setup configs
+
+    public static final String SAVED_SCREEN_ID = "saved_screen_id";
+
     //C2DM Configs
     public static final String C2DM_SENDER = "geatte@gmail.com";
     public static final String C2DM_ACCOUNT_EXTRA = "account_name";

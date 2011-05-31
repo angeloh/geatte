@@ -8,17 +8,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.geatte.android.c2dm.C2DMessaging;
-
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -34,8 +31,6 @@ public class GeatteCanvas extends GDActivity {
     private static final String CLASSTAG = GeatteCanvas.class.getSimpleName();
     private static final int ACTIVITY_SNAP = 0;
     private static final int ACTIVITY_CREATE = 1;
-    private static final int ACTIVITY_ALL_FEEDBACK = 2;
-    private static final int ACTIVITY_SHOW_GEATTETAB = 3;
     private boolean mPendingAuth = false;
     private String mImagePath = null;
 
@@ -44,7 +39,14 @@ public class GeatteCanvas extends GDActivity {
 	super.onCreate(savedInstanceState);
 
 	// setup google account and save to context prefs
-	getGoogleAccount();
+	//getGoogleAccount();
+
+	// Run the setup first if necessary
+	Context context = getApplicationContext();
+	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+	if (prefs.getString(Config.PREF_REGISTRATION_ID, null) == null) {
+	    startActivity(new Intent(this, GeatteSetupActivity.class));
+	}
 
 	setActionBarContentView(R.layout.geatte_canvas);
 
@@ -81,17 +83,6 @@ public class GeatteCanvas extends GDActivity {
 	    }
 	});
 
-	//	Button registerButton = (Button) findViewById(R.id.app_register_btn);
-	//	registerButton.setOnClickListener(new OnClickListener() {
-	//	    public void onClick(View v) {
-	//		setRegisterView();
-	//	    }
-	//	});
-
-	setRegisterView();
-
-	registerReceiver(mUpdateUIReceiver, new IntentFilter(Config.INTENT_ACTION_UPDATE_UI));
-	registerReceiver(mAuthPermissionReceiver, new IntentFilter(Config.INTENT_ACTION_AUTH_PERMISSION));
     }
 
     //TODO show information
@@ -132,49 +123,7 @@ public class GeatteCanvas extends GDActivity {
 
     @Override
     public void onDestroy() {
-	unregisterReceiver(mUpdateUIReceiver);
-	unregisterReceiver(mAuthPermissionReceiver);
 	super.onDestroy();
-    }
-
-
-    private final BroadcastReceiver mUpdateUIReceiver = new BroadcastReceiver() {
-	@Override
-	public void onReceive(Context context, Intent intent) {
-	    handleConnectingUpdate(intent.getIntExtra(
-		    DeviceRegistrar.STATUS_EXTRA, DeviceRegistrar.ERROR_STATUS));
-	}
-    };
-
-    private final BroadcastReceiver mAuthPermissionReceiver = new BroadcastReceiver() {
-	@Override
-	public void onReceive(Context context, Intent intent) {
-	    Bundle extras = intent.getBundleExtra(Config.EXTRA_KEY_ACCOUNT_BUNDLE);
-	    if (extras != null) {
-		Intent authIntent = (Intent) extras.get(AccountManager.KEY_INTENT);
-		if (authIntent != null) {
-		    mPendingAuth = true;
-		    startActivity(authIntent);
-		}
-	    }
-	}
-    };
-
-    private void handleConnectingUpdate(int status) {
-	//	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
-	//	progressBar.setVisibility(ProgressBar.INVISIBLE);
-
-	//	TextView progTextView = (TextView) findViewById(R.id.app_register_prog_text);
-	if (status == DeviceRegistrar.REGISTERED_STATUS) {
-	    //	    progTextView.setText(R.string.register_progress_text_reg);
-	    Log.d(Config.LOGTAG, "GeatteCanvas:handleConnectingUpdate() status : registered");
-	} else if (status == DeviceRegistrar.UNREGISTERED_STATUS) {
-	    //	    progTextView.setText(R.string.register_progress_text_unreg);
-	    Log.d(Config.LOGTAG, "GeatteCanvas:handleConnectingUpdate() status : unregistered");
-	} else {
-	    //	    progTextView.setText(R.string.register_progress_text_error);
-	    Log.d(Config.LOGTAG, "GeatteCanvas:handleConnectingUpdate() status : error");
-	}
     }
 
     private boolean getGoogleAccount() {
@@ -208,31 +157,6 @@ public class GeatteCanvas extends GDActivity {
 	}
     }
 
-    private void setRegisterView() {
-	//final Button regButton = (Button) findViewById(R.id.app_register_btn);
-
-	final SharedPreferences prefs = getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY,
-		Context.MODE_PRIVATE);
-	String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
-
-	if (accountName == null) {
-	    //regButton.setEnabled(false);
-	    Log.d(Config.LOGTAG_C2DM, " " + GeatteCanvas.CLASSTAG + ":setRegisterView() : No google account '"
-		    + Config.PREF_USER_EMAIL + "' in prefs");
-	    //TODO forward user to add account
-
-	} else {
-	    Log.d(Config.LOGTAG_C2DM, " " + GeatteCanvas.CLASSTAG + ":setRegisterView() : user prefs google account "
-		    + Config.PREF_USER_EMAIL + " = " + accountName);
-	    //	    regButton.setOnClickListener(new OnClickListener() {
-	    //		public void onClick(View v) {
-	    //		    register();
-	    //		}
-	    //	    });
-	}
-
-    }
-
     private String[] getGoogleAccounts() {
 	ArrayList<String> accountNames = new ArrayList<String>();
 	Account[] accounts = AccountManager.get(this).getAccounts();
@@ -245,14 +169,6 @@ public class GeatteCanvas extends GDActivity {
 	String[] result = new String[accountNames.size()];
 	accountNames.toArray(result);
 	return result;
-    }
-
-    private void register() {
-	//            ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
-	//            progressBar.setVisibility(ProgressBar.VISIBLE);
-	//            TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
-	//            textView.setVisibility(ProgressBar.VISIBLE);
-	C2DMessaging.register(this, Config.C2DM_SENDER);
     }
 
     @Override

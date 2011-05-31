@@ -1,10 +1,11 @@
 package com.geatte.android.app;
 
+import greendroid.app.GDActivity;
+
 import java.util.ArrayList;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +15,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,17 +22,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-
 import com.geatte.android.c2dm.C2DMessaging;
 
 /**
  * Setup activity - takes user through the setup.
  */
-public class SetupActivity extends Activity {
+public class GeatteSetupActivity extends GDActivity {
 
     private boolean mPendingAuth = false;
     private int mScreenId = -1;
@@ -45,9 +40,9 @@ public class SetupActivity extends Activity {
 
 	Context context = getApplicationContext();
 	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
-	int savedScreenId = prefs.getInt("savedScreenId", -1);
+	int savedScreenId = prefs.getInt(Config.SAVED_SCREEN_ID, -1);
 	if (savedScreenId == -1) {
-	    setScreenContent(R.layout.intro);
+	    setScreenContent(R.layout.geatte_intro);
 	} else {
 	    setScreenContent(savedScreenId);
 	}
@@ -80,13 +75,6 @@ public class SetupActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-	MenuInflater inflater = getMenuInflater();
-	inflater.inflate(R.menu.setup, menu);
-	return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 	switch (item.getItemId()) {
 	//	case R.id.help: {
@@ -101,68 +89,64 @@ public class SetupActivity extends Activity {
 
     private void setScreenContent(int screenId) {
 	mScreenId = screenId;
-	setContentView(screenId);
+	setActionBarContentView(screenId);
 	switch (screenId) {
 	// Screen shown if phone is registered/connected
-	case R.layout.connected: {
-	    setConnectedScreenContent();
-	    break;
-	}
+	//	case R.layout.connected: {
+	//	    setConnectedScreenContent();
+	//	    break;
+	//	}
 	// Ordered sequence of screens for setup
-	case R.layout.intro: {
+	case R.layout.geatte_intro: {
 	    setIntroScreenContent();
 	    break;
 	}
-	case R.layout.select_account: {
+	case R.layout.geatte_select_account: {
 	    setSelectAccountScreenContent();
 	    break;
 	}
-	case R.layout.select_launch_mode: {
-	    setSelectLaunchModeScreenContent();
-	    break;
-	}
-	case R.layout.setup_complete: {
+	case R.layout.geatte_setup_complete: {
 	    setSetupCompleteScreenContent();
 	    break;
 	}
 	}
-	SharedPreferences prefs = Prefs.get(this);
+	Context context = getApplicationContext();
+	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
 	SharedPreferences.Editor editor = prefs.edit();
-	editor.putInt("savedScreenId", screenId);
+	editor.putInt(Config.SAVED_SCREEN_ID, screenId);
 	editor.commit();
     }
 
     private void setIntroScreenContent() {
-	String introText = getString(R.string.intro_text).replace("{tos_link}", HelpActivity.getTOSLink()).replace(
-		"{pp_link}", HelpActivity.getPPLink());
+	String introText = getString(R.string.intro_text);
 	TextView textView = (TextView) findViewById(R.id.intro_text);
 	textView.setText(Html.fromHtml(introText));
 	textView.setMovementMethod(LinkMovementMethod.getInstance());
 
-	Button exitButton = (Button) findViewById(R.id.exit);
+	Button exitButton = (Button) findViewById(R.id.intro_exit);
 	exitButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
 		finish();
 	    }
 	});
 
-	Button nextButton = (Button) findViewById(R.id.next);
+	Button nextButton = (Button) findViewById(R.id.intro_next);
 	nextButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		setScreenContent(R.layout.select_account);
+		setScreenContent(R.layout.geatte_select_account);
 	    }
 	});
     }
 
     private void setSelectAccountScreenContent() {
-	final Button backButton = (Button) findViewById(R.id.back);
+	final Button backButton = (Button) findViewById(R.id.select_account_back);
 	backButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		setScreenContent(R.layout.intro);
+		setScreenContent(R.layout.geatte_intro);
 	    }
 	});
 
-	final Button nextButton = (Button) findViewById(R.id.next);
+	final Button nextButton = (Button) findViewById(R.id.select_account_next);
 	nextButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
 		ListView listView = (ListView) findViewById(R.id.select_account);
@@ -177,108 +161,47 @@ public class SetupActivity extends Activity {
 	// Display accounts
 	String accounts[] = getGoogleAccounts();
 	if (accounts.length == 0) {
-	    TextView promptText = (TextView) findViewById(R.id.select_text);
+	    TextView promptText = (TextView) findViewById(R.id.select_account_text);
 	    promptText.setText(R.string.no_accounts);
-	    TextView nextText = (TextView) findViewById(R.id.click_next_text);
+	    TextView nextText = (TextView) findViewById(R.id.select_account_click_next_text);
 	    nextText.setVisibility(TextView.INVISIBLE);
 	    nextButton.setEnabled(false);
 	} else {
 	    ListView listView = (ListView) findViewById(R.id.select_account);
-	    listView.setAdapter(new ArrayAdapter<String>(this, R.layout.account, accounts));
+	    listView.setAdapter(new ArrayAdapter<String>(this, R.layout.email_account, accounts));
 	    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	    listView.setItemChecked(mAccountSelectedPosition, true);
 	}
-    }
-
-    private void setSelectLaunchModeScreenContent() {
-	Button backButton = (Button) findViewById(R.id.back);
-	backButton.setOnClickListener(new OnClickListener() {
-	    public void onClick(View v) {
-		setScreenContent(R.layout.select_account);
-	    }
-	});
-
-	Button nextButton = (Button) findViewById(R.id.next);
-	nextButton.setOnClickListener(new OnClickListener() {
-	    public void onClick(View v) {
-		storeLaunchModePreference();
-		setScreenContent(R.layout.setup_complete);
-	    }
-	});
-
-	setLaunchModePreferenceUI();
     }
 
     private void setSetupCompleteScreenContent() {
 	TextView textView = (TextView) findViewById(R.id.setup_complete_text);
 	textView.setText(Html.fromHtml(getString((R.string.setup_complete_text))));
 
-	Button backButton = (Button) findViewById(R.id.back);
+	Button backButton = (Button) findViewById(R.id.setup_complete_back);
 	backButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		setScreenContent(R.layout.select_launch_mode);
+		setScreenContent(R.layout.geatte_select_account);
 	    }
 	});
 
-	final Context context = this;
-	Button finishButton = (Button) findViewById(R.id.finish);
+	Button finishButton = (Button) findViewById(R.id.setup_complete_finish);
 	finishButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		SharedPreferences prefs = Prefs.get(context);
+		Context context = getApplicationContext();
+		final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putInt("savedScreenId", R.layout.connected);
+		editor.putInt(Config.SAVED_SCREEN_ID, R.layout.geatte_intro);
 		editor.commit();
 		finish();
 	    }
 	});
     }
 
-    private void setConnectedScreenContent() {
-	SharedPreferences prefs = Prefs.get(this);
-	TextView statusText = (TextView) findViewById(R.id.connected_with_account_text);
-	statusText.setText(getString(R.string.connected_with_account_text) + " "
-		+ prefs.getString("accountName", "error"));
-
-	setLaunchModePreferenceUI();
-
-	RadioGroup launchMode = (RadioGroup) findViewById(R.id.launch_mode_radio);
-	launchMode.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-	    public void onCheckedChanged(RadioGroup group, int checkedId) {
-		storeLaunchModePreference();
-	    }
-	});
-
-	Button disconnectButton = (Button) findViewById(R.id.disconnect);
-	disconnectButton.setOnClickListener(new OnClickListener() {
-	    public void onClick(View v) {
-		unregister();
-	    }
-	});
-    }
-
-    private void storeLaunchModePreference() {
-	SharedPreferences prefs = Prefs.get(this);
-	SharedPreferences.Editor editor = prefs.edit();
-	RadioGroup launchMode = (RadioGroup) findViewById(R.id.launch_mode_radio);
-	editor.putBoolean("launchBrowserOrMaps", launchMode.getCheckedRadioButtonId() == R.id.auto_launch);
-	editor.commit();
-    }
-
-    private void setLaunchModePreferenceUI() {
-	SharedPreferences prefs = Prefs.get(this);
-	if (prefs.getBoolean("launchBrowserOrMaps", true)) {
-	    RadioButton automaticButton = (RadioButton) findViewById(R.id.auto_launch);
-	    automaticButton.setChecked(true);
-	} else {
-	    RadioButton manualButton = (RadioButton) findViewById(R.id.manual_launch);
-	    manualButton.setChecked(true);
-	}
-    }
-
     private void register(String account) {
-	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
+	ProgressBar progressBar = (ProgressBar) findViewById(R.id.select_account_progress_bar);
 	progressBar.setVisibility(ProgressBar.VISIBLE);
-	TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
+	TextView textView = (TextView) findViewById(R.id.select_account_connecting_text);
 	textView.setVisibility(ProgressBar.VISIBLE);
 
 	Context context = getApplicationContext();
@@ -290,17 +213,17 @@ public class SetupActivity extends Activity {
 	C2DMessaging.register(this, Config.C2DM_SENDER);
     }
 
-    private void unregister() {
-	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
-	progressBar.setVisibility(ProgressBar.VISIBLE);
-	TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
-	textView.setVisibility(ProgressBar.VISIBLE);
-
-	Button disconnectButton = (Button) findViewById(R.id.app_disconnect);
-	disconnectButton.setEnabled(false);
-
-	C2DMessaging.unregister(this);
-    }
+    //    private void unregister() {
+    //	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
+    //	progressBar.setVisibility(ProgressBar.VISIBLE);
+    //	TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
+    //	textView.setVisibility(ProgressBar.VISIBLE);
+    //
+    //	Button disconnectButton = (Button) findViewById(R.id.app_disconnect);
+    //	disconnectButton.setEnabled(false);
+    //
+    //	C2DMessaging.unregister(this);
+    //    }
 
     private String[] getGoogleAccounts() {
 	ArrayList<String> accountNames = new ArrayList<String>();
@@ -319,61 +242,27 @@ public class SetupActivity extends Activity {
     private void handleConnectingUpdate(int status) {
 	if (status == DeviceRegistrar.REGISTERED_STATUS) {
 	    Log.d(Config.LOGTAG, "SetupActivity:handleConnectingUpdate() status : registered");
+	    setScreenContent(R.layout.geatte_setup_complete);
 	} else {
-	    ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_text);
+	    ProgressBar progressBar = (ProgressBar) findViewById(R.id.select_account_progress_bar);
 	    progressBar.setVisibility(ProgressBar.INVISIBLE);
-	    TextView textView = (TextView) findViewById(R.id.app_register_prog_text);
+	    TextView textView = (TextView) findViewById(R.id.select_account_connecting_text);
 	    textView.setText(status == DeviceRegistrar.AUTH_ERROR_STATUS ? R.string.auth_error_text
 		    : R.string.connect_error_text);
 
-	    Button backButton = (Button) findViewById(R.id.setup_back);
+	    Button backButton = (Button) findViewById(R.id.select_account_back);
 	    backButton.setEnabled(true);
 
-	    Button nextButton = (Button) findViewById(R.id.setup_next);
+	    Button nextButton = (Button) findViewById(R.id.select_account_next);
 	    nextButton.setEnabled(true);
-	}
-    }
-
-    private void handleConnectingUpdate(int status) {
-	//	ProgressBar progressBar = (ProgressBar) findViewById(R.id.app_register_prog_bar);
-	//	progressBar.setVisibility(ProgressBar.INVISIBLE);
-
-	//	TextView progTextView = (TextView) findViewById(R.id.app_register_prog_text);
-	if (status == DeviceRegistrar.REGISTERED_STATUS) {
-	    //	    progTextView.setText(R.string.register_progress_text_reg);
-	    Log.d(Config.LOGTAG, "GeatteCanvas:handleConnectingUpdate() status : registered");
-	} else if (status == DeviceRegistrar.UNREGISTERED_STATUS) {
-	    //	    progTextView.setText(R.string.register_progress_text_unreg);
-	    Log.d(Config.LOGTAG, "GeatteCanvas:handleConnectingUpdate() status : unregistered");
-	} else {
-	    //	    progTextView.setText(R.string.register_progress_text_error);
-	    Log.d(Config.LOGTAG, "GeatteCanvas:handleConnectingUpdate() status : error");
-	}
-    }
-
-    private void handleDisconnectingUpdate(int status) {
-	if (status == DeviceRegistrar.UNREGISTERED_STATUS) {
-	    setScreenContent(R.layout.intro);
-	} else {
-	    ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-	    progressBar.setVisibility(ProgressBar.INVISIBLE);
-
-	    TextView textView = (TextView) findViewById(R.id.disconnecting_text);
-	    textView.setText(R.string.disconnect_error_text);
-
-	    Button disconnectButton = (Button) findViewById(R.id.disconnect);
-	    disconnectButton.setEnabled(true);
 	}
     }
 
     private final BroadcastReceiver mUpdateUIReceiver = new BroadcastReceiver() {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-	    if (mScreenId == R.layout.select_account) {
+	    if (mScreenId == R.layout.geatte_select_account) {
 		handleConnectingUpdate(intent.getIntExtra(DeviceRegistrar.STATUS_EXTRA, DeviceRegistrar.ERROR_STATUS));
-	    } else if (mScreenId == R.layout.connected) {
-		handleDisconnectingUpdate(intent
-			.getIntExtra(DeviceRegistrar.STATUS_EXTRA, DeviceRegistrar.ERROR_STATUS));
 	    }
 	}
     };
