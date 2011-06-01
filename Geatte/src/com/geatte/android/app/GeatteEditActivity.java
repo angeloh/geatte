@@ -271,7 +271,9 @@ public class GeatteEditActivity extends GDActivity {
 		String myNumber = DeviceRegistrar.getPhoneNumber(getApplicationContext());
 		entity.addPart(Config.GEATTE_FROM_NUMBER_PARAM, new StringBody(myNumber));
 		// TODO to number list
-		entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("15555215554"));
+		//entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("15555215554"));
+		//entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("15103978860"));
+		entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("14085052613"));
 		entity.addPart(Config.GEATTE_TITLE_PARAM, new StringBody(title));
 		entity.addPart(Config.GEATTE_DESC_PARAM, new StringBody(desc));
 		entity.addPart(Config.GEATTE_IMAGE_PARAM, new ByteArrayBody(data, imageFileName));

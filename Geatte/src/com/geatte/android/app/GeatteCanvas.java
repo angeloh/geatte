@@ -61,8 +61,8 @@ public class GeatteCanvas extends GDActivity {
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mImagePath)));
 		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + mImagePath);
 
-		//intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getTmpImagePath())));
-		//Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + getTmpImagePath());
+		//		intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getTmpImagePath())));
+		//		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + getTmpImagePath());
 		startActivityForResult(intent, ACTIVITY_SNAP);
 	    }
 	});
@@ -183,18 +183,18 @@ public class GeatteCanvas extends GDActivity {
 	    //Bitmap captureBmp = Media.getBitmap(getContentResolver(), Uri.fromFile(fi) );
 	    //uri = Uri.parse(android.provider.MediaStore.Images.Media.insertImage(getContentResolver(), fi.getAbsolutePath(), null, null));
 	    if (fi.exists()) {
-		//		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		//		bitmapOptions.inSampleSize = 6;
-		//		Bitmap imgBitmap = BitmapFactory.decodeFile(fi.getAbsolutePath(), bitmapOptions);
-		//		String pathToPicture = saveToFile(imgBitmap);
-		//		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + pathToPicture);
-		//
-		//		Intent i = new Intent(this, GeatteEditActivity.class);
-		//		i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, pathToPicture);
-		//		startActivityForResult(i, ACTIVITY_CREATE);
-		//		if (!fi.delete()) {
-		//		    Log.d(Config.LOGTAG, "Failed to delete " + fi.getAbsolutePath());
-		//		}
+		////		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		////		bitmapOptions.inSampleSize = 6;
+		////		Bitmap imgBitmap = BitmapFactory.decodeFile(fi.getAbsolutePath(), bitmapOptions);
+		////		String pathToPicture = saveToFile(imgBitmap);
+		////		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + pathToPicture);
+		////
+		////		Intent i = new Intent(this, GeatteEditActivity.class);
+		////		i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, pathToPicture);
+		////		startActivityForResult(i, ACTIVITY_CREATE);
+		////		if (!fi.delete()) {
+		////		    Log.d(Config.LOGTAG, "Failed to delete " + fi.getAbsolutePath());
+		////		}
 
 		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + mImagePath);
 
@@ -264,12 +264,13 @@ public class GeatteCanvas extends GDActivity {
     public String getTmpImagePath() {
 	try {
 	    String externalDir = Environment.getExternalStorageDirectory().toString();
+	    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " getTmpImagePath() : get externalDir " + externalDir);
 	    File tmpfile = new File(externalDir, "/tmpgeatte");
 	    if (!tmpfile.exists()) {
 		tmpfile.getParentFile().mkdirs();
 		tmpfile.createNewFile();
 	    }
-
+	    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " getTmpImagePath() : get tmp image path " + tmpfile.getAbsolutePath());
 	    return tmpfile.getAbsolutePath();
 	} catch (Exception e) {
 	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :" , e);

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -85,6 +86,12 @@ public class GeatteSetupActivity extends GDActivity {
 	    return super.onOptionsItemSelected(item);
 	}
 	}
+    }
+
+    @Override
+    public void setActionBarContentView(int resID) {
+	setContentView(createLayout());
+	LayoutInflater.from(this).inflate(resID, getContentView());
     }
 
     private void setScreenContent(int screenId) {
@@ -270,7 +277,7 @@ public class GeatteSetupActivity extends GDActivity {
     private final BroadcastReceiver mAuthPermissionReceiver = new BroadcastReceiver() {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-	    Bundle extras = intent.getBundleExtra("AccountManagerBundle");
+	    Bundle extras = intent.getBundleExtra(Config.EXTRA_KEY_ACCOUNT_BUNDLE);
 	    if (extras != null) {
 		Intent authIntent = (Intent) extras.get(AccountManager.KEY_INTENT);
 		if (authIntent != null) {

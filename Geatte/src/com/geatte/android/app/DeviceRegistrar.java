@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -185,11 +184,12 @@ public class DeviceRegistrar {
 
 	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_REG_ID_PARAM + "=" + deviceRegistrationID);
 
-	String deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-	if (deviceId != null) {
-	    params.add(new BasicNameValuePair(Config.DEVICE_ID_PARAM, deviceId));
+	//String deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+	String installationId = Installation.id(context);
+	if (installationId != null) {
+	    params.add(new BasicNameValuePair(Config.DEVICE_ID_PARAM, installationId));
 
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_ID_PARAM + "=" + deviceId);
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_ID_PARAM + "=" + installationId);
 	}
 
 	String phoneNumber = getPhoneNumber(context);
@@ -222,6 +222,10 @@ public class DeviceRegistrar {
     public static String getPhoneNumber(Context context) {
 	TelephonyManager mTelephonyMgr =
 	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-	return mTelephonyMgr.getLine1Number();
+	String phoneNum =  mTelephonyMgr.getLine1Number();
+	if (phoneNum == null) {
+	    phoneNum = "15103978860";
+	}
+	return phoneNum;
     }
 }
