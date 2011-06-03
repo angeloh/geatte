@@ -49,25 +49,4 @@ public class GeatteContract {
 	return uri.getPathSegments().get(1);
     }
 
-    /**
-     * Content type and column constants for the Notes table.
-     */
-    /*    public static class Notes implements BaseColumns {
-	//The MIME type of a directory of notes.
-	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.jumpnote.note";
-
-	//The MIME type of a single note.
-	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.jumpnote.note";
-
-	//The default sort order for this table
-	public static final String DEFAULT_SORT_ORDER = "title ASC";
-
-	public static final String SERVER_ID = "serverId";
-	public static final String TITLE = "title";
-	public static final String BODY = "note";
-	public static final String ACCOUNT_NAME = "account";
-	public static final String CREATED_DATE = "createdDate";
-	public static final String MODIFIED_DATE = "modifiedDate";
-	public static final String PENDING_DELETE = "pendingDelete";
-    }
-     */}
+}

@@ -14,6 +14,8 @@ import greendroid.widget.ActionBarItem.Type;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +23,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +36,7 @@ public class GeatteCanvas extends GDActivity {
     private static final int ACTIVITY_CREATE = 1;
     private boolean mPendingAuth = false;
     private String mImagePath = null;
+    private PendingIntent mAlarmSender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,29 @@ public class GeatteCanvas extends GDActivity {
 	    }
 	});
 
+	// Create an IntentSender that will launch our service, to be scheduled
+	// with the alarm manager.
+	mAlarmSender = PendingIntent.getService(GeatteCanvas.this,
+		0, new Intent(GeatteCanvas.this, GeatteContactsService.class), 0);
+
+	scheduleContactService();
+
+    }
+
+    private void scheduleContactService() {
+	// We want the alarm to go off 30 seconds from now.
+	long firstTime = SystemClock.elapsedRealtime();
+
+	// Schedule the alarm!
+	AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+	am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+		firstTime, 60*1000, mAlarmSender);
+    }
+
+    private void unScheduleContactService() {
+	// And cancel the alarm.
+	AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+	am.cancel(mAlarmSender);
     }
 
     //TODO show information
@@ -124,6 +151,7 @@ public class GeatteCanvas extends GDActivity {
     @Override
     public void onDestroy() {
 	super.onDestroy();
+	unScheduleContactService();
     }
 
     private boolean getGoogleAccount() {

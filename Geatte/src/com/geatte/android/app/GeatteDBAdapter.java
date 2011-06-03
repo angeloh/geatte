@@ -40,10 +40,9 @@ public class GeatteDBAdapter {
     //public static final String KEY_IMAGE_HASH = "hash";
 
     //TABLE contacts
-    public static final String KEY_CONTACT_ID = "_id";
-    public static final String KEY_CONTACT_PHONE = "phone";
-    public static final String KEY_CONTACT_EMAIL = "email";
-    public static final String KEY_CONTACT_LINK = "link";
+    public static final String KEY_CONTACT_PHONE_NUMBER = "_id";
+    public static final String KEY_CONTACT_ID = "phone";
+    public static final String KEY_CONTACT_NAME = "name";
 
     //TABLE friend_interests
     public static final String KEY_FRIEND_INTEREST_ID = "_id";
@@ -65,6 +64,7 @@ public class GeatteDBAdapter {
     private static final String DB_TABLE_INTERESTS = "interests";
     private static final String DB_TABLE_FEEDBACKS = "feedbacks";
     private static final String DB_TABLE_IMAGES = "images";
+    private static final String DB_TABLE_CONTACTS = "contacts";
     private static final String DB_TABLE_FRIEND_INTERESTS = "friend_interests";
     private static final String DB_TABLE_FI_IMAGES = "fi_images";
 
@@ -95,6 +95,12 @@ public class GeatteDBAdapter {
 	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
 	KEY_IMAGE_INTEREST_ID + " INTEGER," +
 	"FOREIGN KEY (" + KEY_IMAGE_INTEREST_ID + ") REFERENCES " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_ID + ")" +
+	");";
+
+    private static final String DB_CREATE_CONTACTS =
+	"CREATE TABLE " + DB_TABLE_CONTACTS + " (" + KEY_CONTACT_PHONE_NUMBER +" TEXT PRIMARY KEY," +
+	KEY_CONTACT_ID + " INTEGER NOT NULL," +
+	KEY_CONTACT_NAME + " TEXT NOT NULL" +
 	");";
 
     private static final String DB_CREATE_FRIEND_INTERESTS =
@@ -128,6 +134,7 @@ public class GeatteDBAdapter {
 	    db.execSQL(DB_CREATE_INTERESTS);
 	    db.execSQL(DB_CREATE_FEEDBACKS);
 	    db.execSQL(DB_CREATE_IMAGES);
+	    db.execSQL(DB_CREATE_CONTACTS);
 	    db.execSQL(DB_CREATE_FRIEND_INTERESTS);
 	    db.execSQL(DB_CREATE_FI_IMAGES);
 	}
@@ -146,6 +153,7 @@ public class GeatteDBAdapter {
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_INTERESTS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_FEEDBACKS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_IMAGES);
+	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_CONTACTS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_FRIEND_INTERESTS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_FI_IMAGES);
 
@@ -230,6 +238,38 @@ public class GeatteDBAdapter {
 	}
     }
 
+    public long insertOrUpdateContact(String phoneNum, int contactId, String name) {
+	// only first time contacts have mostly insert, later mostly are update
+	if (!updateContact(phoneNum, contactId, name)) {
+	    ContentValues initialValues = new ContentValues();
+	    initialValues.put(KEY_CONTACT_PHONE_NUMBER, phoneNum);
+	    initialValues.put(KEY_CONTACT_ID, contactId);
+	    initialValues.put(KEY_CONTACT_NAME, name);
+
+	    return mDb.insert(DB_TABLE_CONTACTS, null, initialValues);
+	} else {
+	    return -1;
+	}
+    }
+
+    public boolean updateContact(String phoneNum, int contactId, String name) {
+	ContentValues initialValues = new ContentValues();
+	initialValues.put(KEY_CONTACT_ID, contactId);
+	initialValues.put(KEY_CONTACT_NAME, name);
+
+	return mDb.update(DB_TABLE_CONTACTS, initialValues, KEY_CONTACT_PHONE_NUMBER + "='" + phoneNum + "'", null) > 0;
+    }
+
+    /**
+     * Delete the contact
+     * 
+     * @param phone number
+     * @return true if deleted, false otherwise
+     */
+    public boolean deleteContact(String phoneNum) {
+	return mDb.delete(DB_TABLE_CONTACTS, KEY_CONTACT_PHONE_NUMBER + "=" + phoneNum, null) > 0;
+    }
+
     /**
      * Insert friend's interest to db
      * 
@@ -270,7 +310,7 @@ public class GeatteDBAdapter {
     }
 
     /**
-     * Delete the note with the given rowId
+     * Delete the interest with the given rowId
      * 
      * @param rowId id of note to delete
      * @return true if deleted, false otherwise
@@ -282,6 +322,32 @@ public class GeatteDBAdapter {
 	}
 	mDb.delete(DB_TABLE_IMAGES, KEY_IMAGE_INTEREST_ID + "=" + rowId, null);
 	return mDb.delete(DB_TABLE_INTERESTS, KEY_INTEREST_ID + "=" + rowId, null) > 0;
+    }
+
+    /**
+     * Return a Cursor for all feedbacks
+     * 
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchAllContacts() throws SQLException {
+	String query = "SELECT " +
+	DB_TABLE_CONTACTS + "." + KEY_CONTACT_PHONE_NUMBER + ", " +
+	DB_TABLE_CONTACTS + "." + KEY_CONTACT_ID + ", " +
+	DB_TABLE_CONTACTS + "." + KEY_CONTACT_NAME + ", " +
+	"FROM " + DB_TABLE_CONTACTS +
+	" ORDER BY " + DB_TABLE_CONTACTS + "." + KEY_CONTACT_NAME + " ASC";
+
+	Log.i(Config.LOGTAG, "fetch all contacts query string = " + query);
+
+	try {
+	    Cursor cursor = mDb.rawQuery(query, null);
+	    Log.i(Config.LOGTAG, "return cursor fetchAllContacts()");
+	    return cursor;
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch all fetchAllContacts ", ex);
+	}
+	return null;
     }
 
     /**

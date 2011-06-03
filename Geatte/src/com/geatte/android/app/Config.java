@@ -20,7 +20,6 @@ public class Config {
     public static final String EXTRA_CURRENT_TAB = "0";
 
     //setup configs
-
     public static final String SAVED_SCREEN_ID = "saved_screen_id";
 
     //C2DM Configs
@@ -64,5 +63,9 @@ public class Config {
     public static final String FRIEND_GEATTE_VOTER = "friendGeatteVoter";
     public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";
     public static final String FRIEND_GEATTE_FEEDBACK = "friendGeatteFeedback";
+
+    public static final String CONTACT_LIST = "contactList";
+    public static final String CONTACT_PHONE_NUMBER = "phoneNumber";
+    public static final String CONTACT_ID = "contactId";
 
 }
