@@ -13,12 +13,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.geatte.app.shared.DBHelper;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.repackaged.org.json.JSONArray;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 @SuppressWarnings("serial")
 public class RegisterServlet extends HttpServlet {
@@ -99,6 +102,34 @@ public class RegisterServlet extends HttpServlet {
 	} else {
 	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.DEV_PHONE_NUMBER_PARAM + " = "
 		    + phoneNumber);
+	}
+
+	String phoneCountryIso = reqInfo.getParameter(Config.DEV_PHONE_COUNTRY_ISO_PARAM);
+
+	if (phoneCountryIso == null) {
+	    //default is us
+	    phoneCountryIso = "us";
+	    log.severe("RegisterServlet.doPOST() : Missing phone country iso, " + Config.DEV_PHONE_COUNTRY_ISO_PARAM + " is null");
+	    return;
+	} else {
+	    log.log(Level.INFO, "RegisterServlet.doPOST() : user sent a " + Config.DEV_PHONE_COUNTRY_ISO_PARAM + " = "
+		    + phoneCountryIso);
+	}
+
+	PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+	PhoneNumber numberProto = null;
+	try {
+	    numberProto = phoneUtil.parse(phoneNumber, phoneCountryIso);
+	} catch (NumberParseException npe) {
+	    log.log(Level.WARNING, "RegisterServlet.doPOST(): NumberParseException was thrown: "
+		    , npe);
+	}
+
+	if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
+	    phoneNumber = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
+	} else {
+	    log.log(Level.WARNING, "RegisterServlet.doPOST() : Invalid phone number so use passed-in number, " + Config.DEV_PHONE_NUMBER_PARAM
+		    + " = " + phoneNumber + ", countryIso = " + phoneCountryIso);
 	}
 
 	if (reqInfo.deviceRegistrationID == null) {
@@ -198,6 +229,7 @@ public class RegisterServlet extends HttpServlet {
 	    }
 
 	    device.setPhoneNumber(phoneNumber); // update phoneNumber
+	    device.setCountryCode(phoneCountryIso); //update country code
 	    device.setUserEmail(reqInfo.getUserEmail()); // update user email
 	    device.setDeviceName(deviceName); // update display name
 	    // TODO: only need to write if something changed, for chrome nothing

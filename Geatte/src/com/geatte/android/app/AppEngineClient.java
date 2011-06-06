@@ -67,6 +67,14 @@ public class AppEngineClient {
 	return res;
     }
 
+    public HttpResponse makeRequestWithJSONStringEntity(String urlPath,  HttpEntity httpEntity) throws Exception {
+	HttpResponse res = makeRequestNoRetryWithJSONStringEntity(urlPath, httpEntity, false);
+	if (res.getStatusLine().getStatusCode() == 500) {
+	    res = makeRequestNoRetryWithJSONStringEntity(urlPath, httpEntity, true);
+	}
+	return res;
+    }
+
     /*    private HttpResponse makeRequestNoRetryNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
 
 	// Make POST request
@@ -119,6 +127,31 @@ public class AppEngineClient {
 	post.setEntity(httpEntity);
 	post.setHeader("Cookie", ascidCookie.toString());
 	post.setHeader("X-Same-Domain", "1"); // XSRF
+
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWithEntity() : make post request to uri = "
+		+ uri.toString());
+
+	DefaultHttpClient client = new DefaultHttpClient();
+	res = client.execute(post);
+	return res;
+    }
+
+    private HttpResponse makeRequestNoRetryWithJSONStringEntity(String urlPath, HttpEntity httpEntity, boolean renewToken)
+    throws Exception {
+
+	StringBuilder ascidCookie = new StringBuilder();
+	HttpResponse res = getServerAscidCookie(renewToken, ascidCookie);
+	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWithEntity() : got ACSID cookie = "
+		+ ascidCookie.toString());
+
+	// Make POST request
+	URI uri = new URI(Config.BASE_URL + urlPath);
+	HttpPost post = new HttpPost(uri);
+	post.setEntity(httpEntity);
+	post.setHeader("Cookie", ascidCookie.toString());
+	post.setHeader("X-Same-Domain", "1"); // XSRF
+	post.setHeader("Accept", "application/json");
+	post.setHeader("Content-type", "application/json");
 
 	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWithEntity() : make post request to uri = "
 		+ uri.toString());

@@ -3,18 +3,18 @@ package com.geatte.android.app;
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.Item;
-import greendroid.widget.item.ProgressItem;
-import greendroid.widget.item.ThumbnailItem;
 import greendroid.widget.itemview.ItemView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.cyrilmottier.android.greendroid.R;
+import com.geatte.android.view.GeatteProgressItem;
 import com.geatte.android.view.GeatteThumbnailItem;
 import com.geatte.android.view.SeparatorThumbnailItem;
 import com.geatte.android.view.ThumbnailBitmapItem;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 public class GeatteAllFeedbackActivity extends GDListActivity {
 
     private final Handler mHandler = new Handler();
+    private ProgressDialog mDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,10 @@ public class GeatteAllFeedbackActivity extends GDListActivity {
 	Log.d(Config.LOGTAG, "START GeatteAllFeedbackActivity:onCreate");
 	setTitle(R.string.app_name);
 
+	mDialog = ProgressDialog.show(GeatteAllFeedbackActivity.this, "Loading", "Please wait...", true);
+
 	List<Item> items = new ArrayList<Item>();
-	final ThumbnailItem warnItem;
+	final GeatteThumbnailItem warnItem;
 
 	final GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
 	Cursor feedbackCur = null;
@@ -47,7 +50,7 @@ public class GeatteAllFeedbackActivity extends GDListActivity {
 	    feedbackCur.moveToFirst();
 	    if (feedbackCur.isAfterLast()) {
 		Log.d(Config.LOGTAG, "No feedback available!!");
-		warnItem = new ThumbnailItem("No feedback available", null, R.drawable.empty);
+		warnItem = new GeatteThumbnailItem("No feedback available", null, R.drawable.empty);
 	    } else {
 		warnItem = null;
 	    }
@@ -81,7 +84,7 @@ public class GeatteAllFeedbackActivity extends GDListActivity {
 
 	    }
 
-	    final ProgressItem progressItem = new ProgressItem("Retrieving feedbacks", true);
+	    final GeatteProgressItem progressItem = new GeatteProgressItem("Retrieving feedbacks", true);
 	    items.add(progressItem);
 
 	    final ThumbnailBitmapItemAdapter adapter = new ThumbnailBitmapItemAdapter(this, items);
@@ -94,6 +97,15 @@ public class GeatteAllFeedbackActivity extends GDListActivity {
 		    }
 		    adapter.remove(progressItem);
 		    adapter.notifyDataSetChanged();
+		    if (mDialog != null && mDialog.isShowing()) {
+			try {
+			    Log.d(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate(): try to dismiss mDialog");
+			    mDialog.dismiss();
+			    mDialog = null;
+			} catch (Exception e) {
+			    Log.w(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate(): failed to dismiss mDialog", e);
+			}
+		    }
 		}
 	    },500);
 	} catch (Exception e) {

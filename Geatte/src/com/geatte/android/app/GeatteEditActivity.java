@@ -16,8 +16,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.geatte.android.app.R;
+
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -37,6 +40,7 @@ public class GeatteEditActivity extends GDActivity {
 
     private static final String CLASSTAG = GeatteEditActivity.class.getSimpleName();
     private static final String UPLOAD_PATH = "/geatteupload";
+    private static final int ACTIVITY_CONTACT = 0;
 
     private EditText mTitleEditText;
     private EditText mDescEditText;
@@ -47,6 +51,9 @@ public class GeatteEditActivity extends GDActivity {
     private String mSavedImagePath;
     private GeatteDBAdapter mDbHelper;
     private ProgressDialog mDialog;
+    private Button mSendToButton;
+    private Button mSendGeatteButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +69,6 @@ public class GeatteEditActivity extends GDActivity {
 	mTitleEditText = (EditText) findViewById(R.id.title);
 	mDescEditText = (EditText) findViewById(R.id.desc);
 	mSnapView = (ImageView) findViewById(R.id.edit_img);
-
-	Button sendButton = (Button) findViewById(R.id.send_to_button);
 
 	mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
 		.getSerializable(GeatteDBAdapter.KEY_INTEREST_ID);
@@ -111,7 +116,17 @@ public class GeatteEditActivity extends GDActivity {
 	    }
 	});
 
-	sendButton.setOnClickListener(new View.OnClickListener() {
+	mSendToButton = (Button) findViewById(R.id.send_to_button);
+	mSendToButton.setOnClickListener(new View.OnClickListener() {
+	    public void onClick(View view) {
+		Intent intent = new Intent(getApplicationContext(), GeatteContactSelectActivity.class);
+		startActivityForResult(intent, ACTIVITY_CONTACT);
+	    }
+
+	});
+
+	mSendGeatteButton = (Button) findViewById(R.id.send_geatte_button);
+	mSendGeatteButton.setOnClickListener(new View.OnClickListener() {
 	    public void onClick(View view) {
 		if (mImagePath == null && mSavedImagePath == null) {
 		    Toast.makeText(getApplicationContext(), "Please select image", Toast.LENGTH_SHORT).show();
@@ -124,6 +139,9 @@ public class GeatteEditActivity extends GDActivity {
 	    }
 
 	});
+
+	checkContactsSelected();
+
 	Log.d(Config.LOGTAG, "GeatteEdit:onCreate(): END");
     }
 
@@ -139,6 +157,27 @@ public class GeatteEditActivity extends GDActivity {
 	    mDbHelper.close();
 	}
 	Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): END");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	if (requestCode == ACTIVITY_CONTACT && resultCode == Activity.RESULT_OK){
+	    Log.d(Config.LOGTAG, " " + GeatteEditActivity.CLASSTAG + " return from contact selection");
+	    checkContactsSelected();
+	}
+    }
+
+    private void checkContactsSelected() {
+	Context context = getApplicationContext();
+	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+	String selectedContacts = prefs.getString(Config.PREF_SELECTED_CONTACTS, null);
+	if (selectedContacts != null && selectedContacts.length() > 0) {
+	    mSendGeatteButton.setEnabled(true);
+	    mSendToButton.setText(R.string.send_to_reset_text);
+	} else {
+	    mSendGeatteButton.setEnabled(false);
+	    mSendToButton.setText(R.string.send_to_text);
+	}
     }
 
     private void populateFields() {
@@ -234,6 +273,14 @@ public class GeatteEditActivity extends GDActivity {
 	}
     }
 
+    private void cleanSelectedContactsPref() {
+	Context context = getApplicationContext();
+	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+	SharedPreferences.Editor editor = prefs.edit();
+	editor.putString(Config.PREF_SELECTED_CONTACTS, null);
+	editor.commit();
+    }
+
     class GeatteUploadTask extends AsyncTask<String, String, String> {
 	@Override
 	protected String doInBackground(String... strings) {
@@ -262,6 +309,15 @@ public class GeatteEditActivity extends GDActivity {
 			    + mImagePath + " or mSavedImagePath = " + mSavedImagePath);
 		}
 
+		Context context = getApplicationContext();
+		final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+		String selectedContacts = prefs.getString(Config.PREF_SELECTED_CONTACTS, null);
+
+		if (selectedContacts == null || selectedContacts.length() == 0) {
+		    Log.e(Config.LOGTAG, "GeatteUploadTask:doInBackground(): selectedContacts is null, invalid selectedContacts = "
+			    + selectedContacts);
+		}
+
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -270,16 +326,17 @@ public class GeatteEditActivity extends GDActivity {
 
 		String myNumber = DeviceRegistrar.getPhoneNumber(getApplicationContext());
 		entity.addPart(Config.GEATTE_FROM_NUMBER_PARAM, new StringBody(myNumber));
+		String myCountryCode = DeviceRegistrar.getPhoneConuntryCode(getApplicationContext());
+		entity.addPart(Config.GEATTE_COUNTRY_ISO_PARAM, new StringBody(myCountryCode));
 		// TODO to number list
 		//entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("15555215554"));
 		//entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("15103978860"));
-		entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("14085052613"));
+		//entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody("14085052613"));
+		entity.addPart(Config.GEATTE_TO_NUMBER_PARAM, new StringBody(selectedContacts));
 		entity.addPart(Config.GEATTE_TITLE_PARAM, new StringBody(title));
 		entity.addPart(Config.GEATTE_DESC_PARAM, new StringBody(desc));
 		entity.addPart(Config.GEATTE_IMAGE_PARAM, new ByteArrayBody(data, imageFileName));
 
-		final SharedPreferences prefs = getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY,
-			Context.MODE_PRIVATE);
 		String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
 
 		AppEngineClient client = new AppEngineClient(getApplicationContext(), accountName);
@@ -360,6 +417,7 @@ public class GeatteEditActivity extends GDActivity {
 		}
 		if (geatteId != null) {
 		    saveState();
+		    cleanSelectedContactsPref();
 		    Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): save my interest to db, geatteId = " + geatteId + ", interestId = " + mRowId);
 		    Toast.makeText(getApplicationContext(), "Geatte uploaded successfully, geatteId = " + geatteId,
 			    Toast.LENGTH_LONG).show();

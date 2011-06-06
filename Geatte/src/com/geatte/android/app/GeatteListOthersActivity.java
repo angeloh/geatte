@@ -38,7 +38,7 @@ public class GeatteListOthersActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.v(Config.LOGTAG, " " + GeatteListOthersActivity.CLASSTAG + " onCreate");
+	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onCreate(): START");
 
 	this.setContentView(R.layout.geatte_list);
 
@@ -47,16 +47,15 @@ public class GeatteListOthersActivity extends ListActivity {
 	// get start from, an int, from extras
 	mStartFrom = getIntent().getIntExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, 1);
 
-	fillData();
+	// no need to fill data here cause resume is called after tab is created
+	// fillData();
+	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onCreate(): END");
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
 	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onResume(): START");
-
-	// get start from, an int, from extras
-	//mStartFrom = getIntent().getIntExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, 1);
 	fillData();
 	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onResume(): END");
     }

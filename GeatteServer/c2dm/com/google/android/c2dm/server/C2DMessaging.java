@@ -17,7 +17,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
-import com.geatte.app.shared.DBHelper;
+import com.geatte.app.server.DBHelper;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;

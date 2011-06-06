@@ -61,6 +61,13 @@
 		</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>GeatteContactsServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteContactsServlet
+		</servlet-class>
+	</servlet>
+	
 	<!-- 
 	<servlet>
 		<servlet-name>SendServlet</servlet-name>
@@ -102,6 +109,11 @@
 	<servlet-mapping>
 		<servlet-name>GeatteVoteServlet</servlet-name>
 		<url-pattern>/geattevote</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>GeatteContactsServlet</servlet-name>
+		<url-pattern>/geattecontacts</url-pattern>
 	</servlet-mapping>
 	
 	<!-- 

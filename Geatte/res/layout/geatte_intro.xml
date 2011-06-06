@@ -2,9 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
-    android:padding="10px">
+    android:layout_height="fill_parent">
 
 	<ScrollView
 	    android:layout_width="fill_parent"
@@ -27,15 +25,16 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
 	    android:background="#FF707070">
-	    
+ 
         <Button
             android:id="@+id/intro_exit"
             android:text="@string/intro_exit"
             android:layout_marginTop="5px"
             android:layout_weight="1"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"/>
-    
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_btn_back"/>
+
         <Button
             android:id="@+id/intro_next"
             android:text="@string/setup_next"

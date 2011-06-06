@@ -21,6 +21,9 @@ public class GeatteInfo {
     private String fromNumber;
 
     @Persistent
+    private String countryCode;
+
+    @Persistent
     private String toNumber;
 
     @Persistent
@@ -38,9 +41,10 @@ public class GeatteInfo {
     @Persistent
     private Date updateDate;
 
-    public GeatteInfo(String fromNumber, String toNumber, String geatteTitile, String geatteDesc, Blob image) {
+    public GeatteInfo(String fromNumber, String countryCode, String toNumber, String geatteTitile, String geatteDesc, Blob image) {
 	super();
 	this.setFromNumber(fromNumber);
+	this.setCountryCode(countryCode);
 	this.setToNumber(toNumber);
 	this.setGeatteTitile(geatteTitile);
 	this.setGeatteDesc(geatteDesc);
@@ -111,6 +115,14 @@ public class GeatteInfo {
 
     public void setGeatteDesc(String geatteDesc) {
 	this.geatteDesc = geatteDesc;
+    }
+
+    public String getCountryCode() {
+	return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+	this.countryCode = countryCode;
     }
 
 }

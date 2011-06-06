@@ -1,4 +1,4 @@
-package com.geatte.app.shared;
+package com.geatte.app.server;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;

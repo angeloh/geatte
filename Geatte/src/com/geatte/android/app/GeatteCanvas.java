@@ -11,8 +11,6 @@ import com.geatte.android.c2dm.C2DMessaging;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -42,8 +40,7 @@ public class GeatteCanvas extends GDActivity {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 
-	// setup google account and save to context prefs
-	//getGoogleAccount();
+	// TODO check if server has this device's reg id
 
 	// Run the setup first if necessary
 	Context context = getApplicationContext();
@@ -74,16 +71,16 @@ public class GeatteCanvas extends GDActivity {
 	Button showAllFeedbackButton = (Button) findViewById(R.id.app_show_all_feedback_btn);
 	showAllFeedbackButton.setOnClickListener( new OnClickListener(){
 	    public void onClick(View v ){
-		Intent i = new Intent(GeatteCanvas.this.getApplicationContext(), GeatteAllFeedbackActivity.class);
-		startActivity(i);
+		Intent intent = new Intent(getApplicationContext(), GeatteAllFeedbackActivity.class);
+		startActivity(intent);
 	    }
 	});
 
 	Button showGeatteTab = (Button) findViewById(R.id.app_show_geattetab_btn);
 	showGeatteTab.setOnClickListener( new OnClickListener(){
 	    public void onClick(View v ){
-		Intent i = new Intent(GeatteCanvas.this, GeatteTabActivity.class);
-		startActivity(i);
+		Intent intent = new Intent(getApplicationContext(), GeatteTabActivity.class);
+		startActivity(intent);
 	    }
 	});
 
@@ -103,7 +100,7 @@ public class GeatteCanvas extends GDActivity {
 	// Schedule the alarm!
 	AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
 	am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-		firstTime, 60*1000, mAlarmSender);
+		firstTime, 5*60*60*1000, mAlarmSender);
     }
 
     private void unScheduleContactService() {
@@ -152,51 +149,6 @@ public class GeatteCanvas extends GDActivity {
     public void onDestroy() {
 	super.onDestroy();
 	unScheduleContactService();
-    }
-
-    private boolean getGoogleAccount() {
-	// Display accounts
-	final String accounts[] = getGoogleAccounts();
-	if (accounts.length == 0) {
-	    //	    TextView promptText = (TextView) findViewById(R.id.select_text);
-	    //	    promptText.setText(R.string.no_accounts);
-	    //	    TextView nextText = (TextView) findViewById(R.id.click_next_text);
-	    //	    nextText.setVisibility(TextView.INVISIBLE);
-	    Log.d(Config.LOGTAG_C2DM, " " + GeatteCanvas.CLASSTAG + " No google accounts available!!");
-	    return false;
-
-	} else {
-	    //	    ListView listView = (ListView) findViewById(R.id.select_account);
-	    //	    listView.setAdapter(new ArrayAdapter<String>(this,
-	    //		    R.layout.account, accounts));
-	    //	    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-	    //	    listView.setItemChecked(mAccountSelectedPosition, true);
-	    Log.d(Config.LOGTAG_C2DM, " " + GeatteCanvas.CLASSTAG + " google account available : " + accounts[0]);
-
-	    Context context = getApplicationContext();
-	    final SharedPreferences prefs = context.getSharedPreferences(
-		    Config.PREFERENCE_KEY,
-		    Context.MODE_PRIVATE);
-
-	    SharedPreferences.Editor editor = prefs.edit();
-	    editor.putString(Config.PREF_USER_EMAIL, accounts[0]);
-	    editor.commit();
-	    return true;
-	}
-    }
-
-    private String[] getGoogleAccounts() {
-	ArrayList<String> accountNames = new ArrayList<String>();
-	Account[] accounts = AccountManager.get(this).getAccounts();
-	for (Account account : accounts) {
-	    if (account.type.equals("com.google")) {
-		accountNames.add(account.name);
-	    }
-	}
-
-	String[] result = new String[accountNames.size()];
-	accountNames.toArray(result);
-	return result;
     }
 
     @Override

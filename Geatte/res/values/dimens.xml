@@ -8,4 +8,9 @@
 	<dimen name="geatte_item_view_height">64dp</dimen>
 	<dimen name="geatte_item_view_half_height">32dp</dimen>
 	<dimen name="geatte_item_view_quarter_height">16dp</dimen>
+	
+	<dimen name="geatte_progress_bar_width">20dp</dimen>
+	<dimen name="geatte_progress_bar_height">20dp</dimen>
+	<dimen name="geatte_progress_bar_margin">6dp</dimen>
+	
 </resources>

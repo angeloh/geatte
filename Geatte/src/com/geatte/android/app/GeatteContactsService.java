@@ -4,19 +4,17 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Binder;
 import android.os.IBinder;
@@ -104,17 +102,33 @@ public class GeatteContactsService extends Service {
 
 	    JSONObject allContactsJson = queryAllRawContacts();
 
+	    //get default country code from the phone
+	    String countryCode = DeviceRegistrar.getPhoneConuntryCode(getApplicationContext());
+	    try {
+		allContactsJson.put(Config.CONTACT_DEFAULT_COUNTRY_CODE, countryCode);
+	    } catch (JSONException jsonEx) {
+		Log.e(Config.LOGTAG, "GeatteContactsActivity:sendJson() Error: ", jsonEx);
+	    }
+
 	    Log.d(Config.LOGTAG, "GeatteContactsService:Runnable Attemp to send json to contacts servlet: " + allContactsJson);
 
-	    HttpClient client = new DefaultHttpClient();
-	    HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000);
-	    HttpResponse response;
+	    final SharedPreferences prefs = getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY,
+		    Context.MODE_PRIVATE);
+	    String accountName = prefs.getString(Config.PREF_USER_EMAIL, null);
+
+	    //	    HttpClient client = new DefaultHttpClient();
+	    //	    HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000);
+	    //	    HttpResponse response;
 	    try {
-		HttpPost post = new HttpPost(Config.BASE_URL + GET_CONTACTS_PATH);
-		StringEntity se = new StringEntity("JSON: " + allContactsJson.toString());
+		//		HttpPost post = new HttpPost(Config.BASE_URL + GET_CONTACTS_PATH);
+		StringEntity se = new StringEntity(allContactsJson.toString());
 		se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-		post.setEntity(se);
-		response = client.execute(post);
+		//		post.setEntity(se);
+
+		AppEngineClient client = new AppEngineClient(getApplicationContext(), accountName);
+		HttpResponse response = client.makeRequestWithJSONStringEntity(GET_CONTACTS_PATH, se);
+
+		//		response = client.execute(post);
 
 		if (response.getStatusLine().getStatusCode() == 400 || response.getStatusLine().getStatusCode() == 500) {
 		    Log.e(Config.LOGTAG, "GeatteContactsService Error: " + response.getStatusLine().getStatusCode()
@@ -168,6 +182,11 @@ public class GeatteContactsService extends Service {
 	    dbHelper.open();
 
 	    contactArray = jResponse.getJSONArray(Config.CONTACT_LIST);
+	    if (contactArray.length() > 0) {
+		//recreate all contacts
+		int retDel = dbHelper.deleteAllContacts();
+		Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: deleted contacts total [" + retDel + "] DB SUCCESSUL!");
+	    }
 
 	    for (int i = 0; i < contactArray.length(); i++) {
 		try {
@@ -175,7 +194,10 @@ public class GeatteContactsService extends Service {
 		    String contactIdStr = contactArray.getJSONObject(i).getString(Config.CONTACT_ID).toString();
 		    int contactId = Integer.parseInt(contactIdStr);
 		    String name = queryNameForContact(contactId);
-		    long ret = dbHelper.insertOrUpdateContact(phone, contactId, name);
+
+		    //long ret = dbHelper.insertOrUpdateContact(phone, contactId, name);
+		    long ret = dbHelper.insertContact(phone, contactId, name);
+
 		    if (ret >= 0) {
 			Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved contact for phone = " + phone
 				+ ", contactId = " + contactId + ", name = " + name + " to DB SUCCESSUL!");
@@ -288,6 +310,7 @@ public class GeatteContactsService extends Service {
     }
 
     public void queryAllPhoneNumbersForContact(JSONArray jsonArray, String contactId) {
+
 	final String[] projection = new String[] { Phone.NUMBER, Phone.TYPE};
 
 	//	final Cursor phone = managedQuery(Phone.CONTENT_URI, projection, Data.CONTACT_ID + "=?", new String[] { String
@@ -305,7 +328,6 @@ public class GeatteContactsService extends Service {
 		try {
 		    JSONObject json = new JSONObject();
 		    json.put(Config.CONTACT_PHONE_NUMBER, number);
-		    json.put(Config.CONTACT_ID, contactId);
 		    json.put(Config.CONTACT_ID, contactId);
 		    jsonArray.put(json);
 		} catch (JSONException ex) {

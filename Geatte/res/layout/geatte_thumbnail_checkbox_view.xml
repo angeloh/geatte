@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.geatte.android.view.GeatteThumbnailCheckboxView
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	style="?attr/GeatteThumbnailCheckboxStyle"
+	android:layout_width="fill_parent"
+	android:layout_height="?android:attr/listPreferredItemHeight"
+	android:padding="6dip">
+
+	<CheckBox android:id="@+id/contact_check"
+		android:layout_height="wrap_content" 
+		android:layout_width="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:focusable="false" 
+		android:focusableInTouchMode="false"
+		android:paddingRight="2dp" />
+
+	<TextView 
+		style="?attr/GeatteThumbnailCheckboxStyleTitle"
+		android:id="@+id/contact_title" 
+		android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/contact_check"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+		android:gravity="left|center_vertical"
+		android:focusable="false"
+		android:focusableInTouchMode="false"
+		android:ellipsize="end" />
+
+	<TextView style="?attr/GeatteThumbnailCheckboxStyleSubtitle"
+		android:id="@+id/contact_subtitle" 
+		android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/contact_check"
+		android:layout_alignParentBottom="true"
+		android:ellipsize="marquee" />
+
+	<LinearLayout 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:orientation="horizontal"
+		android:layout_toRightOf="@id/contact_title"
+		android:gravity="right|center_vertical">
+
+		<ImageView style="?attr/GeatteThumbnailCheckboxStyleThumbnail"
+			android:id="@+id/contact_thumbnail"
+			android:scaleType="centerInside" />
+
+	</LinearLayout>
+
+</com.geatte.android.view.GeatteThumbnailCheckboxView>

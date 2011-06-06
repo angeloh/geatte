@@ -7,6 +7,7 @@ import com.geatte.android.app.R;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TabHost;
@@ -64,8 +65,7 @@ public class GeatteTabActivity extends GDTabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setContentView(R.layout.geatte_tab);
-
+	Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): START");
 	mTabHost = getTabHost();  // The activity TabHost
 
 	mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
@@ -74,18 +74,31 @@ public class GeatteTabActivity extends GDTabActivity {
 	mFriendInterstStartFrom = getIntent().getIntExtra(Config.EXTRA_MYGEATTE_STARTFROM, 1);
 	mCurrentTab = getIntent().getIntExtra(Config.EXTRA_CURRENT_TAB, 0);
 
-	// Do the same for the other tabs
-	Intent intent1 = new Intent().setClass(this, GeatteListActivity.class);
+	Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListActivity.class);
 	intent1.putExtra(Config.EXTRA_MYGEATTE_STARTFROM, mMyInterstStartFrom);
 
 	setupTab(intent1, "My Geattes");
 
-	Intent intent2 = new Intent().setClass(this, GeatteListOthersActivity.class);
+	Intent intent2 = new Intent().setClass(getApplicationContext(), GeatteListOthersActivity.class);
 	intent2.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mFriendInterstStartFrom);
 
 	setupTab(intent2, "Friend's Geattes");
 
 	mTabHost.setCurrentTab(mCurrentTab);
+	Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): END");
+    }
+
+    @Override
+    protected void onDestroy() {
+	super.onDestroy();
+	Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): START");
+
+	Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): END");
+    }
+
+    @Override
+    public int createLayout() {
+	return R.layout.geatte_tab;
     }
 
     private void setupTab(final Intent intent, final String tag) {

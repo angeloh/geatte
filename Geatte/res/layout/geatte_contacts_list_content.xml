@@ -28,9 +28,33 @@
 			android:id="@android:id/list"
 			android:layout_height="fill_parent"
 			android:layout_width="fill_parent"
-			android:drawSelectorOnTop="false"
 			style="@style/geatte_list" />
 
 	</FrameLayout>
+	
+	<LinearLayout
+        android:id="@+id/contacts_footer"
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:background="#FF707070">
+ 
+        <Button
+            android:id="@+id/contacts_clean_btn"
+            android:text="@string/contacts_clean"
+            android:layout_marginTop="5px"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"/>
 
+        <Button
+            android:id="@+id/contacts_save_btn"
+            android:text="@string/contacts_save"
+            android:layout_marginTop="5px"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"/>
+            
+    </LinearLayout>
 </greendroid.widget.ActionBarHost>

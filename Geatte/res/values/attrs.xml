@@ -6,16 +6,25 @@
 		<attr name="no_label" format="string" />
 	</declare-styleable>
 	
+	<declare-styleable name="GeatteProgressItem">
+		<attr name="isInProgressAttr" format="boolean" />
+	</declare-styleable>
+	
 	<attr name="GeatteDrawableMargin" format="dimension" />
 	
 	<attr name="GeatteTextAppearanceLarge" format="reference" />
 	<attr name="GeatteTextAppearanceMedium" format="reference" />
 	<attr name="GeatteTextAppearanceSmall" format="reference" />
 	<attr name="GeatteTextAppearanceSmallSecondary" format="reference" />
+
 	<attr name="GeatteItemViewPreferredLargeHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredHalfHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredQuarterHeight" format="dimension" />
+
+	<attr name="GeatteProgressBarWidth" format="dimension" />
+	<attr name="GeatteProgressBarHeight" format="dimension" />
+	<attr name="GeatteProgressBarMargin" format="dimension" />
 	
 	<attr name="GeatteThumbnailBitmapItemStyle" format="reference" />
 	<attr name="GeatteThumbnailBitmapItemStyleTitle" format="reference" />
@@ -31,5 +40,14 @@
 	<attr name="GeatteThumbnailItemStyleTitle" format="reference" />
 	<attr name="GeatteThumbnailItemStyleSubtitle" format="reference" />
 	<attr name="GeatteThumbnailItemStyleThumbnail" format="reference" />
+	
+	<attr name="GeatteThumbnailCheckboxStyle" format="reference" />
+	<attr name="GeatteThumbnailCheckboxStyleTitle" format="reference" />
+	<attr name="GeatteThumbnailCheckboxStyleSubtitle" format="reference" />
+	<attr name="GeatteThumbnailCheckboxStyleThumbnail" format="reference" />
+	
+	<attr name="GeatteProgressItemViewStyle" format="reference" />
+	<attr name="GeatteProgressItemViewStyleText" format="reference" />
+	<attr name="GeatteProgressItemViewStyleProgressBar" format="reference" />
 	
 </resources>

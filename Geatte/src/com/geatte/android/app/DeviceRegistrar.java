@@ -199,6 +199,14 @@ public class DeviceRegistrar {
 	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_PHONE_NUMBER_PARAM + "=" + phoneNumber);
 	}
 
+	String countryCode = getPhoneConuntryCode(context);
+	if (countryCode != null) {
+	    params.add(new BasicNameValuePair(Config.DEV_PHONE_COUNTRY_ISO_PARAM, countryCode));
+
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_PHONE_COUNTRY_ISO_PARAM + "=" + countryCode);
+	}
+
+
 	// TODO: Allow device name to be configured
 	params.add(new BasicNameValuePair(Config.DEVICE_NAME_PARAM, isTablet(context) ? "Tablet" : "Phone"));
 
@@ -227,5 +235,15 @@ public class DeviceRegistrar {
 	    phoneNum = "15103978860";
 	}
 	return phoneNum;
+    }
+
+    public static String getPhoneConuntryCode(Context context) {
+	TelephonyManager mTelephonyMgr =
+	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+	String countryCode =  mTelephonyMgr.getSimCountryIso();
+	if (countryCode == null) {
+	    countryCode = "us";
+	}
+	return countryCode;
     }
 }

@@ -57,18 +57,32 @@
 		android:hint="@string/edit_desc_text_default"
 		style="@style/edit_text" />
 	
-    <!-- Button
-    	android:id="@+id/send_to_button"
-    	android:layout_width="wrap_content" 
-        android:layout_height="wrap_content"
-		android:drawableTop="@drawable/contact"
-		android:text="@string/send_to_text" /-->
-	
-	<Button
-    	android:id="@+id/send_to_button"
-    	android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-		android:drawableLeft="@drawable/contact"
-		android:text="@string/send_geatte_text" />
+	<LinearLayout
+        android:id="@+id/edit_footer"
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:background="#FF707070">
+ 
+		<Button
+	    	android:id="@+id/send_to_button"
+	    	android:layout_marginTop="5px"
+            android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+			android:drawableLeft="@drawable/contact"
+			android:text="@string/send_to_text" />
+
+		<Button
+	    	android:id="@+id/send_geatte_button"
+	    	android:layout_marginTop="5px"
+            android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+			android:drawableRight="@drawable/contact"
+			android:text="@string/send_geatte_text" />
+            
+    </LinearLayout>
 
 </LinearLayout>

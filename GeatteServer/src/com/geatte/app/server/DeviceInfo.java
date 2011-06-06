@@ -3,6 +3,8 @@ package com.geatte.app.server;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -12,6 +14,10 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 /**
  * Registration info.
@@ -23,6 +29,7 @@ import com.google.appengine.api.datastore.Key;
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class DeviceInfo {
+    private static final Logger log = Logger.getLogger(DeviceInfo.class.getName());
     public static final String TYPE_AC2DM = "ac2dm";
     public static final String TYPE_CHROME = "chrome";
 
@@ -40,6 +47,12 @@ public class DeviceInfo {
      */
     @Persistent
     private String phoneNumber;
+
+    /**
+     * The country code
+     */
+    @Persistent
+    private String countryCode;
 
     /**
      * The ID used for sending messages to.
@@ -104,8 +117,21 @@ public class DeviceInfo {
 	this.phoneNumber = phoneNumber;
     }
 
-    // Accessor methods for properties added later (hence can be null)
+    /**
+     * @return the countryCode
+     */
+    public String getCountryCode() {
+	return countryCode;
+    }
 
+    /**
+     * @param countryCode the countryCode to set
+     */
+    public void setCountryCode(String countryCode) {
+	this.countryCode = countryCode;
+    }
+
+    // Accessor methods for properties added later (hence can be null)
     public String getDeviceRegistrationID() {
 	return deviceRegistrationID;
     }
@@ -173,26 +199,127 @@ public class DeviceInfo {
 	return result;
     }
 
+    /**
+     * Get the list of device info for given number
+     * 
+     * @param pm persistence manager
+     * @param number phone number
+     * @param defaultCountryCode default country code
+     * @return list of devices for this number
+     */
     @SuppressWarnings("unchecked")
-    public static List<DeviceInfo> getDeviceInfoForNumber(PersistenceManager pm, String number) {
+    public static List<DeviceInfo> getDeviceInfoForNumber(PersistenceManager pm, String number, String defaultCountryCode) {
+
+	// trim dash '-' from given number
+	number = number.replaceAll("-", "");
+
 	Query query = pm.newQuery(DeviceInfo.class);
 
 	query.setFilter("phoneNumber == phoneNumberParam");
 	query.declareParameters("String phoneNumberParam");
 
+	// first get the number as is
 	List<DeviceInfo> qresult = (List<DeviceInfo>) query.execute(number);
-	// Copy to array - we need to close the query
+	// copy to array - we need to close the query
 	List<DeviceInfo> result = new ArrayList<DeviceInfo>();
 	for (DeviceInfo di : qresult) {
 	    result.add(di);
 	}
+
+	// if no results back, try to compare by adding prefix +
+	if (result.size() == 0) {
+	    String preNumber = "+" + number;
+	    qresult = (List<DeviceInfo>) query.execute(preNumber);
+	    for (DeviceInfo di : qresult) {
+		result.add(di);
+	    }
+	}
+
+	// if still no results, try to compare by reformat with default country code
+	if (result.size() == 0) {
+	    PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+	    PhoneNumber numberProto = null;
+	    try {
+		numberProto = phoneUtil.parse(number, defaultCountryCode);
+	    } catch (NumberParseException npe) {
+		log.log(Level.WARNING, "DeviceInfo.getDeviceInfoForNumber(): NumberParseException was thrown: "
+			, npe);
+	    }
+
+	    if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
+		String formatNumber = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
+		qresult = (List<DeviceInfo>) query.execute(formatNumber);
+		for (DeviceInfo di : qresult) {
+		    result.add(di);
+		}
+	    } else {
+		log.log(Level.WARNING, "DeviceInfo.getDeviceInfoForNumber() : to number can not use default country code, toNumber = "
+			+ number + ", defaultCountryCode = " + defaultCountryCode);
+	    }
+	}
+
 	query.closeAll();
 	return result;
     }
 
+    public static boolean checkPhoneExistedHadDeviceInfo(PersistenceManager pm, String number, String defaultCountryCode, String [] retNum) {
+	Query query = pm.newQuery(DeviceInfo.class);
+
+	query.setResult("count(this)");
+	query.setFilter("phoneNumber == phoneNumberParam");
+	query.declareParameters("String phoneNumberParam");
+
+	// trim dash '-' from given number
+	number = number.replaceAll("-", "");
+
+	int count = 0;
+
+	// first get the number as is
+	count = (Integer) query.execute(number);
+	if (count > 0) {
+	    retNum[0] = number;
+	}
+
+	// if no results back, try to compare by adding prefix +
+	if (count == 0) {
+	    String preNumber = "+" + number;
+	    count = (Integer) query.execute(preNumber);
+
+	    if (count > 0) {
+		retNum[0] = preNumber;
+	    }
+	}
+
+	// if still no results, try to compare by reformat with default country code
+	if (count == 0) {
+	    PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+	    PhoneNumber numberProto = null;
+	    try {
+		numberProto = phoneUtil.parse(number, defaultCountryCode);
+	    } catch (NumberParseException npe) {
+		log.log(Level.WARNING, "DeviceInfo.checkPhoneExistedHadDeviceInfo(): NumberParseException was thrown: "
+			, npe);
+	    }
+
+	    if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
+		String formatNumber = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
+		count = (Integer) query.execute(formatNumber);
+		if (count > 0) {
+		    retNum[0] = formatNumber;
+		}
+	    } else {
+		log.log(Level.WARNING, "DeviceInfo.checkPhoneExistedHadDeviceInfo() : contact number can not use default country code, contact number = "
+			+ number + ", defaultCountryCode = " + defaultCountryCode);
+	    }
+	}
+
+	query.closeAll();
+	return count > 0;
+    }
 
     public static DeviceInfo getDeviceInfoForDeviceId(PersistenceManager pm, String deviceId) {
 	DeviceInfo dInfo = pm.getObjectById(DeviceInfo.class, deviceId);
 	return dInfo;
     }
+
 }

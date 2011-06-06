@@ -238,6 +238,19 @@ public class GeatteDBAdapter {
 	}
     }
 
+    public int deleteAllContacts() {
+	return mDb.delete(DB_TABLE_CONTACTS, null, null);
+    }
+
+    public long insertContact(String phoneNum, int contactId, String name) {
+	ContentValues initialValues = new ContentValues();
+	initialValues.put(KEY_CONTACT_PHONE_NUMBER, phoneNum);
+	initialValues.put(KEY_CONTACT_ID, contactId);
+	initialValues.put(KEY_CONTACT_NAME, name);
+
+	return mDb.insert(DB_TABLE_CONTACTS, null, initialValues);
+    }
+
     public long insertOrUpdateContact(String phoneNum, int contactId, String name) {
 	// only first time contacts have mostly insert, later mostly are update
 	if (!updateContact(phoneNum, contactId, name)) {
@@ -334,9 +347,9 @@ public class GeatteDBAdapter {
 	String query = "SELECT " +
 	DB_TABLE_CONTACTS + "." + KEY_CONTACT_PHONE_NUMBER + ", " +
 	DB_TABLE_CONTACTS + "." + KEY_CONTACT_ID + ", " +
-	DB_TABLE_CONTACTS + "." + KEY_CONTACT_NAME + ", " +
+	DB_TABLE_CONTACTS + "." + KEY_CONTACT_NAME + " " +
 	"FROM " + DB_TABLE_CONTACTS +
-	" ORDER BY " + DB_TABLE_CONTACTS + "." + KEY_CONTACT_NAME + " ASC";
+	" ORDER BY " + DB_TABLE_CONTACTS + "." + KEY_CONTACT_NAME;
 
 	Log.i(Config.LOGTAG, "fetch all contacts query string = " + query);
 

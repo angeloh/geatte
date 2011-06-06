@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.geatte.app.shared.DBHelper;
 import com.google.android.c2dm.server.C2DMessaging;
 
 /**
@@ -28,15 +27,14 @@ public class GeatteSendServlet extends HttpServlet {
     public static final String RETRY_COUNT = "X-AppEngine-TaskRetryCount";
     public static final String URI = "/tasks/geattesend";
 
-    /**
-     * Only admin can make this request.
-     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
 
 	String toNumbers = req.getParameter(Config.GEATTE_TO_NUMBER_PARAM);
-	log.info("GeatteSendServlet:doPost() : send geatte to numbers = " + toNumbers);
+	String defaultCountryCode = req.getParameter(Config.GEATTE_COUNTRY_ISO_PARAM);
+
+	log.info("GeatteSendServlet:doPost() : send geatte to numbers = " + toNumbers + ", defaultCountryCode = " + defaultCountryCode);
 	//String geatteId = req.getParameter(Config.GEATTE_ID_PARAM);
 	String retryCount = req.getHeader(RETRY_COUNT);
 	log.info("GeatteSendServlet:doPost() : send geatte retryCount = " + retryCount);
@@ -50,7 +48,7 @@ public class GeatteSendServlet extends HttpServlet {
 	}
 
 	List<String> numberList = splitNumbers(toNumbers);
-	List<DeviceInfo> allDevices = getDevices(numberList);
+	List<DeviceInfo> allDevices = getDevices(numberList, defaultCountryCode);
 
 	Map<String, String[]> params = req.getParameterMap();
 	String collapse = req.getParameter(C2DMessaging.PARAM_COLLAPSE_KEY);
@@ -80,30 +78,29 @@ public class GeatteSendServlet extends HttpServlet {
 	    resp.getOutputStream().write("OK".getBytes());
 	    log.info("GeatteSendServlet:doPost() : send geatte to all numbers SUCCEEDED");
 	} else {
+	    resp.setStatus(500);
 	    resp.getOutputStream().write(errorMsg.toString().getBytes());
 	    log.log(Level.WARNING, "GeatteSendServlet:doPost() : send geatte to all numbers with error = " + errorMsg.toString());
 	}
     }
 
     private List<String> splitNumbers(String numbers) {
-	//TODO: fakenumber
-	//	numbers = "15555215554";
 
 	if (numbers == null || numbers.isEmpty()) {
-	    return null;
+	    return new ArrayList<String>();
 	}
 	numbers = numbers.trim();
 	String[] list = numbers.split(";");
 	return Arrays.asList(list);
     }
 
-    private List<DeviceInfo> getDevices(List<String> numberList) {
+    private List<DeviceInfo> getDevices(List<String> numberList, String defaultCountryCode) {
 	// Context-shared PMF.
 	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
 	List<DeviceInfo> allDevices = new ArrayList<DeviceInfo>();
 	try {
 	    for (String number : numberList) {
-		List<DeviceInfo> devicesForNumber = DeviceInfo.getDeviceInfoForNumber(pm, number);
+		List<DeviceInfo> devicesForNumber = DeviceInfo.getDeviceInfoForNumber(pm, number, defaultCountryCode);
 		if (devicesForNumber != null) {
 		    allDevices.addAll(devicesForNumber);
 		}

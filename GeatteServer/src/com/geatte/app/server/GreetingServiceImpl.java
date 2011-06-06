@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import com.geatte.app.client.GreetingService;
-import com.geatte.app.shared.DBHelper;
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

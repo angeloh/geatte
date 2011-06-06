@@ -21,7 +21,6 @@ import android.widget.TextView;
  */
 public class GeatteListActivity extends ListActivity {
 
-    private static final String CLASSTAG = GeatteListActivity.class.getSimpleName();
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_SHOW = 1;
 
@@ -38,7 +37,7 @@ public class GeatteListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.v(Config.LOGTAG, " " + GeatteListActivity.CLASSTAG + " onCreate");
+	Log.d(Config.LOGTAG, "GeatteListActivity:onCreate(): START");
 
 	this.setContentView(R.layout.geatte_list);
 
@@ -47,24 +46,20 @@ public class GeatteListActivity extends ListActivity {
 	// get start from, an int, from extras
 	mStartFrom = getIntent().getIntExtra(Config.EXTRA_MYGEATTE_STARTFROM, 1);
 
-	fillData();
+	// no need to fill data here cause resume is called after tab is created
+	//fillData();
 
 	// set list properties
 	//listView.setItemsCanFocus(false);
 	//listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	Log.d(Config.LOGTAG, "GeatteListActivity:onCreate(): END");
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
 	Log.d(Config.LOGTAG, "GeatteListActivity:onResume(): START");
-
-	// get start from, an int, from extras
-	//mStartFrom = getIntent().getIntExtra(Config.EXTRA_MYGEATTE_STARTFROM, 1);
-	// create db helper
-
 	fillData();
-
 	Log.d(Config.LOGTAG, "GeatteListActivity:onResume(): END");
     }
 

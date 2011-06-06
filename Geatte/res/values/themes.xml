@@ -36,6 +36,10 @@
 		<item name="GeatteTextAppearanceSmall">@style/Geatte.TextAppearance.Small</item>
 		<item name="GeatteTextAppearanceSmallSecondary">@style/Geatte.TextAppearance.Small.Secondary</item>
 		
+		<item name="GeatteProgressBarWidth">@dimen/geatte_progress_bar_width</item>
+		<item name="GeatteProgressBarHeight">@dimen/geatte_progress_bar_height</item>
+		<item name="GeatteProgressBarMargin">@dimen/geatte_progress_bar_margin</item>
+		
 		<item name="GeatteItemViewPreferredLargeHeight">@dimen/geatte_item_view_large_height</item>
 		<item name="GeatteItemViewPreferredHeight">@dimen/geatte_item_view_height</item>
 		<item name="GeatteItemViewPreferredHalfHeight">@dimen/geatte_item_view_half_height</item>
@@ -54,6 +58,16 @@
 		<item name="GeatteThumbnailItemStyleTitle">@style/Geatte.GeatteThumbnailItem.Title</item>
 		<item name="GeatteThumbnailItemStyleSubtitle">@style/Geatte.GeatteThumbnailItem.Subtitle</item>
 		<item name="GeatteThumbnailItemStyleThumbnail">@style/Geatte.GeatteThumbnailItem.Thumbnail</item>
+		
+		<item name="GeatteThumbnailCheckboxStyle">@style/Geatte.GeatteThumbnailCheckboxStyle</item>
+		<item name="GeatteThumbnailCheckboxStyleTitle">@style/Geatte.GeatteThumbnailCheckboxStyle.Title</item>
+		<item name="GeatteThumbnailCheckboxStyleSubtitle">@style/Geatte.GeatteThumbnailCheckboxStyle.Subtitle</item>
+		<item name="GeatteThumbnailCheckboxStyleThumbnail">@style/Geatte.GeatteThumbnailCheckboxStyle.Thumbnail</item>
+		
+		<item name="GeatteProgressItemViewStyle">@style/Geatte.ProgressItemView</item>
+		<item name="GeatteProgressItemViewStyleText">@style/Geatte.ProgressItemView.Text</item>
+		<item name="GeatteProgressItemViewStyleProgressBar">@style/Geatte.ProgressItemView.ProgressBar</item>
+		
 	</style>
 	
 </resources>

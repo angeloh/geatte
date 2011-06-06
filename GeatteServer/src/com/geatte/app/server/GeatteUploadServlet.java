@@ -23,7 +23,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.IOUtils;
 
-import com.geatte.app.shared.DBHelper;
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
@@ -37,6 +36,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 @SuppressWarnings("serial")
 public class GeatteUploadServlet extends HttpServlet {
@@ -46,12 +49,14 @@ public class GeatteUploadServlet extends HttpServlet {
     private String mUserEmail = null;
     private String mGeatteIdField = null;
     private String mFromNumberField = null;
+    private String mCountryCodeField = null;
     private String mToNumberField = null;
     private String mGeatteTitleField = null;
     private String mGeatteDescField = null;
     private Blob mImageBlobField = null;
 
 
+    @Deprecated
     public void doPostOrig(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	log.log(Level.INFO, "GeatteUploadServlet.doPOST() : START GeatteUploadServlet.doPOST()");
 
@@ -133,6 +138,8 @@ public class GeatteUploadServlet extends HttpServlet {
     throws ServletException, IOException {
 	log.log(Level.INFO, "GeatteUploadServlet.doPOST() : START GeatteUploadServlet.doPOST()");
 	try {
+	    resp.setContentType("application/json");
+
 	    // Try ClientLogin
 	    UserService userService = UserServiceFactory.getUserService();
 	    User user = userService.getCurrentUser();
@@ -148,7 +155,6 @@ public class GeatteUploadServlet extends HttpServlet {
 	    }
 
 	    ServletFileUpload upload = new ServletFileUpload();
-	    resp.setContentType("application/json");
 
 	    FileItemIterator iterator = upload.getItemIterator(req);
 	    while (iterator.hasNext()) {
@@ -158,6 +164,8 @@ public class GeatteUploadServlet extends HttpServlet {
 		if (item.isFormField()) {
 		    if (item.getFieldName().equals(Config.GEATTE_FROM_NUMBER_PARAM)) {
 			mFromNumberField = Streams.asString(stream);
+		    } else if (item.getFieldName().equals(Config.GEATTE_COUNTRY_ISO_PARAM)) {
+			mCountryCodeField = Streams.asString(stream);
 		    } else if (item.getFieldName().equals(Config.GEATTE_TO_NUMBER_PARAM)) {
 			mToNumberField = Streams.asString(stream);
 		    } else if (item.getFieldName().equals(Config.GEATTE_TITLE_PARAM)) {
@@ -174,12 +182,35 @@ public class GeatteUploadServlet extends HttpServlet {
 		}
 	    }
 
+	    if (mCountryCodeField == null) {
+		log.warning("GeatteUploadServlet.doPOST() : Missing country code, " + Config.GEATTE_COUNTRY_ISO_PARAM + " is null");
+		mCountryCodeField = "us"; //default as US
+	    }
+
 	    if (mFromNumberField == null) {
 		resp.setStatus(400);
 		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_FROM_NUMBER_PARAM + ")");
 		log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.GEATTE_FROM_NUMBER_PARAM + " is null");
 		return;
+	    } else {
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		PhoneNumber numberProto = null;
+		try {
+		    numberProto = phoneUtil.parse(mFromNumberField, mCountryCodeField);
+		} catch (NumberParseException npe) {
+		    log.log(Level.WARNING, "GeatteUploadServlet.doPOST(): NumberParseException was thrown: "
+			    , npe);
+		}
+
+		if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
+		    mFromNumberField = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
+		} else {
+		    log.log(Level.WARNING, "GeatteUploadServlet.doPOST() : Invalid phone number so use passed-in number, " + Config.DEV_PHONE_NUMBER_PARAM
+			    + " = " + mFromNumberField + ", countryIso = " + mFromNumberField);
+		}
+
 	    }
+
 	    if (mToNumberField == null) {
 		resp.setStatus(400);
 		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TO_NUMBER_PARAM + ")");
@@ -211,7 +242,7 @@ public class GeatteUploadServlet extends HttpServlet {
 		    geatteJson.put(Config.GEATTE_ID_PARAM, geatteId);
 		    PrintWriter out = resp.getWriter();
 		    geatteJson.write(out);
-		    log.log(Level.INFO, "GeatteInfoGetServlet.doGet() : Successfully send a geatte, return geatte id in JSON = " + geatteId);
+		    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : Successfully send a geatte, return geatte id in JSON = " + geatteId);
 		} catch (JSONException e) {
 		    throw new IOException(e);
 		}
@@ -252,6 +283,7 @@ public class GeatteUploadServlet extends HttpServlet {
 	    }
 
 	    geatteInfo.setFromNumber(this.mFromNumberField);
+	    geatteInfo.setCountryCode(this.mCountryCodeField);
 	    geatteInfo.setToNumber(this.mToNumberField);
 	    geatteInfo.setGeatteTitile(this.mGeatteTitleField);
 	    geatteInfo.setGeatteDesc(this.mGeatteDescField);
@@ -283,7 +315,8 @@ public class GeatteUploadServlet extends HttpServlet {
 	Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
-	    .param(Config.GEATTE_TO_NUMBER_PARAM, toNumbers).param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
+	    .param(Config.GEATTE_TO_NUMBER_PARAM, toNumbers).param(Config.GEATTE_COUNTRY_ISO_PARAM, mCountryCodeField)
+	    .param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
 	    if (delayWhileIdle) {
 		url.param(C2DMessaging.PARAM_DELAY_WHILE_IDLE, "1");
 	    }

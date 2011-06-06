@@ -121,8 +121,40 @@
 	</style>
 
 	<style name="Geatte.GeatteThumbnailItem.Thumbnail">
-		<item name="android:layout_width">?attr/GeatteItemViewPreferredHalfHeight</item>
-		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
 		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
+	
+	<!-- Styles for the GeatteThumbnailCheckboxStyle -->
+	<style name="Geatte.GeatteThumbnailCheckboxStyle">
+		<!-- item name="android:background">#737CA1</item-->
+	</style>
+	
+	<style name="Geatte.GeatteThumbnailCheckboxStyle.Title">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
+	</style>
+	
+	<style name="Geatte.GeatteThumbnailCheckboxStyle.Subtitle">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredQuarterHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	</style>
+
+	<style name="Geatte.GeatteThumbnailCheckboxStyle.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
+	
+	<!-- Styles for the GeatteProgressItemView -->
+	<style name="Geatte.ProgressItemView" />
+	<style name="Geatte.ProgressItemView.ProgressBar">
+		<item name="android:layout_width">?attr/GeatteProgressBarWidth</item>
+		<item name="android:layout_height">?attr/GeatteProgressBarHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
+	<style name="Geatte.ProgressItemView.Text">
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
 	</style>
 </resources>
