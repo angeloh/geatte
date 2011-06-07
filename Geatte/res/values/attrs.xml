@@ -50,4 +50,5 @@
 	<attr name="GeatteProgressItemViewStyleText" format="reference" />
 	<attr name="GeatteProgressItemViewStyleProgressBar" format="reference" />
 	
+	<attr name="GeatteTabsIcon" format="reference" />
 </resources>

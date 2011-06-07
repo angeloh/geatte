@@ -231,7 +231,7 @@ public class DeviceRegistrar {
 	TelephonyManager mTelephonyMgr =
 	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 	String phoneNum =  mTelephonyMgr.getLine1Number();
-	if (phoneNum == null) {
+	if (phoneNum == null || phoneNum.trim().equals("")) {
 	    phoneNum = "15103978860";
 	}
 	return phoneNum;
@@ -241,7 +241,7 @@ public class DeviceRegistrar {
 	TelephonyManager mTelephonyMgr =
 	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 	String countryCode =  mTelephonyMgr.getSimCountryIso();
-	if (countryCode == null) {
+	if (countryCode == null || countryCode.trim().equals("")) {
 	    countryCode = "us";
 	}
 	return countryCode;

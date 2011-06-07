@@ -2,7 +2,7 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:gravity="center_horizontal" android:padding="10px"
+	android:gravity="center" android:padding="10dp"
 	>
 
 	<!-- TextView android:id="@+id/app_top_label"
@@ -17,27 +17,27 @@
         android:layout_width="fill_parent" 
         android:layout_height="80dp"      
         android:gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="10px"
-        android:layout_marginBottom="20px"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:drawableTop="@drawable/snap"
         android:background="@color/rosy_brown"
         android:text="@string/snap_geatte_button_label" />
- 
-     <Button android:id="@+id/app_show_geattetab_btn"  
+ 	
+    <Button android:id="@+id/app_show_geattetab_btn"  
         android:layout_width="fill_parent" 
         android:layout_height="80dp"      
         android:gravity="center_vertical|center_horizontal"
-        android:layout_marginBottom="20px"
+        android:layout_marginBottom="20dp"
         android:layout_below="@id/app_snap_button"
         android:drawableTop="@drawable/tabs"
-        android:background="@color/light_gold"
+        android:background="@drawable/geatte_tabs_icon"
         android:text="@string/show_geattetab" />
-        
+
     <Button android:id="@+id/app_show_all_feedback_btn"  
         android:layout_width="fill_parent" 
         android:layout_height="80dp"      
         android:gravity="center_vertical|center_horizontal"
-        android:layout_marginBottom="20px"
+        android:layout_marginBottom="20dp"
         android:layout_below="@id/app_show_geattetab_btn"
         android:drawableTop="@drawable/feedbacks"
         android:background="@color/light_blue"

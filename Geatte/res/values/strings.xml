@@ -7,6 +7,7 @@
     <string name="no_geattes">No Geattes Yet</string>
     <string name="show_all_feedbacks">Show All Feedbacks</string>
     <string name="show_geattetab">GeatteTab</string>
+    <string name="show_geattetab_loading">Loading...</string>
 
     <string name="menu_delete">Delete Geatte</string>
 	<string name="menu_add_more_geatte">Add more geatte</string>

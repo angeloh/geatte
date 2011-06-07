@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 
 public class GeatteCanvas extends GDActivity {
@@ -68,7 +69,7 @@ public class GeatteCanvas extends GDActivity {
 	    }
 	});
 
-	Button showAllFeedbackButton = (Button) findViewById(R.id.app_show_all_feedback_btn);
+	final Button showAllFeedbackButton = (Button) findViewById(R.id.app_show_all_feedback_btn);
 	showAllFeedbackButton.setOnClickListener( new OnClickListener(){
 	    public void onClick(View v ){
 		Intent intent = new Intent(getApplicationContext(), GeatteAllFeedbackActivity.class);
@@ -76,11 +77,21 @@ public class GeatteCanvas extends GDActivity {
 	    }
 	});
 
-	Button showGeatteTab = (Button) findViewById(R.id.app_show_geattetab_btn);
+	final Button showGeatteTab = (Button) findViewById(R.id.app_show_geattetab_btn);
 	showGeatteTab.setOnClickListener( new OnClickListener(){
-	    public void onClick(View v ){
+	    public void onClick(View v ) {
 		Intent intent = new Intent(getApplicationContext(), GeatteTabActivity.class);
 		startActivity(intent);
+	    }
+	});
+	showGeatteTab.setOnFocusChangeListener( new OnFocusChangeListener(){
+	    @Override
+	    public void onFocusChange(View view, boolean isFocused) {
+		if (isFocused == true)	{
+		    showGeatteTab.setText(R.string.show_geattetab_loading);
+		} else{
+		    showGeatteTab.setText(R.string.show_geattetab);
+		}
 	    }
 	});
 

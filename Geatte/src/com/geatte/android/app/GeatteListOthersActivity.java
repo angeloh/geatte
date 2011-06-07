@@ -3,10 +3,10 @@ package com.geatte.android.app;
 import com.geatte.android.app.R;
 
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -23,16 +23,14 @@ import android.widget.TextView;
  */
 public class GeatteListOthersActivity extends ListActivity {
 
-    private static final String CLASSTAG = GeatteListOthersActivity.class.getSimpleName();
-
     private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
     //private static final int MENU_DELETE_GEATTE = Menu.FIRST + 1;
 
-    private static final int NUM_RESULTS_PER_PAGE = 8;
+    private static final int NUM_RESULTS_PER_PAGE = 5;
 
+    private final Handler mHandler = new Handler();
     private int mStartFrom = 1;
     private TextView empty;
-    private ProgressDialog progressDialog;
     private GeatteDBAdapter mDbHelper;
 
     @Override
@@ -56,7 +54,11 @@ public class GeatteListOthersActivity extends ListActivity {
     protected void onResume() {
 	super.onResume();
 	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onResume(): START");
-	fillData();
+	mHandler.postDelayed(new Runnable() {
+	    public void run() {
+		fillData();
+	    }
+	},250);
 	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onResume(): END");
     }
 
@@ -64,7 +66,6 @@ public class GeatteListOthersActivity extends ListActivity {
     protected void onDestroy() {
 	super.onDestroy();
 	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onDestroy(): START");
-
 	Log.d(Config.LOGTAG, "GeatteListOthersActivity:onDestroy(): END");
     }
 
@@ -74,8 +75,6 @@ public class GeatteListOthersActivity extends ListActivity {
 	mDbHelper = new GeatteDBAdapter(this);
 	try {
 	    mDbHelper.open();
-
-	    this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving my geattes", true, false);
 
 	    // Get all of the rows from the database and create the item list
 	    Cursor myGeattesCursor = mDbHelper.fetchFriendInterestsLimit(NUM_RESULTS_PER_PAGE, mStartFrom);
@@ -91,8 +90,6 @@ public class GeatteListOthersActivity extends ListActivity {
 	    SimpleCursorAdapter cursorAdapter =
 		new SimpleCursorAdapter(this, R.layout.geatte_row_fi, myGeattesCursor, from, to);
 	    setListAdapter(cursorAdapter);
-
-	    progressDialog.dismiss();
 
 	    // set list properties
 	    final ListView listView = getListView();

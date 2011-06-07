@@ -41,7 +41,7 @@ public class GeatteDBAdapter {
 
     //TABLE contacts
     public static final String KEY_CONTACT_PHONE_NUMBER = "_id";
-    public static final String KEY_CONTACT_ID = "phone";
+    public static final String KEY_CONTACT_ID = "contact_id";
     public static final String KEY_CONTACT_NAME = "name";
 
     //TABLE friend_interests

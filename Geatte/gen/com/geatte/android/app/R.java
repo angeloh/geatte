@@ -131,6 +131,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
+        public static final int GeatteTabsIcon=0x7f01006e;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
         public static final int GeatteTextAppearanceLarge=0x7f010050;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -689,9 +693,10 @@ containing a value of this type.
     public static final class color {
         public static final int gd_action_bar_divider_tint=0x7f060001;
         public static final int gd_action_bar_tint=0x7f060000;
-        public static final int light_blue=0x7f060006;
-        public static final int light_gold=0x7f060005;
+        public static final int light_blue=0x7f060007;
         public static final int rosy_brown=0x7f060004;
+        public static final int royal_blue=0x7f060006;
+        public static final int slate_gray=0x7f060005;
         public static final int translucent_black=0x7f060003;
         public static final int translucent_white=0x7f060002;
     }
@@ -793,30 +798,31 @@ containing a value of this type.
         public static final int geatte_app_log_alt=0x7f020047;
         public static final int geatte_app_log_norm=0x7f020048;
         public static final int geatte_application_logo=0x7f020049;
-        public static final int green_light=0x7f02004a;
-        public static final int ic_btn_back=0x7f02004b;
-        public static final int ic_btn_next=0x7f02004c;
-        public static final int ic_tab_grey=0x7f02004d;
-        public static final int ic_tab_white=0x7f02004e;
-        public static final int icon=0x7f02004f;
-        public static final int invalid=0x7f020050;
-        public static final int maybe=0x7f020051;
-        public static final int no=0x7f020052;
-        public static final int pause=0x7f020053;
-        public static final int profile=0x7f020054;
-        public static final int red_light=0x7f020055;
-        public static final int send=0x7f020056;
-        public static final int snap=0x7f020057;
-        public static final int tab_bg_selected=0x7f020058;
-        public static final int tab_bg_selector=0x7f020059;
-        public static final int tab_bg_unselected=0x7f02005a;
-        public static final int tab_buttons=0x7f02005b;
-        public static final int tab_divider=0x7f02005c;
-        public static final int tab_text_selector=0x7f02005d;
-        public static final int tabs=0x7f02005e;
-        public static final int warning=0x7f02005f;
-        public static final int write=0x7f020060;
-        public static final int yes=0x7f020061;
+        public static final int geatte_tabs_icon=0x7f02004a;
+        public static final int green_light=0x7f02004b;
+        public static final int ic_btn_back=0x7f02004c;
+        public static final int ic_btn_next=0x7f02004d;
+        public static final int ic_tab_grey=0x7f02004e;
+        public static final int ic_tab_white=0x7f02004f;
+        public static final int icon=0x7f020050;
+        public static final int invalid=0x7f020051;
+        public static final int maybe=0x7f020052;
+        public static final int no=0x7f020053;
+        public static final int pause=0x7f020054;
+        public static final int profile=0x7f020055;
+        public static final int red_light=0x7f020056;
+        public static final int send=0x7f020057;
+        public static final int snap=0x7f020058;
+        public static final int tab_bg_selected=0x7f020059;
+        public static final int tab_bg_selector=0x7f02005a;
+        public static final int tab_bg_unselected=0x7f02005b;
+        public static final int tab_buttons=0x7f02005c;
+        public static final int tab_divider=0x7f02005d;
+        public static final int tab_text_selector=0x7f02005e;
+        public static final int tabs=0x7f02005f;
+        public static final int warning=0x7f020060;
+        public static final int write=0x7f020061;
+        public static final int yes=0x7f020062;
     }
     public static final class id {
         public static final int app_register_btn=0x7f050022;
@@ -985,21 +991,21 @@ containing a value of this type.
     public static final class string {
         public static final int app_name=0x7f08001d;
         public static final int app_url=0x7f08001e;
-        public static final int auth_error_text=0x7f080048;
-        public static final int comment_label=0x7f08002e;
-        public static final int connect_error_text=0x7f080047;
-        public static final int connected_with_account_text=0x7f08004b;
-        public static final int contacts_clean=0x7f08004d;
-        public static final int contacts_save=0x7f08004e;
-        public static final int contacts_view_name=0x7f08004c;
-        public static final int desc_label=0x7f08002c;
-        public static final int edit_desc_label=0x7f080028;
-        public static final int edit_desc_text_default=0x7f08002b;
-        public static final int edit_geatte=0x7f080025;
-        public static final int edit_image_label=0x7f080029;
-        public static final int edit_title_label=0x7f080027;
-        public static final int edit_title_text_default=0x7f08002a;
-        public static final int edit_top_label=0x7f080026;
+        public static final int auth_error_text=0x7f080049;
+        public static final int comment_label=0x7f08002f;
+        public static final int connect_error_text=0x7f080048;
+        public static final int connected_with_account_text=0x7f08004c;
+        public static final int contacts_clean=0x7f08004e;
+        public static final int contacts_save=0x7f08004f;
+        public static final int contacts_view_name=0x7f08004d;
+        public static final int desc_label=0x7f08002d;
+        public static final int edit_desc_label=0x7f080029;
+        public static final int edit_desc_text_default=0x7f08002c;
+        public static final int edit_geatte=0x7f080026;
+        public static final int edit_image_label=0x7f08002a;
+        public static final int edit_title_label=0x7f080028;
+        public static final int edit_title_text_default=0x7f08002b;
+        public static final int edit_top_label=0x7f080027;
         public static final int gd_add=0x7f08000b;
         public static final int gd_all_friends=0x7f080016;
         public static final int gd_compass=0x7f08000f;
@@ -1027,45 +1033,46 @@ containing a value of this type.
         public static final int gd_take_photo=0x7f080007;
         public static final int gd_talk=0x7f080002;
         public static final int gd_trashcan=0x7f080014;
-        public static final int intro_exit=0x7f080044;
+        public static final int intro_exit=0x7f080045;
         /**  Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] 
          */
-        public static final int intro_text=0x7f08004f;
-        public static final int menu_add_more_geatte=0x7f080023;
-        public static final int menu_delete=0x7f080022;
-        public static final int menu_get_next_page=0x7f080024;
-        public static final int no_accounts=0x7f080046;
+        public static final int intro_text=0x7f080050;
+        public static final int menu_add_more_geatte=0x7f080024;
+        public static final int menu_delete=0x7f080023;
+        public static final int menu_get_next_page=0x7f080025;
+        public static final int no_accounts=0x7f080047;
         public static final int no_geattes=0x7f08001f;
-        public static final int register=0x7f080032;
-        public static final int register_progress_text_conn=0x7f080033;
-        public static final int register_progress_text_error=0x7f080036;
-        public static final int register_progress_text_reg=0x7f080034;
-        public static final int register_progress_text_unreg=0x7f080035;
-        public static final int select_account_click_next_text=0x7f080049;
-        public static final int select_account_connecting_text=0x7f08004a;
-        public static final int select_account_text=0x7f080045;
-        public static final int send_geatte_text=0x7f08002f;
-        public static final int send_to_reset_text=0x7f080031;
-        public static final int send_to_text=0x7f080030;
-        public static final int setup_back=0x7f080041;
-        public static final int setup_complete_text=0x7f080050;
-        public static final int setup_finish=0x7f080043;
-        public static final int setup_next=0x7f080042;
+        public static final int register=0x7f080033;
+        public static final int register_progress_text_conn=0x7f080034;
+        public static final int register_progress_text_error=0x7f080037;
+        public static final int register_progress_text_reg=0x7f080035;
+        public static final int register_progress_text_unreg=0x7f080036;
+        public static final int select_account_click_next_text=0x7f08004a;
+        public static final int select_account_connecting_text=0x7f08004b;
+        public static final int select_account_text=0x7f080046;
+        public static final int send_geatte_text=0x7f080030;
+        public static final int send_to_reset_text=0x7f080032;
+        public static final int send_to_text=0x7f080031;
+        public static final int setup_back=0x7f080042;
+        public static final int setup_complete_text=0x7f080051;
+        public static final int setup_finish=0x7f080044;
+        public static final int setup_next=0x7f080043;
         public static final int show_all_feedbacks=0x7f080020;
         public static final int show_geattetab=0x7f080021;
+        public static final int show_geattetab_loading=0x7f080022;
         public static final int snap_geatte_button_label=0x7f08001b;
         public static final int take_picture=0x7f08001c;
-        public static final int upload_image_error=0x7f080038;
-        public static final int upload_text_error=0x7f080037;
-        public static final int upload_vote_error=0x7f080039;
-        public static final int vote_label=0x7f08002d;
-        public static final int voting_a_geatte=0x7f080040;
-        public static final int voting_choose_answer=0x7f08003f;
-        public static final int voting_comment=0x7f08003d;
-        public static final int voting_maybe=0x7f08003c;
-        public static final int voting_no=0x7f08003b;
-        public static final int voting_send=0x7f08003e;
-        public static final int voting_yes=0x7f08003a;
+        public static final int upload_image_error=0x7f080039;
+        public static final int upload_text_error=0x7f080038;
+        public static final int upload_vote_error=0x7f08003a;
+        public static final int vote_label=0x7f08002e;
+        public static final int voting_a_geatte=0x7f080041;
+        public static final int voting_choose_answer=0x7f080040;
+        public static final int voting_comment=0x7f08003e;
+        public static final int voting_maybe=0x7f08003d;
+        public static final int voting_no=0x7f08003c;
+        public static final int voting_send=0x7f08003f;
+        public static final int voting_yes=0x7f08003b;
     }
     public static final class style {
         public static final int Geatte=0x7f09003c;

@@ -4,9 +4,11 @@ import greendroid.app.GDTabActivity;
 
 import com.geatte.android.app.R;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,8 @@ public class GeatteTabActivity extends GDTabActivity {
     private int mFriendInterstStartFrom = 1;
     private int mCurrentTab = 0;
     private TabHost mTabHost;
+    private final Handler mHandler = new Handler();
+    private ProgressDialog mDialog;
 
     public static enum TABS {
 	MYINTERESTS(0),
@@ -66,6 +70,9 @@ public class GeatteTabActivity extends GDTabActivity {
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): START");
+
+	mDialog = ProgressDialog.show(GeatteTabActivity.this, "Loading", "Please wait...", true);
+
 	mTabHost = getTabHost();  // The activity TabHost
 
 	mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
@@ -85,6 +92,21 @@ public class GeatteTabActivity extends GDTabActivity {
 	setupTab(intent2, "Friend's Geattes");
 
 	mTabHost.setCurrentTab(mCurrentTab);
+
+	mHandler.postDelayed(new Runnable() {
+	    public void run() {
+		if (mDialog != null && mDialog.isShowing()) {
+		    try {
+			Log.d(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate(): try to dismiss mDialog");
+			mDialog.dismiss();
+			mDialog = null;
+		    } catch (Exception e) {
+			Log.w(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate(): failed to dismiss mDialog", e);
+		    }
+		}
+	    }
+	},500);
+
 	Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): END");
     }
 
@@ -92,7 +114,6 @@ public class GeatteTabActivity extends GDTabActivity {
     protected void onDestroy() {
 	super.onDestroy();
 	Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): START");
-
 	Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): END");
     }
 

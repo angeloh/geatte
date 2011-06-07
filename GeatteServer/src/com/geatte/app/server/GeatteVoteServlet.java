@@ -170,8 +170,8 @@ public class GeatteVoteServlet extends HttpServlet {
 	log.log(Level.INFO, "GeatteVoteServlet.submitGeatteVoteTask() : START submit geatte vote to " + ownerNumber);
 	boolean delayWhileIdle = true;
 	String collapseKey = "1";
-	//Queue dmQueue = QueueFactory.getQueue("c2dm");
-	Queue dmQueue = QueueFactory.getDefaultQueue();
+	Queue dmQueue = QueueFactory.getQueue("geatte_vote");
+	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
 	    .param(Config.GEATTE_TO_NUMBER_PARAM, ownerNumber).param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
@@ -188,7 +188,7 @@ public class GeatteVoteServlet extends HttpServlet {
 	    //url.countdownMillis(jitter);
 
 	    TaskHandle add = dmQueue.add(url);
-	    log.log(Level.INFO, "GeatteVoteServlet.submitGeatteVoteTask() : add one task to queue, url = " + url);
+	    log.log(Level.INFO, "GeatteVoteServlet.submitGeatteVoteTask() : add one task to queue, url = " + url.getUrl());
 	} catch (UnsupportedEncodingException e) {
 	    // Ignore - UTF8 should be supported
 	    log.log(Level.SEVERE, "GeatteVoteServlet.submitGeatteVoteTask : Unexpected error", e);

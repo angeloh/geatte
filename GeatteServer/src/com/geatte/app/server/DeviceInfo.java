@@ -210,8 +210,9 @@ public class DeviceInfo {
     @SuppressWarnings("unchecked")
     public static List<DeviceInfo> getDeviceInfoForNumber(PersistenceManager pm, String number, String defaultCountryCode) {
 
-	// trim dash '-' from given number
-	number = number.replaceAll("-", "");
+	// trim dash '-' '(' ')'from given number
+	number = number.replaceAll("-", "").replaceAll("(", "").replaceAll(")", "").trim();
+
 
 	Query query = pm.newQuery(DeviceInfo.class);
 
@@ -269,8 +270,8 @@ public class DeviceInfo {
 	query.setFilter("phoneNumber == phoneNumberParam");
 	query.declareParameters("String phoneNumberParam");
 
-	// trim dash '-' from given number
-	number = number.replaceAll("-", "");
+	// trim dash '-' '(' ')'from given number
+	number = number.replaceAll("-", "").replaceAll("(", "").replaceAll(")", "").trim();
 
 	int count = 0;
 

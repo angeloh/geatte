@@ -311,8 +311,8 @@ public class GeatteUploadServlet extends HttpServlet {
 	log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : START submit geatte to " + toNumbers);
 	boolean delayWhileIdle = true;
 	String collapseKey = "1";
-	//Queue dmQueue = QueueFactory.getQueue("c2dm");
-	Queue dmQueue = QueueFactory.getDefaultQueue();
+	Queue dmQueue = QueueFactory.getQueue("geatte_send");
+	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
 	    .param(Config.GEATTE_TO_NUMBER_PARAM, toNumbers).param(Config.GEATTE_COUNTRY_ISO_PARAM, mCountryCodeField)
@@ -330,7 +330,7 @@ public class GeatteUploadServlet extends HttpServlet {
 	    //url.countdownMillis(jitter);
 
 	    TaskHandle add = dmQueue.add(url);
-	    log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : add one task to queue, url = " + url);
+	    log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : add one task to queue, url = " + url.getUrl());
 	} catch (UnsupportedEncodingException e) {
 	    // Ignore - UTF8 should be supported
 	    log.log(Level.SEVERE, "Unexpected error", e);

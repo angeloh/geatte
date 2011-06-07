@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="?attr/GeatteItemViewPreferredHeight"
     android:padding="6dip">
     
     <!-- ImageView
@@ -23,9 +23,9 @@
     />-->
 
 	<ImageView
-		style="?attr/gdThumbnailItemViewStyleThumbnail"
+		style="?attr/GeatteThumbnailItemStyleThumbnail"
 		android:id="@+id/my_geatte_img"
-		android:layout_height="?attr/gdItemViewPreferredHeight"
+		android:layout_height="?attr/GeatteItemViewPreferredHeight"
 		android:scaleType="centerInside" />
 
     <TextView
