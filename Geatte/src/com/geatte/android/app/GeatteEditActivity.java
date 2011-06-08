@@ -131,7 +131,7 @@ public class GeatteEditActivity extends GDActivity {
 		if (mImagePath == null && mSavedImagePath == null) {
 		    Toast.makeText(getApplicationContext(), "Please select image", Toast.LENGTH_SHORT).show();
 		} else {
-		    mDialog = ProgressDialog.show(GeatteEditActivity.this, "Uploading", "Please wait...", true);
+		    mDialog = ProgressDialog.show(GeatteEditActivity.this, "Sending to friends", "Please wait...", true);
 		    new GeatteUploadTask().execute();
 		}
 		//setResult(RESULT_OK);
@@ -419,7 +419,7 @@ public class GeatteEditActivity extends GDActivity {
 		    saveState();
 		    cleanSelectedContactsPref();
 		    Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): save my interest to db, geatteId = " + geatteId + ", interestId = " + mRowId);
-		    Toast.makeText(getApplicationContext(), "Geatte uploaded successfully, geatteId = " + geatteId,
+		    Toast.makeText(getApplicationContext(), "Geatte sent successfully, geatteId = " + geatteId,
 			    Toast.LENGTH_LONG).show();
 		}
 		setResult(RESULT_OK);

@@ -204,7 +204,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 	try {
 
-	    URI uri = URIUtils.createURI("https", "geatte.appspot.com", -1, Config.GEATTE_INFO_GET_URL,
+	    URI uri = URIUtils.createURI("https", Config.BASE_SERVER, -1, Config.GEATTE_INFO_GET_URL,
 		    URLEncodedUtils.format(qparams, "UTF-8"), null);
 	    Log.d(Config.LOGTAG_C2DM, "Sending request to geatte info to url = " + uri.toString());
 	    HttpGet httpget = new HttpGet(uri);

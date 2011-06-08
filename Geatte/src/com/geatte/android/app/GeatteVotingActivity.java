@@ -11,8 +11,10 @@ import org.apache.http.message.BasicNameValuePair;
 
 import greendroid.app.GDActivity;
 import greendroid.widget.AsyncImageView;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -27,11 +29,13 @@ public class GeatteVotingActivity extends GDActivity {
 
     private static final String CLASSTAG = GeatteVotingActivity.class.getSimpleName();
     private static final String GEATTE_VOTE_UPLOAD_PATH = "/geattevote";
+    private static final int ACTIVITY_COMMENT = 0;
     private ImageView mGeatteVoteImage;
     private AsyncImageView mVotingThumbnail;
     private String mGeatteId;
     private ProgressDialog mDialog;
     private String mLike = null;
+    private String mComment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,12 +227,26 @@ public class GeatteVotingActivity extends GDActivity {
     }
 
     public void onComment(View v) {
+	Intent i = new Intent(this, GeatteVotingCommentActivity.class);
+	startActivityForResult(i, ACTIVITY_COMMENT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	if (requestCode == ACTIVITY_COMMENT && resultCode == Activity.RESULT_OK){
+	    mComment = intent.getExtras().getString(Config.EXTRA_KEY_VOTING_COMMENT);
+	    if (mComment != null && !mComment.trim().equals("")) {
+		Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment = " + mComment);
+	    } else {
+		Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment is null or empty");
+	    }
+	}
     }
 
     public void onSend(View v) {
 	if (mLike != null) {
 	    mDialog = ProgressDialog.show(GeatteVotingActivity.this, "Sending to Your friend", "Please wait...", true);
-	    new VoteUploadTask().execute("YES");
+	    new VoteUploadTask().execute(mLike, mComment);
 	} else {
 	    Toast.makeText(getApplicationContext(), getString(R.string.voting_choose_answer), Toast.LENGTH_LONG)
 	    .show();

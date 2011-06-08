@@ -82,6 +82,10 @@
 		
 		<activity android:name=".GeatteContactSelectActivity" android:label="@string/app_name">
 		</activity>
+		
+		<activity android:name=".GeatteVotingCommentActivity" 
+          android:label="@string/app_name" 
+          android:theme="@android:style/Theme.Dialog"/>
 
 		<!-- In order to use the c2dm library, an
         application must declare a class with the name C2DMReceiver, in its

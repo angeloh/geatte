@@ -217,6 +217,16 @@ public class RegisterServlet extends HttpServlet {
 		log.log(Level.INFO, "RegisterServlet.doPOST() : can not find a DeviceInfo by key = " + key
 			+ ", create a new one");
 
+		//clean devices for same phone number, only one device allowed for one device
+
+		try {
+		    List<DeviceInfo> devicesForSameNumber = DeviceInfo.getDeviceInfoForNumber(pm, phoneNumber, phoneCountryIso);
+		    for (DeviceInfo deviceSameNumber : devicesForSameNumber) {
+			pm.deletePersistent(deviceSameNumber);
+		    }
+		} catch (JDOObjectNotFoundException e) {
+		}
+
 		device = new DeviceInfo(key, reqInfo.deviceRegistrationID);
 		device.setType(deviceType);
 	    } else {

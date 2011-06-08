@@ -832,8 +832,8 @@ containing a value of this type.
         public static final int app_show_geattetab_btn=0x7f050025;
         public static final int app_snap_button=0x7f050021;
         public static final int app_top_label=0x7f050020;
-        public static final int button=0x7f050064;
-        public static final int checkbox=0x7f050066;
+        public static final int button=0x7f050068;
+        public static final int checkbox=0x7f05006a;
         public static final int contact_check=0x7f050058;
         public static final int contact_subtitle=0x7f05005a;
         public static final int contact_thumbnail=0x7f05005b;
@@ -850,7 +850,7 @@ containing a value of this type.
         public static final int edit_img=0x7f050033;
         public static final int edit_title_label=0x7f05002f;
         public static final int edit_top_label=0x7f05002e;
-        public static final int edittext=0x7f050065;
+        public static final int edittext=0x7f050069;
         public static final int empty=0x7f050002;
         public static final int fi_geatte_desc=0x7f050042;
         public static final int fi_geatte_img=0x7f050041;
@@ -888,9 +888,9 @@ containing a value of this type.
         public static final int geatte_progress_text=0x7f05003d;
         public static final int geatte_separator_text=0x7f05004d;
         public static final int geatte_separator_thumbnail=0x7f05004c;
-        public static final int geatte_thumbnail_item_subtitle=0x7f050063;
-        public static final int geatte_thumbnail_item_thumbnail=0x7f050061;
-        public static final int geatte_thumbnail_item_title=0x7f050062;
+        public static final int geatte_thumbnail_item_subtitle=0x7f050067;
+        public static final int geatte_thumbnail_item_thumbnail=0x7f050065;
+        public static final int geatte_thumbnail_item_title=0x7f050066;
         public static final int geatte_vote_btn_no=0x7f05005e;
         public static final int geatte_vote_btn_yes=0x7f05005d;
         public static final int geatte_vote_img=0x7f05005c;
@@ -906,7 +906,7 @@ containing a value of this type.
         public static final int my_geatte_img=0x7f05003e;
         public static final int my_geatte_title=0x7f050040;
         public static final int normal=0x7f050000;
-        public static final int ratingbar=0x7f050068;
+        public static final int ratingbar=0x7f05006c;
         public static final int select_account=0x7f050045;
         public static final int select_account_back=0x7f05004a;
         public static final int select_account_click_next_text=0x7f050046;
@@ -926,9 +926,13 @@ containing a value of this type.
         public static final int tabsText=0x7f050053;
         public static final int title=0x7f050030;
         public static final int title_detail=0x7f05002b;
-        public static final int togglebutton=0x7f050067;
-        public static final int voting_image_view=0x7f05005f;
-        public static final int voting_thumbnail=0x7f050060;
+        public static final int togglebutton=0x7f05006b;
+        public static final int voting_cancel_button=0x7f050061;
+        public static final int voting_comment=0x7f05005f;
+        public static final int voting_comment_footer=0x7f050060;
+        public static final int voting_image_view=0x7f050063;
+        public static final int voting_ok_button=0x7f050062;
+        public static final int voting_thumbnail=0x7f050064;
         public static final int xhdpi=0x7f050006;
     }
     public static final class layout {
@@ -984,20 +988,21 @@ containing a value of this type.
         public static final int geatte_vote=0x7f030031;
         public static final int geatte_vote_bar=0x7f030032;
         public static final int geatte_vote_btn=0x7f030033;
-        public static final int geatte_voting_view=0x7f030034;
-        public static final int geattethumbnail_item_view=0x7f030035;
-        public static final int main=0x7f030036;
+        public static final int geatte_vote_comment_edit_view=0x7f030034;
+        public static final int geatte_voting_view=0x7f030035;
+        public static final int geattethumbnail_item_view=0x7f030036;
+        public static final int main=0x7f030037;
     }
     public static final class string {
         public static final int app_name=0x7f08001d;
         public static final int app_url=0x7f08001e;
-        public static final int auth_error_text=0x7f080049;
+        public static final int auth_error_text=0x7f08004c;
         public static final int comment_label=0x7f08002f;
-        public static final int connect_error_text=0x7f080048;
-        public static final int connected_with_account_text=0x7f08004c;
-        public static final int contacts_clean=0x7f08004e;
-        public static final int contacts_save=0x7f08004f;
-        public static final int contacts_view_name=0x7f08004d;
+        public static final int connect_error_text=0x7f08004b;
+        public static final int connected_with_account_text=0x7f08004f;
+        public static final int contacts_clean=0x7f080051;
+        public static final int contacts_save=0x7f080052;
+        public static final int contacts_view_name=0x7f080050;
         public static final int desc_label=0x7f08002d;
         public static final int edit_desc_label=0x7f080029;
         public static final int edit_desc_text_default=0x7f08002c;
@@ -1033,30 +1038,30 @@ containing a value of this type.
         public static final int gd_take_photo=0x7f080007;
         public static final int gd_talk=0x7f080002;
         public static final int gd_trashcan=0x7f080014;
-        public static final int intro_exit=0x7f080045;
+        public static final int intro_exit=0x7f080048;
         /**  Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] 
          */
-        public static final int intro_text=0x7f080050;
+        public static final int intro_text=0x7f080053;
         public static final int menu_add_more_geatte=0x7f080024;
         public static final int menu_delete=0x7f080023;
         public static final int menu_get_next_page=0x7f080025;
-        public static final int no_accounts=0x7f080047;
+        public static final int no_accounts=0x7f08004a;
         public static final int no_geattes=0x7f08001f;
         public static final int register=0x7f080033;
         public static final int register_progress_text_conn=0x7f080034;
         public static final int register_progress_text_error=0x7f080037;
         public static final int register_progress_text_reg=0x7f080035;
         public static final int register_progress_text_unreg=0x7f080036;
-        public static final int select_account_click_next_text=0x7f08004a;
-        public static final int select_account_connecting_text=0x7f08004b;
-        public static final int select_account_text=0x7f080046;
+        public static final int select_account_click_next_text=0x7f08004d;
+        public static final int select_account_connecting_text=0x7f08004e;
+        public static final int select_account_text=0x7f080049;
         public static final int send_geatte_text=0x7f080030;
         public static final int send_to_reset_text=0x7f080032;
         public static final int send_to_text=0x7f080031;
-        public static final int setup_back=0x7f080042;
-        public static final int setup_complete_text=0x7f080051;
-        public static final int setup_finish=0x7f080044;
-        public static final int setup_next=0x7f080043;
+        public static final int setup_back=0x7f080045;
+        public static final int setup_complete_text=0x7f080054;
+        public static final int setup_finish=0x7f080047;
+        public static final int setup_next=0x7f080046;
         public static final int show_all_feedbacks=0x7f080020;
         public static final int show_geattetab=0x7f080021;
         public static final int show_geattetab_loading=0x7f080022;
@@ -1069,6 +1074,9 @@ containing a value of this type.
         public static final int voting_a_geatte=0x7f080041;
         public static final int voting_choose_answer=0x7f080040;
         public static final int voting_comment=0x7f08003e;
+        public static final int voting_comment_cancel_text=0x7f080043;
+        public static final int voting_comment_ok_text=0x7f080044;
+        public static final int voting_comment_text_default=0x7f080042;
         public static final int voting_maybe=0x7f08003d;
         public static final int voting_no=0x7f08003c;
         public static final int voting_send=0x7f08003f;

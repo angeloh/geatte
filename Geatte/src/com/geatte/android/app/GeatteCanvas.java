@@ -1,11 +1,18 @@
 package com.geatte.android.app;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import com.geatte.android.c2dm.C2DMessaging;
 import greendroid.app.GDActivity;
@@ -19,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -44,9 +52,7 @@ public class GeatteCanvas extends GDActivity {
 	// TODO check if server has this device's reg id
 
 	// Run the setup first if necessary
-	Context context = getApplicationContext();
-	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
-	if (prefs.getString(Config.PREF_REGISTRATION_ID, null) == null) {
+	if (isSetupRequired()) {
 	    startActivity(new Intent(this, GeatteSetupActivity.class));
 	}
 
@@ -283,5 +289,78 @@ public class GeatteCanvas extends GDActivity {
 	return devices.contains(android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
 		+ android.os.Build.DEVICE);
 
+    }
+
+    private boolean isSetupRequired() {
+	Context context = getApplicationContext();
+	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+	if (prefs.getString(Config.PREF_REGISTRATION_ID, null) == null) {
+	    return true;
+	}
+	String userEmail = prefs.getString(Config.PREF_USER_EMAIL, null);
+	if (userEmail == null) {
+	    return true;
+	}
+	return false;
+	// async check server
+	//	String phoneNumber = DeviceRegistrar.getPhoneNumber(context);
+	//	new RegIdCheckTask().execute(phoneNumber, userEmail);
+	//
+	//	String hasRegIdStr = prefs.getString(Config.PREF_SERVER_HAS_REG_ID, null);
+	//	boolean hasRegId = Boolean.parseBoolean(hasRegIdStr);
+	//	if (!hasRegId) {
+	//	    return true;
+	//	} else {
+	//	    return false;
+	//	}
+    }
+
+    class RegIdCheckTask extends AsyncTask<String, String, String> {
+	@Override
+	protected String doInBackground(String... strings) {
+	    try {
+		String myNumber = strings[0];
+		String userEmail = strings[1];
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair(Config.DEV_PHONE_NUMBER_PARAM, myNumber));
+
+		AppEngineClient client = new AppEngineClient(getApplicationContext(), userEmail);
+		HttpResponse response = client.makeRequestWithParams(Config.GEATTE_REG_CHECK_URL, params);
+
+		if (response.getEntity() != null) {
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
+		    "UTF-8"));
+		    String sResponse = reader.readLine();
+		    Log.d(Config.LOGTAG, "RegIdCheckTask Response: " + sResponse);
+		    if (response.getStatusLine().getStatusCode() == 400
+			    || response.getStatusLine().getStatusCode() == 500) {
+			Log.e(Config.LOGTAG, "RegIdCheckTask Error: " + sResponse);
+			return null;
+		    }
+		    return sResponse;
+		}
+	    } catch (Exception e) {
+		Log.e(Config.LOGTAG, e.getMessage(), e);
+	    }
+	    return null;
+	}
+
+	@Override
+	protected void onPostExecute(String sResponse) {
+	    try {
+		Log.d(Config.LOGTAG, "RegIdCheckTask:onPostExecute(): get response :" + sResponse);
+
+		final SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+			Config.PREFERENCE_KEY,
+			Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Config.PREF_SERVER_HAS_REG_ID, sResponse);
+		editor.commit();
+
+	    } catch (Exception e) {
+		Log.e(Config.LOGTAG, e.getMessage(), e);
+	    }
+	}
     }
 }

@@ -16,6 +16,7 @@ public class Config {
     public static final String EXTRA_FRIENDGEATTE_STARTFROM = "friendgeatte.startfrom";
     public static final String EXTRA_KEY_ACCOUNT_BUNDLE = "account_manager_bundle";
     public static final String EXTRA_KEY_GEATTE_MESSAGE = "geatte_message";
+    public static final String EXTRA_KEY_VOTING_COMMENT = "voting_comment";
 
     public static final String EXTRA_CURRENT_TAB = "0";
 
@@ -40,12 +41,15 @@ public class Config {
     public static final String PREFERENCE_KEY = "com.geatte.android.app";
     public static final String PREF_USER_EMAIL = "userEmail";
     public static final String PREF_REGISTRATION_ID = "registrationId";
+    public static final String PREF_SERVER_HAS_REG_ID = "hasRegIdOnServer";
     public static final String PREF_SELECTED_CONTACTS = "selectedContacts";
 
     // app server
+    public static final String BASE_SERVER = "geatte.appspot.com";
     public static final String BASE_URL = "https://geatte.appspot.com";
     public static final String GEATTE_INFO_GET_URL = "/geatteinfoget";
     public static final String GEATTE_IMAGE_GET_URL = "/geatteimageget";
+    public static final String GEATTE_REG_CHECK_URL = "/geatteregidcheck";
 
     public static final String DEV_REG_ID_PARAM = "devRegId";
     public static final String DEVICE_ID_PARAM = "deviceId";
