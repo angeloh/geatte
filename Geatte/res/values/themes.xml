@@ -70,6 +70,7 @@
 		
 		<item name="GeatteTabsIcon">@drawable/geatte_tabs_icon</item>
 		
+		<item name="GeatteCommentWidget">@style/Geatte.Comment.Widget</item>
 	</style>
 	
 </resources>

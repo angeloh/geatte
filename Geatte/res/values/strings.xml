@@ -46,6 +46,7 @@
     <string name="voting_send">Send</string>
     <string name="voting_choose_answer">Choose an answer first!</string>
     <string name="voting_a_geatte">Vote A Geatte</string>
+    <string name="voting_comment_title">Write A Comment</string>
     <string name="voting_comment_text_default">Enter Comment</string>
     <string name="voting_comment_cancel_text">Cancel</string>
     <string name="voting_comment_ok_text">Ok</string>

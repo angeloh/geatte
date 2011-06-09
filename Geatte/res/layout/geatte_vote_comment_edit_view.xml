@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="horizontal">	
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
 	
+	<FrameLayout
+		android:id="@+id/gdi_header"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/gdi_arrow_up"
+		android:layout_marginTop="-1px"
+		android:background="@drawable/gd_quick_action_top_frame" />
+	
+	<LinearLayout
+        android:id="@+id/voting_comment_mid"
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/gdi_header"
+		android:layout_marginTop="-1px"
+	    android:background="#C0C0C0">
 	<EditText android:id="@+id/voting_comment"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="-1px"
 		android:hint="@string/voting_comment_text_default"
-		style="@style/edit_text" />	
+		style="@style/edit_text" />
+	</LinearLayout>
 
 	<LinearLayout
         android:id="@+id/voting_comment_footer"
 	    android:orientation="horizontal"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:background="#FF707070">
+	    android:layout_below="@id/voting_comment_mid"
+		android:layout_marginTop="-1px"
+	    android:background="#C0C0C0">
  
 		<Button
 	    	android:id="@+id/voting_cancel_button"
@@ -37,5 +55,25 @@
             
     </LinearLayout>
 
+	<FrameLayout
+		android:id="@+id/gdi_footer"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/voting_comment_footer"
+		android:background="@drawable/gd_quick_action_grid_bottom_frame" />
 
-</LinearLayout>
+	<ImageView
+		android:id="@+id/gdi_arrow_up"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/gd_quick_action_arrow_up" />
+
+	<ImageView
+		android:id="@+id/gdi_arrow_down"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/gdi_footer"
+		android:layout_marginTop="-1px"
+		android:src="@drawable/gd_quick_action_grid_arrow_down" />
+
+</RelativeLayout>

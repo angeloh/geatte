@@ -26,6 +26,8 @@ public class GeatteListOthersActivity extends ListActivity {
     private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
     //private static final int MENU_DELETE_GEATTE = Menu.FIRST + 1;
 
+    private static final int ACTIVITY_VOTE = 0;
+
     private static final int NUM_RESULTS_PER_PAGE = 5;
 
     private final Handler mHandler = new Handler();
@@ -138,10 +140,9 @@ public class GeatteListOthersActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 	super.onListItemClick(l, v, position, id);
-	//	Intent intent = new Intent(this, GeatteVotingActivity.class);
-	//	intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, id);
-	//	intent.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mStartFrom);
-	//	startActivityForResult(intent, ACTIVITY_SHOW);
+	Intent intent = new Intent(this, GeatteVotingActivity.class);
+	intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(id));
+	startActivityForResult(intent, ACTIVITY_VOTE);
     }
 
     @Override

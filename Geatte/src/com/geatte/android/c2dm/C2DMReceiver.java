@@ -248,7 +248,11 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		String createdDate = JResponse.getString(Config.GEATTE_CREATED_DATE_PARAM);
 		Log.d(Config.LOGTAG, " " + TAG + "GOT createdDate = " + createdDate);
 
-		dbHelper.insertFriendInterest(geatteId, title, desc, fromNumber, createdDate);
+		long ret = dbHelper.insertFriendInterest(geatteId, title, desc, fromNumber, createdDate);
+		if (ret == -1) {
+		    Log.w(Config.LOGTAG, " " + TAG + "ERROR Saved geatteId = " + geatteId + " to DB, IGNORED");
+		    return;
+		}
 		Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + " to DB SUCCESSUL!");
 
 		// fetch coming image

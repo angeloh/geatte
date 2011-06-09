@@ -36,6 +36,7 @@ public class GeatteVotingActivity extends GDActivity {
     private ProgressDialog mDialog;
     private String mLike = null;
     private String mComment = null;
+    private CommentPopupWidget mPopup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,8 +228,47 @@ public class GeatteVotingActivity extends GDActivity {
     }
 
     public void onComment(View v) {
-	Intent i = new Intent(this, GeatteVotingCommentActivity.class);
-	startActivityForResult(i, ACTIVITY_COMMENT);
+	/// dialog way
+	//	Intent i = new Intent(this, GeatteVotingCommentActivity.class);
+	//	startActivityForResult(i, ACTIVITY_COMMENT);
+
+	/// popupwindow way
+	//	// get the instance of the LayoutInflater
+	//	LayoutInflater inflater = (LayoutInflater) GeatteVotingActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	//	// inflate our view from the corresponding XML file
+	//	View layout = inflater.inflate(R.layout.geatte_vote_comment_edit_view, (ViewGroup)findViewById(R.id.voting_comment_root));
+	//	// create a 100px width and 200px height popup window
+	//	pw = new PopupWindow(layout, 300, 150, true);
+	//	// set actions to buttons we have in our popup
+	//	Button btnCancel = (Button)layout.findViewById(R.id.voting_cancel_button);
+	//	btnCancel.setOnClickListener(new OnClickListener() {
+	//	    @Override
+	//	    public void onClick(View vv) {
+	//		// close the popup
+	//		pw.dismiss();
+	//	    }
+	//	});
+	//	final EditText commentEditText = (EditText) findViewById(R.id.voting_comment);
+	//
+	//	Button btnOk = (Button)layout.findViewById(R.id.voting_ok_button);
+	//	btnOk.setOnClickListener(new OnClickListener() {
+	//	    @Override
+	//	    public void onClick(View vv) {
+	//		mComment = commentEditText.getText().toString();
+	//		if (mComment != null && !mComment.trim().equals("")) {
+	//		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment = " + mComment);
+	//		} else {
+	//		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment is null or empty");
+	//		}
+	//		finish();
+	//	    }
+	//	});
+	//	// finally show the popup in the center of the window
+	//	pw.showAtLocation(layout, Gravity.BOTTOM, 0, 0);
+
+	///override popupwindow
+	mPopup = new CommentPopupWidget(this.getApplicationContext());
+	mPopup.show(v);
     }
 
     @Override
@@ -246,7 +286,15 @@ public class GeatteVotingActivity extends GDActivity {
     public void onSend(View v) {
 	if (mLike != null) {
 	    mDialog = ProgressDialog.show(GeatteVotingActivity.this, "Sending to Your friend", "Please wait...", true);
+
+	    final SharedPreferences prefs = this.getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+	    mComment = prefs.getString(Config.PREF_VOTING_COMMENT, null);
+
 	    new VoteUploadTask().execute(mLike, mComment);
+
+	    SharedPreferences.Editor editor = prefs.edit();
+	    editor.remove(Config.PREF_VOTING_COMMENT);
+	    editor.commit();
 	} else {
 	    Toast.makeText(getApplicationContext(), getString(R.string.voting_choose_answer), Toast.LENGTH_LONG)
 	    .show();
