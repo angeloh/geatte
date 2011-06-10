@@ -15,11 +15,11 @@
     
     <string name="edit_geatte">New Geatte</string>
     <string name="edit_top_label">Send A Geatte</string>
-    <string name="edit_title_label">Title:</string>
+    <string name="edit_title_label">Caption:</string>
     <string name="edit_desc_label">More:</string>
     <string name="edit_image_label">Image:</string>
-    <string name="edit_title_text_default">Enter Geatte Title</string>
-    <string name="edit_desc_text_default">Enter Geatte Desc</string>
+    <string name="edit_title_text_default">Enter Geatte Caption</string>
+    <string name="edit_desc_text_default">Enter More Desc</string>
     
     <string name="desc_label">More:</string>
     <string name="vote_label">Vote:</string>

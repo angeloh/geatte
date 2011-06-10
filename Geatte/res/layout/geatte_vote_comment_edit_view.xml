@@ -18,14 +18,12 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/gdi_header"
-		android:layout_marginTop="-1px"
-	    android:background="#C0C0C0">
-	<EditText android:id="@+id/voting_comment"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="-1px"
-		android:hint="@string/voting_comment_text_default"
-		style="@style/edit_text" />
+	    android:background="@color/dark_gray">
+		<EditText android:id="@+id/voting_comment"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/voting_comment_text_default"
+			style="@style/edit_text" />
 	</LinearLayout>
 
 	<LinearLayout
@@ -34,8 +32,7 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/voting_comment_mid"
-		android:layout_marginTop="-1px"
-	    android:background="#C0C0C0">
+	    android:background="@color/dark_gray">
  
 		<Button
 	    	android:id="@+id/voting_cancel_button"
