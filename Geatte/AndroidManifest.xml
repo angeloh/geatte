@@ -61,6 +61,9 @@
 
 		<activity android:name=".GeatteEditActivity" android:label="@string/edit_geatte">
 		</activity>
+		
+		<activity android:name=".GeatteEditUploadTextOnlyActivity" android:label="@string/edit_geatte">
+		</activity>
 
 		<activity android:name=".GeatteDetail" android:label="@string/app_name">
 		</activity>
@@ -97,6 +100,8 @@
         <service android:name="com.geatte.android.c2dm.C2DMReceiver" />
         
         <service android:name="com.geatte.android.app.GeatteContactsService" />
+        
+        <service android:name="com.geatte.android.app.GeatteImageUploadIntentService" />
 
 		<!--
 			Only C2DM servers can send messages for the app. If permission is not

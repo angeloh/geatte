@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -195,9 +196,22 @@ public class GeatteCanvas extends GDActivity {
 
 		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + mImagePath);
 
-		Intent i = new Intent(this, GeatteEditActivity.class);
-		i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
-		startActivityForResult(i, ACTIVITY_CREATE);
+		//		Intent i = new Intent(this, GeatteEditActivity.class);
+		//		i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
+		//		startActivityForResult(i, ACTIVITY_CREATE);
+
+		String randomId = UUID.randomUUID().toString();
+		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " try upload image capture output to server as intent service, randomId : " + randomId);
+
+		Intent imageUploadIntent = new Intent(GeatteImageUploadIntentService.IMAGE_UPLOAD_ACTION);
+		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_PATH, mImagePath);
+		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
+		GeatteImageUploadIntentService.runIntentInService(this.getApplicationContext(), imageUploadIntent);
+
+		Intent editIntent = new Intent(this, GeatteEditUploadTextOnlyActivity.class);
+		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
+		editIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
+		startActivityForResult(editIntent, ACTIVITY_CREATE);
 
 	    } else {
 		Log.d(Config.LOGTAG, "file not exist " + fi.getAbsolutePath());

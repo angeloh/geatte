@@ -5,6 +5,8 @@ public class Config {
     public static final String LOGTAG = "GeatteApp";
     public static final String LOGTAG_C2DM = "C2DM";
 
+    public static final Long IMAGE_BLOB_UPLOAD_BACKOFF = 300L;
+
     public static enum LIKE {YES, NO, MAYBE};
 
     //    public static final String INTENT_ACTION_VIEW_DETAIL = "com.geatte.android.app.VIEW_DETAIL";
@@ -17,6 +19,9 @@ public class Config {
     public static final String EXTRA_KEY_ACCOUNT_BUNDLE = "account_manager_bundle";
     public static final String EXTRA_KEY_GEATTE_MESSAGE = "geatte_message";
     public static final String EXTRA_KEY_VOTING_COMMENT = "voting_comment";
+
+    public static final String EXTRA_IMAGE_PATH = "image_path";
+    public static final String EXTRA_IMAGE_RANDOM_ID = "image_random_id";
 
     public static final String EXTRA_CURRENT_TAB = "0";
 
@@ -51,6 +56,7 @@ public class Config {
     public static final String GEATTE_INFO_GET_URL = "/geatteinfoget";
     public static final String GEATTE_IMAGE_GET_URL = "/geatteimageget";
     public static final String GEATTE_REG_CHECK_URL = "/geatteregidcheck";
+    public static final String GEATTE_IMAGE_BLOB_UPLOAD_URL = "/geatteimageblobupload";
 
     public static final String DEV_REG_ID_PARAM = "devRegId";
     public static final String DEVICE_ID_PARAM = "deviceId";
@@ -71,6 +77,10 @@ public class Config {
     public static final String FRIEND_GEATTE_VOTER = "friendGeatteVoter";
     public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";
     public static final String FRIEND_GEATTE_FEEDBACK = "friendGeatteFeedback";
+
+    public static final String GEATTE_IMAGE_RANDOM_ID_PARAM = "random_id";
+    public static final String GEATTE_IMAGE_BLOB_PARAM = "image_blob";
+    public static final String GEATTE_IMAGE_BLOB_RESP = "image_blob_resp";
 
     public static final String CONTACT_LIST = "contactList";
     public static final String CONTACT_DEFAULT_COUNTRY_CODE = "countryCode";
