@@ -35,6 +35,7 @@
     <string name="register_progress_text_unreg">Unregistered</string>
     <string name="register_progress_text_error">Error to register</string>
     
+    <string name="upload_text_retry">Had problems to upload, please retry</string>
     <string name="upload_text_error">Error to upload geatte info</string>
     <string name="upload_image_error">Error to upload geatte image</string>
     <string name="upload_vote_error">Error to upload geatte vote</string>

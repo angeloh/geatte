@@ -170,7 +170,7 @@ public class GeatteVoteServlet extends HttpServlet {
 	log.log(Level.INFO, "GeatteVoteServlet.submitGeatteVoteTask() : START submit geatte vote to " + ownerNumber);
 	boolean delayWhileIdle = true;
 	String collapseKey = "1";
-	Queue dmQueue = QueueFactory.getQueue("geatte_vote");
+	Queue dmQueue = QueueFactory.getQueue("geatteVote");
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)

@@ -211,7 +211,7 @@ public class DeviceInfo {
     public static List<DeviceInfo> getDeviceInfoForNumber(PersistenceManager pm, String number, String defaultCountryCode) {
 
 	// trim dash '-' '(' ')'from given number
-	number = number.replaceAll("-", "").replaceAll("(", "").replaceAll(")", "").trim();
+	number = number.replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "").trim();
 
 
 	Query query = pm.newQuery(DeviceInfo.class);
@@ -271,7 +271,7 @@ public class DeviceInfo {
 	query.declareParameters("String phoneNumberParam");
 
 	// trim dash '-' '(' ')'from given number
-	number = number.replaceAll("-", "").replaceAll("(", "").replaceAll(")", "").trim();
+	number = number.replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "").trim();
 
 	int count = 0;
 
@@ -309,8 +309,8 @@ public class DeviceInfo {
 		    retNum[0] = formatNumber;
 		}
 	    } else {
-		log.log(Level.WARNING, "DeviceInfo.checkPhoneExistedHadDeviceInfo() : contact number can not use default country code, contact number = "
-			+ number + ", defaultCountryCode = " + defaultCountryCode);
+		//		log.log(Level.WARNING, "DeviceInfo.checkPhoneExistedHadDeviceInfo() : contact number can not use default country code, contact number = "
+		//			+ number + ", defaultCountryCode = " + defaultCountryCode);
 	    }
 	}
 

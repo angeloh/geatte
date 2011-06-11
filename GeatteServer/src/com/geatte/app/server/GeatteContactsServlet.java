@@ -90,9 +90,9 @@ public class GeatteContactsServlet extends HttpServlet {
 		    retJSONArray.put(jObject);
 		}
 
-		if (retJSONArray.length() > 0) {
-		    log.info("GeatteContactsServlet.filterGeatteExistingUsers() : finish filter the contacts, ret = " + retJSONArray);
-		}
+	    }
+	    if (retJSONArray.length() > 0) {
+		log.info("GeatteContactsServlet.filterGeatteExistingUsers() : finish filter the contacts, ret = " + retJSONArray);
 	    }
 	} catch (Exception e) {
 	    log.log(Level.WARNING, "GeatteContactsServlet.filterGeatteExistingUsers() : Error checking contacts", e);

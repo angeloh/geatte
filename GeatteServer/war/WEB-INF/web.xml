@@ -68,6 +68,27 @@
 		</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>GeatteTmpImageUploadServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteTmpImageUploadServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>GeatteUplaodTextOnlyServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteUplaodTextOnlyServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>GeatteImagePurgeServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteImagePurgeServlet
+		</servlet-class>
+	</servlet>
+	
 	<!-- 
 	<servlet>
 		<servlet-name>SendServlet</servlet-name>
@@ -116,6 +137,16 @@
 		<url-pattern>/geattecontacts</url-pattern>
 	</servlet-mapping>
 	
+	<servlet-mapping>
+		<servlet-name>GeatteTmpImageUploadServlet</servlet-name>
+		<url-pattern>/geatteimageblobupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>GeatteUplaodTextOnlyServlet</servlet-name>
+		<url-pattern>/geatteuploadtextonly</url-pattern>
+	</servlet-mapping>
+	
 	<!-- 
 	<servlet-mapping>
 		<servlet-name>SendServlet</servlet-name>
@@ -140,6 +171,11 @@
 	<servlet-mapping>
 		<servlet-name>GeatteSendServlet</servlet-name>
 		<url-pattern>/tasks/geattesend</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>GeatteImagePurgeServlet</servlet-name>
+		<url-pattern>/tasks/geatteimagepurge</url-pattern>
 	</servlet-mapping>
 
 	<security-constraint>

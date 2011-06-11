@@ -311,7 +311,7 @@ public class GeatteUploadServlet extends HttpServlet {
 	log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : START submit geatte to " + toNumbers);
 	boolean delayWhileIdle = true;
 	String collapseKey = "1";
-	Queue dmQueue = QueueFactory.getQueue("geatte_send");
+	Queue dmQueue = QueueFactory.getQueue("geatteSend");
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)

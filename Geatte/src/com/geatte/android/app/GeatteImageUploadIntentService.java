@@ -38,8 +38,8 @@ public class GeatteImageUploadIntentService extends IntentService {
 
     private static PowerManager.WakeLock mWakeLock;
 
-    public GeatteImageUploadIntentService(String name) {
-	super(name);
+    public GeatteImageUploadIntentService() {
+	super("image_upload");
     }
 
     @Override
@@ -121,12 +121,11 @@ public class GeatteImageUploadIntentService extends IntentService {
 
 	    AppEngineClient client = new AppEngineClient(getApplicationContext(), accountName);
 	    HttpResponse response = client.makeRequestWithEntity(Config.GEATTE_IMAGE_BLOB_UPLOAD_URL, entity);
-
-	    if (response.getStatusLine().getStatusCode() == 400 || response.getStatusLine().getStatusCode() == 500) {
-		Log.e(Config.LOGTAG, "GeatteImageUploadIntentService:handleImageUpload Error: "
-			+ response.getStatusLine().getStatusCode() + " " + response.getEntity().getContent());
+	    int respStatusCode = response.getStatusLine().getStatusCode();
+	    if (respStatusCode == 400 || respStatusCode == 500) {
 		// RETRY
-		Log.d(Config.LOGTAG_C2DM, "Scheduling image blob upload retry, backoff = " + Config.IMAGE_BLOB_UPLOAD_BACKOFF);
+		Log.d(Config.LOGTAG_C2DM, "Got Error status code = " + respStatusCode + ", scheduling image blob upload " +
+			"retry, backoff = " + Config.IMAGE_BLOB_UPLOAD_BACKOFF);
 		Intent retryIntent = new Intent(IMAGE_UPLOAD_ACTION);
 		PendingIntent retryPIntent = PendingIntent.getBroadcast(context, 0 /* requestCode */, retryIntent, 0 /* flags */);
 

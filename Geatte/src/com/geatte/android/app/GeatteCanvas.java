@@ -206,7 +206,7 @@ public class GeatteCanvas extends GDActivity {
 		Intent imageUploadIntent = new Intent(GeatteImageUploadIntentService.IMAGE_UPLOAD_ACTION);
 		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_PATH, mImagePath);
 		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
-		GeatteImageUploadIntentService.runIntentInService(this.getApplicationContext(), imageUploadIntent);
+		GeatteImageUploadIntentService.runIntentInService(this, imageUploadIntent);
 
 		Intent editIntent = new Intent(this, GeatteEditUploadTextOnlyActivity.class);
 		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);

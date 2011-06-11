@@ -33,9 +33,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class GeatteEditUploadTextOnlyActivity extends GDActivity {
-
+    private static final String RETRY_STATUS = "RETRY";
     private static final String CLASSTAG = GeatteEditUploadTextOnlyActivity.class.getSimpleName();
-    private static final String UPLOAD_PATH = "/geatteupload";
+    private static final String UPLOAD_PATH = "/geatteuploadtextonly";
     private static final int ACTIVITY_CONTACT = 0;
 
     private EditText mTitleEditText;
@@ -319,14 +319,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		AppEngineClient client = new AppEngineClient(getApplicationContext(), accountName);
 		HttpResponse response = client.makeRequestWithEntity(UPLOAD_PATH, entity);
 
-		if (response.getStatusLine().getStatusCode() == 400
-			|| response.getStatusLine().getStatusCode() == 500) {
-
-		    //when resp is RETRY, redirect to geatte canvas
-
-		    Log.e(Config.LOGTAG, "GeatteUploadTask Error: " + response.getStatusLine().getStatusCode() + " " + response.getEntity().getContent());
-		    return null;
-		}
+		int respStatusCode = response.getStatusLine().getStatusCode();
 
 		if (response.getEntity() != null) {
 
@@ -344,6 +337,29 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 			}
 			body.append(tmp, 0, cnt);
 		    }
+
+		    if (respStatusCode == 400 || respStatusCode == 500) {
+
+			//when resp is RETRY, redirect to geatte canvas
+			if (body.toString().equals(RETRY_STATUS)) {
+			    if (mDialog != null && mDialog.isShowing()) {
+				try {
+				    Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): try to dismiss mDialog");
+				    mDialog.dismiss();
+				    mDialog = null;
+				} catch (Exception ex) {
+				    Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
+				}
+			    }
+			    this.publishProgress(getString(R.string.upload_text_retry));
+			    Log.w(Config.LOGTAG, "GeatteUploadTask Got RETRY");
+			    return RETRY_STATUS;
+			} else {
+			    Log.w(Config.LOGTAG, "GeatteUploadTask Error: " + respStatusCode + " " + body.toString());
+			    throw new Exception("GeatteUploadTask Error: " + respStatusCode + " " + body.toString());
+			}
+		    }
+
 		    try {
 			JResponse = new JSONObject(body.toString());
 		    } catch (JSONException e) {
@@ -385,6 +401,11 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 
 	@Override
 	protected void onPostExecute(String geatteId) {
+	    if (geatteId != null && geatteId.equals(RETRY_STATUS)) {
+		Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): got retry");
+		return;
+	    }
+
 	    try {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {

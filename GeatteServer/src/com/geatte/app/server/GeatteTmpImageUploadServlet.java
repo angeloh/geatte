@@ -26,8 +26,8 @@ import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
 
 @SuppressWarnings("serial")
-public class GeatteTmpImageUpload extends HttpServlet {
-    private static final Logger log = Logger.getLogger(GeatteTmpImageUpload.class.getName());
+public class GeatteTmpImageUploadServlet extends HttpServlet {
+    private static final Logger log = Logger.getLogger(GeatteTmpImageUploadServlet.class.getName());
     private static final String OK_STATUS = "OK";
     private static final String ERROR_STATUS = "ERROR";
     private String mUserEmail = null;

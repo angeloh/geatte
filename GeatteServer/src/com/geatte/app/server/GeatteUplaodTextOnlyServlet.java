@@ -22,6 +22,7 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
+
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
@@ -179,7 +180,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 		log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() : sent geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
 
 		//image already saved to geatte info, delete from image info
-		deleteImageInfo(imageInfo);
+		purgeImageTask(imageInfo.getId());
 
 		JSONObject geatteJson = new JSONObject();
 		try {
@@ -232,23 +233,6 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 	return null;
     }
 
-    private void deleteImageInfo(GeatteTmpImageInfo imageInfo) {
-	ServletContext ctx = getServletContext();
-	if (ctx == null) {
-	    return;
-	}
-	PersistenceManager pm = DBHelper.getPMF(ctx).getPersistenceManager();
-	try {
-	    pm.deletePersistent(imageInfo);
-	    log.log(Level.INFO, "[DEBUG] GeatteUplaodTextOnlyServlet.getUploadedImage() : deleted imageInfo for " + imageInfo.getId());
-	} catch (Exception e) {
-	    log.warning("GeatteUplaodTextOnlyServlet.getUploadedImage() : Error : " + e.getMessage());
-	} finally {
-	    pm.close();
-	}
-    }
-
-
     private String saveToDb(HttpServletResponse resp) throws IOException {
 	// Context-shared PMF.
 	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
@@ -258,17 +242,17 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 	    GeatteInfo geatteInfo = null;
 
 	    if (mGeatteIdField == null) {
-		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : create a new GeatteInfo");
+		log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.saveToDb() : create a new GeatteInfo");
 
 		geatteInfo = new GeatteInfo(mImageBlobField);
 	    } else {
-		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : find a GeatteInfo by key = " + mGeatteIdField);
+		log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.saveToDb() : find a GeatteInfo by key = " + mGeatteIdField);
 
 		Key key = KeyFactory.createKey(GeatteInfo.class.getSimpleName(), mGeatteIdField);
 		try {
 		    geatteInfo = pm.getObjectById(GeatteInfo.class, key);
 		} catch (JDOObjectNotFoundException e) {
-		    log.log(Level.SEVERE, "GeatteUploadServlet.doPOST() : failed to get GeatteInfo by key = " + mGeatteIdField);
+		    log.log(Level.SEVERE, "GeatteUplaodTextOnlyServlet.saveToDb() : failed to get GeatteInfo by key = " + mGeatteIdField);
 		}
 		// update image
 		geatteInfo.setImage(mImageBlobField);
@@ -282,7 +266,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 
 	    pm.makePersistent(geatteInfo);
 
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : Saved geatteInfo fromNumber = " + mFromNumberField
+	    log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.saveToDb() : Saved geatteInfo fromNumber = " + mFromNumberField
 		    + ", toNumber = " + mToNumberField + ", geatteTitile = " + mGeatteTitleField
 		    + ", geatteDesc = " + mGeatteDescField + ", id = " + geatteInfo.getId().toString());
 
@@ -292,7 +276,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 	} catch (Exception e) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + " (Error saving geatteInfo)");
-	    log.log(Level.SEVERE, "GeatteUploadServlet.doPOST() : Error saving geatteInfo.", e);
+	    log.log(Level.SEVERE, "GeatteUplaodTextOnlyServlet.saveToDb() : Error saving geatteInfo.", e);
 	} finally {
 	    pm.close();
 	}
@@ -300,10 +284,10 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
     }
 
     private void submitGeatteTask(String toNumbers, Map<String, String[]> params) {
-	log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : START submit geatte to " + toNumbers);
+	log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.submitGeatteTask() : START submit geatte to " + toNumbers);
 	boolean delayWhileIdle = true;
 	String collapseKey = "1";
-	Queue dmQueue = QueueFactory.getQueue("geatte_send");
+	Queue dmQueue = QueueFactory.getQueue("geatteSend");
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
@@ -322,12 +306,32 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 	    //url.countdownMillis(jitter);
 
 	    TaskHandle add = dmQueue.add(url);
-	    log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : add one task to queue, url = " + url.getUrl());
+	    log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.submitGeatteTask() : add one task to queue, url = " + url.getUrl());
 	} catch (UnsupportedEncodingException e) {
 	    // Ignore - UTF8 should be supported
 	    log.log(Level.SEVERE, "Unexpected error", e);
 	}
-	log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : END submit geatte to " + toNumbers);
+	log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.submitGeatteTask() : END submit geatte to " + toNumbers);
+
+    }
+
+    private void purgeImageTask(String imageId) {
+	log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.purgeImageTask() : START purge image " + imageId);
+	Queue dmQueue = QueueFactory.getQueue("geatteImagePurge");
+	try {
+	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteImagePurgeServlet.URI)
+	    .param(Config.GEATTE_IMAGE_RANDOM_ID_PARAM, imageId);
+
+	    // Task queue implements the exponential backoff
+	    //long jitter = (int) Math.random() * DATAMESSAGING_MAX_JITTER_MSEC;
+	    //url.countdownMillis(jitter);
+
+	    TaskHandle add = dmQueue.add(url);
+	    log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.purgeImageTask() : add one task to queue, url = " + url.getUrl());
+	} catch (Exception e) {
+	    log.log(Level.SEVERE, "Unexpected error", e);
+	}
+	log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.purgeImageTask() : END purge image " + imageId);
 
     }
 
