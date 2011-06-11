@@ -321,6 +321,9 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 
 		if (response.getStatusLine().getStatusCode() == 400
 			|| response.getStatusLine().getStatusCode() == 500) {
+
+		    //when resp is RETRY, redirect to geatte canvas
+
 		    Log.e(Config.LOGTAG, "GeatteUploadTask Error: " + response.getStatusLine().getStatusCode() + " " + response.getEntity().getContent());
 		    return null;
 		}

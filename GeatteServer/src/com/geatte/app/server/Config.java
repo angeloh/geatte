@@ -27,4 +27,8 @@ public class Config {
     public static final String CONTACT_DEFAULT_COUNTRY_CODE = "countryCode";
     public static final String CONTACT_PHONE_NUMBER = "phoneNumber";
     public static final String CONTACT_ID = "contactId";
+
+    public static final String GEATTE_IMAGE_RANDOM_ID_PARAM = "random_id";
+    public static final String GEATTE_IMAGE_BLOB_PARAM = "image_blob";
+    public static final String GEATTE_IMAGE_BLOB_RESP = "image_blob_resp";
 }

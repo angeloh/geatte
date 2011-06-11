@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +22,6 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
-import org.apache.commons.io.IOUtils;
-
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
@@ -42,9 +41,10 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 @SuppressWarnings("serial")
-public class GeatteUploadServlet extends HttpServlet {
-    private static final Logger log = Logger.getLogger(GeatteUploadServlet.class.getName());
+public class GeatteUplaodTextOnlyServlet extends HttpServlet {
+    private static final Logger log = Logger.getLogger(GeatteUplaodTextOnlyServlet.class.getName());
     //private static final String OK_STATUS = "OK";
+    private static final String RETRY_STATUS = "RETRY";
     private static final String ERROR_STATUS = "ERROR";
     private String mUserEmail = null;
     private String mGeatteIdField = null;
@@ -53,90 +53,13 @@ public class GeatteUploadServlet extends HttpServlet {
     private String mToNumberField = null;
     private String mGeatteTitleField = null;
     private String mGeatteDescField = null;
+    private String mImageRandomId = null;
     private Blob mImageBlobField = null;
-
-
-    @Deprecated
-    public void doPostOrig(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-	log.log(Level.INFO, "GeatteUploadServlet.doPOST() : START GeatteUploadServlet.doPOST()");
-
-	resp.setContentType("text/plain");
-
-	GeatteRegisterRequestInfo reqInfo = GeatteRegisterRequestInfo.processRequest(req, resp, getServletContext());
-	if (reqInfo == null) {
-	    log.severe("GeatteUploadServlet.doPOST() : can not load RequestInfo!!");
-	    return;
-	}
-
-	String fromNumber = reqInfo.getParameter(Config.GEATTE_FROM_NUMBER_PARAM);
-
-	if (fromNumber == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_FROM_NUMBER_PARAM + ")");
-	    log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.GEATTE_FROM_NUMBER_PARAM + " is null");
-	    return;
-	} else {
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.GEATTE_FROM_NUMBER_PARAM + " = " + fromNumber);
-	}
-
-	String toNumber = reqInfo.getParameter(Config.GEATTE_TO_NUMBER_PARAM);
-
-	if (toNumber == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TO_NUMBER_PARAM + ")");
-	    log.severe("GeatteUploadServlet.doPOST() : Missing to number, " + Config.GEATTE_TO_NUMBER_PARAM + " is null");
-	    return;
-	} else {
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.GEATTE_TO_NUMBER_PARAM + " = "
-		    + toNumber);
-	}
-
-	String title = reqInfo.getParameter(Config.GEATTE_TITLE_PARAM);
-
-	if (title == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TITLE_PARAM + ")");
-	    log.severe("GeatteUploadServlet.doPOST() : Missing geatte title, " + Config.GEATTE_TITLE_PARAM + " is null");
-	    return;
-	} else {
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.GEATTE_TITLE_PARAM + " = "
-		    + title);
-	}
-
-	String desc = reqInfo.getParameter(Config.GEATTE_DESC_PARAM);
-
-	if (desc != null) {
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent a " + Config.GEATTE_DESC_PARAM + " = "
-		    + title);
-	}
-
-
-	InputStream stream = req.getInputStream();
-	Blob imageBlob = new Blob(IOUtils.toByteArray(stream));
-
-	// Get the image representation
-	/*ServletFileUpload upload = new ServletFileUpload();
-	FileItemIterator iter = upload.getItemIterator(req);
-	Blob imageBlob = null;
-	while (iter.hasNext()) {
-	    FileItemStream item = iter.next();
-	    InputStream stream = item.openStream();
-
-	    if (!item.isFormField()) {
-		imageBlob = new Blob(IOUtils.toByteArray(stream));
-		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent an image file : " + item.getFieldName() + ", name : " + item.getName());
-	    }
-	}
-	 */
-	if (imageBlob == null) {
-	    resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_IMAGE_PARAM + ")");
-	    log.severe("GeatteUploadServlet.doPOST() : Missing geatte image, " + Config.GEATTE_IMAGE_PARAM + " is null");
-	    return;
-	}
-
-    }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
-	log.log(Level.INFO, "GeatteUploadServlet.doPOST() : START GeatteUploadServlet.doPOST()");
+	log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() : START GeatteUplaodTextOnlyServlet.doPOST()");
 	try {
 	    resp.setContentType("application/json");
 
@@ -145,12 +68,12 @@ public class GeatteUploadServlet extends HttpServlet {
 	    User user = userService.getCurrentUser();
 	    if (user != null) {
 		mUserEmail = user.getEmail();
-		log.log(Level.INFO,"GeatteUploadServlet.doPOST() : get user email thru ClientLogin :" + mUserEmail);
+		log.log(Level.INFO,"GeatteUplaodTextOnlyServlet.doPOST() : get user email thru ClientLogin :" + mUserEmail);
 	    }
 	    if (mUserEmail == null) {
 		resp.setStatus(500);
 		resp.getWriter().println(ERROR_STATUS + "(Login is required)");
-		log.warning("GeatteUploadServlet.doPOST() : can not get login user email!!");
+		log.warning("GeatteUplaodTextOnlyServlet.doPOST() : can not get login user email!!");
 		return;
 	    }
 
@@ -174,23 +97,22 @@ public class GeatteUploadServlet extends HttpServlet {
 			mGeatteDescField = Streams.asString(stream);
 		    } else if (item.getFieldName().equals(Config.GEATTE_ID_PARAM)){
 			mGeatteIdField = Streams.asString(stream);
+		    } else if (item.getFieldName().equals(Config.GEATTE_IMAGE_RANDOM_ID_PARAM)) {
+			mImageRandomId = Streams.asString(stream);
 		    }
-		    log.log(Level.INFO, "Got a form field: " + item.getFieldName());
-		} else {
-		    mImageBlobField = new Blob(IOUtils.toByteArray(stream));
-		    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : user sent an image file : " + item.getFieldName() + ", name : " + item.getName());
+		    log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() Got a form field: " + item.getFieldName());
 		}
 	    }
 
 	    if (mCountryCodeField == null) {
-		log.warning("GeatteUploadServlet.doPOST() : Missing country code, " + Config.GEATTE_COUNTRY_ISO_PARAM + " is null");
+		log.warning("GeatteUplaodTextOnlyServlet.doPOST() : Missing country code, " + Config.GEATTE_COUNTRY_ISO_PARAM + " is null");
 		mCountryCodeField = "us"; //default as US
 	    }
 
 	    if (mFromNumberField == null) {
 		resp.setStatus(400);
 		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_FROM_NUMBER_PARAM + ")");
-		log.severe("GeatteUploadServlet.doPOST() : Missing from number, " + Config.GEATTE_FROM_NUMBER_PARAM + " is null");
+		log.severe("GeatteUplaodTextOnlyServlet.doPOST() : Missing from number, " + Config.GEATTE_FROM_NUMBER_PARAM + " is null");
 		return;
 	    } else {
 		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
@@ -198,14 +120,14 @@ public class GeatteUploadServlet extends HttpServlet {
 		try {
 		    numberProto = phoneUtil.parse(mFromNumberField, mCountryCodeField);
 		} catch (NumberParseException npe) {
-		    log.log(Level.WARNING, "GeatteUploadServlet.doPOST(): NumberParseException was thrown: "
+		    log.log(Level.WARNING, "GeatteUplaodTextOnlyServlet.doPOST(): NumberParseException was thrown: "
 			    , npe);
 		}
 
 		if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
 		    mFromNumberField = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
 		} else {
-		    log.log(Level.WARNING, "GeatteUploadServlet.doPOST() : Invalid phone number so use passed-in number, " + Config.DEV_PHONE_NUMBER_PARAM
+		    log.log(Level.WARNING, "GeatteUplaodTextOnlyServlet.doPOST() : Invalid phone number so use passed-in number, " + Config.DEV_PHONE_NUMBER_PARAM
 			    + " = " + mFromNumberField + ", countryIso = " + mFromNumberField);
 		}
 
@@ -214,48 +136,118 @@ public class GeatteUploadServlet extends HttpServlet {
 	    if (mToNumberField == null) {
 		resp.setStatus(400);
 		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_TO_NUMBER_PARAM + ")");
-		log.severe("GeatteUploadServlet.doPOST() : Missing to number, " + Config.GEATTE_TO_NUMBER_PARAM + " is null");
+		log.severe("GeatteUplaodTextOnlyServlet.doPOST() : Missing to number, " + Config.GEATTE_TO_NUMBER_PARAM + " is null");
 		return;
 	    }
+
+	    if (mImageRandomId == null) {
+		resp.setStatus(400);
+		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_IMAGE_RANDOM_ID_PARAM + ")");
+		log.severe("GeatteUplaodTextOnlyServlet.doPOST() : Missing image id, " + Config.GEATTE_IMAGE_RANDOM_ID_PARAM + " is null");
+		return;
+	    }
+
 	    if (mGeatteTitleField == null) {
 		mGeatteTitleField = "new geatte";
 	    }
-	    if (mImageBlobField == null) {
+
+	    GeatteTmpImageInfo imageInfo = getUploadedImage(mImageRandomId);
+	    if (imageInfo == null) {
 		resp.setStatus(400);
-		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_IMAGE_PARAM + ")");
-		log.severe("GeatteUploadServlet.doPOST() : Missing image, " + Config.GEATTE_IMAGE_PARAM + " is null");
+		resp.getWriter().println(RETRY_STATUS);
+		log.severe("GeatteUplaodTextOnlyServlet.doPOST() : Missing image info, can not load from image table with mImageRandomId = " + mImageRandomId);
 		return;
 	    }
+	    mImageBlobField = imageInfo.getImage();
+
+	    if (mImageBlobField == null) {
+		resp.setStatus(400);
+		resp.getWriter().println(RETRY_STATUS);
+		log.severe("GeatteUplaodTextOnlyServlet.doPOST() : Missing image, can not load image from image table with mImageRandomId = " + mImageRandomId);
+		return;
+	    }
+
 	    //after save to db, send geatte to contacts
 	    String geatteId = null;
 	    if ((geatteId = saveToDb(resp)) != null ) {
-		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : ready to send geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
+		log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() : ready to send geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
 		// the message push to device
 		Map<String, String[]> params = new HashMap<String, String[]>();
 		params.put("data.geatteid", new String[]{geatteId});
 
 		submitGeatteTask(mToNumberField, params);
-		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : sent geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
+		log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() : sent geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
+
+		//image already saved to geatte info, delete from image info
+		deleteImageInfo(imageInfo);
 
 		JSONObject geatteJson = new JSONObject();
 		try {
 		    geatteJson.put(Config.GEATTE_ID_PARAM, geatteId);
 		    PrintWriter out = resp.getWriter();
 		    geatteJson.write(out);
-		    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : Successfully send a geatte, return geatte id in JSON = " + geatteId);
+		    log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() : Successfully send a geatte, return geatte id in JSON = " + geatteId);
 		} catch (JSONException e) {
 		    throw new IOException(e);
 		}
 	    }
 	    else {
-		log.warning("GeatteUploadServlet.doPOST() : unable to save user's geatte to db");
+		log.warning("GeatteUplaodTextOnlyServlet.doPOST() : unable to save user's geatte to db");
 	    }
 
-	    log.log(Level.INFO, "GeatteUploadServlet.doPOST() : END GeatteUploadServlet.doPOST()");
+	    log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() : END GeatteUploadServlet.doPOST()");
 	} catch (Exception ex) {
 	    throw new ServletException(ex);
 	}
     }
+
+    private GeatteTmpImageInfo getUploadedImage(String imageRandomId) {
+	ServletContext ctx = getServletContext();
+	if (ctx == null) {
+	    return null;
+	}
+	PersistenceManager pm = DBHelper.getPMF(ctx).getPersistenceManager();
+	try {
+	    GeatteTmpImageInfo imageInfo = GeatteTmpImageInfo.getImageInfoForImageId(pm, imageRandomId);
+
+	    //retries
+	    if (imageInfo == null) {
+		int retries = 0;
+		while (retries < 2 && imageInfo == null) {
+		    try {
+			Thread.sleep(500);
+			imageInfo = GeatteTmpImageInfo.getImageInfoForImageId(pm, imageRandomId);
+			retries++;
+		    } catch (InterruptedException e) {
+			// ignore
+		    }
+		}
+	    }
+	    return imageInfo;
+	} catch (Exception e) {
+	    log.warning("GeatteUplaodTextOnlyServlet.getUploadedImage() : Error : " + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+	return null;
+    }
+
+    private void deleteImageInfo(GeatteTmpImageInfo imageInfo) {
+	ServletContext ctx = getServletContext();
+	if (ctx == null) {
+	    return;
+	}
+	PersistenceManager pm = DBHelper.getPMF(ctx).getPersistenceManager();
+	try {
+	    pm.deletePersistent(imageInfo);
+	    log.log(Level.INFO, "[DEBUG] GeatteUplaodTextOnlyServlet.getUploadedImage() : deleted imageInfo for " + imageInfo.getId());
+	} catch (Exception e) {
+	    log.warning("GeatteUplaodTextOnlyServlet.getUploadedImage() : Error : " + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+    }
+
 
     private String saveToDb(HttpServletResponse resp) throws IOException {
 	// Context-shared PMF.
