@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-
 import greendroid.app.GDActivity;
 import greendroid.widget.AsyncImageView;
 import android.app.Activity;
@@ -40,25 +39,26 @@ public class GeatteVotingActivity extends GDActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+	Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate START");
 	super.onCreate(savedInstanceState);
 	setActionBarContentView(R.layout.geatte_voting_view);
 	mGeatteVoteImage = (ImageView) findViewById(R.id.voting_image_view);
 	mVotingThumbnail = (AsyncImageView) findViewById(R.id.voting_thumbnail);
-
-	Log.d(Config.LOGTAG, " " + " GeatteVotingActivity:onCreate");
 
 	Bundle extras = getIntent().getExtras();
 	mGeatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
 
 	Log.d(Config.LOGTAG, " " +  GeatteVotingActivity.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
 	populateFields();
+	Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate END");
     }
 
     @Override
     protected void onResume() {
+	Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume START");
 	super.onResume();
-	Log.v(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " onResume");
 	populateFields();
+	Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume END");
     }
 
     @Override
@@ -122,6 +122,35 @@ public class GeatteVotingActivity extends GDActivity {
 	}
     }
 
+    private void saveState(String geatteId, String vote, String comment) {
+
+	final GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
+
+	try {
+	    dbHelper.open();
+
+	    long ret = dbHelper.insertFIFeedback(geatteId, vote, comment);
+
+	    if (ret >= 0) {
+		Log.d(Config.LOGTAG, "GeatteVotingActivity:saveState() : saved feedback for friend interest for geatteId = " + geatteId
+			+ ", vote = " + vote + ", comment = " + comment + " to DB SUCCESSUL!");
+	    } else {
+		Log.d(Config.LOGTAG, " GeatteVotingActivity:saveState() : saved contact for friend interest for geatteId = " + geatteId
+			+ ", vote = " + vote + ", comment = " + comment + " to DB FAILED!");
+	    }
+
+	} catch (Exception e) {
+	    Log.e(Config.LOGTAG, "GeatteContactsService:processJsonResponse: exception", e);
+	} finally {
+	    dbHelper.close();
+	}
+
+    }
+    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_GEATTE_ID + ", " +
+    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_VOTE + ", " +
+    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_COMMENT + ", " +
+    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_CREATED_DATE + " " +
+
     class VoteUploadTask extends AsyncTask<String, String, String> {
 	@Override
 	protected String doInBackground(String... strings) {
@@ -145,6 +174,11 @@ public class GeatteVotingActivity extends GDActivity {
 
 		AppEngineClient client = new AppEngineClient(getApplicationContext(), accountName);
 		HttpResponse response = client.makeRequestWithParams(GEATTE_VOTE_UPLOAD_PATH, params);
+
+		//save feedback to db
+		saveState(mGeatteId, vote, feedback);
+		Log.d(Config.LOGTAG, "VoteUploadTask:doInBackground(): save feedback for friend interest to db, " +
+			"geatteId = " + mGeatteId + ", vote = " + vote + ", feedback = " + feedback);
 
 		if (response.getEntity() != null) {
 		    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
@@ -195,6 +229,7 @@ public class GeatteVotingActivity extends GDActivity {
 		    }
 		}
 		Log.d(Config.LOGTAG, "VoteUploadTask:onPostExecute(): get response :" + sResponse);
+
 		// server response
 		if (sResponse != null) {
 		    Toast.makeText(getApplicationContext(), "Geatte vote and feedback sent successfully, result = " + sResponse,

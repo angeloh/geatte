@@ -202,8 +202,8 @@ public class GeatteContactsService extends Service {
 			Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved contact for phone = " + phone
 				+ ", contactId = " + contactId + ", name = " + name + " to DB SUCCESSUL!");
 		    } else {
-			Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: updated contact for phone = " + phone
-				+ ", contactId = " + contactId + ", name = " + name + " to DB SUCCESSUL!");
+			Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved contact for phone = " + phone
+				+ ", contactId = " + contactId + ", name = " + name + " to DB FAILED!");
 		    }
 		} catch (Exception e) {
 		    Log.e(Config.LOGTAG, "GeatteContactsService:processJsonResponse: exception", e);

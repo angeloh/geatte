@@ -341,7 +341,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		    if (respStatusCode == 400 || respStatusCode == 500) {
 
 			//when resp is RETRY, redirect to geatte canvas
-			if (body.toString().equals(RETRY_STATUS)) {
+			if (body.toString().contains(RETRY_STATUS)) {
 			    if (mDialog != null && mDialog.isShowing()) {
 				try {
 				    Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): try to dismiss mDialog");
@@ -352,7 +352,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 				}
 			    }
 			    this.publishProgress(getString(R.string.upload_text_retry));
-			    Log.w(Config.LOGTAG, "GeatteUploadTask Got RETRY");
+			    Log.w(Config.LOGTAG, "GeatteUploadTask Got RETRY, body = " + body.toString());
 			    return RETRY_STATUS;
 			} else {
 			    Log.w(Config.LOGTAG, "GeatteUploadTask Error: " + respStatusCode + " " + body.toString());
@@ -405,7 +405,6 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): got retry");
 		return;
 	    }
-
 	    try {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {

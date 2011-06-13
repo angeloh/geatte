@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class GeatteCanvas extends GDActivity {
     private static final String CLASSTAG = GeatteCanvas.class.getSimpleName();
@@ -48,6 +51,7 @@ public class GeatteCanvas extends GDActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+	Log.d(Config.LOGTAG, "GeatteCanvas:onCreate() START");
 	super.onCreate(savedInstanceState);
 
 	// TODO check if server has this device's reg id
@@ -108,7 +112,16 @@ public class GeatteCanvas extends GDActivity {
 		0, new Intent(GeatteCanvas.this, GeatteContactsService.class), 0);
 
 	scheduleContactService();
+	Log.d(Config.LOGTAG, "GeatteCanvas:onCreate() END");
+    }
 
+    private boolean isOnline() {
+	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+	    return true;
+	}
+	return false;
     }
 
     private void scheduleContactService() {
@@ -149,7 +162,7 @@ public class GeatteCanvas extends GDActivity {
 
     @Override
     protected void onResume() {
-	Log.d(Config.LOGTAG_C2DM, "GeatteCanvas:onResume() START");
+	Log.d(Config.LOGTAG, "GeatteCanvas:onResume() START");
 	super.onResume();
 	if (mPendingAuth) {
 	    mPendingAuth = false;
@@ -160,7 +173,11 @@ public class GeatteCanvas extends GDActivity {
 		C2DMessaging.register(this, Config.C2DM_SENDER);
 	    }
 	}
-	Log.d(Config.LOGTAG_C2DM, "GeatteCanvas:onResume() END");
+	if (!isOnline()) {
+	    Toast.makeText(getApplicationContext(), "No internet connection available!!", Toast.LENGTH_SHORT).show();
+	    Log.d(Config.LOGTAG, "GeatteCanvas:onResume()  No internet connection available!!");
+	}
+	Log.d(Config.LOGTAG, "GeatteCanvas:onResume() END");
     }
 
     @Override
@@ -203,10 +220,11 @@ public class GeatteCanvas extends GDActivity {
 		String randomId = UUID.randomUUID().toString();
 		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " try upload image capture output to server as intent service, randomId : " + randomId);
 
-		Intent imageUploadIntent = new Intent(GeatteImageUploadIntentService.IMAGE_UPLOAD_ACTION);
-		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_PATH, mImagePath);
-		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
-		GeatteImageUploadIntentService.runIntentInService(this, imageUploadIntent);
+		new ImageUploadAsynTask().execute(randomId);
+		//		Intent imageUploadIntent = new Intent(GeatteImageUploadIntentService.IMAGE_UPLOAD_ACTION);
+		//		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_PATH, mImagePath);
+		//		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
+		//		GeatteImageUploadIntentService.runIntentInService(this, imageUploadIntent);
 
 		Intent editIntent = new Intent(this, GeatteEditUploadTextOnlyActivity.class);
 		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
@@ -327,6 +345,24 @@ public class GeatteCanvas extends GDActivity {
 	//	} else {
 	//	    return false;
 	//	}
+    }
+
+    class ImageUploadAsynTask extends AsyncTask<String, String, String> {
+	@Override
+	protected String doInBackground(String... strings) {
+	    try {
+		String imageRandomId = strings[0];
+		Context context = getApplicationContext();
+		Intent imageUploadIntent = new Intent(GeatteImageUploadIntentService.IMAGE_UPLOAD_ACTION);
+		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_PATH, mImagePath);
+		imageUploadIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, imageRandomId);
+		GeatteImageUploadIntentService.runIntentInService(context, imageUploadIntent);
+
+	    } catch (Exception e) {
+		Log.e(Config.LOGTAG, e.getMessage(), e);
+	    }
+	    return null;
+	}
     }
 
     class RegIdCheckTask extends AsyncTask<String, String, String> {

@@ -322,7 +322,7 @@ public class GeatteUploadServlet extends HttpServlet {
 	    }
 	    for (String key : params.keySet()) {
 		String[] values = params.get(key);
-		url.param(key, URLEncoder.encode(values[0], C2DMessaging.UTF8));
+		url.param(key, URLEncoder.encode(values[0], Config.ENCODE_UTF8));
 	    }
 
 	    // Task queue implements the exponential backoff

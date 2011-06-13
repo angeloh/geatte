@@ -23,7 +23,7 @@ public class GeatteTmpImageInfo {
     private Blob image;
 
     @Persistent
-    private Date createDate = new Date();
+    private Date createdDate = new Date();
 
     public GeatteTmpImageInfo(String id, Blob image) {
 	super();
@@ -39,8 +39,8 @@ public class GeatteTmpImageInfo {
 	return id;
     }
 
-    public Date getCreateDate() {
-	return createDate;
+    public Date getCreatedDate() {
+	return createdDate;
     }
 
     public void setImage(Blob image) {

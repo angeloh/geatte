@@ -1,6 +1,8 @@
 package com.geatte.app.server;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +35,15 @@ public class GeatteSendServlet extends HttpServlet {
 
 	String toNumbers = req.getParameter(Config.GEATTE_TO_NUMBER_PARAM);
 	String defaultCountryCode = req.getParameter(Config.GEATTE_COUNTRY_ISO_PARAM);
+	String collapse = req.getParameter(C2DMessaging.PARAM_COLLAPSE_KEY);
+	boolean delayWhenIdle = null != req.getParameter(C2DMessaging.PARAM_DELAY_WHILE_IDLE);
+	try {
+	    toNumbers = URLDecoder.decode((toNumbers==null ? "" : toNumbers), Config.ENCODE_UTF8);
+	    defaultCountryCode = URLDecoder.decode((defaultCountryCode==null ? "" : defaultCountryCode), Config.ENCODE_UTF8);
+	    collapse = URLDecoder.decode((collapse==null ? "" : collapse), Config.ENCODE_UTF8);
+	} catch (UnsupportedEncodingException ex) {
+	    log.log(Level.WARNING, "GeatteSendServlet:doPost() : Error", ex);
+	}
 
 	log.info("GeatteSendServlet:doPost() : send geatte to numbers = " + toNumbers + ", defaultCountryCode = " + defaultCountryCode);
 	//String geatteId = req.getParameter(Config.GEATTE_ID_PARAM);
@@ -51,8 +62,7 @@ public class GeatteSendServlet extends HttpServlet {
 	List<DeviceInfo> allDevices = getDevices(numberList, defaultCountryCode);
 
 	Map<String, String[]> params = req.getParameterMap();
-	String collapse = req.getParameter(C2DMessaging.PARAM_COLLAPSE_KEY);
-	boolean delayWhenIdle = null != req.getParameter(C2DMessaging.PARAM_DELAY_WHILE_IDLE);
+
 
 	StringBuilder errorMsg = new StringBuilder();
 	boolean sentOk = false;

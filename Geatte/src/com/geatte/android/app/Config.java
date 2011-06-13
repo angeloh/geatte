@@ -5,6 +5,8 @@ public class Config {
     public static final String LOGTAG = "GeatteApp";
     public static final String LOGTAG_C2DM = "C2DM";
 
+    public static final String ENCODE_UTF8 = "UTF-8";
+
     public static final Long IMAGE_BLOB_UPLOAD_BACKOFF = 300L;
 
     public static enum LIKE {YES, NO, MAYBE};
@@ -24,6 +26,10 @@ public class Config {
     public static final String EXTRA_IMAGE_RANDOM_ID = "image_random_id";
 
     public static final String EXTRA_CURRENT_TAB = "0";
+
+    //intent actions
+    public static final String ACTION_VOTING = "action_voting";
+    public static final String ACTION_FEEDBACK = "action_feedback";
 
     //setup configs
     public static final String SAVED_SCREEN_ID = "saved_screen_id";
@@ -72,7 +78,7 @@ public class Config {
     public static final String GEATTE_TITLE_PARAM = "title";
     public static final String GEATTE_DESC_PARAM = "desc";
     public static final String GEATTE_IMAGE_PARAM = "image";
-    public static final String GEATTE_CREATED_DATE_PARAM = "createDate";
+    public static final String GEATTE_CREATED_DATE_PARAM = "createdDate";
 
     public static final String FRIEND_GEATTE_VOTER = "friendGeatteVoter";
     public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";

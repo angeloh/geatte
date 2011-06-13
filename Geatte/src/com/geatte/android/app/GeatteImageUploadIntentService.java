@@ -91,7 +91,7 @@ public class GeatteImageUploadIntentService extends IntentService {
 	    if (imagePath != null && imageRandomId != null) {
 		// bitmap = BitmapFactory.decodeFile(mImagePath);
 		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		bitmapOptions.inSampleSize = 8;
+		bitmapOptions.inSampleSize = 6;
 		bitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 		imageFileName = new File(imagePath).getName();
 	    } else {

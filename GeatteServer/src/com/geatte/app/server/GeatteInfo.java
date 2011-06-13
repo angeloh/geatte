@@ -1,5 +1,6 @@
 package com.geatte.app.server;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -36,7 +37,7 @@ public class GeatteInfo {
     private Blob image;
 
     @Persistent
-    private Date createDate = new Date();
+    private Date createdDate = new Date();
 
     @Persistent
     private Date updateDate;
@@ -88,8 +89,14 @@ public class GeatteInfo {
 	this.updateDate = updateDate;
     }
 
-    public Date getCreateDate() {
-	return createDate;
+    public Date getCreatedDate() {
+	return createdDate;
+    }
+
+    public String getCreatedDateStr() {
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	String str = dateFormat.format(createdDate);
+	return str;
     }
 
     public void setImage(Blob image) {

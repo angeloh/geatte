@@ -2,6 +2,8 @@ package com.geatte.app.server;
 
 public class Config {
 
+    public static final String ENCODE_UTF8 = "UTF-8";
+
     // request parameter keys
     public static final String DEV_REG_ID_PARAM = "devRegId";
     public static final String DEVICE_ID_PARAM = "deviceId";
@@ -17,7 +19,7 @@ public class Config {
     public static final String GEATTE_TITLE_PARAM = "title";
     public static final String GEATTE_DESC_PARAM = "desc";
     public static final String GEATTE_IMAGE_PARAM = "image";
-    public static final String GEATTE_CREATED_DATE_PARAM = "createDate";
+    public static final String GEATTE_CREATED_DATE_PARAM = "createdDate";
 
     public static final String FRIEND_GEATTE_VOTER = "friendGeatteVoter";
     public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";

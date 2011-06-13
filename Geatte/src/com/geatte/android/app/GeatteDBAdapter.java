@@ -57,6 +57,13 @@ public class GeatteDBAdapter {
     public static final String KEY_FI_IMAGE_INTEREST_ID = "fi_interest";
     public static final String KEY_FI_IMAGE_PATH = "fi_image_path";
 
+    //TABLE feedbacks to friend_interests
+    public static final String KEY_FI_FEEDBACK_ID = "_id";
+    public static final String KEY_FI_FEEDBACK_GEATTE_ID = "fi_geatte_id";
+    public static final String KEY_FI_FEEDBACK_VOTE = "fi_vote";
+    public static final String KEY_FI_FEEDBACK_COMMENT = "fi_feedback";
+    public static final String KEY_FI_FEEDBACK_CREATED_DATE = "fi_created_date";
+
     private static final String DATABASE_NAME = "geattedb";
     private static final int DATABASE_VERSION = 2;
     private static final int CURSOR_LIMIT = 8;
@@ -67,6 +74,7 @@ public class GeatteDBAdapter {
     private static final String DB_TABLE_CONTACTS = "contacts";
     private static final String DB_TABLE_FRIEND_INTERESTS = "friend_interests";
     private static final String DB_TABLE_FI_IMAGES = "fi_images";
+    private static final String DB_TABLE_FI_FEEDBACKS = "fi_feedbacks";
 
     /**
      * Database creation sql statement
@@ -108,7 +116,7 @@ public class GeatteDBAdapter {
 	KEY_FRIEND_INTEREST_TITLE +" TEXT NOT NULL," +
 	KEY_FRIEND_INTEREST_DESC +" TEXT," +
 	KEY_FRIEND_INTEREST_FROM +" TEXT NOT NULL," +
-	KEY_FRIEND_INTEREST_CREATED_DATE +" TEXT" +
+	KEY_FRIEND_INTEREST_CREATED_DATE +" DATE" +
 	");";
 
     private static final String DB_CREATE_FI_IMAGES =
@@ -117,6 +125,15 @@ public class GeatteDBAdapter {
 	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
 	KEY_FI_IMAGE_INTEREST_ID + " TEXT," +
 	"FOREIGN KEY (" + KEY_FI_IMAGE_INTEREST_ID + ") REFERENCES " + DB_TABLE_FRIEND_INTERESTS + " (" + KEY_FRIEND_INTEREST_ID + ")" +
+	");";
+
+    private static final String DB_CREATE_FI_FEEDBACKS =
+	"CREATE TABLE " + DB_TABLE_FI_FEEDBACKS + " (" + KEY_FI_FEEDBACK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+	KEY_FI_FEEDBACK_GEATTE_ID + " TEXT," +
+	KEY_FI_FEEDBACK_VOTE + " TEXT," +
+	KEY_FI_FEEDBACK_COMMENT + " TEXT," +
+	KEY_FI_FEEDBACK_CREATED_DATE + " DATE," +
+	"FOREIGN KEY (" +KEY_FI_FEEDBACK_GEATTE_ID +") REFERENCES " + DB_TABLE_FRIEND_INTERESTS + " (" + KEY_FRIEND_INTEREST_ID + ")" +
 	");";
 
     private DatabaseHelper mDbHelper;
@@ -137,6 +154,7 @@ public class GeatteDBAdapter {
 	    db.execSQL(DB_CREATE_CONTACTS);
 	    db.execSQL(DB_CREATE_FRIEND_INTERESTS);
 	    db.execSQL(DB_CREATE_FI_IMAGES);
+	    db.execSQL(DB_CREATE_FI_FEEDBACKS);
 	}
 
 	/*	private void processDelete(long rowId) {
@@ -153,10 +171,10 @@ public class GeatteDBAdapter {
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_INTERESTS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_FEEDBACKS);
 	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_IMAGES);
-	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_CONTACTS);
-	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_FRIEND_INTERESTS);
-	    db.execSQL("DROP TABLE IF EXISTS "+DB_CREATE_FI_IMAGES);
-
+	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_CONTACTS);
+	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_FRIEND_INTERESTS);
+	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_FI_IMAGES);
+	    db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE_FI_FEEDBACKS);
 	    onCreate(db);
 	}
 
@@ -320,6 +338,18 @@ public class GeatteDBAdapter {
 	initialValues.put(KEY_FI_IMAGE_PATH, imagePath);
 
 	return mDb.insert(DB_TABLE_FI_IMAGES, null, initialValues);
+    }
+
+    public long insertFIFeedback(String geatteId, String vote, String comment) {
+	ContentValues initialValues = new ContentValues();
+	initialValues.put(KEY_FI_FEEDBACK_GEATTE_ID, geatteId);
+	initialValues.put(KEY_FI_FEEDBACK_VOTE, vote);
+	initialValues.put(KEY_FI_FEEDBACK_COMMENT, comment);
+	// set the format to sql date time
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	initialValues.put(KEY_FI_FEEDBACK_CREATED_DATE, dateFormat.format(new Date()));
+
+	return mDb.insert(DB_TABLE_FI_FEEDBACKS, null, initialValues);
     }
 
     /**
@@ -564,6 +594,29 @@ public class GeatteDBAdapter {
 	if (cursor != null) {
 	    cursor.moveToFirst();
 	}
+	return cursor;
+    }
+
+    /**
+     * Return a Cursor positioned at the friend interest's feedbacks that matches the given geatteId
+     * 
+     * @param geatteId geatteId
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchFIFeedback(String geatteId) throws SQLException {
+	String query = "SELECT " +
+	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_GEATTE_ID + ", " +
+	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_VOTE + ", " +
+	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_COMMENT + ", " +
+	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_CREATED_DATE + " " +
+	"FROM " +
+	DB_TABLE_FI_FEEDBACKS +
+	" WHERE " + DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_GEATTE_ID + "=\"" + geatteId + "\"";
+
+	Log.i(Config.LOGTAG, "fetch friend's interest feedbacks query string = " + query);
+
+	Cursor cursor = mDb.rawQuery(query, null);
 	return cursor;
     }
 

@@ -2,6 +2,7 @@ package com.geatte.app.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,12 +83,12 @@ public class GeatteInfoGetServlet extends HttpServlet {
 		JSONObject geatteJson = new JSONObject();
 		try {
 		    //JSONArray devices = new JSONArray();
-		    //JSONObject dijson = new JSONObject();
-		    geatteJson.put(Config.GEATTE_ID_PARAM, geatte.getId().toString());
-		    geatteJson.put(Config.GEATTE_FROM_NUMBER_PARAM, geatte.getFromNumber());
-		    geatteJson.put(Config.GEATTE_TITLE_PARAM, geatte.getGeatteTitile());
-		    geatteJson.put(Config.GEATTE_DESC_PARAM, geatte.getGeatteDesc());
-		    geatteJson.put(Config.GEATTE_CREATED_DATE_PARAM, geatte.getCreateDate());
+		    //JSONObject dijson = new JSONObject(); (geatteid==null ? "" : geatteid), Config.ENCODE_UTF8
+		    geatteJson.put(Config.GEATTE_ID_PARAM, URLEncoder.encode(geatte.getId().toString(), Config.ENCODE_UTF8));
+		    geatteJson.put(Config.GEATTE_FROM_NUMBER_PARAM, URLEncoder.encode(geatte.getFromNumber(), Config.ENCODE_UTF8));
+		    geatteJson.put(Config.GEATTE_TITLE_PARAM, URLEncoder.encode((geatte.getGeatteTitile()==null ? "": geatte.getGeatteTitile()), Config.ENCODE_UTF8));
+		    geatteJson.put(Config.GEATTE_DESC_PARAM, URLEncoder.encode((geatte.getGeatteDesc()==null ? "": geatte.getGeatteDesc()), Config.ENCODE_UTF8));
+		    geatteJson.put(Config.GEATTE_CREATED_DATE_PARAM, URLEncoder.encode((geatte.getCreatedDateStr()==null ? "": geatte.getCreatedDateStr()), Config.ENCODE_UTF8));
 
 		    PrintWriter out = res.getWriter();
 		    geatteJson.write(out);

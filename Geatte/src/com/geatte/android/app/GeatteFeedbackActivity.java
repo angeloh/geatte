@@ -27,7 +27,7 @@ public class GeatteFeedbackActivity extends GDListActivity {
     private final Handler mHandler = new Handler();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	Log.d(Config.LOGTAG, "START GeatteFeedbackActivity:onCreate");
 	setTitle(R.string.app_name);

@@ -7,10 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -188,6 +190,12 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	//showNotification("Got new geatte message : " + geatteMessage);
 	Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatteid " + geatteid);
 
+	try {
+	    geatteid = URLDecoder.decode((geatteid==null ? "" : geatteid), Config.ENCODE_UTF8);
+	} catch (UnsupportedEncodingException e) {
+	    Log.e(Config.LOGTAG, " " + TAG, e);
+	}
+
 	//fetch coming message
 	DefaultHttpClient client = new DefaultHttpClient();
 	//		HttpGet get = new HttpGet(Config.BASE_URL + Config.GEATTE_INFO_GET_URL);
@@ -234,23 +242,23 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 	    if (JResponse != null) {
 		String geatteId = JResponse.getString(Config.GEATTE_ID_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + "GOT geatteId = " + geatteId);
+		Log.d(Config.LOGTAG, " " + TAG + " GOT geatteId = " + geatteId);
 
 		String fromNumber = JResponse.getString(Config.GEATTE_FROM_NUMBER_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + "GOT fromNumber = " + fromNumber);
+		Log.d(Config.LOGTAG, " " + TAG + " GOT fromNumber = " + fromNumber);
 
 		String title = JResponse.getString(Config.GEATTE_TITLE_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + "GOT title = " + title);
+		Log.d(Config.LOGTAG, " " + TAG + " GOT title = " + title);
 
 		String desc = JResponse.getString(Config.GEATTE_DESC_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + "GOT desc = " + desc);
+		Log.d(Config.LOGTAG, " " + TAG + " GOT desc = " + desc);
 
 		String createdDate = JResponse.getString(Config.GEATTE_CREATED_DATE_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + "GOT createdDate = " + createdDate);
+		Log.d(Config.LOGTAG, " " + TAG + " GOT createdDate = " + createdDate);
 
 		long ret = dbHelper.insertFriendInterest(geatteId, title, desc, fromNumber, createdDate);
 		if (ret == -1) {
-		    Log.w(Config.LOGTAG, " " + TAG + "ERROR Saved geatteId = " + geatteId + " to DB, IGNORED");
+		    Log.w(Config.LOGTAG, " " + TAG + " ERROR Saved geatteId = " + geatteId + " to DB, IGNORED");
 		    return;
 		}
 		Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + " to DB SUCCESSUL!");
@@ -260,7 +268,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		//get = new HttpGet(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL);
 		//response =  client.execute(get);
 
-		if ((geatteId != null) && !geatteId.equals("")) {
+		if (geatteId != null && !geatteId.equals("")) {
 		    try {
 			URL url = new URL(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL + "?" + Config.GEATTE_ID_PARAM + "=" + geatteId);
 			URLConnection conn = url.openConnection();
@@ -281,7 +289,12 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 			}
 
 			// send notification
-			Intent intentNotify = new Intent(this, GeatteVotingActivity.class);
+			Intent intentNotify = new Intent(context, GeatteVotingActivity.class);
+			intentNotify.setAction(Config.ACTION_VOTING + System.currentTimeMillis());
+			if (intentNotify.getExtras() != null) {
+			    String geatteIdExtra = intentNotify.getExtras().getString(Config.GEATTE_ID_PARAM);
+			    Log.d(Config.LOGTAG, " " + TAG + " geatteIdExtra is " + geatteIdExtra);
+			}
 			intentNotify.putExtra(Config.GEATTE_ID_PARAM, geatteId);
 			//				intentNotify.putExtra(Config.GEATTE_FROM_NUMBER_PARAM, fromNumber);
 			//				intentNotify.putExtra(Config.GEATTE_TITLE_PARAM, title);
@@ -317,6 +330,15 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     private void processNewGeatteFeedback(Context context, String voteGeatteId, String voter, String voteResp, String voteFeedback) {
 	Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatte vote id = " + voteGeatteId);
 
+	try {
+	    voteGeatteId = URLDecoder.decode((voteGeatteId==null ? "" : voteGeatteId), Config.ENCODE_UTF8);
+	    voter = URLDecoder.decode((voter==null ? "" : voter), Config.ENCODE_UTF8);
+	    voteResp = URLDecoder.decode((voteResp==null ? "" : voteResp), Config.ENCODE_UTF8);
+	    voteFeedback = URLDecoder.decode((voteFeedback==null ? "" : voteFeedback), Config.ENCODE_UTF8);
+	} catch (UnsupportedEncodingException e) {
+	    Log.e(Config.LOGTAG, " " + TAG, e);
+	}
+
 	final GeatteDBAdapter dbHelper = new GeatteDBAdapter(this);
 
 	try {
@@ -324,11 +346,8 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    dbHelper.open();
 
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteGeatteId = " + voteGeatteId);
-
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voter = " + voter);
-
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteResp = " + voteResp);
-
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteFeedback = " + voteFeedback);
 
 	    dbHelper.insertFeedback(voteGeatteId, voter, voteResp, voteFeedback);
@@ -336,6 +355,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 	    // send notification
 	    Intent intentNotify = new Intent(this, GeatteFeedbackActivity.class);
+	    intentNotify.setAction(Config.ACTION_FEEDBACK + System.currentTimeMillis());
 	    intentNotify.putExtra(Config.GEATTE_ID_PARAM, voteGeatteId);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTER, voter);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTE_RESP, voteResp);

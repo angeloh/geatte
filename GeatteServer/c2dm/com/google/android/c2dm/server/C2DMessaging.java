@@ -17,6 +17,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import com.geatte.app.server.Config;
 import com.geatte.app.server.DBHelper;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -33,8 +34,6 @@ public class C2DMessaging {
     public static final String PARAM_DELAY_WHILE_IDLE = "delay_while_idle";
 
     public static final String PARAM_COLLAPSE_KEY = "collapse_key";
-
-    public static final String UTF8 = "UTF-8";
 
     /**
      * Jitter - random interval to wait before retry.
@@ -90,13 +89,13 @@ public class C2DMessaging {
 	    String key = (String) keyObj;
 	    if (key.startsWith("data.")) {
 		String[] values = params.get(key);
-		postDataBuilder.append("&").append(key).append("=").append(URLEncoder.encode(values[0], UTF8));
+		postDataBuilder.append("&").append(key).append("=").append(URLEncoder.encode(values[0], Config.ENCODE_UTF8));
 	    }
 	}
 
 	log.info("C2DMessaging.sendNoRetry() : the data to post : " + postDataBuilder.toString());
 
-	byte[] postData = postDataBuilder.toString().getBytes(UTF8);
+	byte[] postData = postDataBuilder.toString().getBytes(Config.ENCODE_UTF8);
 
 	// Hit the dm URL.
 	URL url = new URL(serverConfig.getC2DMUrl());
@@ -248,7 +247,7 @@ public class C2DMessaging {
 	    }
 	    for (String key : params.keySet()) {
 		String[] values = params.get(key);
-		url.param(key, URLEncoder.encode(values[0], UTF8));
+		url.param(key, URLEncoder.encode(values[0], Config.ENCODE_UTF8));
 	    }
 
 	    // Task queue implements the exponential backoff
