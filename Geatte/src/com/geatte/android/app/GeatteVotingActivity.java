@@ -140,7 +140,7 @@ public class GeatteVotingActivity extends GDActivity {
 	    }
 
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteContactsService:processJsonResponse: exception", e);
+	    Log.e(Config.LOGTAG, "GeatteVotingActivity:saveState: exception", e);
 	} finally {
 	    dbHelper.close();
 	}

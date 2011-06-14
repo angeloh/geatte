@@ -286,7 +286,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
     private void submitGeatteTask(String toNumbers, Map<String, String[]> params) {
 	log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.submitGeatteTask() : START submit geatte to " + toNumbers);
 	boolean delayWhileIdle = true;
-	String collapseKey = "1";
+	String collapseKey = Integer.toString((int)(Math.random()*5000));
 	Queue dmQueue = QueueFactory.getQueue("geatteSend");
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {

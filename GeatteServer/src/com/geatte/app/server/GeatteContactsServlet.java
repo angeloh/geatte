@@ -2,6 +2,7 @@ package com.geatte.app.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,7 +82,7 @@ public class GeatteContactsServlet extends HttpServlet {
 		    //put the contact back which is as same as the server device info
 		    if (ret[0] != null) {
 			jObject.remove(Config.CONTACT_PHONE_NUMBER);
-			jObject.put(Config.CONTACT_PHONE_NUMBER, ret[0]);
+			jObject.put(Config.CONTACT_PHONE_NUMBER, URLEncoder.encode(ret[0], Config.ENCODE_UTF8));
 		    } else {
 			log.log(Level.WARNING, "GeatteContactsServlet.filterGeatteExistingUsers() : Error getting contact " +
 				"phone number from ret array, use old one = " + phone);

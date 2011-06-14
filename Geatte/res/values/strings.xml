@@ -12,6 +12,7 @@
     <string name="menu_delete">Delete Geatte</string>
 	<string name="menu_add_more_geatte">Add more geatte</string>
 	<string name="menu_get_next_page">Get next page</string>
+	<string name="menu_refresh">Refresh</string>
     
     <string name="edit_geatte">New Geatte</string>
     <string name="edit_top_label">Send A Geatte</string>

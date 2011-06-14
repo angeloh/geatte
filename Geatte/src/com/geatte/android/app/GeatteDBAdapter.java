@@ -368,7 +368,7 @@ public class GeatteDBAdapter {
     }
 
     /**
-     * Return a Cursor for all feedbacks
+     * Return a Cursor for all contacts
      * 
      * @return Cursor positioned to matching interest, if found
      * @throws SQLException if note could not be found/retrieved
@@ -391,6 +391,60 @@ public class GeatteDBAdapter {
 	    Log.e(Config.LOGTAG, "ERROR to fetch all fetchAllContacts ", ex);
 	}
 	return null;
+    }
+
+    /**
+     * Return a Cursor of contact for given number
+     * 
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchContactFromPhone(String phoneNumber) throws SQLException {
+	if (phoneNumber == null) {
+	    return null;
+	}
+	String query = "SELECT " +
+	DB_TABLE_CONTACTS + "." + KEY_CONTACT_PHONE_NUMBER + ", " +
+	DB_TABLE_CONTACTS + "." + KEY_CONTACT_ID + ", " +
+	DB_TABLE_CONTACTS + "." + KEY_CONTACT_NAME + " " +
+	"FROM " + DB_TABLE_CONTACTS +
+	" WHERE " + DB_TABLE_CONTACTS + "." + KEY_CONTACT_PHONE_NUMBER + "='" + phoneNumber + "'";
+
+	Log.d(Config.LOGTAG, "fetch contact query string = " + query);
+
+	try {
+	    Cursor cursor = mDb.rawQuery(query, null);
+
+	    if (cursor != null) {
+		cursor.moveToFirst();
+	    }
+
+	    Log.d(Config.LOGTAG, "return cursor fetchContactFromPhone()");
+	    return cursor;
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch fetchContactFromPhone()", ex);
+	}
+	return null;
+    }
+
+    public String fetchContactName(String phoneNumber) {
+	String contactName = null;
+	Cursor contactCur = null;
+	try {
+	    contactCur = fetchContactFromPhone(phoneNumber);
+	    if (contactCur == null || contactCur.isAfterLast()) {
+		contactName = "";
+	    } else {
+		contactName = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_NAME));
+	    }
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch fetchContactName()", ex);
+	} finally {
+	    if (contactCur != null) {
+		contactCur.close();
+	    }
+	}
+	return contactName;
     }
 
     /**

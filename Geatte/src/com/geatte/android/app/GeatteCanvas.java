@@ -72,7 +72,7 @@ public class GeatteCanvas extends GDActivity {
 		Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE );
 		mImagePath = createImagePath();
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mImagePath)));
-		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + mImagePath);
+		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Will put a EXTRA_OUTPUT for image capture to " + mImagePath);
 
 		//		intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getTmpImagePath())));
 		//		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + getTmpImagePath());
@@ -191,13 +191,17 @@ public class GeatteCanvas extends GDActivity {
 	if (requestCode == ACTIVITY_SNAP && resultCode == Activity.RESULT_OK){
 	    //Bitmap x = (Bitmap) intent.getExtras().get("data");
 	    //String path = saveToFile(imgBitmap);
-
-	    ////File fi = new File(getTmpImagePath());
-	    File fi = new File(mImagePath);
+	    File fi = null;
+	    try {
+		////fi = new File(getTmpImagePath());
+		fi = new File(mImagePath);
+	    } catch (Exception ex) {
+		Log.w(Config.LOGTAG, "mImagePath not exist " + mImagePath);
+	    }
 
 	    //Bitmap captureBmp = Media.getBitmap(getContentResolver(), Uri.fromFile(fi) );
 	    //uri = Uri.parse(android.provider.MediaStore.Images.Media.insertImage(getContentResolver(), fi.getAbsolutePath(), null, null));
-	    if (fi.exists()) {
+	    if (fi != null && fi.exists()) {
 		////		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
 		////		bitmapOptions.inSampleSize = 6;
 		////		Bitmap imgBitmap = BitmapFactory.decodeFile(fi.getAbsolutePath(), bitmapOptions);

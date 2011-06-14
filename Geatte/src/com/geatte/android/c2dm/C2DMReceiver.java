@@ -218,7 +218,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    HttpGet httpget = new HttpGet(uri);
 	    HttpResponse response = client.execute(httpget);
 
-	    JSONObject JResponse = null;
+	    JSONObject jResponse = null;
 	    BufferedReader reader = new BufferedReader(
 		    new InputStreamReader(
 			    response.getEntity().getContent(), "UTF-8"));
@@ -233,27 +233,28 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		body.append(tmp, 0, cnt);
 	    }
 	    try {
-		JResponse = new JSONObject(body.toString());
+		jResponse = new JSONObject(URLDecoder.decode((body.toString()==null ? "" : body.toString()), Config.ENCODE_UTF8));
 	    } catch (JSONException e) {
 		Log.e(Config.LOGTAG, " " + TAG, e);
 	    }
 
 	    dbHelper.open();
 
-	    if (JResponse != null) {
-		String geatteId = JResponse.getString(Config.GEATTE_ID_PARAM);
+	    if (jResponse != null) {
+		String geatteId = jResponse.getString(Config.GEATTE_ID_PARAM);
 		Log.d(Config.LOGTAG, " " + TAG + " GOT geatteId = " + geatteId);
 
-		String fromNumber = JResponse.getString(Config.GEATTE_FROM_NUMBER_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + " GOT fromNumber = " + fromNumber);
+		String fromNumber = jResponse.getString(Config.GEATTE_FROM_NUMBER_PARAM);
+		String contactName = dbHelper.fetchContactName(fromNumber);
+		Log.d(Config.LOGTAG, " " + TAG + "GOT fromNumber = " + fromNumber + ", contactName = " + contactName);
 
-		String title = JResponse.getString(Config.GEATTE_TITLE_PARAM);
+		String title = jResponse.getString(Config.GEATTE_TITLE_PARAM);
 		Log.d(Config.LOGTAG, " " + TAG + " GOT title = " + title);
 
-		String desc = JResponse.getString(Config.GEATTE_DESC_PARAM);
+		String desc = jResponse.getString(Config.GEATTE_DESC_PARAM);
 		Log.d(Config.LOGTAG, " " + TAG + " GOT desc = " + desc);
 
-		String createdDate = JResponse.getString(Config.GEATTE_CREATED_DATE_PARAM);
+		String createdDate = jResponse.getString(Config.GEATTE_CREATED_DATE_PARAM);
 		Log.d(Config.LOGTAG, " " + TAG + " GOT createdDate = " + createdDate);
 
 		long ret = dbHelper.insertFriendInterest(geatteId, title, desc, fromNumber, createdDate);
@@ -301,7 +302,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 			//				intentNotify.putExtra(Config.GEATTE_DESC_PARAM, desc);
 			//				intentNotify.putExtra(Config.GEATTE_CREATED_DATE_PARAM, createdDate);
 			//				intentNotify.putExtra(Config.GEATTE_IMAGE_GET_URL, imagePath);
-			C2DMReceiver.generateNotification(context, "You got a new Geatte", title, intentNotify);
+			C2DMReceiver.generateNotification(context, "Got a Geatte from " + contactName, title, intentNotify);
 
 		    } catch (IOException e) {
 			Log.e(Config.LOGTAG, " " + TAG, e);
@@ -344,14 +345,16 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	try {
 
 	    dbHelper.open();
+	    String contactName = dbHelper.fetchContactName(voter);
 
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteGeatteId = " + voteGeatteId);
-	    Log.d(Config.LOGTAG, " " + TAG + "GOT voter = " + voter);
+	    Log.d(Config.LOGTAG, " " + TAG + "GOT voter = " + voter + ", contactName = " + contactName);
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteResp = " + voteResp);
 	    Log.d(Config.LOGTAG, " " + TAG + "GOT voteFeedback = " + voteFeedback);
 
 	    dbHelper.insertFeedback(voteGeatteId, voter, voteResp, voteFeedback);
-	    Log.d(Config.LOGTAG, " " + TAG + "Saved feedback for geatteId = " + voteGeatteId + ", voter = " + voter + " to DB SUCCESSUL!");
+	    Log.d(Config.LOGTAG, " " + TAG + "Saved feedback for geatteId = " + voteGeatteId + ", voter = " +
+		    voter + ", contact name = " + contactName + " to DB SUCCESSUL!");
 
 	    // send notification
 	    Intent intentNotify = new Intent(this, GeatteFeedbackActivity.class);
@@ -360,7 +363,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTER, voter);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTE_RESP, voteResp);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_FEEDBACK, voteFeedback);
-	    C2DMReceiver.generateNotification(context, "You got a new Geatte Feedback from ", voter, intentNotify);
+	    C2DMReceiver.generateNotification(context, "Got a Geatte feedback from " + contactName, "Got feedback", intentNotify);
 
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, " " + TAG, e);

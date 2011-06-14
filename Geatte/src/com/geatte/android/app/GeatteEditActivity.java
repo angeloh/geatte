@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -350,7 +351,7 @@ public class GeatteEditActivity extends GDActivity {
 
 		if (response.getEntity() != null) {
 
-		    JSONObject JResponse = null;
+		    JSONObject jResponse = null;
 		    BufferedReader reader = new BufferedReader(
 			    new InputStreamReader(
 				    response.getEntity().getContent(), "UTF-8"));
@@ -365,17 +366,17 @@ public class GeatteEditActivity extends GDActivity {
 			body.append(tmp, 0, cnt);
 		    }
 		    try {
-			JResponse = new JSONObject(body.toString());
+			jResponse = new JSONObject(URLDecoder.decode((body.toString()==null ? "" : body.toString()), Config.ENCODE_UTF8));
 		    } catch (JSONException e) {
 			Log.e(Config.LOGTAG, "GeatteUploadTask:doInBackground(): unable to read response after upload geatte to server", e);
 		    }
 
-		    if (JResponse != null) {
-			mGeatteId = JResponse.getString(Config.GEATTE_ID_PARAM);
+		    if (jResponse != null) {
+			mGeatteId = jResponse.getString(Config.GEATTE_ID_PARAM);
 			Log.d(Config.LOGTAG, " GeatteUploadTask:doInBackground : GOT geatteId = " + mGeatteId);
 		    }
 
-		    Log.d(Config.LOGTAG, "GeatteUploadTask Response: " + JResponse);
+		    Log.d(Config.LOGTAG, "GeatteUploadTask Response: " + jResponse);
 
 		    return mGeatteId;
 		}

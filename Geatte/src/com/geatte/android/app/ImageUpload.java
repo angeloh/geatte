@@ -3,6 +3,7 @@ package com.geatte.android.app;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -186,9 +187,10 @@ public class ImageUpload extends Activity {
 		    dialog.dismiss();
 
 		if (sResponse != null) {
-		    JSONObject JResponse = new JSONObject(sResponse);
-		    int success = JResponse.getInt("SUCCESS");
-		    String message = JResponse.getString("MESSAGE");
+
+		    JSONObject jResponse = new JSONObject(URLDecoder.decode((sResponse==null ? "" : sResponse), Config.ENCODE_UTF8));
+		    int success = jResponse.getInt("SUCCESS");
+		    String message = jResponse.getString("MESSAGE");
 		    if (success == 0) {
 			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 		    } else {

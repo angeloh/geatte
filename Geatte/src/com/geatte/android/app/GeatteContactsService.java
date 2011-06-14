@@ -2,6 +2,7 @@ package com.geatte.android.app;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
@@ -37,32 +38,27 @@ public class GeatteContactsService extends Service {
     /** Called when the service is first created. */
     @Override
     public void onCreate() {
-
-
+	Log.d(Config.LOGTAG, "GeatteContactsService:onCreate() START");
 	// Start up the thread running the service.  Note that we create a
 	// separate thread because the service normally runs in the process's
 	// main thread, which we don't want to block.
-	Thread thr = new Thread(null, mTask, "AlarmService_Service");
+	Thread thr = new Thread(null, mTask, "GeatteContactsServiceThread");
 	thr.start();
+	Log.d(Config.LOGTAG, "GeatteContactsService:onCreate() END");
     }
 
     @Override
     public void onDestroy() {
+	super.onDestroy();
     }
 
 
     private JSONObject queryAllRawContacts() {
-
+	Log.d(Config.LOGTAG, "GeatteContactsService:queryAllRawContacts() START");
 	final String[] projection = new String[] { RawContacts.CONTACT_ID,
 		// the contact id column
 		RawContacts.DELETED // column if this contact is deleted
 	};
-
-	//	final Cursor rawContacts = managedQuery( RawContacts.CONTENT_URI,
-	//		// the uri for raw contact provider
-	//		projection, null, // selection = null, retrieve all entries
-	//		null, // not required because selection does not contain parameters
-	//		null); // do not order
 
 	Cursor rawContacts = getContentResolver().query(RawContacts.CONTENT_URI, projection, null, null, null);
 
@@ -91,6 +87,7 @@ public class GeatteContactsService extends Service {
 	    Log.e(Config.LOGTAG,
 		    "GeatteContactsService:queryAllRawContacts: json exception", ex);
 	}
+	Log.d(Config.LOGTAG, "GeatteContactsService:queryAllRawContacts() END");
 	return json;
     }
 
@@ -151,7 +148,7 @@ public class GeatteContactsService extends Service {
 			body.append(tmp, 0, cnt);
 		    }
 		    try {
-			jResponse = new JSONObject(body.toString());
+			jResponse = new JSONObject(URLDecoder.decode((body.toString()==null ? "" : body.toString()), Config.ENCODE_UTF8));
 		    } catch (JSONException e) {
 			Log.e(Config.LOGTAG,
 				"GeatteContactsService:Runnable: unable to read response after send contacts to server", e);
@@ -161,6 +158,10 @@ public class GeatteContactsService extends Service {
 
 		    // process json
 		    processJsonResponse(jResponse);
+
+		    // send intent for broadcase receiver in GeatteContactSelectActivity
+		    Intent updateContactsIntent = new Intent(Config.INTENT_ACTION_UPDATE_CONTACTS);
+		    getApplicationContext().sendBroadcast(updateContactsIntent);
 		}
 
 	    } catch (Exception ex) {
@@ -312,9 +313,6 @@ public class GeatteContactsService extends Service {
     public void queryAllPhoneNumbersForContact(JSONArray jsonArray, String contactId) {
 
 	final String[] projection = new String[] { Phone.NUMBER, Phone.TYPE};
-
-	//	final Cursor phone = managedQuery(Phone.CONTENT_URI, projection, Data.CONTACT_ID + "=?", new String[] { String
-	//		.valueOf(contactId) }, null);
 
 	Cursor phone = getContentResolver().query(Phone.CONTENT_URI, projection, Data.CONTACT_ID + "=?", new String[] { contactId }, null);
 

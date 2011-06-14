@@ -44,7 +44,7 @@ public final class C2DMConfig {
     @Persistent
     private String clientSecret;
 
-
+    // default endpoint for c2dm
     public static final String DATAMESSAGING_SEND_ENDPOINT = "https://android.apis.google.com/c2dm/send";
 
     @Persistent

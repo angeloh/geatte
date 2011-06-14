@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -63,7 +62,6 @@ public class GeatteSendServlet extends HttpServlet {
 
 	Map<String, String[]> params = req.getParameterMap();
 
-
 	StringBuilder errorMsg = new StringBuilder();
 	boolean sentOk = false;
 	for (DeviceInfo device : allDevices) {
@@ -101,7 +99,11 @@ public class GeatteSendServlet extends HttpServlet {
 	}
 	numbers = numbers.trim();
 	String[] list = numbers.split(";");
-	return Arrays.asList(list);
+	List<String> ret = new ArrayList<String>();
+	for (String n: list) {
+	    ret.add(n.trim());
+	}
+	return ret;
     }
 
     private List<DeviceInfo> getDevices(List<String> numberList, String defaultCountryCode) {

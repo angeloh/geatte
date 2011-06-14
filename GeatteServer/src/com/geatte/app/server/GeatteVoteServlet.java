@@ -169,7 +169,7 @@ public class GeatteVoteServlet extends HttpServlet {
     private void submitGeatteVoteTask(String ownerNumber, Map<String, String[]> params) {
 	log.log(Level.INFO, "GeatteVoteServlet.submitGeatteVoteTask() : START submit geatte vote to " + ownerNumber);
 	boolean delayWhileIdle = true;
-	String collapseKey = "1";
+	String collapseKey = Integer.toString((int)((Math.random()*5000) + 5001));
 	Queue dmQueue = QueueFactory.getQueue("geatteVote");
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {

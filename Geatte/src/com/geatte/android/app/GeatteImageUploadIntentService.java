@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -136,7 +137,7 @@ public class GeatteImageUploadIntentService extends IntentService {
 
 	    if (response.getEntity() != null) {
 
-		JSONObject JResponse = null;
+		JSONObject jResponse = null;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
 		"UTF-8"));
 
@@ -150,8 +151,8 @@ public class GeatteImageUploadIntentService extends IntentService {
 		    body.append(tmp, 0, cnt);
 		}
 		try {
-		    JResponse = new JSONObject(body.toString());
-		    Log.d(Config.LOGTAG, "GeatteImageUploadIntentService:handleImageUpload Response: " + JResponse);
+		    jResponse = new JSONObject(URLDecoder.decode((body.toString()==null ? "" : body.toString()), Config.ENCODE_UTF8));
+		    Log.d(Config.LOGTAG, "GeatteImageUploadIntentService:handleImageUpload Response: " + jResponse);
 		} catch (JSONException e) {
 		    Log.e(Config.LOGTAG,
 			    "GeatteImageUploadIntentService:handleImageUpload(): unable to read " +
@@ -159,13 +160,13 @@ public class GeatteImageUploadIntentService extends IntentService {
 		}
 
 		String resp = null;
-		if (JResponse != null) {
-		    resp = JResponse.getString(Config.GEATTE_IMAGE_BLOB_RESP);
+		if (jResponse != null) {
+		    resp = jResponse.getString(Config.GEATTE_IMAGE_BLOB_RESP);
 		    Log.d(Config.LOGTAG, " GeatteImageUploadIntentService:handleImageUpload : GOT image uplaod resp = "
 			    + resp);
 		}
 
-		if (JResponse == null || resp == null || !resp.equals("OK")) {
+		if (jResponse == null || resp == null || !resp.equals("OK")) {
 		    // RETRY
 		    Log.d(Config.LOGTAG_C2DM, "Scheduling image blob upload retry, backoff = " + Config.IMAGE_BLOB_UPLOAD_BACKOFF);
 		    Intent retryIntent = new Intent(IMAGE_UPLOAD_ACTION);
