@@ -21,8 +21,8 @@ import android.widget.TextView;
  */
 public class GeatteListActivity extends ListActivity {
 
-    private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_SHOW = 1;
+    //private static final int ACTIVITY_CREATE = 1;
+    private static final int ACTIVITY_SHOW = 0;
 
     private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;
     //private static final int MENU_DELETE_GEATTE = Menu.FIRST + 1;
@@ -143,11 +143,6 @@ public class GeatteListActivity extends ListActivity {
 	return super.onMenuItemSelected(featureId, item);
     }
 
-    private void createGeatte() {
-	Intent i = new Intent(this, GeatteEditActivity.class);
-	startActivityForResult(i, ACTIVITY_CREATE);
-    }
-
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 	super.onListItemClick(l, v, position, id);
@@ -162,4 +157,5 @@ public class GeatteListActivity extends ListActivity {
 	super.onActivityResult(requestCode, resultCode, intent);
 	fillData();
     }
+
 }

@@ -3,7 +3,6 @@ package com.geatte.android.app;
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.Item;
-import greendroid.widget.item.ThumbnailItem;
 import greendroid.widget.itemview.ItemView;
 
 import java.util.ArrayList;
@@ -39,21 +38,21 @@ public class GeatteFeedbackActivity extends GDListActivity {
 	Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra interestId = " + interestId);
 
 	List<Item> items = new ArrayList<Item>();
-	final ThumbnailItem warnItem;
+	final GeatteThumbnailItem warnItem;
 	final ThumbnailBitmapItem geatteItem;
 
 	if (geatteId != null || (interestId != null && interestId != 0L)) {
 	    ThumbnailBitmapItem item = createItemsFromFetchResult(geatteId, interestId, items);
 	    if (item == null) {
 		geatteItem = null;
-		warnItem = new ThumbnailItem("No geatte available", null, R.drawable.empty);
+		warnItem = new GeatteThumbnailItem("No geatte available", null, R.drawable.empty);
 	    } else {
 		geatteItem = item;
 		warnItem = null;
 	    }
 	}
 	else {
-	    warnItem = new ThumbnailItem("Invalid geatte", null, R.drawable.invalid);
+	    warnItem = new GeatteThumbnailItem("Invalid geatte", null, R.drawable.invalid);
 	    geatteItem = null;
 	}
 

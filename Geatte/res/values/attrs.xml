@@ -46,6 +46,11 @@
 	<attr name="GeatteThumbnailCheckboxStyleSubtitle" format="reference" />
 	<attr name="GeatteThumbnailCheckboxStyleThumbnail" format="reference" />
 	
+	<attr name="GeatteThumbnailAsyncBitmapItemStyle" format="reference" />
+	<attr name="GeatteThumbnailAsyncBitmapItemStyleTitle" format="reference" />
+	<attr name="GeatteThumbnailAsyncBitmapItemStyleSubtitle" format="reference" />
+	<attr name="GeatteThumbnailAsyncBitmapItemStyleThumbnail" format="reference" />
+	
 	<attr name="GeatteProgressItemViewStyle" format="reference" />
 	<attr name="GeatteProgressItemViewStyleText" format="reference" />
 	<attr name="GeatteProgressItemViewStyleProgressBar" format="reference" />

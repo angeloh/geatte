@@ -452,7 +452,7 @@ public class GeatteDBAdapter {
      * 
      * @param limit query limit
      * @param startFrom query startFrom, 1 to n
-     * @return Cursor over all notes
+     * @return Cursor over all my interests
      */
     public Cursor fetchMyInterestsLimit(int limit, int startFrom) {
 	int offset = startFrom - 1;
@@ -485,9 +485,34 @@ public class GeatteDBAdapter {
     }
 
     /**
+     * Return a Cursor over the list of my interests in the database given limit and offset
+     * 
+     * @return Cursor over all my interests
+     */
+    public Cursor fetchAllMyInterests() {
+	String query = "SELECT " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_ID + " AS " + KEY_IMAGE_AS_ID + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_PATH + " " +
+	" FROM " +
+	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_INTEREST_ID +
+	" ORDER BY " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + " DESC";
+
+	Log.i(Config.LOGTAG, "fetch all my interests query string = " + query);
+
+	Cursor cursor = mDb.rawQuery(query, null);
+	return cursor;
+    }
+
+    /**
      * Return a Cursor positioned at the interest that matches the given rowId
      * 
-     * @param rowId id of note to retrieve
+     * @param rowId id of my interest to retrieve
      * @return Cursor positioned to matching interest, if found
      * @throws SQLException if note could not be found/retrieved
      */

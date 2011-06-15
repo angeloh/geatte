@@ -1,5 +1,6 @@
 package com.geatte.android.app;
 
+import greendroid.app.ActionBarActivity;
 import greendroid.app.GDTabActivity;
 
 import com.geatte.android.app.R;
@@ -81,8 +82,10 @@ public class GeatteTabActivity extends GDTabActivity {
 	mFriendInterstStartFrom = getIntent().getIntExtra(Config.EXTRA_MYGEATTE_STARTFROM, 1);
 	mCurrentTab = getIntent().getIntExtra(Config.EXTRA_CURRENT_TAB, 0);
 
-	Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListActivity.class);
+	//Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListActivity.class);
+	Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListAsyncActivity.class);
 	intent1.putExtra(Config.EXTRA_MYGEATTE_STARTFROM, mMyInterstStartFrom);
+	intent1.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
 
 	setupTab(intent1, "My Geattes");
 

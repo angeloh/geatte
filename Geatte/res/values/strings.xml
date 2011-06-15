@@ -68,7 +68,7 @@
 	<string name="contacts_view_name">Geatte Contacts</string>
 	<string name="contacts_clean">Clean</string>
     <string name="contacts_save">Save</string>
-	
+    
     <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->
     <string name="intro_text">
         Geatte is a shopping feedback app for you and your friends.

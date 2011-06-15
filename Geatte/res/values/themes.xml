@@ -64,6 +64,11 @@
 		<item name="GeatteThumbnailCheckboxStyleSubtitle">@style/Geatte.GeatteThumbnailCheckboxStyle.Subtitle</item>
 		<item name="GeatteThumbnailCheckboxStyleThumbnail">@style/Geatte.GeatteThumbnailCheckboxStyle.Thumbnail</item>
 		
+		<item name="GeatteThumbnailAsyncBitmapItemStyle">@style/Geatte.ThumbnailAsyncBitmapItemStyle</item>
+		<item name="GeatteThumbnailAsyncBitmapItemStyleTitle">@style/Geatte.ThumbnailAsyncBitmapItemStyle.Title</item>
+		<item name="GeatteThumbnailAsyncBitmapItemStyleSubtitle">@style/Geatte.ThumbnailAsyncBitmapItemStyle.Subtitle</item>
+		<item name="GeatteThumbnailAsyncBitmapItemStyleThumbnail">@style/Geatte.ThumbnailAsyncBitmapItemStyle.Thumbnail</item>
+		
 		<item name="GeatteProgressItemViewStyle">@style/Geatte.ProgressItemView</item>
 		<item name="GeatteProgressItemViewStyleText">@style/Geatte.ProgressItemView.Text</item>
 		<item name="GeatteProgressItemViewStyleProgressBar">@style/Geatte.ProgressItemView.ProgressBar</item>

@@ -147,6 +147,27 @@
 		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
 	</style>
 	
+	<!-- Styles for the ThumbnailAsyncBitmapItemStyle -->
+	<style name="Geatte.ThumbnailAsyncBitmapItemStyle">
+		<!-- item name="android:background">#737CA1</item-->
+	</style>
+	
+	<style name="Geatte.ThumbnailAsyncBitmapItemStyle.Title">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
+	</style>
+	
+	<style name="Geatte.ThumbnailAsyncBitmapItemStyle.Subtitle">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredQuarterHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	</style>
+
+	<style name="Geatte.ThumbnailAsyncBitmapItemStyle.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
+	
 	<!-- Styles for the GeatteProgressItemView -->
 	<style name="Geatte.ProgressItemView" />
 	<style name="Geatte.ProgressItemView.ProgressBar">
