@@ -27,7 +27,7 @@ public final class R {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteCommentWidget=0x7f01007e;
+        public static final int GeatteCommentWidget=0x7f01007f;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -47,7 +47,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredHalfHeight=0x7f010061;
+        public static final int GeatteItemViewPreferredHalfHeight=0x7f010062;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -57,7 +57,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredHeight=0x7f010060;
+        public static final int GeatteItemViewPreferredHeight=0x7f010061;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -77,7 +77,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredQuarterHeight=0x7f010062;
+        public static final int GeatteItemViewPreferredMidHeight=0x7f010060;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -87,7 +87,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteProgressBarHeight=0x7f010064;
+        public static final int GeatteItemViewPreferredQuarterHeight=0x7f010063;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -97,7 +97,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteProgressBarMargin=0x7f010065;
+        public static final int GeatteProgressBarHeight=0x7f010065;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -107,35 +107,45 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteProgressBarWidth=0x7f010063;
+        public static final int GeatteProgressBarMargin=0x7f010066;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int GeatteProgressBarWidth=0x7f010064;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyle=0x7f01007a;
+        public static final int GeatteProgressItemViewStyle=0x7f01007b;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleProgressBar=0x7f01007c;
+        public static final int GeatteProgressItemViewStyleProgressBar=0x7f01007d;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleText=0x7f01007b;
+        public static final int GeatteProgressItemViewStyleText=0x7f01007c;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteSeparatorThumbnailItemStyle=0x7f01006b;
+        public static final int GeatteSeparatorThumbnailItemStyle=0x7f01006c;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteSeparatorThumbnailItemStyleText=0x7f01006c;
+        public static final int GeatteSeparatorThumbnailItemStyleText=0x7f01006d;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteSeparatorThumbnailItemStyleThumbnail=0x7f01006d;
+        public static final int GeatteSeparatorThumbnailItemStyleThumbnail=0x7f01006e;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTabsIcon=0x7f01007d;
+        public static final int GeatteTabsIcon=0x7f01007e;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -155,71 +165,71 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyle=0x7f010076;
+        public static final int GeatteThumbnailAsyncBitmapItemStyle=0x7f010077;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyleSubtitle=0x7f010078;
+        public static final int GeatteThumbnailAsyncBitmapItemStyleSubtitle=0x7f010079;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyleThumbnail=0x7f010079;
+        public static final int GeatteThumbnailAsyncBitmapItemStyleThumbnail=0x7f01007a;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyleTitle=0x7f010077;
+        public static final int GeatteThumbnailAsyncBitmapItemStyleTitle=0x7f010078;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyle=0x7f010066;
+        public static final int GeatteThumbnailBitmapItemStyle=0x7f010067;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleDesc=0x7f010069;
+        public static final int GeatteThumbnailBitmapItemStyleDesc=0x7f01006a;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleLabel=0x7f010068;
+        public static final int GeatteThumbnailBitmapItemStyleLabel=0x7f010069;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleThumbnail=0x7f01006a;
+        public static final int GeatteThumbnailBitmapItemStyleThumbnail=0x7f01006b;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleTitle=0x7f010067;
+        public static final int GeatteThumbnailBitmapItemStyleTitle=0x7f010068;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyle=0x7f010072;
+        public static final int GeatteThumbnailCheckboxStyle=0x7f010073;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyleSubtitle=0x7f010074;
+        public static final int GeatteThumbnailCheckboxStyleSubtitle=0x7f010075;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyleThumbnail=0x7f010075;
+        public static final int GeatteThumbnailCheckboxStyleThumbnail=0x7f010076;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyleTitle=0x7f010073;
+        public static final int GeatteThumbnailCheckboxStyleTitle=0x7f010074;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyle=0x7f01006e;
+        public static final int GeatteThumbnailItemStyle=0x7f01006f;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyleSubtitle=0x7f010070;
+        public static final int GeatteThumbnailItemStyleSubtitle=0x7f010071;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyleThumbnail=0x7f010071;
+        public static final int GeatteThumbnailItemStyleThumbnail=0x7f010072;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyleTitle=0x7f01006f;
+        public static final int GeatteThumbnailItemStyleTitle=0x7f010070;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -822,13 +832,14 @@ containing a value of this type.
         public static final int gd_separator_item_view_height=0x7f070000;
         public static final int gd_separator_item_view_padding_left=0x7f070001;
         public static final int geatte_drawable_margin=0x7f07000f;
-        public static final int geatte_item_view_half_height=0x7f070012;
-        public static final int geatte_item_view_height=0x7f070011;
+        public static final int geatte_item_view_half_height=0x7f070013;
+        public static final int geatte_item_view_height=0x7f070012;
         public static final int geatte_item_view_large_height=0x7f070010;
-        public static final int geatte_item_view_quarter_height=0x7f070013;
-        public static final int geatte_progress_bar_height=0x7f070015;
-        public static final int geatte_progress_bar_margin=0x7f070016;
-        public static final int geatte_progress_bar_width=0x7f070014;
+        public static final int geatte_item_view_mid_height=0x7f070011;
+        public static final int geatte_item_view_quarter_height=0x7f070014;
+        public static final int geatte_progress_bar_height=0x7f070016;
+        public static final int geatte_progress_bar_margin=0x7f070017;
+        public static final int geatte_progress_bar_width=0x7f070015;
         public static final int geatte_thumbnail_radius=0x7f07000e;
         public static final int geatte_thumbnail_size=0x7f07000d;
     }
@@ -1005,8 +1016,8 @@ containing a value of this type.
         public static final int gdi_rack=0x7f050020;
         public static final int gdi_scroll=0x7f05001f;
         public static final int geatte_async_image=0x7f05005d;
-        public static final int geatte_async_item_title=0x7f05005e;
-        public static final int geatte_async_subtitle=0x7f05005f;
+        public static final int geatte_async_item_title=0x7f05005f;
+        public static final int geatte_async_subtitle=0x7f05005e;
         public static final int geatte_bitmap_item_desc=0x7f050063;
         public static final int geatte_bitmap_item_label=0x7f050062;
         public static final int geatte_bitmap_item_thumbnail=0x7f050060;

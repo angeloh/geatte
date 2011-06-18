@@ -111,6 +111,12 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onResume(): END");
     }
 
+    @Override
+    public void onDestroy() {
+	unregisterReceiver(receiver);
+	super.onDestroy();
+    }
+
     private List<Item> getContacts() {
 	List<Item> items = new ArrayList<Item>();
 

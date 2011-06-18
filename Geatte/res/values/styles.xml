@@ -62,7 +62,7 @@
 	</style>
 	
 	<style name="Geatte.TextAppearance.Small.Secondary">
-		<item name="android:textSize">14sp</item>
+		<item name="android:textSize">13sp</item>
 		<item name="android:textColor">?android:attr/textColorSecondary</item>
 	</style>
 	
@@ -158,7 +158,7 @@
 	</style>
 	
 	<style name="Geatte.ThumbnailAsyncBitmapItemStyle.Subtitle">
-		<item name="android:layout_height">?attr/GeatteItemViewPreferredQuarterHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
 		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
 	</style>
 

@@ -51,7 +51,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Broadcast receiver that handles Android Cloud to Data Messaging (AC2DM)
@@ -106,7 +105,8 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
 	String registrationId = prefs.getString(Config.PREF_REGISTRATION_ID, null);
 	DeviceRegistrar.unregisterWithServer(context, registrationId);
-	Toast.makeText(context, "Messaging registration error: " + errorId, Toast.LENGTH_LONG).show();
+	Log.w(Config.LOGTAG_C2DM, "Messaging registration error: " + errorId);
+	//Toast.makeText(context, "Messaging registration error: " + errorId, Toast.LENGTH_SHORT).show();
 	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onError() END");
     }
 

@@ -15,7 +15,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.geatte.android.c2dm.C2DMessaging;
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
@@ -45,7 +44,6 @@ public class GeatteCanvas extends GDActivity {
     private static final String CLASSTAG = GeatteCanvas.class.getSimpleName();
     private static final int ACTIVITY_SNAP = 0;
     private static final int ACTIVITY_CREATE = 1;
-    private boolean mPendingAuth = false;
     private String mImagePath = null;
     private PendingIntent mAlarmSender;
 
@@ -164,15 +162,6 @@ public class GeatteCanvas extends GDActivity {
     protected void onResume() {
 	Log.d(Config.LOGTAG, "GeatteCanvas:onResume() START");
 	super.onResume();
-	if (mPendingAuth) {
-	    mPendingAuth = false;
-	    String regId = C2DMessaging.getRegistrationId(this);
-	    if (regId != null && !regId.equals("")) {
-		DeviceRegistrar.registerWithServer(this, regId);
-	    } else {
-		C2DMessaging.register(this, Config.C2DM_SENDER);
-	    }
-	}
 	if (!isOnline()) {
 	    Toast.makeText(getApplicationContext(), "No internet connection available!!", Toast.LENGTH_SHORT).show();
 	    Log.d(Config.LOGTAG, "GeatteCanvas:onResume()  No internet connection available!!");

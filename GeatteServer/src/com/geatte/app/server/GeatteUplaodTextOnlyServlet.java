@@ -129,7 +129,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 		    mFromNumberField = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
 		} else {
 		    log.log(Level.WARNING, "GeatteUplaodTextOnlyServlet.doPOST() : Invalid phone number so use passed-in number, " + Config.DEV_PHONE_NUMBER_PARAM
-			    + " = " + mFromNumberField + ", countryIso = " + mFromNumberField);
+			    + " = " + mFromNumberField + ", countryIso = " + mCountryCodeField);
 		}
 
 	    }

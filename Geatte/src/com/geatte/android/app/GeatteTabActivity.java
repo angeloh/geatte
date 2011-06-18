@@ -83,14 +83,16 @@ public class GeatteTabActivity extends GDTabActivity {
 	mCurrentTab = getIntent().getIntExtra(Config.EXTRA_CURRENT_TAB, 0);
 
 	//Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListActivity.class);
-	Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListAsyncActivity.class);
+	Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListAsyncXActivity.class);
 	intent1.putExtra(Config.EXTRA_MYGEATTE_STARTFROM, mMyInterstStartFrom);
 	intent1.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
 
 	setupTab(intent1, "My Geattes");
 
-	Intent intent2 = new Intent().setClass(getApplicationContext(), GeatteListOthersActivity.class);
+	//Intent intent2 = new Intent().setClass(getApplicationContext(), GeatteListOthersActivity.class);
+	Intent intent2 = new Intent().setClass(getApplicationContext(), GeatteListFIAsyncXActivity.class);
 	intent2.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mFriendInterstStartFrom);
+	intent2.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
 
 	setupTab(intent2, "Friend's Geattes");
 
@@ -100,11 +102,11 @@ public class GeatteTabActivity extends GDTabActivity {
 	    public void run() {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate(): try to dismiss mDialog");
+			Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): try to dismiss mDialog");
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception e) {
-			Log.w(Config.LOGTAG, "GeatteAllFeedbackActivity:onCreate(): failed to dismiss mDialog", e);
+			Log.w(Config.LOGTAG, "GeatteTabActivity:onCreate(): failed to dismiss mDialog", e);
 		    }
 		}
 	    }

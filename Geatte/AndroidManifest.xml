@@ -94,6 +94,12 @@
 		<activity android:name=".GeatteListAsyncActivity" android:label="@string/app_name">
 		</activity>
 		
+		<activity android:name=".GeatteListAsyncXActivity" android:label="@string/app_name">
+		</activity>
+		
+		<activity android:name=".GeatteListFIAsyncXActivity" android:label="@string/app_name">
+		</activity>
+		
 		<!-- In order to use the c2dm library, an
         application must declare a class with the name C2DMReceiver, in its
         own package, extending com.google.android.c2dm.C2DMBaseReceiver

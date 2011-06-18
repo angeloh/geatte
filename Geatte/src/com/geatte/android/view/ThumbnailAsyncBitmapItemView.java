@@ -40,10 +40,9 @@ public class ThumbnailAsyncBitmapItemView extends RelativeLayout implements Item
 	final ThumbnailAsyncBitmapItem item = (ThumbnailAsyncBitmapItem) object;
 	mTitleView.setText(item.text);
 	mDescView.setText(item.subtitle);
-	mThumbnailView.setImageProcessor(item.mImageProcessor);
 
 	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	bitmapOptions.inSampleSize = 8;
+	bitmapOptions.inSampleSize = 16;
 	Bitmap imgBitmap = BitmapFactory.decodeFile(item.imagePath, bitmapOptions);
 	mThumbnailView.setImageBitmap(imgBitmap);
     }

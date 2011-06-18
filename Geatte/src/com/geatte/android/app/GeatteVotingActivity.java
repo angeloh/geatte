@@ -164,6 +164,8 @@ public class GeatteVotingActivity extends GDActivity {
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair(Config.GEATTE_ID_PARAM, mGeatteId));
+		String myCountryCode = DeviceRegistrar.getPhoneConuntryCode(getApplicationContext());
+		params.add(new BasicNameValuePair(Config.FRIEND_GEATTE_COUNTRY_ISO, myCountryCode));
 		params.add(new BasicNameValuePair(Config.FRIEND_GEATTE_VOTER, myNumber));
 		params.add(new BasicNameValuePair(Config.FRIEND_GEATTE_VOTE_RESP, vote));
 		params.add(new BasicNameValuePair(Config.FRIEND_GEATTE_FEEDBACK, feedback == null ? "" : feedback));

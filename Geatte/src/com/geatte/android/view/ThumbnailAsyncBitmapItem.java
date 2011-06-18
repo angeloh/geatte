@@ -1,6 +1,5 @@
 package com.geatte.android.view;
 
-import greendroid.image.ImageProcessor;
 import greendroid.widget.item.SubtitleItem;
 import greendroid.widget.itemview.ItemView;
 
@@ -12,18 +11,32 @@ import android.view.ViewGroup;
 
 public class ThumbnailAsyncBitmapItem extends SubtitleItem {
 
-    String imagePath = null;
-    ImageProcessor mImageProcessor;
+    public long id;
+    public String geatteId = null;
+    public String imagePath = null;
+    public byte[] thumbnail = null;
 
-    public ThumbnailAsyncBitmapItem(String title, String desc, String imagePath, ImageProcessor imageProcessor) {
+    public ThumbnailAsyncBitmapItem(long id, String title, String desc, String imagePath) {
 	super(title, desc);
+	this.id = id;
 	this.imagePath = imagePath;
-	this.mImageProcessor = imageProcessor;
+    }
+
+    public ThumbnailAsyncBitmapItem(long id, String title, String desc, String imagePath, byte[] thumbnail) {
+	super(title, desc);
+	this.id = id;
+	this.imagePath = imagePath;
+	this.thumbnail = thumbnail;
     }
 
     @Override
     public ItemView newView(Context context, ViewGroup parent) {
 	return createCellFromXml(context, R.layout.geatte_thumbnail_async_bitmap_item_view, parent);
     }
+
+    public long getId() {
+	return id;
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.geatte.android.app;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,6 +10,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
 import android.util.Log;
 
 /**
@@ -37,6 +41,7 @@ public class GeatteDBAdapter {
     public static final String KEY_IMAGE_AS_ID = "image_id";
     public static final String KEY_IMAGE_INTEREST_ID = "interest";
     public static final String KEY_IMAGE_PATH = "image_path";
+    public static final String KEY_IMAGE_THUMBNAIL = "image_thumbnail";
     //public static final String KEY_IMAGE_HASH = "hash";
 
     //TABLE contacts
@@ -56,6 +61,7 @@ public class GeatteDBAdapter {
     public static final String KEY_FI_IMAGE_AS_ID = "fi_image_id";
     public static final String KEY_FI_IMAGE_INTEREST_ID = "fi_interest";
     public static final String KEY_FI_IMAGE_PATH = "fi_image_path";
+    public static final String KEY_FI_IMAGE_THUMBNAIL = "fi_image_thumbnail";
 
     //TABLE feedbacks to friend_interests
     public static final String KEY_FI_FEEDBACK_ID = "_id";
@@ -100,6 +106,7 @@ public class GeatteDBAdapter {
     private static final String DB_CREATE_IMAGES =
 	"CREATE TABLE " + DB_TABLE_IMAGES + " (" + KEY_IMAGE_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
 	KEY_IMAGE_PATH +" TEXT NOT NULL," +
+	KEY_IMAGE_THUMBNAIL +" BLOB," +
 	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
 	KEY_IMAGE_INTEREST_ID + " INTEGER," +
 	"FOREIGN KEY (" + KEY_IMAGE_INTEREST_ID + ") REFERENCES " + DB_TABLE_INTERESTS + " (" + KEY_INTEREST_ID + ")" +
@@ -122,6 +129,7 @@ public class GeatteDBAdapter {
     private static final String DB_CREATE_FI_IMAGES =
 	"CREATE TABLE " + DB_TABLE_FI_IMAGES + " (" + KEY_FI_IMAGE_ID +" INTEGER PRIMARY KEY AUTOINCREMENT," +
 	KEY_FI_IMAGE_PATH +" TEXT NOT NULL," +
+	KEY_FI_IMAGE_THUMBNAIL +" BLOB," +
 	//KEY_IMAGE_HASH + " BLOB," +//TODO UNIQUE
 	KEY_FI_IMAGE_INTEREST_ID + " TEXT," +
 	"FOREIGN KEY (" + KEY_FI_IMAGE_INTEREST_ID + ") REFERENCES " + DB_TABLE_FRIEND_INTERESTS + " (" + KEY_FRIEND_INTEREST_ID + ")" +
@@ -250,6 +258,14 @@ public class GeatteDBAdapter {
 	    initialValues.put(KEY_IMAGE_PATH, imagePath);
 	    //initialValues.put(KEY_IMAGE_HASH, getHashFromByteArray(byteArray));
 
+	    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+	    bitmapOptions.inSampleSize = 64;
+	    Bitmap imgBitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
+	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	    imgBitmap.compress(CompressFormat.JPEG, 100, bos);
+	    byte[] data = bos.toByteArray();
+
+	    initialValues.put(KEY_IMAGE_THUMBNAIL, data);
 	    return mDb.insert(DB_TABLE_IMAGES, null, initialValues);
 	} else {
 	    return -1;
@@ -337,6 +353,14 @@ public class GeatteDBAdapter {
 	initialValues.put(KEY_FI_IMAGE_INTEREST_ID, geatteId);
 	initialValues.put(KEY_FI_IMAGE_PATH, imagePath);
 
+	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+	bitmapOptions.inSampleSize = 8;
+	Bitmap imgBitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
+	ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	imgBitmap.compress(CompressFormat.JPEG, 100, bos);
+	byte[] data = bos.toByteArray();
+
+	initialValues.put(KEY_FI_IMAGE_THUMBNAIL, data);
 	return mDb.insert(DB_TABLE_FI_IMAGES, null, initialValues);
     }
 
@@ -485,7 +509,7 @@ public class GeatteDBAdapter {
     }
 
     /**
-     * Return a Cursor over the list of my interests in the database given limit and offset
+     * Return a Cursor over the list of my interests in the database
      * 
      * @return Cursor over all my interests
      */
@@ -497,6 +521,32 @@ public class GeatteDBAdapter {
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + ", " +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_ID + " AS " + KEY_IMAGE_AS_ID + ", " +
 	DB_TABLE_IMAGES + "." + KEY_IMAGE_PATH + " " +
+	" FROM " +
+	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_INTEREST_ID +
+	" ORDER BY " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + " DESC";
+
+	Log.i(Config.LOGTAG, "fetch all my interests query string = " + query);
+
+	Cursor cursor = mDb.rawQuery(query, null);
+	return cursor;
+    }
+
+    /**
+     * Return a Cursor over the list of my interests in the database with image thumbnail
+     * 
+     * @return Cursor over all my interests
+     */
+    public Cursor fetchAllMyInterestsWithBlob() {
+	String query = "SELECT " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_ID + " AS " + KEY_IMAGE_AS_ID + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_PATH + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_THUMBNAIL + " " +
 	" FROM " +
 	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
@@ -640,6 +690,33 @@ public class GeatteDBAdapter {
 
 	Cursor cursor = mDb.rawQuery(query, null);
 
+	return cursor;
+    }
+
+    /**
+     * Return a Cursor over the list of friends' interests in the database with blob image
+     * 
+     * @return Cursor over friends' interests
+     */
+    public Cursor fetchAllFriendInterestsWithBlob() throws SQLException {
+	String query = "SELECT " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_ID + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_TITLE + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_DESC + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_FROM + ", " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_CREATED_DATE + ", " +
+	DB_TABLE_FI_IMAGES + "." + KEY_FI_IMAGE_ID + " AS " + KEY_FI_IMAGE_AS_ID + ", " +
+	DB_TABLE_FI_IMAGES + "." + KEY_FI_IMAGE_PATH + ", " +
+	DB_TABLE_FI_IMAGES + "." + KEY_FI_IMAGE_THUMBNAIL + " " +
+	"FROM " +
+	DB_TABLE_FRIEND_INTERESTS + " JOIN " + DB_TABLE_FI_IMAGES + " ON " +
+	DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_ID + "=" +
+	DB_TABLE_FI_IMAGES + "." + KEY_FI_IMAGE_INTEREST_ID +
+	" ORDER BY " + DB_TABLE_FRIEND_INTERESTS + "." + KEY_FRIEND_INTEREST_CREATED_DATE + " DESC";
+
+	Log.i(Config.LOGTAG, "fetch all friend's interest query string = " + query);
+
+	Cursor cursor = mDb.rawQuery(query, null);
 	return cursor;
     }
 

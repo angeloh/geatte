@@ -81,6 +81,7 @@ public class Config {
     public static final String GEATTE_IMAGE_PARAM = "image";
     public static final String GEATTE_CREATED_DATE_PARAM = "createdDate";
 
+    public static final String FRIEND_GEATTE_COUNTRY_ISO = "friendGeatteVoterCountryIso";
     public static final String FRIEND_GEATTE_VOTER = "friendGeatteVoter";
     public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";
     public static final String FRIEND_GEATTE_FEEDBACK = "friendGeatteFeedback";

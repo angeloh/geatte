@@ -1,41 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.geatte.android.view.ThumbnailAsyncBitmapItemView
-	xmlns:android="http://schemas.android.com/apk/res/android" 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
 	style="?attr/GeatteThumbnailAsyncBitmapItemStyle"
 	android:layout_width="fill_parent"
-	android:layout_height="?android:attr/listPreferredItemHeight"
-	android:padding="6dip">
-	<LinearLayout
-			xmlns:android="http://schemas.android.com/apk/res/android"
-			xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal">
+	android:layout_height="?attr/GeatteItemViewPreferredMidHeight"
+	android:padding="3dip">
+
 		
-			<greendroid.widget.AsyncImageView
-				android:id="@+id/geatte_async_image"
-				android:layout_width="@dimen/geatte_thumbnail_size"
-				android:layout_height="@dimen/geatte_thumbnail_size"
-				greendroid:defaultSrc="@drawable/icon" />
+	<greendroid.widget.AsyncImageView
+		android:id="@+id/geatte_async_image"
+		android:layout_width="@dimen/geatte_thumbnail_size"
+		android:layout_height="@dimen/geatte_thumbnail_size"
+		greendroid:defaultSrc="@drawable/icon" />
 		
-			<TextView
-				style="?attr/GeatteThumbnailAsyncBitmapItemStyleTitle"
-				android:id="@+id/geatte_async_item_title"
-				android:layout_width="wrap_content"
-				android:layout_toRightOf="@id/geatte_async_image"
-				android:layout_alignParentRight="true"
-		        android:layout_alignParentTop="true"
-				android:layout_alignWithParentIfMissing="true"
-				android:gravity="center_vertical|left"/>
+	<TextView
+		style="?attr/GeatteThumbnailAsyncBitmapItemStyleSubtitle"
+		android:id="@+id/geatte_async_subtitle"
+		android:layout_width="fill_parent"
+		android:layout_toRightOf="@id/geatte_async_image"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentBottom="true"/>
 		
-			<TextView
-				style="?attr/GeatteThumbnailAsyncBitmapItemStyleSubtitle"
-				android:id="@+id/geatte_async_subtitle"
-				android:layout_width="wrap_content"
-				android:layout_toRightOf="@id/geatte_async_image"
-				android:layout_alignParentRight="true"
-		        android:layout_alignParentBottom="true"
-		        android:gravity="center_vertical|left" />
+	<TextView
+		style="?attr/GeatteThumbnailAsyncBitmapItemStyleTitle"
+		android:id="@+id/geatte_async_item_title"
+		android:layout_width="fill_parent"
+		android:layout_toRightOf="@id/geatte_async_image"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentTop="true"
+        android:layout_above="@id/geatte_async_subtitle"
+		android:layout_alignWithParentIfMissing="true"
+		android:gravity="center_vertical"/>
 		
-	</LinearLayout>
+
 </com.geatte.android.view.ThumbnailAsyncBitmapItemView>

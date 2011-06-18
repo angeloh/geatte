@@ -20,6 +20,10 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 @SuppressWarnings("serial")
 public class GeatteVoteServlet extends HttpServlet {
@@ -27,10 +31,11 @@ public class GeatteVoteServlet extends HttpServlet {
     private static final String OK_STATUS = "OK";
     private static final String ERROR_STATUS = "ERROR";
 
-    private String mGeatteIdField;
-    private String mGeatteVoterField;
-    private String mGeatteVoteRespField;
-    private String mGeatteFeedbackField;
+    private String mGeatteIdField = null;
+    private String mCountryCodeField = null;
+    private String mGeatteVoterField = null;
+    private String mGeatteVoteRespField = null;
+    private String mGeatteFeedbackField = null;
 
 
     @Override
@@ -56,6 +61,13 @@ public class GeatteVoteServlet extends HttpServlet {
 	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : user sent a " + Config.GEATTE_ID_PARAM + " = " + mGeatteIdField);
 	}
 
+	mCountryCodeField = reqInfo.getParameter(Config.FRIEND_GEATTE_COUNTRY_ISO);
+
+	if (mCountryCodeField == null) {
+	    log.warning("GeatteVoteServlet.doPOST() : Missing country code, " + Config.FRIEND_GEATTE_COUNTRY_ISO + " is null");
+	    mCountryCodeField = "us"; //default as US
+	}
+
 	mGeatteVoterField = reqInfo.getParameter(Config.FRIEND_GEATTE_VOTER);
 
 	if (mGeatteVoterField == null) {
@@ -65,7 +77,24 @@ public class GeatteVoteServlet extends HttpServlet {
 	    return;
 	} else {
 	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : user sent a " + Config.FRIEND_GEATTE_VOTER + " = "
-		    + mGeatteVoterField);
+		    + mGeatteVoterField + ", countryIso = " + mCountryCodeField);
+
+	    PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+	    PhoneNumber numberProto = null;
+	    try {
+		numberProto = phoneUtil.parse(mGeatteVoterField, mCountryCodeField);
+	    } catch (NumberParseException npe) {
+		log.log(Level.WARNING, "GeatteVoteServlet.doPOST(): NumberParseException was thrown: "
+			, npe);
+	    }
+
+	    if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
+		mGeatteVoterField = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
+	    } else {
+		log.log(Level.WARNING, "GeatteVoteServlet.doPOST() : Invalid voter phone number so use passed-in voter number, " + Config.FRIEND_GEATTE_VOTER
+			+ " = " + mGeatteVoterField + ", countryIso = " + mCountryCodeField);
+	    }
+
 	}
 
 	mGeatteVoteRespField = reqInfo.getParameter(Config.FRIEND_GEATTE_VOTE_RESP);
@@ -103,7 +132,6 @@ public class GeatteVoteServlet extends HttpServlet {
 	    submitGeatteVoteTask(geatteOwnerNumber, params);
 	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : sent geatte id = " + mGeatteIdField + ",  geatte vote '" + geatteVoteId  + "' to owner phoneNumber = " + geatteOwnerNumber);
 	}
-
 
 	log.log(Level.INFO, "GeatteVoteServlet.doPOST() : END GeatteVoteServlet.doPOST()");
 

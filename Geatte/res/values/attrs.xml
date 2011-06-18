@@ -18,6 +18,7 @@
 	<attr name="GeatteTextAppearanceSmallSecondary" format="reference" />
 
 	<attr name="GeatteItemViewPreferredLargeHeight" format="dimension" />
+	<attr name="GeatteItemViewPreferredMidHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredHalfHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredQuarterHeight" format="dimension" />

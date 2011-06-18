@@ -3,7 +3,6 @@ package com.geatte.android.c2dm;
 import java.io.IOException;
 
 import com.geatte.android.app.Config;
-
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -76,7 +75,6 @@ public abstract class C2DMBaseReceiver extends IntentService {
     public void onUnregistered(Context context) {
     }
 
-
     @Override
     public final void onHandleIntent(Intent intent) {
 	try {
@@ -102,7 +100,6 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	}
     }
 
-
     /**
      * Called from the broadcast receiver.
      * Will process the received intent, call handleMessage(), registered(), etc.
@@ -125,7 +122,6 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	context.startService(intent);
 
     }
-
 
     private void handleRegistration(final Context context, Intent intent) {
 	final String registrationId = intent.getStringExtra(EXTRA_REGISTRATION_ID);
