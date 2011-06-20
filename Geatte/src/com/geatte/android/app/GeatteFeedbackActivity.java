@@ -15,8 +15,13 @@ import com.geatte.android.view.ThumbnailBitmapItem;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +47,10 @@ public class GeatteFeedbackActivity extends GDListActivity {
 	final ThumbnailBitmapItem geatteItem;
 
 	if (geatteId != null || (interestId != null && interestId != 0L)) {
-	    ThumbnailBitmapItem item = createItemsFromFetchResult(geatteId, interestId, items);
+	    ThumbnailBitmapItem item = createFeedbackItemsFromFetchResult(geatteId, interestId, items);
 	    if (item == null) {
 		geatteItem = null;
-		warnItem = new GeatteThumbnailItem("No geatte available", null, R.drawable.empty);
+		warnItem = new GeatteThumbnailItem("No geatte available", null, R.drawable.invalid);
 	    } else {
 		geatteItem = item;
 		warnItem = null;
@@ -76,7 +81,7 @@ public class GeatteFeedbackActivity extends GDListActivity {
 	Log.d(Config.LOGTAG, "END GeatteFeedbackActivity:onCreate");
     }
 
-    private ThumbnailBitmapItem createItemsFromFetchResult(String geatteId, Long interestId, List<Item> items) {
+    private ThumbnailBitmapItem createFeedbackItemsFromFetchResult(String geatteId, Long interestId, List<Item> items) {
 	ThumbnailBitmapItem geatteItem = null;
 
 	final GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
@@ -92,9 +97,9 @@ public class GeatteFeedbackActivity extends GDListActivity {
 
 	    if (geatteId != null) {
 		myInterestCur = mDbHelper.fetchMyInterest(geatteId);
-		Log.d(Config.LOGTAG, "GeatteFeedbackActivity:createItemsFromFetchResult fetched my interest by geatteId = " + geatteId);
+		Log.d(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult fetched my interest by geatteId = " + geatteId);
 	    } else {
-		Log.w(Config.LOGTAG, "GeatteFeedbackActivity:createItemsFromFetchResult invalid interestId and geatteId, ignore create!!");
+		Log.w(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult invalid interestId and geatteId, ignore create!!");
 		return null;
 	    }
 	    if (myInterestCur.isAfterLast()) {
@@ -126,10 +131,20 @@ public class GeatteFeedbackActivity extends GDListActivity {
 			    yesItems.add(new SeparatorThumbnailItem("Go Get It!!", R.drawable.yes));
 			}
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
+			// get contact name for this voter
+			String voterName = mDbHelper.fetchContactName(voter);
 			// get voter contact thumbnail
+			Integer contactId = mDbHelper.fetchContactId(voter);
+			Bitmap contactBitmap = queryPhotoForContact(contactId);
 
+			String text = new StringBuilder(voterName).append(" LOVE it!").toString();
 			String comment = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_COMMENT));
-			yesItems.add(new GeatteThumbnailItem(voter, comment, R.drawable.profile));
+
+			if (contactBitmap != null) {
+			    yesItems.add(new GeatteThumbnailItem(text, comment, contactBitmap));
+			} else {
+			    yesItems.add(new GeatteThumbnailItem(text, comment, R.drawable.profile));
+			}
 
 		    }
 		    if (vote.equals(Config.LIKE.NO.toString())) {
@@ -138,10 +153,20 @@ public class GeatteFeedbackActivity extends GDListActivity {
 			    noItems.add(new SeparatorThumbnailItem("Don't Get It!!", R.drawable.no));
 			}
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
+			// get contact name for this voter
+			String voterName = mDbHelper.fetchContactName(voter);
 			// get voter contact thumbnail
+			Integer contactId = mDbHelper.fetchContactId(voter);
+			Bitmap contactBitmap = queryPhotoForContact(contactId);
 
+			String text = new StringBuilder(voterName).append(" said NO!").toString();
 			String comment = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_COMMENT));
-			noItems.add(new GeatteThumbnailItem(voter, comment, R.drawable.profile));
+
+			if (contactBitmap != null) {
+			    noItems.add(new GeatteThumbnailItem(text, comment, contactBitmap));
+			} else {
+			    noItems.add(new GeatteThumbnailItem(text, comment, R.drawable.profile));
+			}
 		    }
 
 		    if (vote.equals(Config.LIKE.MAYBE.toString())) {
@@ -150,10 +175,20 @@ public class GeatteFeedbackActivity extends GDListActivity {
 			    maybeItems.add(new SeparatorThumbnailItem("Think Twice!!", R.drawable.maybe));
 			}
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
+			// get contact name for this voter
+			String voterName = mDbHelper.fetchContactName(voter);
 			// get voter contact thumbnail
+			Integer contactId = mDbHelper.fetchContactId(voter);
+			Bitmap contactBitmap = queryPhotoForContact(contactId);
 
+			String text = new StringBuilder(voterName).append(" said MAYBE!").toString();
 			String comment = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_COMMENT));
-			maybeItems.add(new GeatteThumbnailItem(voter, comment, R.drawable.profile));
+
+			if (contactBitmap != null) {
+			    maybeItems.add(new GeatteThumbnailItem(text, comment, contactBitmap));
+			} else {
+			    maybeItems.add(new GeatteThumbnailItem(text, comment, R.drawable.profile));
+			}
 		    }
 
 		    feedbackCur.moveToNext();
@@ -165,7 +200,7 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		items.addAll(noItems);
 	    }
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteFeedbackActivity:createItemsFromFetchResult ERROR ", e);
+	    Log.e(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult ERROR ", e);
 	} finally {
 	    if (myInterestCur != null) {
 		myInterestCur.close();
@@ -224,6 +259,52 @@ public class GeatteFeedbackActivity extends GDListActivity {
 	    }
 	}
 
+    }
+
+    private Bitmap queryPhotoForContact(int contactId) {
+	final String[] projection = new String[] {
+		//Contacts.DISPLAY_NAME,// the name of the contact
+		Contacts.PHOTO_ID// the id of the column in the data table for the image
+	};
+
+	final Cursor contact = managedQuery(
+		Contacts.CONTENT_URI,
+		projection,
+		Contacts._ID + "=?",// filter entries on the basis of the contact id
+		new String[]{String.valueOf(contactId)},// the parameter to which the contact id column is compared to
+		null);
+
+	if(contact.moveToFirst()) {
+	    //	    final String name = contact.getString(
+	    //		    contact.getColumnIndex(Contacts.DISPLAY_NAME));
+	    final String photoId = contact.getString(
+		    contact.getColumnIndex(Contacts.PHOTO_ID));
+	    final Bitmap photo;
+	    if(photoId != null) {
+		photo = queryContactBitmap(photoId);
+	    } else {
+		photo = null;
+	    }
+	    contact.close();
+	    return photo;
+	}
+	contact.close();
+	return null;
+    }
+
+    private Bitmap queryContactBitmap(String photoId) {
+	Cursor photo = getContentResolver().query(Data.CONTENT_URI, new String[] { Photo.PHOTO },
+		Data._ID + "=?", new String[] { photoId }, null);
+
+	final Bitmap photoBitmap;
+	if (photo.moveToFirst()) {
+	    byte[] photoBlob = photo.getBlob(photo.getColumnIndex(Photo.PHOTO));
+	    photoBitmap = BitmapFactory.decodeByteArray(photoBlob, 0, photoBlob.length);
+	} else {
+	    photoBitmap = null;
+	}
+	photo.close();
+	return photoBitmap;
     }
 
     @Override

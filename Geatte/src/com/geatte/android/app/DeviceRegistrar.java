@@ -227,12 +227,30 @@ public class DeviceRegistrar {
 	return (config.screenLayout & xlargeBit) == xlargeBit;
     }
 
+    public static String getPhoneNumberFromTeleService(Context context) {
+	TelephonyManager mTelephonyMgr =
+	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+	String phoneNum =  mTelephonyMgr.getLine1Number();
+	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : phone number is " + phoneNum);
+	if (phoneNum == null || phoneNum.trim().equals("")) {
+	    phoneNum = null;
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : line 1 is null return null");
+	    //phoneNum = "15103978860";
+	}
+	return phoneNum;
+    }
+
     public static String getPhoneNumber(Context context) {
 	TelephonyManager mTelephonyMgr =
 	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 	String phoneNum =  mTelephonyMgr.getLine1Number();
+	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : phone number is " + phoneNum);
 	if (phoneNum == null || phoneNum.trim().equals("")) {
-	    phoneNum = "15103978860";
+	    final SharedPreferences prefs = context.getSharedPreferences(
+		    Config.PREFERENCE_KEY,
+		    Context.MODE_PRIVATE);
+	    phoneNum = prefs.getString(Config.PREF_PHONE_NUMBER, null);
+	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : line 1 is null try preference, got phoneNum = " + phoneNum);
 	}
 	return phoneNum;
     }

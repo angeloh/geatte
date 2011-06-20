@@ -64,6 +64,8 @@
 	<string name="select_account_click_next_text">Click Next to finish the setup of Geatte.</string>
 	<string name="select_account_connecting_text">Connecting...</string>
 	<string name="connected_with_account_text">Your phone is connected to Geatte using this account:</string>
+	<string name="setup_complete_phone_missing_text">Geatte can not find your phone number from carrier\'s sin card, please enter below to continue</string>
+	<string name="setup_complete_edit_phone_example">Ex: 14081112233</string>
 	
 	<string name="contacts_view_name">Geatte Contacts</string>
 	<string name="contacts_clean">Clean</string>

@@ -4,7 +4,7 @@
 	style="?attr/GeatteThumbnailItemStyle"
 	android:layout_width="fill_parent"
 	android:layout_height="?android:attr/listPreferredItemHeight"
-	android:padding="6dip">
+	android:padding="3dip">
 	
 	<ImageView
 		style="?attr/GeatteThumbnailItemStyleThumbnail"
@@ -19,16 +19,14 @@
 		android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
 		android:layout_alignWithParentIfMissing="true"
-		android:gravity="center_vertical"
-		android:ellipsize="end" />
-
+		android:gravity="center_vertical" />
+	
 	<TextView
 		style="?attr/GeatteThumbnailItemStyleSubtitle"
 		android:id="@+id/geatte_thumbnail_item_subtitle"
 		android:layout_width="wrap_content"
 		android:layout_toRightOf="@id/geatte_thumbnail_item_thumbnail"
 		android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-		android:ellipsize="marquee" />
+        android:layout_alignParentBottom="true"/>
 
 </com.geatte.android.view.GeatteThumbnailItemView>

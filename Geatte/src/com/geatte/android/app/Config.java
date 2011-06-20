@@ -56,6 +56,7 @@ public class Config {
     public static final String PREF_SERVER_HAS_REG_ID = "hasRegIdOnServer";
     public static final String PREF_SELECTED_CONTACTS = "selectedContacts";
     public static final String PREF_VOTING_COMMENT = "votingComment";
+    public static final String PREF_PHONE_NUMBER = "myPhoneNumber";
 
     // app server
     public static final String BASE_SERVER = "geatte.appspot.com";

@@ -41,8 +41,9 @@
 		<item name="GeatteProgressBarMargin">@dimen/geatte_progress_bar_margin</item>
 		
 		<item name="GeatteItemViewPreferredLargeHeight">@dimen/geatte_item_view_large_height</item>
-		<item name="GeatteItemViewPreferredMidHeight">@dimen/geatte_item_view_mid_height</item>
+		<item name="GeatteItemViewPreferredUpperMidHeight">@dimen/geatte_item_view_upper_mid_height</item>
 		<item name="GeatteItemViewPreferredHeight">@dimen/geatte_item_view_height</item>
+		<item name="GeatteItemViewPreferredLowerMidHeight">@dimen/geatte_item_view_lower_mid_height</item>
 		<item name="GeatteItemViewPreferredHalfHeight">@dimen/geatte_item_view_half_height</item>
 		<item name="GeatteItemViewPreferredQuarterHeight">@dimen/geatte_item_view_quarter_height</item>
 		

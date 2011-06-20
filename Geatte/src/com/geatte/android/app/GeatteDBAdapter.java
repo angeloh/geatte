@@ -259,7 +259,7 @@ public class GeatteDBAdapter {
 	    //initialValues.put(KEY_IMAGE_HASH, getHashFromByteArray(byteArray));
 
 	    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	    bitmapOptions.inSampleSize = 64;
+	    bitmapOptions.inSampleSize = 32;
 	    Bitmap imgBitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    imgBitmap.compress(CompressFormat.JPEG, 100, bos);
@@ -354,7 +354,7 @@ public class GeatteDBAdapter {
 	initialValues.put(KEY_FI_IMAGE_PATH, imagePath);
 
 	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	bitmapOptions.inSampleSize = 8;
+	bitmapOptions.inSampleSize = 6;
 	Bitmap imgBitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 	ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	imgBitmap.compress(CompressFormat.JPEG, 100, bos);
@@ -469,6 +469,26 @@ public class GeatteDBAdapter {
 	    }
 	}
 	return contactName;
+    }
+
+    public int fetchContactId(String phoneNumber) {
+	Integer contactId = null;
+	Cursor contactCur = null;
+	try {
+	    contactCur = fetchContactFromPhone(phoneNumber);
+	    if (contactCur == null || contactCur.isAfterLast()) {
+		contactId = -1;
+	    } else {
+		contactId = contactCur.getInt(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_ID));
+	    }
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch contactId()", ex);
+	} finally {
+	    if (contactCur != null) {
+		contactCur.close();
+	    }
+	}
+	return contactId;
     }
 
     /**

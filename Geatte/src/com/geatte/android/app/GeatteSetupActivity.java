@@ -21,9 +21,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.geatte.android.c2dm.C2DMessaging;
 
 /**
@@ -130,6 +133,18 @@ public class GeatteSetupActivity extends GDActivity {
 	textView.setText(Html.fromHtml(introText));
 	textView.setMovementMethod(LinkMovementMethod.getInstance());
 
+	TextView phoneMissingTextView = (TextView) findViewById(R.id.setup_intro_phone_missing_text);
+	final EditText phoneEditText = (EditText) findViewById(R.id.setup_intro_edit_phone);
+
+	String myNumber = DeviceRegistrar.getPhoneNumberFromTeleService(getApplicationContext());
+	if (myNumber != null) {
+	    Log.d(Config.LOGTAG, "SetupActivity:setSetupCompleteScreenContent() has phone " +
+		    "number : " + myNumber + ", so disable edit text");
+	    phoneMissingTextView.setVisibility(View.GONE);
+	    phoneEditText.setVisibility(View.GONE);
+	    phoneEditText.setText(myNumber);
+	}
+
 	Button exitButton = (Button) findViewById(R.id.intro_exit);
 	exitButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
@@ -140,7 +155,17 @@ public class GeatteSetupActivity extends GDActivity {
 	Button nextButton = (Button) findViewById(R.id.intro_next);
 	nextButton.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		setScreenContent(R.layout.geatte_select_account);
+		String num = phoneEditText.getText().toString().trim();
+		if (num != null && num.length() > 0) {
+		    Context context = getApplicationContext();
+		    final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+		    SharedPreferences.Editor editor = prefs.edit();
+		    editor.putString(Config.PREF_PHONE_NUMBER, num);
+		    editor.commit();
+		    setScreenContent(R.layout.geatte_select_account);
+		} else {
+		    Toast.makeText(GeatteSetupActivity.this, "Please input your phone number", Toast.LENGTH_SHORT).show();
+		}
 	    }
 	});
     }

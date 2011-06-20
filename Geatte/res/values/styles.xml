@@ -91,7 +91,7 @@
 
 	<!-- Styles for the SeparatorThumbnailItem -->
 	<style name="Geatte.SeparatorThumbnailItem">
-		<item name="android:background">#737CA1</item>
+		<item name="android:background">#646D7E</item>
 	</style>
 	
 	<style name="Geatte.SeparatorThumbnailItem.Text">
@@ -111,12 +111,12 @@
 	</style>
 	
 	<style name="Geatte.GeatteThumbnailItem.Title">
-		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
 		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
 	</style>
 	
 	<style name="Geatte.GeatteThumbnailItem.Subtitle">
-		<item name="android:layout_height">?attr/GeatteItemViewPreferredQuarterHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
 		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
 	</style>
 

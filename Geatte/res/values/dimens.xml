@@ -8,8 +8,9 @@
 	<dimen name="geatte_drawable_margin">6dp</dimen>
 	
 	<dimen name="geatte_item_view_large_height">128dp</dimen>
-	<dimen name="geatte_item_view_mid_height">96dp</dimen>	
+	<dimen name="geatte_item_view_upper_mid_height">96dp</dimen>	
 	<dimen name="geatte_item_view_height">64dp</dimen>
+	<dimen name="geatte_item_view_lower_mid_height">48dp</dimen>
 	<dimen name="geatte_item_view_half_height">32dp</dimen>
 	<dimen name="geatte_item_view_quarter_height">16dp</dimen>
 	

@@ -38,7 +38,11 @@ public class GeatteThumbnailItemView extends RelativeLayout implements ItemView 
 	final GeatteThumbnailItem item = (GeatteThumbnailItem) object;
 	mTitleView.setText(item.text);
 	mSubtitleView.setText(item.subtitle);
-	mThumbnailView.setImageResource(item.drawableId);
+	if (item.bitmap != null) {
+	    mThumbnailView.setImageBitmap(item.bitmap);
+	} else {
+	    mThumbnailView.setImageResource(item.drawableId);
+	}
     }
 
 }

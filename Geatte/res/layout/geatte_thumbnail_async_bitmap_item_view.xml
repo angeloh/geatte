@@ -4,15 +4,14 @@
 	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
 	style="?attr/GeatteThumbnailAsyncBitmapItemStyle"
 	android:layout_width="fill_parent"
-	android:layout_height="?attr/GeatteItemViewPreferredMidHeight"
+	android:layout_height="?attr/GeatteItemViewPreferredUpperMidHeight"
 	android:padding="3dip">
-
 		
 	<greendroid.widget.AsyncImageView
+		style="?attr/GeatteThumbnailAsyncBitmapItemStyleThumbnail"
 		android:id="@+id/geatte_async_image"
-		android:layout_width="@dimen/geatte_thumbnail_size"
-		android:layout_height="@dimen/geatte_thumbnail_size"
-		greendroid:defaultSrc="@drawable/icon" />
+		greendroid:defaultSrc="@drawable/icon" 
+		android:scaleType="centerCrop" />
 		
 	<TextView
 		style="?attr/GeatteThumbnailAsyncBitmapItemStyleSubtitle"
