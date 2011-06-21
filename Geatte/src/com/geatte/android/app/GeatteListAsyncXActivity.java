@@ -17,6 +17,7 @@ import greendroid.widget.ActionBar;
 import greendroid.widget.AsyncImageView;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.Item;
+import greendroid.widget.itemview.ItemView;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -230,11 +231,16 @@ public class GeatteListAsyncXActivity extends GDListActivity implements OnScroll
 		//		Bitmap imgBitmap = BitmapFactory.decodeFile(tItem.imagePath, bitmapOptions);
 		//		holder.imageView.setImageBitmap(imgBitmap);
 		return convertView;
-	    } else {
+	    }
+	    else if (item instanceof GeatteThumbnailItem) {
+		ItemView cell = item.newView(mContext, null);
+		cell.prepareItemView();
+		cell.setObject(item);
+		return (View) cell;
+	    }
+	    else {
 		return super.getView(position, convertView, parent);
 	    }
-
-
 
 	}
 

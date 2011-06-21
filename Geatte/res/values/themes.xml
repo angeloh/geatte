@@ -71,6 +71,11 @@
 		<item name="GeatteThumbnailAsyncBitmapItemStyleSubtitle">@style/Geatte.ThumbnailAsyncBitmapItemStyle.Subtitle</item>
 		<item name="GeatteThumbnailAsyncBitmapItemStyleThumbnail">@style/Geatte.ThumbnailAsyncBitmapItemStyle.Thumbnail</item>
 		
+		<item name="GeatteFeedbackItemStyle">@style/Geatte.GeatteFeedbackItem</item>
+		<item name="GeatteFeedbackItemStyleTitle">@style/Geatte.GeatteFeedbackItem.Title</item>
+		<item name="GeatteFeedbackItemStyleSubtitle">@style/Geatte.GeatteFeedbackItem.Subtitle</item>
+		<item name="GeatteFeedbackItemStyleThumbnail">@style/Geatte.GeatteFeedbackItem.Thumbnail</item>
+		
 		<item name="GeatteProgressItemViewStyle">@style/Geatte.ProgressItemView</item>
 		<item name="GeatteProgressItemViewStyleText">@style/Geatte.ProgressItemView.Text</item>
 		<item name="GeatteProgressItemViewStyleProgressBar">@style/Geatte.ProgressItemView.ProgressBar</item>

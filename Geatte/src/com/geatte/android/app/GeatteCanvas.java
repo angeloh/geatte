@@ -81,7 +81,7 @@ public class GeatteCanvas extends GDActivity {
 	final Button showAllFeedbackButton = (Button) findViewById(R.id.app_show_all_feedback_btn);
 	showAllFeedbackButton.setOnClickListener( new OnClickListener(){
 	    public void onClick(View v ){
-		Intent intent = new Intent(getApplicationContext(), GeatteAllFeedbackActivity.class);
+		Intent intent = new Intent(getApplicationContext(), GeatteAllFeedbackXActivity.class);
 		startActivity(intent);
 	    }
 	});

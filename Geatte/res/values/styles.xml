@@ -168,6 +168,27 @@
 		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
 	</style>
 	
+	<!-- Styles for the GeatteFeedbackItem -->
+	<style name="Geatte.GeatteFeedbackItem">
+		<!-- item name="android:background">#737CA1</item-->
+	</style>
+	
+	<style name="Geatte.GeatteFeedbackItem.Title">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
+	</style>
+	
+	<style name="Geatte.GeatteFeedbackItem.Subtitle">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	</style>
+
+	<style name="Geatte.GeatteFeedbackItem.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
+		
 	<!-- Styles for the GeatteProgressItemView -->
 	<style name="Geatte.ProgressItemView" />
 	<style name="Geatte.ProgressItemView.ProgressBar">

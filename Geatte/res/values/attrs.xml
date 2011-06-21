@@ -53,6 +53,11 @@
 	<attr name="GeatteThumbnailAsyncBitmapItemStyleSubtitle" format="reference" />
 	<attr name="GeatteThumbnailAsyncBitmapItemStyleThumbnail" format="reference" />
 	
+	<attr name="GeatteFeedbackItemStyle" format="reference" />
+	<attr name="GeatteFeedbackItemStyleTitle" format="reference" />
+	<attr name="GeatteFeedbackItemStyleSubtitle" format="reference" />
+	<attr name="GeatteFeedbackItemStyleThumbnail" format="reference" />
+	
 	<attr name="GeatteProgressItemViewStyle" format="reference" />
 	<attr name="GeatteProgressItemViewStyleText" format="reference" />
 	<attr name="GeatteProgressItemViewStyleProgressBar" format="reference" />

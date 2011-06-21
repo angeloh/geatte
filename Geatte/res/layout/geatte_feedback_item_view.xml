@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.geatte.android.view.GeatteFeedbackItemView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
+	style="?attr/GeatteFeedbackItemStyle"
+	android:layout_width="fill_parent"
+	android:layout_height="?android:attr/listPreferredItemHeight"
+	android:padding="1dip">
+	
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent" 
+		android:orientation="horizontal"
+		android:gravity="left|center_vertical">
+	
+		<ImageView
+			style="?attr/GeatteFeedbackItemStyleThumbnail"
+			android:id="@+id/geatte_feedback_item_contact_thumbnail"
+			android:gravity="left|center_vertical"
+			android:scaleType="centerInside" />
+		
+		<TextView
+			style="?attr/GeatteFeedbackItemStyleTitle"
+			android:id="@+id/geatte_feedback_item_title"
+			android:layout_width="wrap_content"
+			android:layout_toRightOf="@id/geatte_feedback_item_contact_thumbnail"
+	        android:layout_alignParentTop="true"
+			android:layout_alignWithParentIfMissing="true"
+			android:gravity="left|center_vertical"
+			android:ellipsize="end" />
+	
+		<TextView
+			style="?attr/GeatteFeedbackItemStyleSubtitle"
+			android:id="@+id/geatte_feedback_item_subtitle"
+			android:layout_width="wrap_content"
+			android:layout_toRightOf="@id/geatte_feedback_item_contact_thumbnail"
+	        android:layout_alignParentBottom="true"
+	        android:ellipsize="marquee" />
+        
+    </RelativeLayout>
+    
+   	<LinearLayout 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:orientation="horizontal"
+		android:gravity="right|center_vertical">
+
+		<greendroid.widget.AsyncImageView
+			style="?attr/GeatteFeedbackItemStyleThumbnail"
+			android:id="@+id/geatte_feedback_item_interest_thumbnail"
+			android:scaleType="centerCrop" />
+
+	</LinearLayout>
+
+</com.geatte.android.view.GeatteFeedbackItemView>

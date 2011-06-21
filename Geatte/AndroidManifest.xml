@@ -54,12 +54,6 @@
 		<activity android:name=".GeatteApp" android:label="@string/app_name">
 		</activity>
 
-		<activity android:name=".GeatteListActivity" android:label="@string/app_name">
-		</activity>
-
-		<activity android:name=".GeatteListOthersActivity" android:label="@string/app_name">
-		</activity>
-
 		<activity android:name=".GeatteEditActivity" android:label="@string/edit_geatte">
 		</activity>
 		
@@ -78,7 +72,7 @@
 		<activity android:name=".GeatteFeedbackActivity" android:label="@string/app_name">
 		</activity>
 		
-		<activity android:name=".GeatteAllFeedbackActivity" android:label="@string/app_name">
+		<activity android:name=".GeatteAllFeedbackXActivity" android:label="@string/app_name">
 		</activity>
 		
 		<activity android:name=".GeatteTabActivity" android:label="@string/app_name">
@@ -91,9 +85,6 @@
           android:label="@string/voting_comment_title" 
           android:theme="@android:style/Theme.Dialog"/>
 
-		<activity android:name=".GeatteListAsyncActivity" android:label="@string/app_name">
-		</activity>
-		
 		<activity android:name=".GeatteListAsyncXActivity" android:label="@string/app_name">
 		</activity>
 		

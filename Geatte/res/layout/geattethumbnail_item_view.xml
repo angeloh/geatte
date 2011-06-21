@@ -19,7 +19,8 @@
 		android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
 		android:layout_alignWithParentIfMissing="true"
-		android:gravity="center_vertical" />
+		android:gravity="center_vertical"
+		android:ellipsize="end" />
 	
 	<TextView
 		style="?attr/GeatteThumbnailItemStyleSubtitle"
@@ -27,6 +28,7 @@
 		android:layout_width="wrap_content"
 		android:layout_toRightOf="@id/geatte_thumbnail_item_thumbnail"
 		android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:ellipsize="marquee" />
 
 </com.geatte.android.view.GeatteThumbnailItemView>

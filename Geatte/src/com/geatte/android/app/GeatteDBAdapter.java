@@ -630,6 +630,57 @@ public class GeatteDBAdapter {
     }
 
     /**
+     * Return a Cursor positioned at the interest that matches the given rowId with blob
+     * 
+     * @param rowId id of my interest to retrieve
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchMyInterestWithBlob(long rowId) throws SQLException {
+	String query = "SELECT " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_ID + " AS " + KEY_IMAGE_AS_ID + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_PATH + ", " +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_THUMBNAIL + " " +
+	"FROM " +
+	DB_TABLE_INTERESTS + " JOIN " + DB_TABLE_IMAGES + " ON " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" +
+	DB_TABLE_IMAGES + "." + KEY_IMAGE_INTEREST_ID +
+	" WHERE " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=" + rowId;
+
+	/*	String query = "SELECT " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + " " +
+	"FROM " +
+	DB_TABLE_INTERESTS +
+	" WHERE " + DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + "=\"" + rowId + "\"";*/
+
+	Log.i(Config.LOGTAG, "fetch interest query string = " + query);
+
+	Cursor cursor = mDb.rawQuery(query, null);
+
+	if (cursor != null) {
+	    cursor.moveToFirst();
+	}
+	return cursor;
+    }
+
+    /**
+     * Return a Cursor positioned at the interest that matches the given geatteId with blob
+     * 
+     * @param geatteId geatteId
+     * @return Cursor positioned to matching interest, if found
+     * @throws SQLException if note could not be found/retrieved
+     */
+    public Cursor fetchMyInterestWithBlob(String geatteId) throws SQLException {
+	long interestId = this.getInterestIdFromGeatteId(geatteId);
+	return fetchMyInterestWithBlob(interestId);
+    }
+
+    /**
      * Return a Cursor positioned at the feedbacks that matches the given geatteId
      * 
      * @param geatteId geatteId

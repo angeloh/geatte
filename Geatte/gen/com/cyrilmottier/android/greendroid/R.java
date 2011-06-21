@@ -27,7 +27,7 @@ public final class R {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteCommentWidget=0x7f010080;
+        public static final int GeatteCommentWidget=0x7f010084;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -38,6 +38,22 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int GeatteDrawableMargin=0x7f01005a;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int GeatteFeedbackItemStyle=0x7f01007c;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int GeatteFeedbackItemStyleSubtitle=0x7f01007e;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int GeatteFeedbackItemStyleThumbnail=0x7f01007f;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int GeatteFeedbackItemStyleTitle=0x7f01007d;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -131,15 +147,15 @@ containing a value of this type.
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyle=0x7f01007c;
+        public static final int GeatteProgressItemViewStyle=0x7f010080;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleProgressBar=0x7f01007e;
+        public static final int GeatteProgressItemViewStyleProgressBar=0x7f010082;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleText=0x7f01007d;
+        public static final int GeatteProgressItemViewStyleText=0x7f010081;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -155,7 +171,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTabsIcon=0x7f01007f;
+        public static final int GeatteTabsIcon=0x7f010083;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -975,15 +991,15 @@ containing a value of this type.
         public static final int app_snap_button=0x7f05002a;
         public static final int app_top_label=0x7f050029;
         public static final int bottom=0x7f050008;
-        public static final int button=0x7f050077;
+        public static final int button=0x7f05007b;
         public static final int center=0x7f05000d;
         public static final int center_horizontal=0x7f05000c;
         public static final int center_vertical=0x7f05000b;
-        public static final int checkbox=0x7f050079;
-        public static final int contact_check=0x7f050066;
-        public static final int contact_subtitle=0x7f050068;
-        public static final int contact_thumbnail=0x7f050069;
-        public static final int contact_title=0x7f050067;
+        public static final int checkbox=0x7f05007d;
+        public static final int contact_check=0x7f05006a;
+        public static final int contact_subtitle=0x7f05006c;
+        public static final int contact_thumbnail=0x7f05006d;
+        public static final int contact_title=0x7f05006b;
         public static final int contacts_clean_btn=0x7f050031;
         public static final int contacts_footer=0x7f050030;
         public static final int contacts_save_btn=0x7f050032;
@@ -996,11 +1012,11 @@ containing a value of this type.
         public static final int edit_img=0x7f05003c;
         public static final int edit_title_label=0x7f050038;
         public static final int edit_top_label=0x7f050037;
-        public static final int edittext=0x7f050078;
+        public static final int edittext=0x7f05007c;
         public static final int empty=0x7f050002;
-        public static final int fi_geatte_desc=0x7f05004d;
-        public static final int fi_geatte_img=0x7f05004c;
-        public static final int fi_geatte_title=0x7f05004e;
+        public static final int fi_geatte_desc=0x7f050051;
+        public static final int fi_geatte_img=0x7f050050;
+        public static final int fi_geatte_title=0x7f050052;
         public static final int gd_action_bar=0x7f050012;
         public static final int gd_action_bar_content_view=0x7f050014;
         public static final int gd_action_bar_home_item=0x7f050015;
@@ -1026,70 +1042,74 @@ containing a value of this type.
         public static final int gdi_quick_action_items=0x7f050021;
         public static final int gdi_rack=0x7f050020;
         public static final int gdi_scroll=0x7f05001f;
-        public static final int geatte_async_image=0x7f05005f;
-        public static final int geatte_async_item_title=0x7f050061;
-        public static final int geatte_async_subtitle=0x7f050060;
-        public static final int geatte_bitmap_item_desc=0x7f050065;
-        public static final int geatte_bitmap_item_label=0x7f050064;
-        public static final int geatte_bitmap_item_thumbnail=0x7f050062;
-        public static final int geatte_bitmap_item_title=0x7f050063;
-        public static final int geatte_progress_bar=0x7f050047;
-        public static final int geatte_progress_text=0x7f050048;
-        public static final int geatte_separator_text=0x7f050058;
-        public static final int geatte_separator_thumbnail=0x7f050057;
-        public static final int geatte_thumbnail_item_subtitle=0x7f050076;
-        public static final int geatte_thumbnail_item_thumbnail=0x7f050074;
-        public static final int geatte_thumbnail_item_title=0x7f050075;
-        public static final int geatte_vote_btn_no=0x7f05006c;
-        public static final int geatte_vote_btn_yes=0x7f05006b;
-        public static final int geatte_vote_img=0x7f05006a;
+        public static final int geatte_async_image=0x7f050063;
+        public static final int geatte_async_item_title=0x7f050065;
+        public static final int geatte_async_subtitle=0x7f050064;
+        public static final int geatte_bitmap_item_desc=0x7f050069;
+        public static final int geatte_bitmap_item_label=0x7f050068;
+        public static final int geatte_bitmap_item_thumbnail=0x7f050066;
+        public static final int geatte_bitmap_item_title=0x7f050067;
+        public static final int geatte_feedback_item_contact_thumbnail=0x7f050041;
+        public static final int geatte_feedback_item_interest_thumbnail=0x7f050044;
+        public static final int geatte_feedback_item_subtitle=0x7f050043;
+        public static final int geatte_feedback_item_title=0x7f050042;
+        public static final int geatte_progress_bar=0x7f05004b;
+        public static final int geatte_progress_text=0x7f05004c;
+        public static final int geatte_separator_text=0x7f05005c;
+        public static final int geatte_separator_thumbnail=0x7f05005b;
+        public static final int geatte_thumbnail_item_subtitle=0x7f05007a;
+        public static final int geatte_thumbnail_item_thumbnail=0x7f050078;
+        public static final int geatte_thumbnail_item_title=0x7f050079;
+        public static final int geatte_vote_btn_no=0x7f050070;
+        public static final int geatte_vote_btn_yes=0x7f05006f;
+        public static final int geatte_vote_img=0x7f05006e;
         public static final int hdpi=0x7f050005;
         public static final int image_detail=0x7f050033;
-        public static final int intro_exit=0x7f050045;
-        public static final int intro_footer=0x7f050041;
-        public static final int intro_next=0x7f050046;
-        public static final int intro_text=0x7f050042;
+        public static final int intro_exit=0x7f050049;
+        public static final int intro_footer=0x7f050045;
+        public static final int intro_next=0x7f05004a;
+        public static final int intro_text=0x7f050046;
         public static final int ldpi=0x7f050003;
         public static final int left=0x7f050009;
         public static final int mdpi=0x7f050004;
         public static final int multiple=0x7f05000f;
-        public static final int my_geatte_desc=0x7f05004a;
-        public static final int my_geatte_img=0x7f050049;
-        public static final int my_geatte_title=0x7f05004b;
+        public static final int my_geatte_desc=0x7f05004e;
+        public static final int my_geatte_img=0x7f05004d;
+        public static final int my_geatte_title=0x7f05004f;
         public static final int normal=0x7f050000;
-        public static final int ratingbar=0x7f05007b;
+        public static final int ratingbar=0x7f05007f;
         public static final int right=0x7f05000a;
-        public static final int select_account=0x7f050050;
-        public static final int select_account_back=0x7f050055;
-        public static final int select_account_click_next_text=0x7f050051;
-        public static final int select_account_connecting_text=0x7f050053;
-        public static final int select_account_footer=0x7f050054;
-        public static final int select_account_next=0x7f050056;
-        public static final int select_account_progress_bar=0x7f050052;
-        public static final int select_account_text=0x7f05004f;
+        public static final int select_account=0x7f050054;
+        public static final int select_account_back=0x7f050059;
+        public static final int select_account_click_next_text=0x7f050055;
+        public static final int select_account_connecting_text=0x7f050057;
+        public static final int select_account_footer=0x7f050058;
+        public static final int select_account_next=0x7f05005a;
+        public static final int select_account_progress_bar=0x7f050056;
+        public static final int select_account_text=0x7f050053;
         public static final int send_button=0x7f05003d;
         public static final int send_geatte_button=0x7f050040;
         public static final int send_to_button=0x7f05003f;
-        public static final int setup_complete_back=0x7f05005b;
-        public static final int setup_complete_finish=0x7f05005c;
-        public static final int setup_complete_footer=0x7f050059;
-        public static final int setup_complete_text=0x7f05005a;
-        public static final int setup_intro_edit_phone=0x7f050044;
-        public static final int setup_intro_phone_missing_text=0x7f050043;
+        public static final int setup_complete_back=0x7f05005f;
+        public static final int setup_complete_finish=0x7f050060;
+        public static final int setup_complete_footer=0x7f05005d;
+        public static final int setup_complete_text=0x7f05005e;
+        public static final int setup_intro_edit_phone=0x7f050048;
+        public static final int setup_intro_phone_missing_text=0x7f050047;
         public static final int single=0x7f05000e;
-        public static final int tabsLayout=0x7f05005d;
-        public static final int tabsText=0x7f05005e;
+        public static final int tabsLayout=0x7f050061;
+        public static final int tabsText=0x7f050062;
         public static final int title=0x7f050039;
         public static final int title_detail=0x7f050034;
-        public static final int togglebutton=0x7f05007a;
+        public static final int togglebutton=0x7f05007e;
         public static final int top=0x7f050007;
-        public static final int voting_cancel_button=0x7f050070;
-        public static final int voting_comment=0x7f05006e;
-        public static final int voting_comment_footer=0x7f05006f;
-        public static final int voting_comment_mid=0x7f05006d;
-        public static final int voting_image_view=0x7f050072;
-        public static final int voting_ok_button=0x7f050071;
-        public static final int voting_thumbnail=0x7f050073;
+        public static final int voting_cancel_button=0x7f050074;
+        public static final int voting_comment=0x7f050072;
+        public static final int voting_comment_footer=0x7f050073;
+        public static final int voting_comment_mid=0x7f050071;
+        public static final int voting_image_view=0x7f050076;
+        public static final int voting_ok_button=0x7f050075;
+        public static final int voting_thumbnail=0x7f050077;
         public static final int xhdpi=0x7f050006;
     }
     public static final class layout {
@@ -1130,30 +1150,31 @@ containing a value of this type.
         public static final int geatte_detail=0x7f030022;
         public static final int geatte_edit=0x7f030023;
         public static final int geatte_edit_view=0x7f030024;
-        public static final int geatte_feedback_list_content=0x7f030025;
-        public static final int geatte_intro=0x7f030026;
-        public static final int geatte_list=0x7f030027;
-        public static final int geatte_list_content_empty=0x7f030028;
-        public static final int geatte_progress_item_view=0x7f030029;
-        public static final int geatte_row=0x7f03002a;
-        public static final int geatte_row_fi=0x7f03002b;
-        public static final int geatte_select_account=0x7f03002c;
-        public static final int geatte_separator_thumbnail_item_view=0x7f03002d;
-        public static final int geatte_setup_complete=0x7f03002e;
-        public static final int geatte_tab=0x7f03002f;
-        public static final int geatte_tab_widget=0x7f030030;
-        public static final int geatte_tabs_bg=0x7f030031;
-        public static final int geatte_thumbnail_async_bitmap_item_view=0x7f030032;
-        public static final int geatte_thumbnail_bitmap_item_view=0x7f030033;
-        public static final int geatte_thumbnail_checkbox_view=0x7f030034;
-        public static final int geatte_thumbnail_item_view=0x7f030035;
-        public static final int geatte_vote=0x7f030036;
-        public static final int geatte_vote_bar=0x7f030037;
-        public static final int geatte_vote_btn=0x7f030038;
-        public static final int geatte_vote_comment_edit_view=0x7f030039;
-        public static final int geatte_voting_view=0x7f03003a;
-        public static final int geattethumbnail_item_view=0x7f03003b;
-        public static final int main=0x7f03003c;
+        public static final int geatte_feedback_item_view=0x7f030025;
+        public static final int geatte_feedback_list_content=0x7f030026;
+        public static final int geatte_intro=0x7f030027;
+        public static final int geatte_list=0x7f030028;
+        public static final int geatte_list_content_empty=0x7f030029;
+        public static final int geatte_progress_item_view=0x7f03002a;
+        public static final int geatte_row=0x7f03002b;
+        public static final int geatte_row_fi=0x7f03002c;
+        public static final int geatte_select_account=0x7f03002d;
+        public static final int geatte_separator_thumbnail_item_view=0x7f03002e;
+        public static final int geatte_setup_complete=0x7f03002f;
+        public static final int geatte_tab=0x7f030030;
+        public static final int geatte_tab_widget=0x7f030031;
+        public static final int geatte_tabs_bg=0x7f030032;
+        public static final int geatte_thumbnail_async_bitmap_item_view=0x7f030033;
+        public static final int geatte_thumbnail_bitmap_item_view=0x7f030034;
+        public static final int geatte_thumbnail_checkbox_view=0x7f030035;
+        public static final int geatte_thumbnail_item_view=0x7f030036;
+        public static final int geatte_vote=0x7f030037;
+        public static final int geatte_vote_bar=0x7f030038;
+        public static final int geatte_vote_btn=0x7f030039;
+        public static final int geatte_vote_comment_edit_view=0x7f03003a;
+        public static final int geatte_voting_view=0x7f03003b;
+        public static final int geattethumbnail_item_view=0x7f03003c;
+        public static final int main=0x7f03003d;
     }
     public static final class string {
         public static final int app_name=0x7f08001d;
@@ -1251,8 +1272,15 @@ containing a value of this type.
     }
     public static final class style {
         public static final int Geatte=0x7f09003e;
-        public static final int Geatte_Comment=0x7f09005b;
-        public static final int Geatte_Comment_Widget=0x7f09005c;
+        public static final int Geatte_Comment=0x7f09005f;
+        public static final int Geatte_Comment_Widget=0x7f090060;
+        /**  Styles for the GeatteFeedbackItem 
+ item name="android:background">#737CA1</item
+         */
+        public static final int Geatte_GeatteFeedbackItem=0x7f090058;
+        public static final int Geatte_GeatteFeedbackItem_Subtitle=0x7f09005a;
+        public static final int Geatte_GeatteFeedbackItem_Thumbnail=0x7f09005b;
+        public static final int Geatte_GeatteFeedbackItem_Title=0x7f090059;
         /**  Styles for the GeatteThumbnailCheckboxStyle 
  item name="android:background">#737CA1</item
          */
@@ -1269,9 +1297,9 @@ containing a value of this type.
         public static final int Geatte_GeatteThumbnailItem_Title=0x7f09004d;
         /**  Styles for the GeatteProgressItemView 
          */
-        public static final int Geatte_ProgressItemView=0x7f090058;
-        public static final int Geatte_ProgressItemView_ProgressBar=0x7f090059;
-        public static final int Geatte_ProgressItemView_Text=0x7f09005a;
+        public static final int Geatte_ProgressItemView=0x7f09005c;
+        public static final int Geatte_ProgressItemView_ProgressBar=0x7f09005d;
+        public static final int Geatte_ProgressItemView_Text=0x7f09005e;
         /**  Styles for the SeparatorThumbnailItem 
          */
         public static final int Geatte_SeparatorThumbnailItem=0x7f090049;
@@ -1373,7 +1401,7 @@ containing a value of this type.
         public static final int TextAppearance_Separator=0x7f090004;
         public static final int TextAppearance_Small=0x7f090003;
         public static final int TextAppearance_TabIndicator=0x7f090005;
-        public static final int Theme_Geatte=0x7f09005d;
+        public static final int Theme_Geatte=0x7f090061;
         public static final int Theme_GreenDroid=0x7f090035;
         public static final int Theme_GreenDroid_NoTitleBar=0x7f090036;
         public static final int edit_text=0x7f090039;
