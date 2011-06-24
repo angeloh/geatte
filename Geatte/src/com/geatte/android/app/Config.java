@@ -9,10 +9,30 @@ public class Config {
 
     public static final Long IMAGE_BLOB_UPLOAD_BACKOFF = 300L;
 
-    public static enum LIKE {YES, NO, MAYBE};
+    public static enum LIKE {
+	YES, NO, MAYBE
+    };
 
-    //    public static final String INTENT_ACTION_VIEW_DETAIL = "com.geatte.android.app.VIEW_DETAIL";
-    //    public static final String INTENT_ACTION_VIEW_LIST = "com.geatte.android.app.VIEW_LIST";
+    private static final int LOG_LEVEL_DEBUG = 4;
+    private static final int LOG_LEVEL_INFO = 3;
+    private static final int LOG_LEVEL_WARNING = 2;
+    private static final int LOG_LEVEL_ERROR = 1;
+    private static final int LOG_LEVEL_NONE = 0;
+
+    /**
+     * Set this flag to {@link Config#GD_LOG_LEVEL_NONE} when releasing
+     */
+    private static final int GD_LOG_LEVEL = LOG_LEVEL_DEBUG;
+
+    public static final boolean LOG_DEBUG_ENABLED = (GD_LOG_LEVEL == LOG_LEVEL_DEBUG);
+    public static final boolean LOG_INFO_ENABLED = LOG_DEBUG_ENABLED || (GD_LOG_LEVEL == LOG_LEVEL_INFO);
+    public static final boolean LOG_WARNING_LOGS_ENABLED = LOG_INFO_ENABLED || (GD_LOG_LEVEL == LOG_LEVEL_WARNING);
+    public static final boolean LOG_ERROR_LOGS_ENABLED = LOG_WARNING_LOGS_ENABLED || (GD_LOG_LEVEL == LOG_LEVEL_ERROR);
+
+    // public static final String INTENT_ACTION_VIEW_DETAIL =
+    // "com.geatte.android.app.VIEW_DETAIL";
+    // public static final String INTENT_ACTION_VIEW_LIST =
+    // "com.geatte.android.app.VIEW_LIST";
     public static final String INTENT_ACTION_UPDATE_UI = "com.geatte.android.app.UPDATE_UI";
     public static final String INTENT_ACTION_AUTH_PERMISSION = "com.geatte.android.app.AUTH_PERMISSION";
     public static final String INTENT_ACTION_UPDATE_CONTACTS = "com.geatte.android.app.UPDATE_CONTACTS";
@@ -28,14 +48,14 @@ public class Config {
 
     public static final String EXTRA_CURRENT_TAB = "0";
 
-    //intent actions
+    // intent actions
     public static final String ACTION_VOTING = "action_voting";
     public static final String ACTION_FEEDBACK = "action_feedback";
 
-    //setup configs
+    // setup configs
     public static final String SAVED_SCREEN_ID = "saved_screen_id";
 
-    //C2DM Configs
+    // C2DM Configs
     public static final String C2DM_SENDER = "geatte@gmail.com";
     public static final String C2DM_ACCOUNT_EXTRA = "account_name";
     public static final String C2DM_MESSAGE_EXTRA = "message";
@@ -43,7 +63,8 @@ public class Config {
     public static final String C2DM_MESSAGE_PAYLOAD = "payload";
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
     public static final String C2DM_MESSAGE_GEATTE_ID = "geatteid";
-    //public static final String C2DM_MESSAGE_GEATTE_MESSAGE = "geatte_message";
+    // public static final String C2DM_MESSAGE_GEATTE_MESSAGE =
+    // "geatte_message";
     public static final String C2DM_MESSAGE_GEATTEID_VOTE = "geatteid_vote";
     public static final String C2DM_MESSAGE_GEATTE_VOTER = "geatte_voter";
     public static final String C2DM_MESSAGE_GEATTE_VOTE_RESP = "geatte_vote_resp";
@@ -95,5 +116,10 @@ public class Config {
     public static final String CONTACT_DEFAULT_COUNTRY_CODE = "countryCode";
     public static final String CONTACT_PHONE_NUMBER = "phoneNumber";
     public static final String CONTACT_ID = "contactId";
+
+    public static final String INVITE_EMAIL_SUBJECT = "Come join Geatte to share shopping feedback with me";
+    public static final String INVITE_EMAIL_TEXT = "Geatte is a shopping feedback app on mobile for friends " +
+    "to share information and help each other to make decision. We can share photos of want-to-have items to " +
+    "anyone on your contact list who has installed Geatte. Go download Geatte free on your Android or iPhone market.";
 
 }

@@ -81,6 +81,9 @@
 		<activity android:name=".GeatteContactSelectActivity" android:label="@string/app_name">
 		</activity>
 		
+		<activity android:name=".GeatteContactInfoActivity" android:label="@string/app_name">
+		</activity>
+		
 		<activity android:name=".GeatteVotingCommentActivity" 
           android:label="@string/voting_comment_title" 
           android:theme="@android:style/Theme.Dialog"/>

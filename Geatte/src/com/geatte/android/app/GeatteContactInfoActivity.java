@@ -4,13 +4,12 @@ import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.Item;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.cyrilmottier.android.greendroid.R;
+import com.geatte.android.view.GeatteContactItem;
+import com.geatte.android.view.GeatteContactItemView;
 import com.geatte.android.view.GeatteProgressItem;
-import com.geatte.android.view.GeatteThumbnailCheckbox;
-import com.geatte.android.view.GeatteThumbnailCheckboxView;
 import com.geatte.android.view.GeatteThumbnailItem;
 
 import android.os.AsyncTask;
@@ -26,41 +25,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.content.*;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class GeatteContactSelectActivity extends GDListActivity {
+public class GeatteContactInfoActivity extends GDListActivity {
 
     private static final int MENU_REFRESH = Menu.FIRST;
     private static final int MENU_INVITE = Menu.FIRST + 1;
     private final Handler mHandler = new Handler();
     private ListView mListView = null;
-    ThumbnailCheckBoxItemAdapter mCheckboxAdapter = null;
+    ThumbnailItemAdapter mContactsAdapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() START");
+	Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() START");
 	setTitle(R.string.contacts_view_name);
 
-	Button btnClear = (Button) findViewById(R.id.contacts_clean_btn);
-	btnClear.setOnClickListener(new OnClickListener() {
+	Button btnOk = (Button) findViewById(R.id.contacts_info_ok_btn);
+	btnOk.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : clean contacts selections");
-		clearSelections();
-	    }
-	});
-
-	Button btnSave = (Button) findViewById(R.id.contacts_save_btn);
-	btnSave.setOnClickListener(new OnClickListener() {
-
-	    // redirect to geatte edit
-	    public void onClick(View v) {
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : save contacts selections");
+		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() : return to previous activity");
 		setResult(RESULT_OK);
 		finish();
 	    }
@@ -70,7 +58,7 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	try {
 	    List<Item> items = getContacts();
 	    if (items.size() == 0) {
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : No contacts available!!");
+		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() : No contacts available!!");
 		warnItem = new GeatteThumbnailItem("Click menu to invite friends", null, R.drawable.email);
 	    } else {
 		warnItem = null;
@@ -78,8 +66,8 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    final GeatteProgressItem progressItem = new GeatteProgressItem("Retrieving contacts", true);
 	    items.add(progressItem);
 
-	    mCheckboxAdapter = new ThumbnailCheckBoxItemAdapter(this, items);
-	    setListAdapter(mCheckboxAdapter);
+	    mContactsAdapter = new ThumbnailItemAdapter(this, items);
+	    setListAdapter(mContactsAdapter);
 
 	    // Broadcast receiver to get notification from GeatteContactsService to update contact list
 	    registerReceiver(receiver,
@@ -88,28 +76,28 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    mHandler.postDelayed(new Runnable() {
 		public void run() {
 		    if (warnItem != null) {
-			mCheckboxAdapter.insert(warnItem, 0);
+			mContactsAdapter.insert(warnItem, 0);
 		    }
-		    mCheckboxAdapter.remove(progressItem);
-		    mCheckboxAdapter.notifyDataSetChanged();
+		    mContactsAdapter.remove(progressItem);
+		    mContactsAdapter.notifyDataSetChanged();
 		}
 	    },500);
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() :  ERROR ", e);
 	}
 
 	mListView = getListView();
 	mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-	Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() END");
+	Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() END");
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
-	Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onResume(): START");
-	mCheckboxAdapter.notifyDataSetChanged();
-	Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onResume(): END");
+	Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onResume(): START");
+	mContactsAdapter.notifyDataSetChanged();
+	Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onResume(): END");
     }
 
     @Override
@@ -127,13 +115,15 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    mDbHelper.open();
 	    contactCur = mDbHelper.fetchAllContacts();
 
-	    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : Got cursor for all contacts");
+	    if (Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : Got cursor for all contacts");
+	    }
 
 	    contactCur.moveToFirst();
 	    int counter = 0;
 	    while (contactCur.isAfterLast() == false) {
 		++counter;
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : Process contact = " + counter);
+		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : Process contact = " + counter);
 
 		String contactPhone = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_PHONE_NUMBER));
 		String contactId = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_ID));
@@ -141,21 +131,23 @@ public class GeatteContactSelectActivity extends GDListActivity {
 		int contactIdInt = Integer.parseInt(contactId);
 		Bitmap contactBitmap = queryPhotoForContact(contactIdInt);
 
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : add one GeatteThumbnailCheckbox, contactPhone = " + contactPhone
+		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : add one GeatteThumbnailCheckbox, contactPhone = " + contactPhone
 			+ ", contactId = " + contactId + ", contactName = " + contactName);
 		if (contactBitmap != null) {
-		    items.add(new GeatteThumbnailCheckbox(contactName, null, contactPhone, contactBitmap));
+		    items.add(new GeatteContactItem(contactName, null, contactPhone, contactBitmap));
 		} else {
-		    items.add(new GeatteThumbnailCheckbox(contactName, null, contactPhone, R.drawable.profile));
-		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : contact has no profile photo available, " +
-			    "use default for contactName = " + contactName);
+		    items.add(new GeatteContactItem(contactName, null, contactPhone, R.drawable.profile));
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : contact has no profile photo available, " +
+				"use default for contactName = " + contactName);
+		    }
 		}
 
 		contactCur.moveToNext();
 
 	    }
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() :  ERROR ", e);
 	} finally {
 	    if (contactCur != null) {
 		contactCur.close();
@@ -211,130 +203,52 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	return photoBitmap;
     }
 
-    private void clearSelections() {
-	for (int i = 0; i < this.mListView.getCount(); i++) {
-	    GeatteThumbnailCheckboxView checkboxView = (GeatteThumbnailCheckboxView) this.mListView.getChildAt(i);
-	    checkboxView.setCheckboxChecked(false);
-	}
-	this.mCheckboxAdapter.clearSelectedContacts();
-    }
-
     /**
-     * A ThumbnailCheckBoxItemAdapter is an extension of an ItemAdapter for
-     * GeatteThumbnailCheckbox
-     * to return associated view.
+     * A ThumbnailItemAdapter is an extension of an ItemAdapter for
+     * GeatteContactItem to return associated view.
      */
-    private class ThumbnailCheckBoxItemAdapter extends ItemAdapter implements
-    OnClickListener {
+    private class ThumbnailItemAdapter extends ItemAdapter {
 
 	private Context mContext;
-	private ArrayList<String> selectedContacts = new ArrayList<String>();
 
-	public ThumbnailCheckBoxItemAdapter(Context context, Item[] items) {
+	public ThumbnailItemAdapter(Context context, Item[] items) {
 	    super(context, items);
 	    mContext = context;
-	    loadSelections();
 	}
 
-	public ThumbnailCheckBoxItemAdapter(Context context, List<Item> items) {
+	public ThumbnailItemAdapter(Context context, List<Item> items) {
 	    super(context, items);
 	    mContext = context;
-	    loadSelections();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 	    final Item item = (Item) getItem(position);
-	    if (item instanceof GeatteThumbnailCheckbox) {
-		GeatteThumbnailCheckboxView checkboxView = (GeatteThumbnailCheckboxView) item.newView(mContext, null);
-		checkboxView.prepareItemView();
-		checkboxView.setObject(item);
-		if (this.selectedContacts.contains(((GeatteThumbnailCheckbox) item).phone)) {
-		    checkboxView.setCheckboxChecked(true);
-		}
-		checkboxView.setCheckboxClickListener(this);
-		checkboxView.setCheckboxTag(((GeatteThumbnailCheckbox) item).phone);
-		return (View) checkboxView;
+	    if (item instanceof GeatteContactItem) {
+		GeatteContactItemView contactView = (GeatteContactItemView) item.newView(mContext, null);
+		contactView.prepareItemView();
+		contactView.setObject(item);
+		contactView.setTag(((GeatteContactItem) item).phone);
+		return (View) contactView;
 	    } else {
 		return super.getView(position, convertView, parent);
 	    }
 	}
 
-	@Override
-	public void onClick(View v) {
-	    CheckBox cBox = (CheckBox) v;
-	    String phone = (String) cBox.getTag();
-
-	    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter select phone = " + phone);
-	    if (cBox.isChecked()) {
-		if (!this.selectedContacts.contains(phone))
-		    this.selectedContacts.add(phone);
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter select phone = " + phone);
-	    } else {
-		if (this.selectedContacts.contains(phone))
-		    this.selectedContacts.remove(phone);
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter un-select phone = " + phone);
-	    }
-
-	    saveSelections();
-
-	}
-
-	public void clearSelectedContacts() {
-	    this.selectedContacts.clear();
-	    saveSelections();
-	}
-
-	private String getSavedItems() {
-	    String savedItems = "";
-
-	    for (int i = 0; i < selectedContacts.size(); i++) {
-
-		if (savedItems.length() > 0) {
-		    savedItems += ";" + this.selectedContacts.get(i);
-		} else {
-		    savedItems += this.selectedContacts.get(i);
-		}
-
-	    }
-	    return savedItems;
-	}
-
-	private void saveSelections() {
-	    // save the selections in the shared preference in private mode for the user
-	    Context context = getApplicationContext();
-	    final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
-	    SharedPreferences.Editor editor = prefs.edit();
-	    String selectContacts = getSavedItems();
-	    editor.putString(Config.PREF_SELECTED_CONTACTS, selectContacts);
-	    editor.commit();
-	}
-
-	private void loadSelections() {
-	    // if the selections were previously saved load them
-	    Context context = getApplicationContext();
-	    final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
-
-	    if (prefs.contains(Config.PREF_SELECTED_CONTACTS)) {
-		String savedItems = prefs.getString(Config.PREF_SELECTED_CONTACTS, "");
-		this.selectedContacts.addAll(Arrays.asList(savedItems.split(";")));
-	    }
-	}
     }
 
     @Override
     public int createLayout() {
-	Log.d(Config.LOGTAG, "creating the geatte contacts layout");
-	return R.layout.geatte_contacts_list_content;
+	return R.layout.geatte_contacts_info_list_content;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 	super.onCreateOptionsMenu(menu);
-	menu.add(0, GeatteContactSelectActivity.MENU_REFRESH, 0, R.string.menu_refresh).setIcon(
+	menu.add(0, GeatteContactInfoActivity.MENU_REFRESH, 0, R.string.menu_refresh).setIcon(
 		android.R.drawable.ic_menu_rotate);
-	menu.add(0, GeatteContactSelectActivity.MENU_INVITE, 0, R.string.menu_invite).setIcon(
+	menu.add(0, GeatteContactInfoActivity.MENU_INVITE, 0, R.string.menu_invite).setIcon(
 		android.R.drawable.ic_menu_share);
 
 	return true;
@@ -411,16 +325,16 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    final GeatteProgressItem progressItem = new GeatteProgressItem("Retrieving contacts", true);
 	    items.add(progressItem);
 
-	    mCheckboxAdapter = new ThumbnailCheckBoxItemAdapter(GeatteContactSelectActivity.this, items);
-	    setListAdapter(mCheckboxAdapter);
+	    mContactsAdapter = new ThumbnailItemAdapter(GeatteContactInfoActivity.this, items);
+	    setListAdapter(mContactsAdapter);
 
 	    mHandler.postDelayed(new Runnable() {
 		public void run() {
 		    if (warnItem != null) {
-			mCheckboxAdapter.insert(warnItem, 0);
+			mContactsAdapter.insert(warnItem, 0);
 		    }
-		    mCheckboxAdapter.remove(progressItem);
-		    mCheckboxAdapter.notifyDataSetChanged();
+		    mContactsAdapter.remove(progressItem);
+		    mContactsAdapter.notifyDataSetChanged();
 		}
 	    },500);
 	    Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() END");

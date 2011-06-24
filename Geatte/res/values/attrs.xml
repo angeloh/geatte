@@ -58,6 +58,11 @@
 	<attr name="GeatteFeedbackItemStyleSubtitle" format="reference" />
 	<attr name="GeatteFeedbackItemStyleThumbnail" format="reference" />
 	
+	<attr name="GeatteContactItemStyle" format="reference" />
+	<attr name="GeatteContactItemStyleTitle" format="reference" />
+	<attr name="GeatteContactItemStyleSubtitle" format="reference" />
+	<attr name="GeatteContactItemStyleThumbnail" format="reference" />
+	
 	<attr name="GeatteProgressItemViewStyle" format="reference" />
 	<attr name="GeatteProgressItemViewStyleText" format="reference" />
 	<attr name="GeatteProgressItemViewStyleProgressBar" format="reference" />

@@ -61,7 +61,7 @@ public class GeatteCanvas extends GDActivity {
 
 	setActionBarContentView(R.layout.geatte_canvas);
 
-	addActionBarItem(Type.Info);
+	addActionBarItem(Type.AllFriends);
 
 	Button cameraButton = (Button) findViewById(R.id.app_snap_button);
 	cameraButton.setOnClickListener( new OnClickListener(){
@@ -138,9 +138,10 @@ public class GeatteCanvas extends GDActivity {
 	am.cancel(mAlarmSender);
     }
 
-    //TODO show information
-    public void onShowInfo(View v) {
-
+    //TODO show all contacts
+    public void onShowAllContacts(View v) {
+	Intent intent = new Intent(getApplicationContext(), GeatteContactInfoActivity.class);
+	startActivity(intent);
     }
 
     @Override
@@ -148,7 +149,7 @@ public class GeatteCanvas extends GDActivity {
 
 	switch (position) {
 	case 0:
-	    onShowInfo(item.getItemView());
+	    onShowAllContacts(item.getItemView());
 	    break;
 
 	default:

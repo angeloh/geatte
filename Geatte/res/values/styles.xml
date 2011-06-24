@@ -188,6 +188,27 @@
 		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
 		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
 	</style>
+	
+	<!-- Styles for the GeatteContactItem -->
+	<style name="Geatte.GeatteContactItem">
+		<!-- item name="android:background">#737CA1</item-->
+	</style>
+	
+	<style name="Geatte.GeatteContactItem.Title">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
+	</style>
+	
+	<style name="Geatte.GeatteContactItem.Subtitle">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	</style>
+
+	<style name="Geatte.GeatteContactItem.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
+		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
 		
 	<!-- Styles for the GeatteProgressItemView -->
 	<style name="Geatte.ProgressItemView" />

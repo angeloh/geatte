@@ -13,6 +13,7 @@
 	<string name="menu_add_more_geatte">Add more geatte</string>
 	<string name="menu_get_next_page">Get next page</string>
 	<string name="menu_refresh">Refresh</string>
+	<string name="menu_invite">Tell friends</string>
     
     <string name="edit_geatte">New Geatte</string>
     <string name="edit_top_label">Send A Geatte</string>
@@ -70,6 +71,7 @@
 	<string name="contacts_view_name">Geatte Contacts</string>
 	<string name="contacts_clean">Clean</string>
     <string name="contacts_save">Save</string>
+    <string name="contacts_ok">Ok</string>
     
     <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->
     <string name="intro_text">
