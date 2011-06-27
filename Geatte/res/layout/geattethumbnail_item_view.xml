@@ -20,6 +20,8 @@
         android:layout_alignParentTop="true"
 		android:layout_alignWithParentIfMissing="true"
 		android:gravity="center_vertical"
+		android:inputType="text"
+		android:maxLines="1"
 		android:ellipsize="end" />
 	
 	<TextView

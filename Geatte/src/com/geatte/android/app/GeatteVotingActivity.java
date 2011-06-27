@@ -159,10 +159,6 @@ public class GeatteVotingActivity extends GDActivity {
 	}
 
     }
-    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_GEATTE_ID + ", " +
-    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_VOTE + ", " +
-    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_COMMENT + ", " +
-    //	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_CREATED_DATE + " " +
 
     class VoteUploadTask extends AsyncTask<String, String, String> {
 	@Override
@@ -257,8 +253,7 @@ public class GeatteVotingActivity extends GDActivity {
 
 		// server response
 		if (sResponse != null) {
-		    Toast.makeText(getApplicationContext(), "Geatte vote and feedback sent successfully, result = " + sResponse,
-			    Toast.LENGTH_LONG).show();
+		    Toast.makeText(getApplicationContext(), "You feedback sent successfully", Toast.LENGTH_LONG).show();
 		}
 		setResult(RESULT_OK);
 	    } catch (Exception e) {

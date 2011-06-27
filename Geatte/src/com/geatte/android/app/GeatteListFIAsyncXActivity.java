@@ -91,7 +91,7 @@ public class GeatteListFIAsyncXActivity extends GDListActivity {
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:fillList() : No geatte available!!");
 		}
-		warnItem = new GeatteThumbnailItem("Click Menu to invite friends to Geatte", null, R.drawable.icon);
+		warnItem = new GeatteThumbnailItem("No friend's interest yet!", null, R.drawable.icon);
 	    } else {
 		warnItem = null;
 	    }

@@ -94,7 +94,7 @@ public class GeatteListAsyncXActivity extends GDListActivity {
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "GeatteListAsyncXActivity:fillList() : No geatte available!!");
 		}
-		warnItem = new GeatteThumbnailItem("Click Home to create a Geatte", null, R.drawable.icon);
+		warnItem = new GeatteThumbnailItem("No interest created yet!", null, R.drawable.icon);
 	    } else {
 		warnItem = null;
 	    }
