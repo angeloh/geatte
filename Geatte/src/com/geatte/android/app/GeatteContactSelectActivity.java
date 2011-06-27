@@ -50,7 +50,9 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	Button btnClear = (Button) findViewById(R.id.contacts_clean_btn);
 	btnClear.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : clean contacts selections");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : clean contacts selections");
+		}
 		clearSelections();
 	    }
 	});
@@ -60,7 +62,9 @@ public class GeatteContactSelectActivity extends GDListActivity {
 
 	    // redirect to geatte edit
 	    public void onClick(View v) {
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : save contacts selections");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : save contacts selections");
+		}
 		setResult(RESULT_OK);
 		finish();
 	    }
@@ -70,7 +74,9 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	try {
 	    List<Item> items = getContacts();
 	    if (items.size() == 0) {
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : No contacts available!!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:onCreate() : No contacts available!!");
+		}
 		warnItem = new GeatteThumbnailItem("Click menu to invite friends", null, R.drawable.email);
 	    } else {
 		warnItem = null;
@@ -127,13 +133,13 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    mDbHelper.open();
 	    contactCur = mDbHelper.fetchAllContacts();
 
-	    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : Got cursor for all contacts");
-
 	    contactCur.moveToFirst();
 	    int counter = 0;
 	    while (contactCur.isAfterLast() == false) {
 		++counter;
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : Process contact = " + counter);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : Process contact = " + counter);
+		}
 
 		String contactPhone = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_PHONE_NUMBER));
 		String contactId = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_ID));
@@ -141,14 +147,18 @@ public class GeatteContactSelectActivity extends GDListActivity {
 		int contactIdInt = Integer.parseInt(contactId);
 		Bitmap contactBitmap = queryPhotoForContact(contactIdInt);
 
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : add one GeatteThumbnailCheckbox, contactPhone = " + contactPhone
-			+ ", contactId = " + contactId + ", contactName = " + contactName);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : add one GeatteThumbnailCheckbox, contactPhone = " + contactPhone
+			    + ", contactId = " + contactId + ", contactName = " + contactName);
+		}
 		if (contactBitmap != null) {
 		    items.add(new GeatteThumbnailCheckbox(contactName, null, contactPhone, contactBitmap));
 		} else {
 		    items.add(new GeatteThumbnailCheckbox(contactName, null, contactPhone, R.drawable.profile));
-		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : contact has no profile photo available, " +
-			    "use default for contactName = " + contactName);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "GeatteContactSelectActivity:getContacts() : contact has no profile photo available, " +
+				"use default for contactName = " + contactName);
+		    }
 		}
 
 		contactCur.moveToNext();
@@ -266,15 +276,20 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    CheckBox cBox = (CheckBox) v;
 	    String phone = (String) cBox.getTag();
 
-	    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter select phone = " + phone);
 	    if (cBox.isChecked()) {
-		if (!this.selectedContacts.contains(phone))
+		if (!this.selectedContacts.contains(phone)) {
 		    this.selectedContacts.add(phone);
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter select phone = " + phone);
+		}
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter select phone = " + phone);
+		}
 	    } else {
-		if (this.selectedContacts.contains(phone))
+		if (this.selectedContacts.contains(phone)) {
 		    this.selectedContacts.remove(phone);
-		Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter un-select phone = " + phone);
+		}
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactSelectActivity:ThumbnailCheckBoxItemAdapter un-select phone = " + phone);
+		}
 	    }
 
 	    saveSelections();
@@ -325,7 +340,6 @@ public class GeatteContactSelectActivity extends GDListActivity {
 
     @Override
     public int createLayout() {
-	Log.d(Config.LOGTAG, "creating the geatte contacts layout");
 	return R.layout.geatte_contacts_list_content;
     }
 
@@ -367,7 +381,6 @@ public class GeatteContactSelectActivity extends GDListActivity {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-	    Log.d(Config.LOGTAG, "trying to update contact list");
 	    updateContactList();
 	}
     };
@@ -390,7 +403,9 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	 */
 	@Override
 	protected List<Item> doInBackground(Void...unused) {
-	    Log.d(Config.LOGTAG, "updateContactsTask:doInBackground() : refresh contacts from db");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "updateContactsTask:doInBackground() : refresh contacts from db");
+	    }
 	    return getContacts();
 	}
 
@@ -403,7 +418,9 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() START");
 	    final GeatteThumbnailItem warnItem;
 	    if (items.size() == 0) {
-		Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() : No contacts available!!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() : No contacts available!!");
+		}
 		warnItem = new GeatteThumbnailItem("Click menu to invite friends", null, R.drawable.email);
 	    } else {
 		warnItem = null;

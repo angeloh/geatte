@@ -102,11 +102,15 @@ public class C2DMReceiver extends C2DMBaseReceiver {
     @Override
     public void onError(Context context, String errorId) {
 	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onError() START");
-	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
-	String registrationId = prefs.getString(Config.PREF_REGISTRATION_ID, null);
-	DeviceRegistrar.unregisterWithServer(context, registrationId);
+	//	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+	//	String registrationId = prefs.getString(Config.PREF_REGISTRATION_ID, null);
+	//	DeviceRegistrar.unregisterWithServer(context, registrationId);
 	Log.w(Config.LOGTAG_C2DM, "Messaging registration error: " + errorId);
-	//Toast.makeText(context, "Messaging registration error: " + errorId, Toast.LENGTH_SHORT).show();
+
+	Intent updateUIIntent = new Intent(Config.INTENT_ACTION_UPDATE_UI);
+	updateUIIntent.putExtra(DeviceRegistrar.STATUS_EXTRA, DeviceRegistrar.ERROR_STATUS);
+	context.sendBroadcast(updateUIIntent);
+
 	Log.d(Config.LOGTAG_C2DM, "GeatteApp:onError() END");
     }
 

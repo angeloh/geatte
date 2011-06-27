@@ -70,7 +70,9 @@ public class GeatteTabActivity extends GDTabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): START");
+	}
 
 	mDialog = ProgressDialog.show(GeatteTabActivity.this, "Loading", "Please wait...", true);
 
@@ -102,7 +104,9 @@ public class GeatteTabActivity extends GDTabActivity {
 	    public void run() {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): try to dismiss mDialog");
+			if(Config.LOG_DEBUG_ENABLED) {
+			    Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): try to dismiss mDialog");
+			}
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception e) {
@@ -112,14 +116,20 @@ public class GeatteTabActivity extends GDTabActivity {
 	    }
 	},500);
 
-	Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): END");
+	}
     }
 
     @Override
     protected void onDestroy() {
 	super.onDestroy();
-	Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): START");
-	Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): START");
+	}
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteTabActivity:onDestroy(): END");
+	}
     }
 
     @Override

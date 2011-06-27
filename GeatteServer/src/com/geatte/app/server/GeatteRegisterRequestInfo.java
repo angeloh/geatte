@@ -73,7 +73,7 @@ public class GeatteRegisterRequestInfo {
 	if (req.getHeader("X-Same-Domain") == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + " (Missing X-Same-Domain header)");
-	    log.warning("RequestInfo:processRequest() : Missing X-Same-Domain");
+	    log.warning("GeatteRegisterRequestInfo:processRequest() : Missing X-Same-Domain");
 	    return null;
 	}
 
@@ -92,13 +92,13 @@ public class GeatteRegisterRequestInfo {
 	//	}
 
 	if (user == null) {
-	    log.info("RequestInfo:processRequest() : user is null, try ClientLogin");
+	    log.info("GeatteRegisterRequestInfo:processRequest() : user is null, try ClientLogin");
 	    // Try ClientLogin
 	    UserService userService = UserServiceFactory.getUserService();
 	    user = userService.getCurrentUser();
 	    if (user != null) {
 		reqInfo.userEmail = user.getEmail();
-		log.info("RequestInfo:processRequest() : get user email thru ClientLogin :" + reqInfo.userEmail);
+		log.info("GeatteRegisterRequestInfo:processRequest() : get user email thru ClientLogin :" + reqInfo.userEmail);
 	    }
 	}
 
@@ -116,15 +116,16 @@ public class GeatteRegisterRequestInfo {
 	    }
 	    try {
 		reqInfo.jsonParams = new JSONObject(body.toString());
-		log.info("RequestInfo:processRequest() : reqInfo.jsonParams :" + reqInfo.jsonParams.toString());
+		log.info("GeatteRegisterRequestInfo:processRequest() : reqInfo.jsonParams :" + reqInfo.jsonParams.toString());
 	    } catch (JSONException e) {
 		resp.setStatus(500);
 		return null;
 	    }
 	} else {
 	    reqInfo.parameterMap = req.getParameterMap();
-
-	    log.info("RequestInfo:processRequest() : reqInfo.parameterMap :" + reqInfo.parameterMap.toString());
+	    for (String key : reqInfo.parameterMap.keySet()) {
+		log.info("GeatteRegisterRequestInfo:processRequest() : reqInfo.parameterMap :" + key + "=" + reqInfo.parameterMap.get(key).toString());
+	    }
 	}
 
 	reqInfo.deviceRegistrationID = reqInfo.getParameter(Config.DEV_REG_ID_PARAM);
@@ -134,13 +135,13 @@ public class GeatteRegisterRequestInfo {
 	    if ("".equals(reqInfo.deviceRegistrationID)) {
 		reqInfo.deviceRegistrationID = null;
 	    }
-	    log.info("RequestInfo:processRequest() : after trim() reqInfo.deviceRegistrationID = " + reqInfo.deviceRegistrationID);
+	    log.info("GeatteRegisterRequestInfo:processRequest() : after trim() reqInfo.deviceRegistrationID = " + reqInfo.deviceRegistrationID);
 	}
 
 	if (reqInfo.userEmail == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(LOGIN_REQUIRED_STATUS);
-	    log.warning("RequestInfo:processRequest() : can not get login user email!!");
+	    log.warning("GeatteRegisterRequestInfo:processRequest() : can not get login user email!!");
 	    return null;
 	}
 

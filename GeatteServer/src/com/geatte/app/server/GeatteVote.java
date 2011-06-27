@@ -36,7 +36,7 @@ public class GeatteVote {
     public GeatteVote(String geatteId, String geatteVoter, String geatteVoteResp, String geatteFeedback) {
 	super();
 	this.setGeatteId(geatteId);
-	this.setGeatteVoter(geatteVoteResp);
+	this.setGeatteVoter(geatteVoter);
 	this.setGeatteVoteResp(geatteVoteResp);
 	this.setGeatteFeedback(geatteFeedback);
     }

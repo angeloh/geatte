@@ -27,7 +27,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -94,33 +93,6 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 
 	populateFields();
 
-	mTitleEditText.setOnClickListener(new OnClickListener() {
-	    String name = mTitleEditText.getText().toString();
-	    String origVal = getResources().getText(R.string.edit_title_text_default).toString();
-
-	    @Override
-	    public void onClick(View v) {
-		if(name.equals(origVal));
-		{
-		    mTitleEditText.setText("");
-		}
-
-	    }
-	});
-
-	mDescEditText.setOnClickListener(new OnClickListener() {
-	    String name = mDescEditText.getText().toString();
-	    String origVal = getResources().getText(R.string.edit_desc_text_default).toString();
-
-	    @Override
-	    public void onClick(View v) {
-		if(name.equals(origVal));
-		{
-		    mDescEditText.setText("");
-		}
-	    }
-	});
-
 	mSendToButton = (Button) findViewById(R.id.send_to_button);
 	mSendToButton.setOnClickListener(new View.OnClickListener() {
 	    public void onClick(View view) {
@@ -157,7 +129,9 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 	super.onDestroy();
 	Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): START");
 	if (mDialog != null) {
-	    Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): cancel mDialog");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "GeatteEdit:onDestroy(): cancel mDialog");
+	    }
 	    mDialog.cancel();
 	}
 	if (mDbHelper != null) {
@@ -169,7 +143,6 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	if (requestCode == ACTIVITY_CONTACT && resultCode == Activity.RESULT_OK){
-	    Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " return from contact selection");
 	    checkContactsSelected();
 	}
     }
@@ -242,12 +215,14 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 	    long id = mDbHelper.insertInterest(title, desc);
 	    if (id >= 0) {
 		mRowId = id;
-		Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " create new interest for id = " + mRowId + ", geatteId = " + mGeatteId);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " create new interest for id = " + mRowId + ", geatteId = " + mGeatteId);
+		}
 		mDbHelper.insertImage(mRowId, mImagePath);
-		Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " insert geatte image for id " + mGeatteId + " and interest = " + mRowId);
+		Log.i(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " insert geatte image for id " + mGeatteId + " and interest = " + mRowId);
 		if (mGeatteId != null) {
 		    mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
-		    Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " add geatte id " + mGeatteId + " to interest = " + mRowId);
+		    Log.i(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " add geatte id " + mGeatteId + " to interest = " + mRowId);
 		}
 	    }
 	    else {
@@ -258,10 +233,12 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 	    mDbHelper.updateInterest(mRowId, title, desc);
 	    if (mGeatteId != null) {
 		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
-		Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
+		Log.i(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
 	    }
 	    mDbHelper.updateImage(mRowId, mImagePath);
-	    Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update interest for id = " + mRowId);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update interest for id = " + mRowId);
+	    }
 	}
     }
 
@@ -273,10 +250,12 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 	    mDbHelper.updateInterest(mRowId, title, desc);
 	    if (mGeatteId != null) {
 		mDbHelper.updateInterestGeatteId(mRowId, mGeatteId);
-		Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
+		Log.i(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update geatte id " + mGeatteId + " to interest = " + mRowId);
 	    }
 	    mDbHelper.updateImage(mRowId, mImagePath);
-	    Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update interest for id = " + mRowId);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " update interest for id = " + mRowId);
+	    }
 	}
     }
 
@@ -345,11 +324,13 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 			if (body.toString().contains(RETRY_STATUS)) {
 			    if (mDialog != null && mDialog.isShowing()) {
 				try {
-				    Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): try to dismiss mDialog");
+				    if(Config.LOG_DEBUG_ENABLED) {
+					Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): try to dismiss mDialog");
+				    }
 				    mDialog.dismiss();
 				    mDialog = null;
 				} catch (Exception ex) {
-				    Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
+				    Log.w(Config.LOGTAG, "GeatteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
 				}
 			    }
 			    this.publishProgress(getString(R.string.upload_text_retry));
@@ -372,7 +353,9 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 			Log.d(Config.LOGTAG, " GeatteUploadTask:doInBackground : GOT geatteId = " + mGeatteId);
 		    }
 
-		    Log.d(Config.LOGTAG, "GeatteUploadTask Response: " + jResponse);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "GeatteUploadTask Response: " + jResponse);
+		    }
 
 		    return mGeatteId;
 		}
@@ -380,11 +363,13 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		Log.e(Config.LOGTAG, e.getMessage(), e);
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): try to dismiss mDialog");
+			if(Config.LOG_DEBUG_ENABLED) {
+			    Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): try to dismiss mDialog");
+			}
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception ex) {
-			Log.d(Config.LOGTAG, "GeatteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
+			Log.w(Config.LOGTAG, "GeatteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
 		    }
 		}
 		this.publishProgress(getString(R.string.upload_text_error));
@@ -403,13 +388,15 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 	@Override
 	protected void onPostExecute(String geatteId) {
 	    if (geatteId != null && geatteId.equals(RETRY_STATUS)) {
-		Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): got retry");
+		Log.i(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): got retry");
 		return;
 	    }
 	    try {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): try to dismiss mDialog");
+			if(Config.LOG_DEBUG_ENABLED) {
+			    Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): try to dismiss mDialog");
+			}
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception e) {
@@ -419,9 +406,10 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		if (geatteId != null) {
 		    saveState();
 		    cleanSelectedContactsPref();
-		    Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): save my interest to db, geatteId = " + geatteId + ", interestId = " + mRowId);
-		    Toast.makeText(getApplicationContext(), "Geatte sent successfully, geatteId = " + geatteId,
-			    Toast.LENGTH_LONG).show();
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): save my interest to db, geatteId = " + geatteId + ", interestId = " + mRowId);
+		    }
+		    Toast.makeText(getApplicationContext(), "Geatte sent successfully", Toast.LENGTH_LONG).show();
 		}
 		setResult(RESULT_OK);
 	    } catch (Exception e) {

@@ -19,7 +19,9 @@ public class GeatteVotingCommentActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-	Log.d(Config.LOGTAG, "GeatteVotingCommentActivity:onCreate(): START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingCommentActivity:onCreate(): START");
+	}
 	super.onCreate(savedInstanceState);
 
 	setContentView(R.layout.geatte_vote_comment_edit_view);
@@ -62,7 +64,9 @@ public class GeatteVotingCommentActivity extends Activity {
 
 	});
 
-	Log.d(Config.LOGTAG, "GeatteVotingCommentActivity:onCreate(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingCommentActivity:onCreate(): END");
+	}
     }
 
     @Override

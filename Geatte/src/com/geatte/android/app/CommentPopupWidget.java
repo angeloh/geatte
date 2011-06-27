@@ -113,7 +113,9 @@ public class CommentPopupWidget extends PopupWindow {
      * @param anchor The view the {@link CommentPopupWidget} will be anchored to.
      */
     public void show(View anchor) {
-	Log.d(Config.LOGTAG, " CommentPopupWidget show() START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, " CommentPopupWidget show() START");
+	}
 
 	final View contentView = getContentView();
 	final SharedPreferences prefs = mContext.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
@@ -157,13 +159,13 @@ public class CommentPopupWidget extends PopupWindow {
 	    public void onClick(View vv) {
 		String comment = commentEditText.getText().toString();
 		if (comment != null && !comment.trim().equals("")) {
-		    Log.d(Config.LOGTAG, " CommentPopupWidget return from comment typing, comment = " + comment);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, " CommentPopupWidget return from comment typing, comment = " + comment);
+		    }
 
 		    SharedPreferences.Editor editor = prefs.edit();
 		    editor.putString(Config.PREF_VOTING_COMMENT, comment);
 		    editor.commit();
-		} else {
-		    Log.d(Config.LOGTAG, " CommentPopupWidget return from comment typing, comment is null or empty");
 		}
 		dismiss();
 	    }
@@ -180,7 +182,9 @@ public class CommentPopupWidget extends PopupWindow {
 	prepareAnimationStyle();
 	showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 18);
 	//showAtLocation(anchor, Gravity.NO_GRAVITY, 0, mPopupY);
-	Log.d(Config.LOGTAG, " CommentPopupWidget show() END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, " CommentPopupWidget show() END");
+	}
     }
 
     protected void onMeasureAndLayout(Rect anchorRect, View contentView) {

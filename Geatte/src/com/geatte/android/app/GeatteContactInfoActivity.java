@@ -43,12 +43,14 @@ public class GeatteContactInfoActivity extends GDListActivity {
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() START");
-	setTitle(R.string.contacts_view_name);
+	setTitle(R.string.contacts_info_view_name);
 
 	Button btnOk = (Button) findViewById(R.id.contacts_info_ok_btn);
 	btnOk.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() : return to previous activity");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() : return to previous activity");
+		}
 		setResult(RESULT_OK);
 		finish();
 	    }
@@ -58,7 +60,9 @@ public class GeatteContactInfoActivity extends GDListActivity {
 	try {
 	    List<Item> items = getContacts();
 	    if (items.size() == 0) {
-		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() : No contacts available!!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactInfoActivity:onCreate() : No contacts available!!");
+		}
 		warnItem = new GeatteThumbnailItem("Click menu to invite friends", null, R.drawable.email);
 	    } else {
 		warnItem = null;
@@ -123,7 +127,9 @@ public class GeatteContactInfoActivity extends GDListActivity {
 	    int counter = 0;
 	    while (contactCur.isAfterLast() == false) {
 		++counter;
-		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : Process contact = " + counter);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : Process contact = " + counter);
+		}
 
 		String contactPhone = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_PHONE_NUMBER));
 		String contactId = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_ID));
@@ -131,8 +137,10 @@ public class GeatteContactInfoActivity extends GDListActivity {
 		int contactIdInt = Integer.parseInt(contactId);
 		Bitmap contactBitmap = queryPhotoForContact(contactIdInt);
 
-		Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : add one GeatteThumbnailCheckbox, contactPhone = " + contactPhone
-			+ ", contactId = " + contactId + ", contactName = " + contactName);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteContactInfoActivity:getContacts() : add one GeatteThumbnailCheckbox, contactPhone = " + contactPhone
+			    + ", contactId = " + contactId + ", contactName = " + contactName);
+		}
 		if (contactBitmap != null) {
 		    items.add(new GeatteContactItem(contactName, null, contactPhone, contactBitmap));
 		} else {
@@ -281,7 +289,9 @@ public class GeatteContactInfoActivity extends GDListActivity {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-	    Log.d(Config.LOGTAG, "trying to update contact list");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "trying to update contact list");
+	    }
 	    updateContactList();
 	}
     };
@@ -304,7 +314,9 @@ public class GeatteContactInfoActivity extends GDListActivity {
 	 */
 	@Override
 	protected List<Item> doInBackground(Void...unused) {
-	    Log.d(Config.LOGTAG, "updateContactsTask:doInBackground() : refresh contacts from db");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "updateContactsTask:doInBackground() : refresh contacts from db");
+	    }
 	    return getContacts();
 	}
 
@@ -317,7 +329,9 @@ public class GeatteContactInfoActivity extends GDListActivity {
 	    Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() START");
 	    final GeatteThumbnailItem warnItem;
 	    if (items.size() == 0) {
-		Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() : No contacts available!!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() : No contacts available!!");
+		}
 		warnItem = new GeatteThumbnailItem("Click menu to invite friends", null, R.drawable.email);
 	    } else {
 		warnItem = null;

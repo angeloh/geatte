@@ -19,6 +19,7 @@ import android.widget.TextView;
  * "List" of my geattes screen
  * 
  */
+@Deprecated
 public class GeatteListActivity extends ListActivity {
 
     //private static final int ACTIVITY_CREATE = 1;

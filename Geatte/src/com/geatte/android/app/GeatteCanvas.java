@@ -24,6 +24,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,8 +50,14 @@ public class GeatteCanvas extends GDActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-	Log.d(Config.LOGTAG, "GeatteCanvas:onCreate() START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteCanvas:onCreate() START");
+	}
 	super.onCreate(savedInstanceState);
+
+	setActionBarContentView(R.layout.geatte_canvas);
+	addActionBarItem(Type.AllFriends);
+	initializeUI();
 
 	// TODO check if server has this device's reg id
 
@@ -59,10 +66,32 @@ public class GeatteCanvas extends GDActivity {
 	    startActivity(new Intent(this, GeatteSetupActivity.class));
 	}
 
+	// Create an IntentSender that will launch our service, to be scheduled
+	// with the alarm manager.
+	mAlarmSender = PendingIntent.getService(GeatteCanvas.this,
+		0, new Intent(GeatteCanvas.this, GeatteContactsService.class), 0);
+
+	scheduleContactService();
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteCanvas:onCreate() END");
+	}
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteCanvas:onConfigurationChanged() START");
+	}
+	super.onConfigurationChanged(newConfig);
 	setActionBarContentView(R.layout.geatte_canvas);
+	initializeUI();
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteCanvas:onConfigurationChanged() END");
+	}
+    }
 
-	addActionBarItem(Type.AllFriends);
-
+    public void initializeUI()
+    {
 	Button cameraButton = (Button) findViewById(R.id.app_snap_button);
 	cameraButton.setOnClickListener( new OnClickListener(){
 	    public void onClick(View v ){
@@ -70,7 +99,9 @@ public class GeatteCanvas extends GDActivity {
 		Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE );
 		mImagePath = createImagePath();
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mImagePath)));
-		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Will put a EXTRA_OUTPUT for image capture to " + mImagePath);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Will put a EXTRA_OUTPUT for image capture to " + mImagePath);
+		}
 
 		//		intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getTmpImagePath())));
 		//		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + getTmpImagePath());
@@ -103,14 +134,6 @@ public class GeatteCanvas extends GDActivity {
 		}
 	    }
 	});
-
-	// Create an IntentSender that will launch our service, to be scheduled
-	// with the alarm manager.
-	mAlarmSender = PendingIntent.getService(GeatteCanvas.this,
-		0, new Intent(GeatteCanvas.this, GeatteContactsService.class), 0);
-
-	scheduleContactService();
-	Log.d(Config.LOGTAG, "GeatteCanvas:onCreate() END");
     }
 
     private boolean isOnline() {
@@ -161,13 +184,18 @@ public class GeatteCanvas extends GDActivity {
 
     @Override
     protected void onResume() {
-	Log.d(Config.LOGTAG, "GeatteCanvas:onResume() START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteCanvas:onResume() START");
+	}
 	super.onResume();
 	if (!isOnline()) {
 	    Toast.makeText(getApplicationContext(), "No internet connection available!!", Toast.LENGTH_SHORT).show();
-	    Log.d(Config.LOGTAG, "GeatteCanvas:onResume()  No internet connection available!!");
+	    Log.w(Config.LOGTAG, "GeatteCanvas:onResume()  No internet connection available!!");
+
 	}
-	Log.d(Config.LOGTAG, "GeatteCanvas:onResume() END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteCanvas:onResume() END");
+	}
     }
 
     @Override
@@ -205,14 +233,18 @@ public class GeatteCanvas extends GDActivity {
 		////		    Log.d(Config.LOGTAG, "Failed to delete " + fi.getAbsolutePath());
 		////		}
 
-		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + mImagePath);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " save image capture output to path : " + mImagePath);
+		}
 
 		//		Intent i = new Intent(this, GeatteEditActivity.class);
 		//		i.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
 		//		startActivityForResult(i, ACTIVITY_CREATE);
 
 		String randomId = UUID.randomUUID().toString();
-		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " try upload image capture output to server as intent service, randomId : " + randomId);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " try upload image capture output to server as intent service, randomId : " + randomId);
+		}
 
 		new ImageUploadAsynTask().execute(randomId);
 		//		Intent imageUploadIntent = new Intent(GeatteImageUploadIntentService.IMAGE_UPLOAD_ACTION);
@@ -226,7 +258,7 @@ public class GeatteCanvas extends GDActivity {
 		startActivityForResult(editIntent, ACTIVITY_CREATE);
 
 	    } else {
-		Log.d(Config.LOGTAG, "file not exist " + fi.getAbsolutePath());
+		Log.w(Config.LOGTAG, "file not exist " + fi.getAbsolutePath());
 	    }
 
 	}
@@ -287,13 +319,17 @@ public class GeatteCanvas extends GDActivity {
     public String getTmpImagePath() {
 	try {
 	    String externalDir = Environment.getExternalStorageDirectory().toString();
-	    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " getTmpImagePath() : get externalDir " + externalDir);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " getTmpImagePath() : get externalDir " + externalDir);
+	    }
 	    File tmpfile = new File(externalDir, "/tmpgeatte");
 	    if (!tmpfile.exists()) {
 		tmpfile.getParentFile().mkdirs();
 		tmpfile.createNewFile();
 	    }
-	    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " getTmpImagePath() : get tmp image path " + tmpfile.getAbsolutePath());
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " getTmpImagePath() : get tmp image path " + tmpfile.getAbsolutePath());
+	    }
 	    return tmpfile.getAbsolutePath();
 	} catch (Exception e) {
 	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :" , e);
@@ -376,10 +412,12 @@ public class GeatteCanvas extends GDActivity {
 		    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
 		    "UTF-8"));
 		    String sResponse = reader.readLine();
-		    Log.d(Config.LOGTAG, "RegIdCheckTask Response: " + sResponse);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "RegIdCheckTask Response: " + sResponse);
+		    }
 		    if (response.getStatusLine().getStatusCode() == 400
 			    || response.getStatusLine().getStatusCode() == 500) {
-			Log.e(Config.LOGTAG, "RegIdCheckTask Error: " + sResponse);
+			Log.w(Config.LOGTAG, "RegIdCheckTask Error: " + sResponse);
 			return null;
 		    }
 		    return sResponse;
@@ -393,7 +431,9 @@ public class GeatteCanvas extends GDActivity {
 	@Override
 	protected void onPostExecute(String sResponse) {
 	    try {
-		Log.d(Config.LOGTAG, "RegIdCheckTask:onPostExecute(): get response :" + sResponse);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "RegIdCheckTask:onPostExecute(): get response :" + sResponse);
+		}
 
 		final SharedPreferences prefs = getApplicationContext().getSharedPreferences(
 			Config.PREFERENCE_KEY,

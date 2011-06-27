@@ -105,7 +105,9 @@ public class GeatteVoteRequestInfo {
 	} else {
 	    reqInfo.parameterMap = req.getParameterMap();
 
-	    log.info("GeatteVoteRequestInfo:processRequest() : reqInfo.parameterMap :" + reqInfo.parameterMap.toString());
+	    for (String key : reqInfo.parameterMap.keySet()) {
+		log.info("GeatteVoteRequestInfo:processRequest() : reqInfo.parameterMap :" + key + "=" + reqInfo.parameterMap.get(key).toString());
+	    }
 	}
 
 	reqInfo.mGeatteId = reqInfo.getParameter(Config.GEATTE_ID_PARAM);

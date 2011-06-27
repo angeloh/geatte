@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 /**
  * Show Geatte detail for review item user selected.
- * 
+ * @see GeatteFeedbackActivity
  */
 @Deprecated
 public class GeatteDetail extends Activity {

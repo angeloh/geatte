@@ -48,7 +48,9 @@ public class GeatteImageUploadIntentService extends IntentService {
 	try {
 	    Context context = getApplicationContext();
 	    if (intent.getAction().equals(IMAGE_UPLOAD_ACTION)) {
-		Log.d(Config.LOGTAG_C2DM, "Upload Image Intent Service STARTED!!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "Upload Image Intent Service STARTED!!");
+		}
 		handleImageUpload(context, intent);
 	    }
 	} finally {
@@ -84,8 +86,10 @@ public class GeatteImageUploadIntentService extends IntentService {
 	    Bundle extras = intent.getExtras();
 	    String imagePath = (String) (extras != null ? extras.get(Config.EXTRA_IMAGE_PATH) : null);
 	    String imageRandomId = (String) (extras != null ? extras.get(Config.EXTRA_IMAGE_RANDOM_ID) : null);
-	    Log.d(Config.LOGTAG, " GeatteImageUploadIntentService:handleImageUpload() got a new picture in "
-		    + imagePath + ", imageRandomId = " + imageRandomId);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " GeatteImageUploadIntentService:handleImageUpload() got a new picture in "
+			+ imagePath + ", imageRandomId = " + imageRandomId);
+	    }
 
 	    Bitmap bitmap = null;
 	    String imageFileName = null;
@@ -125,7 +129,7 @@ public class GeatteImageUploadIntentService extends IntentService {
 	    int respStatusCode = response.getStatusLine().getStatusCode();
 	    if (respStatusCode == 400 || respStatusCode == 500) {
 		// RETRY
-		Log.d(Config.LOGTAG_C2DM, "Got Error status code = " + respStatusCode + ", scheduling image blob upload " +
+		Log.i(Config.LOGTAG, "Got Error status code = " + respStatusCode + ", scheduling image blob upload " +
 			"retry, backoff = " + Config.IMAGE_BLOB_UPLOAD_BACKOFF);
 		Intent retryIntent = new Intent(IMAGE_UPLOAD_ACTION);
 		PendingIntent retryPIntent = PendingIntent.getBroadcast(context, 0 /* requestCode */, retryIntent, 0 /* flags */);
@@ -152,7 +156,9 @@ public class GeatteImageUploadIntentService extends IntentService {
 		}
 		try {
 		    jResponse = new JSONObject(URLDecoder.decode((body.toString()==null ? "" : body.toString()), Config.ENCODE_UTF8));
-		    Log.d(Config.LOGTAG, "GeatteImageUploadIntentService:handleImageUpload Response: " + jResponse);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "GeatteImageUploadIntentService:handleImageUpload Response: " + jResponse);
+		    }
 		} catch (JSONException e) {
 		    Log.e(Config.LOGTAG,
 			    "GeatteImageUploadIntentService:handleImageUpload(): unable to read " +
@@ -162,13 +168,17 @@ public class GeatteImageUploadIntentService extends IntentService {
 		String resp = null;
 		if (jResponse != null) {
 		    resp = jResponse.getString(Config.GEATTE_IMAGE_BLOB_RESP);
-		    Log.d(Config.LOGTAG, " GeatteImageUploadIntentService:handleImageUpload : GOT image uplaod resp = "
-			    + resp);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, " GeatteImageUploadIntentService:handleImageUpload : GOT image uplaod resp = "
+				+ resp);
+		    }
 		}
 
 		if (jResponse == null || resp == null || !resp.equals("OK")) {
 		    // RETRY
-		    Log.d(Config.LOGTAG_C2DM, "Scheduling image blob upload retry, backoff = " + Config.IMAGE_BLOB_UPLOAD_BACKOFF);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "Scheduling image blob upload retry, backoff = " + Config.IMAGE_BLOB_UPLOAD_BACKOFF);
+		    }
 		    Intent retryIntent = new Intent(IMAGE_UPLOAD_ACTION);
 		    PendingIntent retryPIntent = PendingIntent.getBroadcast(context, 0 /* requestCode */, retryIntent, 0 /* flags */);
 

@@ -43,13 +43,13 @@ public class AppEngineClient {
 	this.mUserEmail = accountName;
     }
 
-    /*    public HttpResponse makeRequestNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
+    public HttpResponse makeRequestNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
 	HttpResponse res = makeRequestNoRetryNoAuth(urlPath, params);
 	if (res.getStatusLine().getStatusCode() == 500) {
 	    res = makeRequestNoRetryNoAuth(urlPath, params);
 	}
 	return res;
-    }*/
+    }
 
     public HttpResponse makeRequestWithParams(String urlPath, List<NameValuePair> params) throws Exception {
 	HttpResponse res = makeRequestNoRetryWihtParams(urlPath, params, false);
@@ -75,7 +75,7 @@ public class AppEngineClient {
 	return res;
     }
 
-    /*    private HttpResponse makeRequestNoRetryNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
+    private HttpResponse makeRequestNoRetryNoAuth(String urlPath, List<NameValuePair> params) throws Exception {
 
 	// Make POST request
 	DefaultHttpClient client = new DefaultHttpClient();
@@ -83,19 +83,23 @@ public class AppEngineClient {
 	HttpPost post = new HttpPost(uri);
 	UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
 	post.setEntity(entity);
-	// post.setHeader("Cookie", ascidCookie);
 	post.setHeader("X-Same-Domain", "1"); // XSRF
 	HttpResponse res = client.execute(post);
 	return res;
-    }*/
+    }
 
     private HttpResponse makeRequestNoRetryWihtParams(String urlPath, List<NameValuePair> params, boolean renewToken)
     throws Exception {
 
 	StringBuilder ascidCookie = new StringBuilder();
 	HttpResponse res = getServerAscidCookie(renewToken, ascidCookie);
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWihtParams() : got ACSID cookie = "
-		+ ascidCookie.toString());
+	if (res != null) {
+	    return res;
+	}
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "AppEngineClient:makeRequestNoRetryWihtParams() : got ACSID cookie = "
+		    + ascidCookie.toString());
+	}
 
 	// Make POST request
 	URI uri = new URI(Config.BASE_URL + urlPath);
@@ -105,7 +109,7 @@ public class AppEngineClient {
 	post.setHeader("Cookie", ascidCookie.toString());
 	post.setHeader("X-Same-Domain", "1"); // XSRF
 
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWihtParams() : make post request to uri = "
+	Log.d(Config.LOGTAG, "AppEngineClient:makeRequestNoRetryWihtParams() : make post request to uri = "
 		+ uri.toString());
 
 	DefaultHttpClient client = new DefaultHttpClient();
@@ -118,8 +122,13 @@ public class AppEngineClient {
 
 	StringBuilder ascidCookie = new StringBuilder();
 	HttpResponse res = getServerAscidCookie(renewToken, ascidCookie);
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWithEntity() : got ACSID cookie = "
-		+ ascidCookie.toString());
+	if (res != null) {
+	    return res;
+	}
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "AppEngineClient:makeRequestNoRetryWithEntity() : got ACSID cookie = "
+		    + ascidCookie.toString());
+	}
 
 	// Make POST request
 	URI uri = new URI(Config.BASE_URL + urlPath);
@@ -128,7 +137,7 @@ public class AppEngineClient {
 	post.setHeader("Cookie", ascidCookie.toString());
 	post.setHeader("X-Same-Domain", "1"); // XSRF
 
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWithEntity() : make post request to uri = "
+	Log.d(Config.LOGTAG, "AppEngineClient:makeRequestNoRetryWithEntity() : make post request to uri = "
 		+ uri.toString());
 
 	DefaultHttpClient client = new DefaultHttpClient();
@@ -141,8 +150,13 @@ public class AppEngineClient {
 
 	StringBuilder ascidCookie = new StringBuilder();
 	HttpResponse res = getServerAscidCookie(renewToken, ascidCookie);
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWithEntity() : got ACSID cookie = "
-		+ ascidCookie.toString());
+	if (res != null) {
+	    return res;
+	}
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "AppEngineClient:makeRequestNoRetryWithJSONStringEntity() : got ACSID cookie = "
+		    + ascidCookie.toString());
+	}
 
 	// Make POST request
 	URI uri = new URI(Config.BASE_URL + urlPath);
@@ -153,7 +167,7 @@ public class AppEngineClient {
 	post.setHeader("Accept", "application/json");
 	post.setHeader("Content-type", "application/json");
 
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:makeRequestNoRetryWithEntity() : make post request to uri = "
+	Log.d(Config.LOGTAG, "AppEngineClient:makeRequestNoRetryWithJSONStringEntity() : make post request to uri = "
 		+ uri.toString());
 
 	DefaultHttpClient client = new DefaultHttpClient();
@@ -166,11 +180,11 @@ public class AppEngineClient {
 	Account account = new Account(mUserEmail, "com.google");
 	String authToken = getAuthToken(mContext, account);
 	if (authToken == null) {
-	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:getServerAscidCookie() : authToken is null");
+	    Log.w(Config.LOGTAG, "AppEngineClient:getServerAscidCookie() : authToken is null");
 	    throw new PendingAuthException(mUserEmail);
 	}
 	if (renewToken) { // invalidate the cached token
-	    Log.d(Config.LOGTAG_C2DM, "AppEngineClient:getServerAscidCookie() : renew authToken");
+	    Log.d(Config.LOGTAG, "AppEngineClient:getServerAscidCookie() : renew authToken");
 	    AccountManager accountManager = AccountManager.get(mContext);
 	    accountManager.invalidateAuthToken(account.type, authToken);
 	    authToken = getAuthToken(mContext, account);
@@ -180,8 +194,10 @@ public class AppEngineClient {
 	DefaultHttpClient client = new DefaultHttpClient();
 	String continueURL = Config.BASE_URL;
 	URI uri = new URI(AUTH_URL + "?continue=" + URLEncoder.encode(continueURL, "UTF-8") + "&auth=" + authToken);
-	Log.d(Config.LOGTAG_C2DM, "AppEngineClient:getServerAscidCookie() : get auth cookie, trying to connect to "
-		+ uri.toString());
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "AppEngineClient:getServerAscidCookie() : get auth cookie, trying to connect to "
+		    + uri.toString());
+	}
 
 	HttpGet method = new HttpGet(uri);
 	final HttpParams getParams = new BasicHttpParams();
@@ -192,7 +208,7 @@ public class AppEngineClient {
 	HttpResponse res = client.execute(method);
 	Header[] headers = res.getHeaders("Set-Cookie");
 	if (res.getStatusLine().getStatusCode() != 302 || headers.length == 0) {
-	    Log.d(Config.LOGTAG_C2DM,
+	    Log.w(Config.LOGTAG,
 		    "AppEngineClient:getServerAscidCookie() : failed to continue to make request " +
 	    "because status code is not 302 or header lendth is zero");
 	    return res;
@@ -226,16 +242,16 @@ public class AppEngineClient {
 		intent.putExtra(Config.EXTRA_KEY_ACCOUNT_BUNDLE, bundle);
 		context.sendBroadcast(intent);
 
-		Log.w(Config.LOGTAG_C2DM,
+		Log.w(Config.LOGTAG,
 			"AppEngineClient:getAuthToken() : there is no auth token available for this account = "
 			+ account + ", try to run intent " + Config.INTENT_ACTION_AUTH_PERMISSION);
 	    }
 	} catch (OperationCanceledException e) {
-	    Log.w(Config.LOGTAG_C2DM, e.getMessage());
+	    Log.w(Config.LOGTAG, e.getMessage());
 	} catch (AuthenticatorException e) {
-	    Log.w(Config.LOGTAG_C2DM, e.getMessage());
+	    Log.w(Config.LOGTAG, e.getMessage());
 	} catch (IOException e) {
-	    Log.w(Config.LOGTAG_C2DM, e.getMessage());
+	    Log.w(Config.LOGTAG, e.getMessage());
 	}
 	return authToken;
     }

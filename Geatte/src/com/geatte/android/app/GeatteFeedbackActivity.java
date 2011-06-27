@@ -33,14 +33,17 @@ public class GeatteFeedbackActivity extends GDListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.d(Config.LOGTAG, "START GeatteFeedbackActivity:onCreate");
 	setTitle(R.string.app_name);
 
 	Bundle extras = getIntent().getExtras();
 	final String geatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
-	Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra geatteId = " + geatteId);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra geatteId = " + geatteId);
+	}
 	final Long interestId = extras != null ? extras.getLong(GeatteDBAdapter.KEY_INTEREST_ID) : null;
-	Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra interestId = " + interestId);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra interestId = " + interestId);
+	}
 
 	List<Item> items = new ArrayList<Item>();
 	final GeatteThumbnailItem warnItem;
@@ -78,7 +81,6 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		adapter.notifyDataSetChanged();
 	    }
 	},500);
-	Log.d(Config.LOGTAG, "END GeatteFeedbackActivity:onCreate");
     }
 
     private ThumbnailBitmapItem createFeedbackItemsFromFetchResult(String geatteId, Long interestId, List<Item> items) {
@@ -97,7 +99,9 @@ public class GeatteFeedbackActivity extends GDListActivity {
 
 	    if (geatteId != null) {
 		myInterestCur = mDbHelper.fetchMyInterest(geatteId);
-		Log.d(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult fetched my interest by geatteId = " + geatteId);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult fetched my interest by geatteId = " + geatteId);
+		}
 	    } else {
 		Log.w(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult invalid interestId and geatteId, ignore create!!");
 		return null;
@@ -309,7 +313,6 @@ public class GeatteFeedbackActivity extends GDListActivity {
 
     @Override
     public int createLayout() {
-	Log.d(Config.LOGTAG, "creating the geatte feedback layout");
 	return R.layout.geatte_feedback_list_content;
     }
 

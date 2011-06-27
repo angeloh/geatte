@@ -57,7 +57,9 @@ public class GeatteSetupActivity extends GDActivity {
 
     @Override
     protected void onResume() {
-	Log.d(Config.LOGTAG_C2DM, "SetupActivity:onResume() START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "SetupActivity:onResume() START");
+	}
 	super.onResume();
 	if (mPendingAuth) {
 	    mPendingAuth = false;
@@ -68,7 +70,9 @@ public class GeatteSetupActivity extends GDActivity {
 		C2DMessaging.register(this, Config.C2DM_SENDER);
 	    }
 	}
-	Log.d(Config.LOGTAG_C2DM, "SetupActivity:onResume() END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "SetupActivity:onResume() END");
+	}
     }
 
     @Override
@@ -138,8 +142,10 @@ public class GeatteSetupActivity extends GDActivity {
 
 	String myNumber = DeviceRegistrar.getPhoneNumberFromTeleService(getApplicationContext());
 	if (myNumber != null) {
-	    Log.d(Config.LOGTAG, "SetupActivity:setSetupCompleteScreenContent() has phone " +
-		    "number : " + myNumber + ", so disable edit text");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "SetupActivity:setSetupCompleteScreenContent() has phone " +
+			"number : " + myNumber + ", so disable edit text");
+	    }
 	    phoneMissingTextView.setVisibility(View.GONE);
 	    phoneEditText.setVisibility(View.GONE);
 	    phoneEditText.setText(myNumber);
@@ -273,7 +279,9 @@ public class GeatteSetupActivity extends GDActivity {
 
     private void handleConnectingUpdate(int status) {
 	if (status == DeviceRegistrar.REGISTERED_STATUS) {
-	    Log.d(Config.LOGTAG, "SetupActivity:handleConnectingUpdate() status : registered");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "SetupActivity:handleConnectingUpdate() status : registered");
+	    }
 	    setScreenContent(R.layout.geatte_setup_complete);
 	} else {
 	    ProgressBar progressBar = (ProgressBar) findViewById(R.id.select_account_progress_bar);

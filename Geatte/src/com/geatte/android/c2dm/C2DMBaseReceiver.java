@@ -136,15 +136,22 @@ public abstract class C2DMBaseReceiver extends IntentService {
 	if (removed != null) {
 	    // Remember we are unregistered
 	    //C2DMessaging.clearRegistrationId(context);
+
+	    Log.d(Config.LOGTAG_C2DM, "Removed registration id");
+
+	    // remove reg id from app server
 	    onUnregistered(context);
 	    return;
 	} else if (error != null) {
 	    // we are not registered, can try again
-	    //C2DMessaging.clearRegistrationId(context);
+	    // C2DMessaging.clearRegistrationId(context);
+
 	    // Registration failed
 	    Log.e(Config.LOGTAG_C2DM, "Registration error " + error);
+	    // remove reg id from app server
 	    onError(context, error);
 	    if ("SERVICE_NOT_AVAILABLE".equals(error)) {
+		Log.d(Config.LOGTAG_C2DM, "SERVICE_NOT_AVAILABLE, start a retry");
 		//		long backoffTimeMs = C2DMessaging.getBackoff(context);
 		long backoffTimeMs = C2DMessaging.DEFAULT_BACKOFF;
 
@@ -154,7 +161,6 @@ public abstract class C2DMBaseReceiver extends IntentService {
 
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.ELAPSED_REALTIME, backoffTimeMs, retryPIntent);
-
 
 		//		new Thread(new Runnable() {
 		//		    public void run() {
@@ -166,7 +172,6 @@ public abstract class C2DMBaseReceiver extends IntentService {
 		//		}).start();
 
 		//Log.w(Config.LOGTAG_C2DM, "Start a RETRY intent");
-		//C2DMessaging.register(this, Config.C2DM_SENDER);
 
 		// Next retry should wait longer.
 		//backoffTimeMs *= 2;

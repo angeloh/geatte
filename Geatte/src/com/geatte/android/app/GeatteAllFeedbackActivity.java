@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+@Deprecated
 public class GeatteAllFeedbackActivity extends GDListActivity {
 
     private final Handler mHandler = new Handler();

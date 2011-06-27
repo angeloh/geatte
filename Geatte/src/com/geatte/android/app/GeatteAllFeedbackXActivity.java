@@ -47,22 +47,30 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.d(Config.LOGTAG, "START GeatteAllFeedbackXActivity:onCreate");
-	setTitle(R.string.app_name);
-	Log.d(Config.LOGTAG, "END GeatteAllFeedbackXActivity:onCreate");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "START GeatteAllFeedbackXActivity:onCreate");
+	}
+	setTitle(R.string.show_all_feedbacks_title);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "END GeatteAllFeedbackXActivity:onCreate");
+	}
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
-	Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:onResume(): START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:onResume(): START");
+	}
 	mDialog = ProgressDialog.show(GeatteAllFeedbackXActivity.this, "Loading", "Please wait...", true);
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
 		fillList();
 	    }
 	},250);
-	Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:onResume(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:onResume(): END");
+	}
     }
 
 
@@ -76,7 +84,9 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 	try {
 	    List<Item> items = getAllFeedbackItems();
 	    if (items.size() == 0) {
-		Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:fillList() No feedback available!!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:fillList() No feedback available!!");
+		}
 		warnItem = new GeatteThumbnailItem("No feedback available", null, R.drawable.empty);
 	    } else {
 		warnItem = null;
@@ -93,7 +103,9 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 		    }
 		    if (mDialog != null && mDialog.isShowing()) {
 			try {
-			    Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:fillList(): try to dismiss mDialog");
+			    if(Config.LOG_DEBUG_ENABLED) {
+				Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:fillList(): try to dismiss mDialog");
+			    }
 			    mDialog.dismiss();
 			    mDialog = null;
 			} catch (Exception e) {
@@ -121,7 +133,9 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 	    int counter = 0;
 	    while (feedbackCur.isAfterLast() == false) {
 		++counter;
-		Log.d(Config.LOGTAG, "Process feedback = " + counter);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "Process feedback = " + counter);
+		}
 
 		String geatteId = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_GEATTE_ID));
 		String vote = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTE));
@@ -273,7 +287,9 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 		holder.textViewSubTitle.setText(tItem.subtitle);
 		//setTag(item.id);
 
-		Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:getView() : async image set to bytearray for length= " + tItem.interestThumbnail.length);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteAllFeedbackXActivity:getView() : async image set to bytearray for length= " + tItem.interestThumbnail.length);
+		}
 		holder.interestImageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.interestThumbnail, 0, tItem.interestThumbnail.length));
 
 		if (tItem.contactBitmap != null) {
@@ -352,7 +368,6 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 
     @Override
     public int createLayout() {
-	Log.d(Config.LOGTAG, "creating the geatte feedback layout");
 	return R.layout.geatte_feedback_list_content;
     }
 

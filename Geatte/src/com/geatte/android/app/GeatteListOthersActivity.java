@@ -21,6 +21,7 @@ import android.widget.TextView;
  * "List" of friends geattes screen
  * 
  */
+@Deprecated
 public class GeatteListOthersActivity extends ListActivity {
 
     private static final int MENU_GET_NEXT_PAGE = Menu.FIRST;

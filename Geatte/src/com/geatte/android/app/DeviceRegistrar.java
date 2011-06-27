@@ -16,7 +16,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
- * Register/unregister with the Chrome to Phone App Engine server.
+ * Send/remove registration id from App Engine server.
  */
 public class DeviceRegistrar {
     public static final String STATUS_EXTRA = "Status";
@@ -78,24 +78,24 @@ public class DeviceRegistrar {
 			    editor.putString(Config.PREF_REGISTRATION_ID, registrationId);
 			    editor.commit();
 			    updateUIIntent.putExtra(STATUS_EXTRA, REGISTERED_STATUS);
-			    Log.d(Config.LOGTAG_C2DM, "Registration OK " +
+			    Log.d(Config.LOGTAG, "Registration with app server OK " +
 				    String.valueOf(res.getStatusLine().getStatusCode()));
 			} else if (res.getStatusLine().getStatusCode() == 400) {
 			    updateUIIntent.putExtra(STATUS_EXTRA, AUTH_ERROR_STATUS);
-			    Log.w(Config.LOGTAG_C2DM, "Registration error " +
+			    Log.w(Config.LOGTAG, "Registration with app server ERROR " +
 				    String.valueOf(res.getStatusLine().getStatusCode()));
 			} else {
-			    Log.w(Config.LOGTAG_C2DM, "Registration error " +
+			    Log.w(Config.LOGTAG, "Registration with app server ERROR " +
 				    String.valueOf(res.getStatusLine().getStatusCode()));
 			    updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
 			}
 
 		    } else {
-			Log.w(Config.LOGTAG_C2DM, "Registration error, null registrationID");
+			Log.w(Config.LOGTAG, "Registration with app server ERROR, null registrationID");
 			updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
 		    }
 		} catch (Exception e) {
-		    Log.w(Config.LOGTAG_C2DM, "Registration error " + e.getMessage());
+		    Log.w(Config.LOGTAG, "Registration with app server ERROR " + e.getMessage());
 		    updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
 		} finally{
 		    context.sendBroadcast(updateUIIntent);
@@ -120,20 +120,20 @@ public class DeviceRegistrar {
 			    editor.remove(Config.PREF_REGISTRATION_ID);
 			    editor.commit();
 			    updateUIIntent.putExtra(STATUS_EXTRA, UNREGISTERED_STATUS);
-			    Log.d(Config.LOGTAG_C2DM, "Unregistration OK " +
+			    Log.d(Config.LOGTAG, "Unregistration with app server OK " +
 				    String.valueOf(res.getStatusLine().getStatusCode()));
 			} else {
-			    Log.w(Config.LOGTAG_C2DM, "Unregistration error " +
+			    Log.w(Config.LOGTAG, "Unregistration with app server ERROR " +
 				    String.valueOf(res.getStatusLine().getStatusCode()));
 			    updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
 			}
 		    } else {
-			Log.w(Config.LOGTAG_C2DM, "Registration error, null registrationID");
+			Log.w(Config.LOGTAG, "Unregistration with app server ERROR, null registrationID");
 			updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
 		    }
 		} catch (Exception e) {
 		    updateUIIntent.putExtra(STATUS_EXTRA, ERROR_STATUS);
-		    Log.w(Config.LOGTAG_C2DM, "Unegistration error " + e.getMessage());
+		    Log.w(Config.LOGTAG, "Unregistration with app server ERROR " + e.getMessage());
 		} finally{
 		    context.sendBroadcast(updateUIIntent);
 		}
@@ -182,37 +182,37 @@ public class DeviceRegistrar {
 	List<NameValuePair> params = new ArrayList<NameValuePair>();
 	params.add(new BasicNameValuePair(Config.DEV_REG_ID_PARAM, deviceRegistrationID));
 
-	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_REG_ID_PARAM + "=" + deviceRegistrationID);
+	Log.d(Config.LOGTAG, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_REG_ID_PARAM + "=" + deviceRegistrationID);
 
 	//String deviceId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 	String installationId = Installation.id(context);
 	if (installationId != null) {
 	    params.add(new BasicNameValuePair(Config.DEVICE_ID_PARAM, installationId));
 
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_ID_PARAM + "=" + installationId);
+	    Log.d(Config.LOGTAG, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_ID_PARAM + "=" + installationId);
 	}
 
 	String phoneNumber = getPhoneNumber(context);
 	if (phoneNumber != null) {
 	    params.add(new BasicNameValuePair(Config.DEV_PHONE_NUMBER_PARAM, phoneNumber));
 
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_PHONE_NUMBER_PARAM + "=" + phoneNumber);
+	    Log.d(Config.LOGTAG, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_PHONE_NUMBER_PARAM + "=" + phoneNumber);
 	}
 
 	String countryCode = getPhoneConuntryCode(context);
 	if (countryCode != null) {
 	    params.add(new BasicNameValuePair(Config.DEV_PHONE_COUNTRY_ISO_PARAM, countryCode));
 
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_PHONE_COUNTRY_ISO_PARAM + "=" + countryCode);
+	    Log.d(Config.LOGTAG, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEV_PHONE_COUNTRY_ISO_PARAM + "=" + countryCode);
 	}
 
 
 	// TODO: Allow device name to be configured
 	params.add(new BasicNameValuePair(Config.DEVICE_NAME_PARAM, isTablet(context) ? "Tablet" : "Phone"));
 
-	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_NAME_PARAM + "=" + (isTablet(context) ? "Tablet" : "Phone"));
+	Log.d(Config.LOGTAG, "DeviceRegistrar.makeRequest() : set request parameter " + Config.DEVICE_NAME_PARAM + "=" + (isTablet(context) ? "Tablet" : "Phone"));
 
-	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.makeRequest() : set request urlPath =" + urlPath);
+	Log.d(Config.LOGTAG, "DeviceRegistrar.makeRequest() : set request urlPath =" + urlPath);
 
 	AppEngineClient client = new AppEngineClient(context, accountName);
 	//return client.makeRequestNoAuth(urlPath, params);
@@ -231,10 +231,10 @@ public class DeviceRegistrar {
 	TelephonyManager mTelephonyMgr =
 	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 	String phoneNum =  mTelephonyMgr.getLine1Number();
-	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : phone number is " + phoneNum);
+	Log.d(Config.LOGTAG, "DeviceRegistrar.getPhoneNumber() : phone number is " + phoneNum);
 	if (phoneNum == null || phoneNum.trim().equals("")) {
 	    phoneNum = null;
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : line 1 is null return null");
+	    Log.w(Config.LOGTAG, "DeviceRegistrar.getPhoneNumber() : line 1 is null return null");
 	    //phoneNum = "15103978860";
 	}
 	return phoneNum;
@@ -244,13 +244,13 @@ public class DeviceRegistrar {
 	TelephonyManager mTelephonyMgr =
 	    (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 	String phoneNum =  mTelephonyMgr.getLine1Number();
-	Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : phone number is " + phoneNum);
+	Log.d(Config.LOGTAG, "DeviceRegistrar.getPhoneNumber() : phone number is " + phoneNum);
 	if (phoneNum == null || phoneNum.trim().equals("")) {
 	    final SharedPreferences prefs = context.getSharedPreferences(
 		    Config.PREFERENCE_KEY,
 		    Context.MODE_PRIVATE);
 	    phoneNum = prefs.getString(Config.PREF_PHONE_NUMBER, null);
-	    Log.d(Config.LOGTAG_C2DM, "DeviceRegistrar.getPhoneNumber() : line 1 is null try preference, got phoneNum = " + phoneNum);
+	    Log.d(Config.LOGTAG, "DeviceRegistrar.getPhoneNumber() : line 1 is null try preference, got phoneNum = " + phoneNum);
 	}
 	return phoneNum;
     }

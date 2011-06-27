@@ -434,7 +434,9 @@ public class GeatteDBAdapter {
 	"FROM " + DB_TABLE_CONTACTS +
 	" WHERE " + DB_TABLE_CONTACTS + "." + KEY_CONTACT_PHONE_NUMBER + "='" + phoneNumber + "'";
 
-	Log.d(Config.LOGTAG, "fetch contact query string = " + query);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "fetch contact query string = " + query);
+	}
 
 	try {
 	    Cursor cursor = mDb.rawQuery(query, null);
@@ -442,8 +444,9 @@ public class GeatteDBAdapter {
 	    if (cursor != null) {
 		cursor.moveToFirst();
 	    }
-
-	    Log.d(Config.LOGTAG, "return cursor fetchContactFromPhone()");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "return cursor fetchContactFromPhone()");
+	    }
 	    return cursor;
 	} catch (Exception ex) {
 	    Log.e(Config.LOGTAG, "ERROR to fetch fetchContactFromPhone()", ex);

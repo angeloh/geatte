@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
+@Deprecated
 public class GeatteTabWidget extends TabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {

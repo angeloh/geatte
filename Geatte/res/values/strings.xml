@@ -6,6 +6,7 @@
     <string name="app_url">http://geatte.com</string>
     <string name="no_geattes">No Geattes Yet</string>
     <string name="show_all_feedbacks">Show All Feedbacks</string>
+    <string name="show_all_feedbacks_title">Feedbacks For My Interests</string>
     <string name="show_geattetab">GeatteTab</string>
     <string name="show_geattetab_loading">Loading...</string>
 
@@ -15,7 +16,7 @@
 	<string name="menu_refresh">Refresh</string>
 	<string name="menu_invite">Tell friends</string>
     
-    <string name="edit_geatte">New Geatte</string>
+    <string name="edit_geatte">Create Geatte</string>
     <string name="edit_top_label">Send A Geatte</string>
     <string name="edit_title_label">Caption:</string>
     <string name="edit_desc_label">More:</string>
@@ -65,20 +66,32 @@
 	<string name="select_account_click_next_text">Click Next to finish the setup of Geatte.</string>
 	<string name="select_account_connecting_text">Connecting...</string>
 	<string name="connected_with_account_text">Your phone is connected to Geatte using this account:</string>
-	<string name="setup_complete_phone_missing_text">Geatte can not find your phone number from carrier\'s sin card, please enter below to continue</string>
+	<string name="setup_complete_phone_missing_text">
+		Geatte can not find your phone number from carrier\'s sin card, please enter below to continue:
+	</string>
 	<string name="setup_complete_edit_phone_example">Ex: 14081112233</string>
 	
 	<string name="contacts_view_name">Geatte Contacts</string>
+	<string name="contacts_info_view_name">Who Is On Geatte</string>
 	<string name="contacts_clean">Clean</string>
     <string name="contacts_save">Save</string>
-    <string name="contacts_ok">Ok</string>
+    <string name="contacts_back">Back</string>
     
-    <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->
+    <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, 
+    &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->
     <string name="intro_text">
-        Geatte is a shopping feedback app for you and your friends.
+        Geatte is a shopping feedback app for you and your friends. &lt;br>&lt;br> You can get feedback 
+        from your friends who are already on the phone book and no need to recreate a network for this purpose.
+        &lt;br> The contacts of Geatte come from your phone contacts who have installed Geatte. You can collect
+        opinions from these friends and they can also ask for your feedback for any wish-list items. Geatte helps
+        you make decisions from your friends with same interests as you or with the expertise of wish-list item.
+        &lt;br>&lt;br> This setup is one time setup and needs your Google account for accessing Geatte service.
+        Anyone who wants to ask your feedback on their interested item or any friend you want them to share his/her
+        opinion just has to install Geatte to start sharing and communication.
     </string>
     
     <string name="setup_complete_text">
-        Setup complete. You can start using Geatte to ask feedbacks from your friends and vote firends\' Geatte requests.
+        Congratulations!! Setup is complete.  &lt;br>&lt;br> You can start using Geatte to ask feedbacks from 
+        your friends and give your best opinions for friend\'s Geatte requests.
     </string>
 </resources>

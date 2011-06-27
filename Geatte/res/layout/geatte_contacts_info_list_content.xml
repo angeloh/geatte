@@ -42,11 +42,13 @@
  
         <Button
             android:id="@+id/contacts_info_ok_btn"
-            android:text="@string/contacts_ok"
+            android:text="@string/contacts_back"
             android:layout_marginTop="5px"
-            android:layout_weight="1"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_btn_back"
+            background="@drawable/custom_button" />
             
     </LinearLayout>
 </greendroid.widget.ActionBarHost>

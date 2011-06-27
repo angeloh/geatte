@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
 
+@Deprecated
 public class GeatteListAsyncActivity extends GDListActivity implements OnScrollListener {
 
     private final Handler mHandler = new Handler();

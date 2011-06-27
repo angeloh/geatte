@@ -39,7 +39,9 @@ public class GeatteVotingActivity extends GDActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-	Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate START");
+	}
 	super.onCreate(savedInstanceState);
 	setActionBarContentView(R.layout.geatte_voting_view);
 	mGeatteVoteImage = (ImageView) findViewById(R.id.voting_image_view);
@@ -48,28 +50,37 @@ public class GeatteVotingActivity extends GDActivity {
 	Bundle extras = getIntent().getExtras();
 	mGeatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
 
-	Log.d(Config.LOGTAG, " " +  GeatteVotingActivity.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
+	Log.i(Config.LOGTAG, " " +  GeatteVotingActivity.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
 	populateFields();
-	Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate END");
+	}
     }
 
     @Override
     protected void onResume() {
-	Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume START");
+	}
 	super.onResume();
 	populateFields();
-	Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume END");
+	}
     }
 
     @Override
     protected void onDestroy() {
 	super.onDestroy();
-	Log.d(Config.LOGTAG, "GeatteVotingActivity:onDestroy(): START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onDestroy(): START");
+	}
 	if (mDialog != null) {
-	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onDestroy(): cancel mDialog");
 	    mDialog.cancel();
 	}
-	Log.d(Config.LOGTAG, "GeatteVotingActivity:onDestroy(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onDestroy(): END");
+	}
     }
 
     private void populateFields() {
@@ -132,10 +143,12 @@ public class GeatteVotingActivity extends GDActivity {
 	    long ret = dbHelper.insertFIFeedback(geatteId, vote, comment);
 
 	    if (ret >= 0) {
-		Log.d(Config.LOGTAG, "GeatteVotingActivity:saveState() : saved feedback for friend interest for geatteId = " + geatteId
-			+ ", vote = " + vote + ", comment = " + comment + " to DB SUCCESSUL!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteVotingActivity:saveState() : saved feedback for friend interest for geatteId = " + geatteId
+			    + ", vote = " + vote + ", comment = " + comment + " to DB SUCCESSUL!");
+		}
 	    } else {
-		Log.d(Config.LOGTAG, " GeatteVotingActivity:saveState() : saved contact for friend interest for geatteId = " + geatteId
+		Log.w(Config.LOGTAG, " GeatteVotingActivity:saveState() : saved contact for friend interest for geatteId = " + geatteId
 			+ ", vote = " + vote + ", comment = " + comment + " to DB FAILED!");
 	    }
 
@@ -179,14 +192,18 @@ public class GeatteVotingActivity extends GDActivity {
 
 		//save feedback to db
 		saveState(mGeatteId, vote, feedback);
-		Log.d(Config.LOGTAG, "VoteUploadTask:doInBackground(): save feedback for friend interest to db, " +
-			"geatteId = " + mGeatteId + ", vote = " + vote + ", feedback = " + feedback);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "VoteUploadTask:doInBackground(): save feedback for friend interest to db, " +
+			    "geatteId = " + mGeatteId + ", vote = " + vote + ", feedback = " + feedback);
+		}
 
 		if (response.getEntity() != null) {
 		    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),
 		    "UTF-8"));
 		    String sResponse = reader.readLine();
-		    Log.d(Config.LOGTAG, "VoteUploadTask Response: " + sResponse);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "VoteUploadTask Response: " + sResponse);
+		    }
 		    if (response.getStatusLine().getStatusCode() == 400
 			    || response.getStatusLine().getStatusCode() == 500) {
 			Log.e(Config.LOGTAG, "VoteUploadTask Error: " + sResponse);
@@ -198,11 +215,13 @@ public class GeatteVotingActivity extends GDActivity {
 		Log.e(Config.LOGTAG, e.getMessage(), e);
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "VoteUploadTask:doInBackground(): try to dismiss mDialog");
+			if(Config.LOG_DEBUG_ENABLED) {
+			    Log.d(Config.LOGTAG, "VoteUploadTask:doInBackground(): try to dismiss mDialog");
+			}
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception ex) {
-			Log.d(Config.LOGTAG, "VoteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
+			Log.w(Config.LOGTAG, "VoteUploadTask:doInBackground(): failed to dismiss mDialog", ex);
 		    }
 		}
 		this.publishProgress(getString(R.string.upload_vote_error));
@@ -223,14 +242,18 @@ public class GeatteVotingActivity extends GDActivity {
 	    try {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			Log.d(Config.LOGTAG, "VoteUploadTask:onPostExecute(): try to dismiss mDialog");
+			if(Config.LOG_DEBUG_ENABLED) {
+			    Log.d(Config.LOGTAG, "VoteUploadTask:onPostExecute(): try to dismiss mDialog");
+			}
 			mDialog.dismiss();
 			mDialog = null;
 		    } catch (Exception e) {
-			Log.d(Config.LOGTAG, "VoteUploadTask:onPostExecute(): failed to dismiss mDialog");
+			Log.w(Config.LOGTAG, "VoteUploadTask:onPostExecute(): failed to dismiss mDialog");
 		    }
 		}
-		Log.d(Config.LOGTAG, "VoteUploadTask:onPostExecute(): get response :" + sResponse);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "VoteUploadTask:onPostExecute(): get response :" + sResponse);
+		}
 
 		// server response
 		if (sResponse != null) {
@@ -312,10 +335,12 @@ public class GeatteVotingActivity extends GDActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	if (requestCode == ACTIVITY_COMMENT && resultCode == Activity.RESULT_OK){
 	    mComment = intent.getExtras().getString(Config.EXTRA_KEY_VOTING_COMMENT);
-	    if (mComment != null && !mComment.trim().equals("")) {
-		Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment = " + mComment);
-	    } else {
-		Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment is null or empty");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		if (mComment != null && !mComment.trim().equals("")) {
+		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment = " + mComment);
+		} else {
+		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment is null or empty");
+		}
 	    }
 	}
     }

@@ -37,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+@Deprecated
 public class GeatteEditActivity extends GDActivity {
 
     private static final String CLASSTAG = GeatteEditActivity.class.getSimpleName();

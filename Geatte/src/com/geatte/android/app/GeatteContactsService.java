@@ -107,7 +107,9 @@ public class GeatteContactsService extends Service {
 		Log.e(Config.LOGTAG, "GeatteContactsActivity:sendJson() Error: ", jsonEx);
 	    }
 
-	    Log.d(Config.LOGTAG, "GeatteContactsService:Runnable Attemp to send json to contacts servlet: " + allContactsJson);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "GeatteContactsService:Runnable Attemp to send json to contacts servlet: " + allContactsJson);
+	    }
 
 	    final SharedPreferences prefs = getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY,
 		    Context.MODE_PRIVATE);
@@ -154,7 +156,9 @@ public class GeatteContactsService extends Service {
 				"GeatteContactsService:Runnable: unable to read response after send contacts to server", e);
 		    }
 
-		    Log.d(Config.LOGTAG, "GeatteContactsService:Runnable Response: " + jResponse);
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "GeatteContactsService:Runnable Response: " + jResponse);
+		    }
 
 		    // process json
 		    processJsonResponse(jResponse);
@@ -186,7 +190,9 @@ public class GeatteContactsService extends Service {
 	    if (contactArray.length() > 0) {
 		//recreate all contacts
 		int retDel = dbHelper.deleteAllContacts();
-		Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: deleted contacts total [" + retDel + "] DB SUCCESSUL!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: deleted contacts total [" + retDel + "] DB SUCCESSUL!");
+		}
 	    }
 
 	    for (int i = 0; i < contactArray.length(); i++) {
@@ -200,10 +206,12 @@ public class GeatteContactsService extends Service {
 		    long ret = dbHelper.insertContact(phone, contactId, name);
 
 		    if (ret >= 0) {
-			Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved contact for phone = " + phone
-				+ ", contactId = " + contactId + ", name = " + name + " to DB SUCCESSUL!");
+			if(Config.LOG_DEBUG_ENABLED) {
+			    Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved contact for phone = " + phone
+				    + ", contactId = " + contactId + ", name = " + name + " to DB SUCCESSUL!");
+			}
 		    } else {
-			Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved contact for phone = " + phone
+			Log.w(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved contact for phone = " + phone
 				+ ", contactId = " + contactId + ", name = " + name + " to DB FAILED!");
 		    }
 		} catch (Exception e) {

@@ -33,13 +33,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView.ScaleType;
 
-public class GeatteListFIAsyncXActivity extends GDListActivity implements OnScrollListener {
+public class GeatteListFIAsyncXActivity extends GDListActivity {
 
     private final Handler mHandler = new Handler();
     private AsyncThumbnailItemFIAdapter mAsyncImageAdapter = null;
@@ -57,26 +55,32 @@ public class GeatteListFIAsyncXActivity extends GDListActivity implements OnScro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onCreate() START");
-
-	getListView().setOnScrollListener(this);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onCreate() START");
+	}
 
 	// get start from, an int, from extras
 	mStartFrom = getIntent().getIntExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, 1);
 
-	Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onCreate(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onCreate(): END");
+	}
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
-	Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onResume(): START");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onResume(): START");
+	}
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
 		fillList();
 	    }
 	},250);
-	Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onResume(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onResume(): END");
+	}
     }
 
     private void fillList() {
@@ -84,7 +88,9 @@ public class GeatteListFIAsyncXActivity extends GDListActivity implements OnScro
 	try {
 	    List<Item> items = getFIGeatteItems();
 	    if (items.size() == 0) {
-		Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:fillList() : No geatte available!!");
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:fillList() : No geatte available!!");
+		}
 		warnItem = new GeatteThumbnailItem("Click Menu to invite friends to Geatte", null, R.drawable.icon);
 	    } else {
 		warnItem = null;
@@ -115,13 +121,13 @@ public class GeatteListFIAsyncXActivity extends GDListActivity implements OnScro
 	    mDbHelper.open();
 	    fiCur = mDbHelper.fetchAllFriendInterestsWithBlob();
 
-	    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() : Got cursor for all friends interests");
-
 	    fiCur.moveToFirst();
 	    int counter = 0;
 	    while (fiCur.isAfterLast() == false) {
 		++counter;
-		Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() : Process friend interest = " + counter);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() : Process friend interest = " + counter);
+		}
 
 		long fInterestId = fiCur.getLong(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_ID));
 		String fImagePath = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
@@ -129,7 +135,7 @@ public class GeatteListFIAsyncXActivity extends GDListActivity implements OnScro
 		String fInterestTitle = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE));
 		String fInterestDesc = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_DESC));
 
-		Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
+		Log.i(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
 			"fInterestId = " + fInterestId + ", fImagePath = " + fImagePath + ", fInterestTitle = " +
 			fInterestTitle + ", fInterestDesc = " + fInterestDesc);
 
@@ -202,7 +208,9 @@ public class GeatteListFIAsyncXActivity extends GDListActivity implements OnScro
 		holder.textViewTitle.setText(tItem.text);
 		holder.textViewSubTitle.setText(tItem.subtitle);
 
-		Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
+		}
 		holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
 
 		return convertView;
@@ -260,35 +268,20 @@ public class GeatteListFIAsyncXActivity extends GDListActivity implements OnScro
     protected void onListItemClick(ListView l, View v, int position, long id) {
 	super.onListItemClick(l, v, position, id);
 	if (v instanceof ThumbnailAsyncBitmapItemView) {
-	    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onListItemClick() START");
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onListItemClick() START");
+	    }
 	    ThumbnailAsyncBitmapItem item = (ThumbnailAsyncBitmapItem) l.getAdapter().getItem(position);
 	    if (item == null) {
-		Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onListItemClick() : item is null");
+		Log.w(Config.LOGTAG, "GeatteListFIAsyncXActivity:onListItemClick() : item is null");
 	    } else {
 		Intent intent = new Intent(this, GeatteVotingActivity.class);
 		intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(item.getId()));
 		intent.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mStartFrom);
 		startActivity(intent);
-		Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onListItemClick() END");
-	    }
-	}
-    }
-
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-    }
-
-    public void onScrollStateChanged(AbsListView listView, int scrollState) {
-	if (getListView() == listView) {
-	    searchAsyncImageViews(listView, scrollState == OnScrollListener.SCROLL_STATE_FLING);
-	}
-    }
-
-    private void searchAsyncImageViews(ViewGroup viewGroup, boolean pause) {
-	final int childCount = viewGroup.getChildCount();
-	for (int i = 0; i < childCount; i++) {
-	    AsyncImageView image = (AsyncImageView) viewGroup.getChildAt(i).findViewById(R.id.geatte_async_image);
-	    if (image != null) {
-		image.setPaused(pause);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:onListItemClick() END");
+		}
 	    }
 	}
     }
