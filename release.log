@@ -1,0 +1,4 @@
+
+# release 1.0.2
+use first name in AllFeedback view; add button to pick local picture; retry download image if failed first time; change image file storage location; refresh media album whennew picture is taken
+
