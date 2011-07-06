@@ -58,6 +58,7 @@ public class GeatteImageGetServlet extends HttpServlet {
 	    try {
 		Long id = Long.parseLong(geatteId);
 		geatte = pm.getObjectById(GeatteInfo.class, id);
+		log.info("GeatteImageGetServlet.doGet() : obtain geatte from db for id = " + geatteId);
 	    } catch (JDOObjectNotFoundException ex) {
 		log.warning("GeatteImageGetServlet.doGet() : can not obtain geatte from db for id = " + geatteId);
 		throw new ServletException(ex);

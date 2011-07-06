@@ -1,5 +1,7 @@
 package com.geatte.android.view;
 
+import com.geatte.android.app.CommonUtils;
+import com.geatte.android.app.Config;
 import com.geatte.android.app.R;
 
 import greendroid.widget.item.Item;
@@ -8,6 +10,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,8 +52,12 @@ public class GeatteFeedbackItemView extends RelativeLayout implements ItemView {
 	}
 
 	if (item.interestImagePath != null) {
+	    int sampleSize = CommonUtils.getResizeRatio(item.interestImagePath, 1500, 16);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " GeatteFeedbackItemView:setObject() resize image with sampleSize = " + sampleSize);
+	    }
 	    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	    bitmapOptions.inSampleSize = 16;
+	    bitmapOptions.inSampleSize = sampleSize;
 	    Bitmap imgBitmap = BitmapFactory.decodeFile(item.interestImagePath, bitmapOptions);
 	    mInterestThumbnailView.setImageBitmap(imgBitmap);
 	} else {

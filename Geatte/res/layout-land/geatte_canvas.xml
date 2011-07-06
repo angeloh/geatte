@@ -16,29 +16,41 @@
 		android:text="@string/edit_top_label" /-->
  
     <Button android:id="@+id/app_snap_button"  
-        android:layout_width="100dp" 
+        android:layout_width="90dp" 
         android:layout_height="100dp"      
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:drawableTop="@drawable/snap"
         android:background="@color/rosy_brown"
-        android:text="@string/snap_geatte_button_label" />
- 	
-    <Button android:id="@+id/app_show_geattetab_btn"  
-        android:layout_width="100dp" 
-        android:layout_height="100dp"      
+        android:text="@string/snap_button_label" />
+        
+    <Button android:id="@+id/app_pick_button"  
+        android:layout_width="90dp" 
+        android:layout_height="100dp" 
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/app_snap_button"
+        android:drawableTop="@drawable/pick"
+        android:background="@color/light_orange"
+        android:text="@string/pick_button_label" />
+ 	
+    <Button android:id="@+id/app_show_geattetab_btn"  
+        android:layout_width="90dp" 
+        android:layout_height="100dp"      
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/app_pick_button"
         android:drawableTop="@drawable/tabs"
         android:background="@drawable/geatte_tabs_icon"
         android:text="@string/show_geattetab" />
 
     <Button android:id="@+id/app_show_all_feedback_btn"  
-        android:layout_width="100dp" 
+        android:layout_width="90dp" 
         android:layout_height="100dp"      
         android:gravity="center_vertical|center_horizontal"
         android:layout_marginTop="10dp"

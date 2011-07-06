@@ -142,7 +142,7 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 		String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
 		String comment = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_COMMENT));
 		// get contact name for this voter
-		String voterName = mDbHelper.fetchContactName(voter);
+		String voterName = mDbHelper.fetchContactFirstName(voter);
 		// get voter contact thumbnail
 		Integer contactId = mDbHelper.fetchContactId(voter);
 		Bitmap contactBitmap = queryPhotoForContact(contactId);

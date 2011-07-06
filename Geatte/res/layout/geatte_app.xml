@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"      
         android:layout_marginLeft="10px" android:layout_marginBottom="5px"
         android:layout_below="@id/app_top_label"
-        android:text="@string/snap_geatte_button_label" />
+        android:text="@string/snap_button_label" />
     
     <Button android:id="@+id/app_register_btn"  
         android:layout_width="wrap_content" 

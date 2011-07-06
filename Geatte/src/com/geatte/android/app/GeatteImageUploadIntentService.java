@@ -96,7 +96,11 @@ public class GeatteImageUploadIntentService extends IntentService {
 	    if (imagePath != null && imageRandomId != null) {
 		// bitmap = BitmapFactory.decodeFile(mImagePath);
 		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		bitmapOptions.inSampleSize = 6;
+		int sampleSize = CommonUtils.getResizeRatio(imagePath, 1500, 6);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " GeatteImageUploadIntentService:handleImageUpload() resize image with sampleSize = " + sampleSize);
+		}
+		bitmapOptions.inSampleSize = sampleSize;
 		bitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 		imageFileName = new File(imagePath).getName();
 	    } else {

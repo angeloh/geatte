@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -49,7 +50,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 
 /**
@@ -275,12 +275,11 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 		if (geatteId != null && !geatteId.equals("")) {
 		    try {
-			URL url = new URL(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL + "?" + Config.GEATTE_ID_PARAM + "=" + geatteId);
-			URLConnection conn = url.openConnection();
-			conn.connect();
-			BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-			Bitmap bm = BitmapFactory.decodeStream(bis);
-			bis.close();
+			Bitmap bm = downloadImg(geatteId);
+			//retry once
+			if (bm == null) {
+			    bm = downloadImg(geatteId);
+			}
 
 			String imagePath = saveToFile(bm);
 			if (imagePath != null) {
@@ -329,6 +328,16 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	} finally {
 	    dbHelper.close();
 	}
+    }
+
+    private Bitmap downloadImg(String geatteId) throws MalformedURLException, IOException {
+	URL url = new URL(Config.BASE_URL + Config.GEATTE_IMAGE_GET_URL + "?" + Config.GEATTE_ID_PARAM + "=" + geatteId);
+	URLConnection conn = url.openConnection();
+	conn.connect();
+	BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+	Bitmap bm = BitmapFactory.decodeStream(bis);
+	bis.close();
+	return bm;
     }
 
 
@@ -445,14 +454,21 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	filename = sdf.format(date);
 
 	try {
-	    String path = Environment.getExternalStorageDirectory().toString();
+	    File file = null;
 	    OutputStream fOut = null;
-	    File dir = new File(path, "/geatte/images/");
-	    if (!dir.isDirectory()) {
-		dir.mkdirs();
-	    }
+	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+		String path = Environment.getExternalStorageDirectory().toString();
 
-	    File file = new File(dir, filename + ".jpg");
+		File dir = new File(path, "/geatte/media/geatte images/");
+		if (!dir.isDirectory()) {
+		    dir.mkdirs();
+		}
+
+		file = new File(dir, filename + ".jpg");
+	    } else {
+		//no external storage available
+		file = File.createTempFile("geatte_fi_", ".jpg");
+	    }
 
 	    fOut = new FileOutputStream(file);
 
@@ -460,8 +476,8 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    fOut.flush();
 	    fOut.close();
 
-	    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(), file
-		    .getName());
+	    //	    MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(), file
+	    //		    .getName());
 	    return file.getAbsolutePath();
 	} catch (Exception e) {
 	    Log.w(Config.LOGTAG, " " + TAG + " Exception :" , e);

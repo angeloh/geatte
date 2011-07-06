@@ -1,5 +1,7 @@
 package com.geatte.android.view;
 
+import com.geatte.android.app.CommonUtils;
+import com.geatte.android.app.Config;
 import com.geatte.android.app.R;
 
 import greendroid.widget.item.Item;
@@ -8,6 +10,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,8 +44,13 @@ public class ThumbnailBitmapItemView extends RelativeLayout implements ItemView 
 	mTitleView.setText(item.text);
 	mDescView.setText(item.subtitle);
 
+	int sampleSize = CommonUtils.getResizeRatio(item.imagePath, 1500, 8);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, " ThumbnailBitmapItemView:setObject() resize image with sampleSize = " + sampleSize);
+	}
+
 	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	bitmapOptions.inSampleSize = 8;
+	bitmapOptions.inSampleSize = sampleSize;
 	Bitmap imgBitmap = BitmapFactory.decodeFile(item.imagePath, bitmapOptions);
 	mThumbnailView.setImageBitmap(imgBitmap);
     }

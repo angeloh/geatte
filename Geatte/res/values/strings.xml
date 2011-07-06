@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="snap_geatte_button_label">Snap A Geatte</string>
-    <string name="take_picture">Take a picture</string>
+    <string name="snap_button_label">Snap Geatte Now</string>
+    <string name="pick_button_label">Pick From Gallery</string>
     <string name="app_name">Geatte</string>
-    <string name="app_url">http://geatte.com</string>
+    <string name="app_url">http://www.geatte.com</string>
     <string name="no_geattes">No Geattes Yet</string>
     <string name="show_all_feedbacks">Show All Feedbacks</string>
     <string name="show_all_feedbacks_title">Feedbacks For My Interests</string>

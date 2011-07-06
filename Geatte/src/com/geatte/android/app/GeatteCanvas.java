@@ -2,9 +2,7 @@ package com.geatte.android.app;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -45,6 +43,7 @@ public class GeatteCanvas extends GDActivity {
     private static final String CLASSTAG = GeatteCanvas.class.getSimpleName();
     private static final int ACTIVITY_SNAP = 0;
     private static final int ACTIVITY_CREATE = 1;
+    private static final int ACTIVITY_PICK = 2;
     private String mImagePath = null;
     private PendingIntent mAlarmSender;
 
@@ -107,6 +106,17 @@ public class GeatteCanvas extends GDActivity {
 		//		Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " put a EXTRA_OUTPUT for image capture to " + getTmpImagePath());
 		startActivityForResult(intent, ACTIVITY_SNAP);
 	    }
+	});
+
+	Button pickButton = (Button) findViewById(R.id.app_pick_button);
+	pickButton.setOnClickListener( new OnClickListener() {
+	    public void onClick(View v ) {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"), ACTIVITY_PICK);
+	    }
+
 	});
 
 	final Button showAllFeedbackButton = (Button) findViewById(R.id.app_show_all_feedback_btn);
@@ -184,10 +194,10 @@ public class GeatteCanvas extends GDActivity {
 
     @Override
     protected void onResume() {
+	super.onResume();
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "GeatteCanvas:onResume() START");
 	}
-	super.onResume();
 	if (!isOnline()) {
 	    Toast.makeText(getApplicationContext(), "No internet connection available!!", Toast.LENGTH_SHORT).show();
 	    Log.w(Config.LOGTAG, "GeatteCanvas:onResume()  No internet connection available!!");
@@ -258,13 +268,69 @@ public class GeatteCanvas extends GDActivity {
 		startActivityForResult(editIntent, ACTIVITY_CREATE);
 
 	    } else {
-		Log.w(Config.LOGTAG, "file not exist " + fi.getAbsolutePath());
+		Log.w(Config.LOGTAG, "file not exist or file is null");
 	    }
 
+	} else if (requestCode == ACTIVITY_PICK && resultCode == Activity.RESULT_OK) {
+	    Uri selectedImageUri = intent.getData();
+
+	    // OI FILE Manager
+	    String fileManagerString = selectedImageUri.getPath();
+
+	    // MEDIA GALLERY
+	    String selectedImagePath = getPathFromMediaStore(selectedImageUri);
+
+	    if (selectedImagePath != null) {
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " user chose a image from MEDIA GALLERY " + selectedImagePath);
+		}
+		mImagePath = selectedImagePath;
+	    }
+	    else if (fileManagerString != null) {
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " user chose a image from OI FILE Manager " + fileManagerString);
+		}
+		mImagePath = fileManagerString;
+	    }
+
+	    File fi = null;
+	    try {
+		fi = new File(mImagePath);
+	    } catch (Exception ex) {
+		Log.w(Config.LOGTAG, "mImagePath not exist " + mImagePath);
+	    }
+
+	    if (fi != null && fi.exists()) {
+		String randomId = UUID.randomUUID().toString();
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " try upload user-selected image to server as intent service, randomId : " + randomId);
+		}
+
+		new ImageUploadAsynTask().execute(randomId);
+		Intent editIntent = new Intent(this, GeatteEditUploadTextOnlyActivity.class);
+		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
+		editIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
+		startActivityForResult(editIntent, ACTIVITY_CREATE);
+	    } else {
+		Log.w(Config.LOGTAG, "file not exist or file is null");
+	    }
 	}
     }
 
-    public String saveToFile(Bitmap bitmap) {
+    public String getPathFromMediaStore(Uri uri) {
+	String[] projection = { MediaStore.Images.Media.DATA };
+	Cursor cursor = managedQuery(uri, projection, null, null, null);
+	if (cursor != null) {
+	    // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+	    // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+	    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	    cursor.moveToFirst();
+	    return cursor.getString(column_index);
+	} else
+	    return null;
+    }
+
+    /*    public String saveToFile(Bitmap bitmap) {
 	String filename;
 	Date date = new Date();
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -294,7 +360,7 @@ public class GeatteCanvas extends GDActivity {
 	}
 	return null;
     }
-
+     */
     public String createImagePath() {
 	String filename;
 	Date date = new Date();
@@ -302,21 +368,28 @@ public class GeatteCanvas extends GDActivity {
 	filename = sdf.format(date);
 
 	try {
-	    String path = Environment.getExternalStorageDirectory().toString();
-	    File dir = new File(path, "/geatte/images/");
-	    if (!dir.isDirectory()) {
-		dir.mkdirs();
+	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+		String path = Environment.getExternalStorageDirectory().toString();
+		File dir = new File(path, "/geatte/media/geatte images/");
+		if (!dir.isDirectory()) {
+		    dir.mkdirs();
+		}
+
+		File file = new File(dir, filename + ".jpg");
+		return file.getAbsolutePath();
+	    } else {
+		//no external storage available
+		File file = File.createTempFile("geatte_", ".jpg");
+		return file.getAbsolutePath();
 	    }
 
-	    File file = new File(dir, filename + ".jpg");
-	    return file.getAbsolutePath();
 	} catch (Exception e) {
-	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :" , e);
+	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :", e);
 	}
 	return null;
     }
 
-    public String getTmpImagePath() {
+    /*    public String getTmpImagePath() {
 	try {
 	    String externalDir = Environment.getExternalStorageDirectory().toString();
 	    if(Config.LOG_DEBUG_ENABLED) {
@@ -335,9 +408,9 @@ public class GeatteCanvas extends GDActivity {
 	    Log.w(Config.LOGTAG, " " + GeatteCanvas.CLASSTAG + " Exception :" , e);
 	}
 	return null;
-    }
+    }*/
 
-    public boolean hasImageCaptureBug() {
+    /*    public boolean hasImageCaptureBug() {
 
 	// list of known devices that have the bug
 	ArrayList<String> devices = new ArrayList<String>();
@@ -351,7 +424,7 @@ public class GeatteCanvas extends GDActivity {
 	return devices.contains(android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
 		+ android.os.Build.DEVICE);
 
-    }
+    }*/
 
     private boolean isSetupRequired() {
 	Context context = getApplicationContext();

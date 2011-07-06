@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.net.Uri;
 
 public class GeatteEditUploadTextOnlyActivity extends GDActivity {
     private static final String RETRY_STATUS = "RETRY";
@@ -87,11 +89,20 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		    finish();
 		    return;
 		}
-
+		//scan the image so show up in album
+		MediaScannerConnection.scanFile(this,
+			new String[] { mImagePath }, null,
+			new MediaScannerConnection.OnScanCompletedListener() {
+		    public void onScanCompleted(String path, Uri uri) {
+			if(Config.LOG_DEBUG_ENABLED) {
+			    Log.d(Config.LOGTAG, " GeatteEditUploadTextOnlyActivity:populateFields() scanned : " + path);
+			}
+		    }
+		});
 	    }
 	}
 
-	populateFields();
+	//populateFields();
 
 	mSendToButton = (Button) findViewById(R.id.send_to_button);
 	mSendToButton.setOnClickListener(new View.OnClickListener() {
@@ -170,8 +181,12 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 
 	    mSavedImagePath = cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
 	    //mSnapView.setImageBitmap(BitmapFactory.decodeFile(mSavedImagePath));
+	    int sampleSize = CommonUtils.getResizeRatio(mSavedImagePath, 1500, 6);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " GeatteEditUploadTextOnlyActivity:populateFields() resize image with sampleSize = " + sampleSize);
+	    }
 	    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	    bitmapOptions.inSampleSize = 6;
+	    bitmapOptions.inSampleSize = sampleSize;
 	    Bitmap imgBitmap = BitmapFactory.decodeFile(mSavedImagePath, bitmapOptions);
 	    mSnapView.setImageBitmap(imgBitmap);
 	}
@@ -180,7 +195,11 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 	if (mRowId == null || mRowId == 0L) {
 	    if (mImagePath != null) {
 		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		bitmapOptions.inSampleSize = 6;
+		int sampleSize = CommonUtils.getResizeRatio(mImagePath, 1500, 6);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " GeatteEditUploadTextOnlyActivity:populateFields() resize image with sampleSize = " + sampleSize);
+		}
+		bitmapOptions.inSampleSize = sampleSize;
 		Bitmap imgBitmap = BitmapFactory.decodeFile(mImagePath, bitmapOptions);
 		mSnapView.setImageBitmap(imgBitmap);
 		//mSnapView.setImageBitmap(BitmapFactory.decodeFile(mImagePath));

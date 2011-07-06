@@ -258,8 +258,12 @@ public class GeatteDBAdapter {
 	    initialValues.put(KEY_IMAGE_PATH, imagePath);
 	    //initialValues.put(KEY_IMAGE_HASH, getHashFromByteArray(byteArray));
 
+	    int sampleSize = CommonUtils.getResizeRatio(imagePath, 1500, 32);
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, " GeatteDBAdapter:insertImage() resize image with sampleSize = " + sampleSize);
+	    }
 	    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	    bitmapOptions.inSampleSize = 32;
+	    bitmapOptions.inSampleSize = sampleSize;
 	    Bitmap imgBitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    imgBitmap.compress(CompressFormat.JPEG, 100, bos);
@@ -470,6 +474,34 @@ public class GeatteDBAdapter {
 	    if (contactCur != null) {
 		contactCur.close();
 	    }
+	}
+	return contactName;
+    }
+
+    public String fetchContactFirstName(String phoneNumber) {
+	String contactName = null;
+	Cursor contactCur = null;
+	try {
+	    contactCur = fetchContactFromPhone(phoneNumber);
+	    if (contactCur == null || contactCur.isAfterLast()) {
+		contactName = "";
+	    } else {
+		contactName = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_NAME));
+	    }
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch fetchContactFirstName()", ex);
+	} finally {
+	    if (contactCur != null) {
+		contactCur.close();
+	    }
+	}
+
+	String[] names = contactName.trim().split(" ");
+	if (names != null) {
+	    contactName = names[0];
+	}
+	if (contactName.length() > 9) {
+	    contactName = contactName.substring(0, 9);
 	}
 	return contactName;
     }
