@@ -126,7 +126,7 @@ public class GeatteListFIAsyncXActivity extends GDListActivity {
 	    while (fiCur.isAfterLast() == false) {
 		++counter;
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() : Process friend interest = " + counter);
+		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getFIGeatteItems() : Process friend interest = " + counter);
 		}
 
 		long fInterestId = fiCur.getLong(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_ID));
@@ -135,7 +135,7 @@ public class GeatteListFIAsyncXActivity extends GDListActivity {
 		String fInterestTitle = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE));
 		String fInterestDesc = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_DESC));
 
-		Log.i(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
+		Log.i(Config.LOGTAG, "GeatteListFIAsyncXActivity:getFIGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
 			"fInterestId = " + fInterestId + ", fImagePath = " + fImagePath + ", fInterestTitle = " +
 			fInterestTitle + ", fInterestDesc = " + fInterestDesc);
 
@@ -148,7 +148,7 @@ public class GeatteListFIAsyncXActivity extends GDListActivity {
 
 	    }
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteListFIAsyncXActivity:getMyGeatteItems() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "GeatteListFIAsyncXActivity:getFIGeatteItems() :  ERROR ", e);
 	} finally {
 	    if (fiCur != null) {
 		fiCur.close();
@@ -211,7 +211,12 @@ public class GeatteListFIAsyncXActivity extends GDListActivity {
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "GeatteListFIAsyncXActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
 		}
-		holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
+
+		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
+		    holder.imageView.setImageResource(R.drawable.thumb_missing);
+		} else {
+		    holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
+		}
 
 		return convertView;
 	    } else {

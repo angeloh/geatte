@@ -2,7 +2,8 @@ package com.geatte.android.app;
 
 import greendroid.app.ActionBarActivity;
 import greendroid.app.GDTabActivity;
-
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.NormalActionBarItem;
 import com.geatte.android.app.R;
 
 import android.app.ProgressDialog;
@@ -22,6 +23,7 @@ public class GeatteTabActivity extends GDTabActivity {
     private int mMyInterstStartFrom = 1;
     private int mFriendInterstStartFrom = 1;
     private int mCurrentTab = 0;
+    private int mCurrentDisplay = DISPLAY.GRID.getIndex();
     private TabHost mTabHost;
     private final Handler mHandler = new Handler();
     private ProgressDialog mDialog;
@@ -29,8 +31,20 @@ public class GeatteTabActivity extends GDTabActivity {
     public static enum TABS {
 	MYINTERESTS(0),
 	FRIENDINTERESTS(1);
-	private final int index;   // in kilograms
+	private final int index;
 	TABS(int index) {
+	    this.index = index;
+	}
+	public int getIndex() {
+	    return index;
+	}
+    };
+
+    public static enum DISPLAY {
+	GRID(0),
+	LIST(1);
+	private final int index;
+	DISPLAY(int index) {
 	    this.index = index;
 	}
 	public int getIndex() {
@@ -70,30 +84,44 @@ public class GeatteTabActivity extends GDTabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	if(Config.LOG_DEBUG_ENABLED) {
+	if (Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): START");
 	}
 
 	mDialog = ProgressDialog.show(GeatteTabActivity.this, "Loading", "Please wait...", true);
 
-	mTabHost = getTabHost();  // The activity TabHost
+	mTabHost = getTabHost(); // The activity TabHost
 
 	mTabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
 
 	mMyInterstStartFrom = getIntent().getIntExtra(Config.EXTRA_MYGEATTE_STARTFROM, 1);
 	mFriendInterstStartFrom = getIntent().getIntExtra(Config.EXTRA_MYGEATTE_STARTFROM, 1);
 	mCurrentTab = getIntent().getIntExtra(Config.EXTRA_CURRENT_TAB, 0);
+	mCurrentDisplay = getIntent().getIntExtra(Config.EXTRA_CURRENT_DISPLAY, DISPLAY.GRID.getIndex());
 
-	//Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListActivity.class);
-	Intent intent1 = new Intent().setClass(getApplicationContext(), GeatteListAsyncXActivity.class);
+	Intent intent1 = null;
+	Intent intent2 = null;
+	if (mCurrentDisplay == DISPLAY.LIST.getIndex()) {
+	    ActionBarItem actionBarItem = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(
+		    R.drawable.grid).setContentDescription(R.string.tab_grid);
+	    addActionBarItem(actionBarItem);
+	    intent1 = new Intent().setClass(getApplicationContext(), GeatteListAsyncXActivity.class);
+	    intent2 = new Intent().setClass(getApplicationContext(), GeatteListFIAsyncXActivity.class);
+	} else {
+	    ActionBarItem actionBarItem = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(
+		    R.drawable.list).setContentDescription(R.string.tab_list);
+	    addActionBarItem(actionBarItem);
+	    intent1 = new Intent().setClass(getApplicationContext(), GeatteGridAsyncXActivity.class);
+	    intent2 = new Intent().setClass(getApplicationContext(), GeatteGridFIAsyncXActivity.class);
+	}
 	intent1.putExtra(Config.EXTRA_MYGEATTE_STARTFROM, mMyInterstStartFrom);
+	intent1.putExtra(Config.EXTRA_CURRENT_DISPLAY, mCurrentDisplay);
 	intent1.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
 
 	setupTab(intent1, "My Geattes");
 
-	//Intent intent2 = new Intent().setClass(getApplicationContext(), GeatteListOthersActivity.class);
-	Intent intent2 = new Intent().setClass(getApplicationContext(), GeatteListFIAsyncXActivity.class);
 	intent2.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mFriendInterstStartFrom);
+	intent2.putExtra(Config.EXTRA_CURRENT_DISPLAY, mCurrentDisplay);
 	intent2.putExtra(ActionBarActivity.GD_ACTION_BAR_VISIBILITY, View.GONE);
 
 	setupTab(intent2, "Friend's Geattes");
@@ -104,7 +132,7 @@ public class GeatteTabActivity extends GDTabActivity {
 	    public void run() {
 		if (mDialog != null && mDialog.isShowing()) {
 		    try {
-			if(Config.LOG_DEBUG_ENABLED) {
+			if (Config.LOG_DEBUG_ENABLED) {
 			    Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): try to dismiss mDialog");
 			}
 			mDialog.dismiss();
@@ -114,9 +142,9 @@ public class GeatteTabActivity extends GDTabActivity {
 		    }
 		}
 	    }
-	},500);
+	}, 500);
 
-	if(Config.LOG_DEBUG_ENABLED) {
+	if (Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "GeatteTabActivity:onCreate(): END");
 	}
     }
@@ -149,5 +177,31 @@ public class GeatteTabActivity extends GDTabActivity {
 	TextView tv = (TextView) view.findViewById(R.id.tabsText);
 	tv.setText(text);
 	return view;
+    }
+
+    @Override
+    public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+	switch (position) {
+	case 0:
+	    Intent intent = new Intent(this, GeatteTabActivity.class);
+	    intent.putExtra(Config.EXTRA_MYGEATTE_STARTFROM, mMyInterstStartFrom);
+	    intent.putExtra(Config.EXTRA_FRIENDGEATTE_STARTFROM, mFriendInterstStartFrom);
+	    intent.putExtra(Config.EXTRA_CURRENT_TAB, mTabHost.getCurrentTab());
+	    int nextDisplay = 0;
+	    if (mCurrentDisplay == DISPLAY.LIST.getIndex()) {
+		nextDisplay = DISPLAY.GRID.getIndex(); //GRID
+	    } else {
+		nextDisplay = DISPLAY.LIST.getIndex(); //LIST
+	    }
+	    intent.putExtra(Config.EXTRA_CURRENT_DISPLAY, nextDisplay);
+	    startActivity(intent);
+	    break;
+
+	default:
+	    return super.onHandleActionBarItemClick(item, position);
+	}
+
+	return true;
     }
 }

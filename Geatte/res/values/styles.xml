@@ -39,6 +39,15 @@
 		<item name="android:dividerHeight">2px</item>
 	</style>
 	
+	<!--  this is the style for the container GridView -->
+	<style name="geatte_grid">
+		<item name="android:columnWidth">90dp</item>
+		<item name="android:numColumns">auto_fit</item>
+		<item name="android:verticalSpacing">10dp</item>
+		<item name="android:horizontalSpacing">10dp</item>
+		<item name="android:stretchMode">columnWidth</item>
+	</style>
+	
 	<style name="Geatte" />
 
 	<style name="Geatte.TextAppearance">
@@ -208,6 +217,16 @@
 		<item name="android:layout_width">?attr/GeatteItemViewPreferredHeight</item>
 		<item name="android:layout_height">?attr/GeatteItemViewPreferredHeight</item>
 		<item name="android:layout_marginRight">?attr/GeatteDrawableMargin</item>
+	</style>
+	
+	<!-- Styles for the GridBitmapItem -->
+	<style name="Geatte.GridBitmapItemStyle">
+		<item name="android:layout_width">?attr/GeatteGridBitmapItemSize</item>
+		<item name="android:layout_height">?attr/GeatteGridBitmapItemSize</item>
+		<item name="android:paddingTop">?attr/GeatteGridBitmapItemPadding</item>
+		<item name="android:paddingBottom">?attr/GeatteGridBitmapItemPadding</item>
+		<item name="android:paddingLeft">?attr/GeatteGridBitmapItemPadding</item>
+		<item name="android:paddingRight">?attr/GeatteGridBitmapItemPadding</item>
 	</style>
 		
 	<!-- Styles for the GeatteProgressItemView -->

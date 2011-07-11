@@ -12,6 +12,10 @@
 	
 	<attr name="GeatteDrawableMargin" format="dimension" />
 	
+	<attr name="GeatteGridBitmapItemPadding" format="dimension" />
+	<attr name="GeatteGridBitmapItemSize" format="dimension" />
+	<attr name="GeatteGridBitmapItemStyle" format="reference" />
+	
 	<attr name="GeatteTextAppearanceLarge" format="reference" />
 	<attr name="GeatteTextAppearanceMedium" format="reference" />
 	<attr name="GeatteTextAppearanceSmall" format="reference" />

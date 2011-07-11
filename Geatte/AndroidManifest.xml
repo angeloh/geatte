@@ -92,7 +92,13 @@
 		<activity android:name=".GeatteListAsyncXActivity" android:label="@string/app_name">
 		</activity>
 		
+		<activity android:name=".GeatteGridAsyncXActivity" android:label="@string/app_name">
+		</activity>
+		
 		<activity android:name=".GeatteListFIAsyncXActivity" android:label="@string/app_name">
+		</activity>
+		
+		<activity android:name=".GeatteGridFIAsyncXActivity" android:label="@string/app_name">
 		</activity>
 		
 		<!-- In order to use the c2dm library, an

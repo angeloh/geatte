@@ -60,7 +60,6 @@ public class GeatteListAsyncXActivity extends GDListActivity {
 	    Log.d(Config.LOGTAG, "GeatteListAsyncXActivity:onCreate() START");
 	}
 
-	// get start from, an int, from extras
 	mStartFrom = getIntent().getIntExtra(Config.EXTRA_MYGEATTE_STARTFROM, 1);
 
 	if(Config.LOG_DEBUG_ENABLED) {
@@ -142,10 +141,8 @@ public class GeatteListAsyncXActivity extends GDListActivity {
 			"interestId = " + interestId + ", imagePath = " + imagePath + ", interestTitle = " +
 			interestTitle + ", interestDesc = " + interestDesc);
 
-		if (imagePath != null) {
-		    //items.add(new ThumbnailAsyncBitmapItem(interestId, interestTitle, interestDesc, imagePath));
-		    items.add(new ThumbnailAsyncBitmapItem(interestId, interestTitle, interestDesc, imagePath, imageThumbnail));
-		}
+		//items.add(new ThumbnailAsyncBitmapItem(interestId, interestTitle, interestDesc, imagePath));
+		items.add(new ThumbnailAsyncBitmapItem(interestId, interestTitle, interestDesc, imagePath, imageThumbnail));
 
 		interestCur.moveToNext();
 
@@ -228,8 +225,11 @@ public class GeatteListAsyncXActivity extends GDListActivity {
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "GeatteListAsyncXActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
 		}
-		holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
-
+		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
+		    holder.imageView.setImageResource(R.drawable.thumb_missing);
+		} else {
+		    holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
+		}
 		//String uri = Uri.fromFile(new File(tItem.imagePath)).toString();
 		//Log.d(Config.LOGTAG, "GeatteListAsyncActivity:getView() : async image request to = " + uri);
 		//holder.imageView.setUrl(Uri.fromFile(new File(tItem.imagePath)).toString());

@@ -5,6 +5,8 @@
     <string name="app_name">Geatte</string>
     <string name="app_url">http://www.geatte.com</string>
     <string name="no_geattes">No Geattes Yet</string>
+    <string name="empty_my_interests">You have not created any interests.</string>
+    <string name="empty_friend_interests">You have not received any interests from friends.</string>
     <string name="show_all_feedbacks">Show All Feedbacks</string>
     <string name="show_all_feedbacks_title">Feedbacks For My Interests</string>
     <string name="show_geattetab">GeatteTab</string>
@@ -76,6 +78,9 @@
 	<string name="contacts_clean">Clean</string>
     <string name="contacts_save">Save</string>
     <string name="contacts_back">Back</string>
+    
+    <string name="tab_list">List View</string>
+    <string name="tab_grid">Grid View</string>
     
     <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, 
     &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->

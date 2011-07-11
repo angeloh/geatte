@@ -5,6 +5,9 @@
 	<dimen name="geatte_thumbnail_size">50dp</dimen>
     <dimen name="geatte_thumbnail_radius">5dp</dimen>
 
+	<dimen name="geatte_grid_bitmap_item_padding">8dp</dimen>
+	<dimen name="geatte_grid_bitmap_item_size">85dp</dimen>
+	
 	<dimen name="geatte_drawable_margin">6dp</dimen>
 	
 	<dimen name="geatte_item_view_large_height">128dp</dimen>

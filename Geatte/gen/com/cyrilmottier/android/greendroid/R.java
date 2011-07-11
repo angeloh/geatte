@@ -27,23 +27,23 @@ public final class R {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteCommentWidget=0x7f010088;
+        public static final int GeatteCommentWidget=0x7f01008b;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyle=0x7f010080;
+        public static final int GeatteContactItemStyle=0x7f010083;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyleSubtitle=0x7f010082;
+        public static final int GeatteContactItemStyleSubtitle=0x7f010085;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyleThumbnail=0x7f010083;
+        public static final int GeatteContactItemStyleThumbnail=0x7f010086;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyleTitle=0x7f010081;
+        public static final int GeatteContactItemStyleTitle=0x7f010084;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -57,19 +57,19 @@ containing a value of this type.
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyle=0x7f01007c;
+        public static final int GeatteFeedbackItemStyle=0x7f01007f;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyleSubtitle=0x7f01007e;
+        public static final int GeatteFeedbackItemStyleSubtitle=0x7f010081;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyleThumbnail=0x7f01007f;
+        public static final int GeatteFeedbackItemStyleThumbnail=0x7f010082;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyleTitle=0x7f01007d;
+        public static final int GeatteFeedbackItemStyleTitle=0x7f010080;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -79,7 +79,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredHalfHeight=0x7f010063;
+        public static final int GeatteGridBitmapItemPadding=0x7f01005b;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -89,7 +89,11 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredHeight=0x7f010061;
+        public static final int GeatteGridBitmapItemSize=0x7f01005c;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int GeatteGridBitmapItemStyle=0x7f01005d;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -99,7 +103,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredLargeHeight=0x7f01005f;
+        public static final int GeatteItemViewPreferredHalfHeight=0x7f010066;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -109,7 +113,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredLowerMidHeight=0x7f010062;
+        public static final int GeatteItemViewPreferredHeight=0x7f010064;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -119,7 +123,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredQuarterHeight=0x7f010064;
+        public static final int GeatteItemViewPreferredLargeHeight=0x7f010062;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -129,7 +133,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteItemViewPreferredUpperMidHeight=0x7f010060;
+        public static final int GeatteItemViewPreferredLowerMidHeight=0x7f010065;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -139,7 +143,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteProgressBarHeight=0x7f010066;
+        public static final int GeatteItemViewPreferredQuarterHeight=0x7f010067;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -149,7 +153,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteProgressBarMargin=0x7f010067;
+        public static final int GeatteItemViewPreferredUpperMidHeight=0x7f010063;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -159,119 +163,139 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int GeatteProgressBarWidth=0x7f010065;
+        public static final int GeatteProgressBarHeight=0x7f010069;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int GeatteProgressBarMargin=0x7f01006a;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int GeatteProgressBarWidth=0x7f010068;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyle=0x7f010084;
+        public static final int GeatteProgressItemViewStyle=0x7f010087;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleProgressBar=0x7f010086;
+        public static final int GeatteProgressItemViewStyleProgressBar=0x7f010089;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleText=0x7f010085;
+        public static final int GeatteProgressItemViewStyleText=0x7f010088;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteSeparatorThumbnailItemStyle=0x7f01006d;
+        public static final int GeatteSeparatorThumbnailItemStyle=0x7f010070;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteSeparatorThumbnailItemStyleText=0x7f01006e;
+        public static final int GeatteSeparatorThumbnailItemStyleText=0x7f010071;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteSeparatorThumbnailItemStyleThumbnail=0x7f01006f;
+        public static final int GeatteSeparatorThumbnailItemStyleThumbnail=0x7f010072;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTabsIcon=0x7f010087;
+        public static final int GeatteTabsIcon=0x7f01008a;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTextAppearanceLarge=0x7f01005b;
+        public static final int GeatteTextAppearanceLarge=0x7f01005e;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTextAppearanceMedium=0x7f01005c;
+        public static final int GeatteTextAppearanceMedium=0x7f01005f;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTextAppearanceSmall=0x7f01005d;
+        public static final int GeatteTextAppearanceSmall=0x7f010060;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTextAppearanceSmallSecondary=0x7f01005e;
+        public static final int GeatteTextAppearanceSmallSecondary=0x7f010061;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyle=0x7f010078;
+        public static final int GeatteThumbnailAsyncBitmapItemStyle=0x7f01007b;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyleSubtitle=0x7f01007a;
+        public static final int GeatteThumbnailAsyncBitmapItemStyleSubtitle=0x7f01007d;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyleThumbnail=0x7f01007b;
+        public static final int GeatteThumbnailAsyncBitmapItemStyleThumbnail=0x7f01007e;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailAsyncBitmapItemStyleTitle=0x7f010079;
+        public static final int GeatteThumbnailAsyncBitmapItemStyleTitle=0x7f01007c;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyle=0x7f010068;
+        public static final int GeatteThumbnailBitmapItemStyle=0x7f01006b;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleDesc=0x7f01006b;
+        public static final int GeatteThumbnailBitmapItemStyleDesc=0x7f01006e;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleLabel=0x7f01006a;
+        public static final int GeatteThumbnailBitmapItemStyleLabel=0x7f01006d;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleThumbnail=0x7f01006c;
+        public static final int GeatteThumbnailBitmapItemStyleThumbnail=0x7f01006f;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailBitmapItemStyleTitle=0x7f010069;
+        public static final int GeatteThumbnailBitmapItemStyleTitle=0x7f01006c;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyle=0x7f010074;
+        public static final int GeatteThumbnailCheckboxStyle=0x7f010077;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyleSubtitle=0x7f010076;
+        public static final int GeatteThumbnailCheckboxStyleSubtitle=0x7f010079;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyleThumbnail=0x7f010077;
+        public static final int GeatteThumbnailCheckboxStyleThumbnail=0x7f01007a;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailCheckboxStyleTitle=0x7f010075;
+        public static final int GeatteThumbnailCheckboxStyleTitle=0x7f010078;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyle=0x7f010070;
+        public static final int GeatteThumbnailItemStyle=0x7f010073;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyleSubtitle=0x7f010072;
+        public static final int GeatteThumbnailItemStyleSubtitle=0x7f010075;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyleThumbnail=0x7f010073;
+        public static final int GeatteThumbnailItemStyleThumbnail=0x7f010076;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteThumbnailItemStyleTitle=0x7f010071;
+        public static final int GeatteThumbnailItemStyleTitle=0x7f010074;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -882,16 +906,18 @@ containing a value of this type.
         public static final int gd_progress_bar_width=0x7f070008;
         public static final int gd_separator_item_view_height=0x7f070000;
         public static final int gd_separator_item_view_padding_left=0x7f070001;
-        public static final int geatte_drawable_margin=0x7f07000f;
-        public static final int geatte_item_view_half_height=0x7f070014;
-        public static final int geatte_item_view_height=0x7f070012;
-        public static final int geatte_item_view_large_height=0x7f070010;
-        public static final int geatte_item_view_lower_mid_height=0x7f070013;
-        public static final int geatte_item_view_quarter_height=0x7f070015;
-        public static final int geatte_item_view_upper_mid_height=0x7f070011;
-        public static final int geatte_progress_bar_height=0x7f070017;
-        public static final int geatte_progress_bar_margin=0x7f070018;
-        public static final int geatte_progress_bar_width=0x7f070016;
+        public static final int geatte_drawable_margin=0x7f070011;
+        public static final int geatte_grid_bitmap_item_padding=0x7f07000f;
+        public static final int geatte_grid_bitmap_item_size=0x7f070010;
+        public static final int geatte_item_view_half_height=0x7f070016;
+        public static final int geatte_item_view_height=0x7f070014;
+        public static final int geatte_item_view_large_height=0x7f070012;
+        public static final int geatte_item_view_lower_mid_height=0x7f070015;
+        public static final int geatte_item_view_quarter_height=0x7f070017;
+        public static final int geatte_item_view_upper_mid_height=0x7f070013;
+        public static final int geatte_progress_bar_height=0x7f070019;
+        public static final int geatte_progress_bar_margin=0x7f07001a;
+        public static final int geatte_progress_bar_width=0x7f070018;
         public static final int geatte_thumbnail_radius=0x7f07000e;
         public static final int geatte_thumbnail_size=0x7f07000d;
     }
@@ -902,109 +928,114 @@ containing a value of this type.
         public static final int custom_button=0x7f020003;
         public static final int email=0x7f020004;
         public static final int empty=0x7f020005;
-        public static final int feedbacks=0x7f020006;
-        public static final int gd_action_bar_add=0x7f020007;
-        public static final int gd_action_bar_all_friends=0x7f020008;
-        public static final int gd_action_bar_compass=0x7f020009;
-        public static final int gd_action_bar_compose=0x7f02000a;
-        public static final int gd_action_bar_edit=0x7f02000b;
-        public static final int gd_action_bar_export=0x7f02000c;
-        public static final int gd_action_bar_eye=0x7f02000d;
-        public static final int gd_action_bar_gallery=0x7f02000e;
-        public static final int gd_action_bar_group=0x7f02000f;
-        public static final int gd_action_bar_help=0x7f020010;
-        public static final int gd_action_bar_home=0x7f020011;
-        public static final int gd_action_bar_info=0x7f020012;
-        public static final int gd_action_bar_item=0x7f020013;
-        public static final int gd_action_bar_item_focused=0x7f020014;
-        public static final int gd_action_bar_item_pressed=0x7f020015;
-        public static final int gd_action_bar_list=0x7f020016;
-        public static final int gd_action_bar_locate=0x7f020017;
-        public static final int gd_action_bar_locate_myself=0x7f020018;
-        public static final int gd_action_bar_mail=0x7f020019;
-        public static final int gd_action_bar_refresh=0x7f02001a;
-        public static final int gd_action_bar_search=0x7f02001b;
-        public static final int gd_action_bar_settings=0x7f02001c;
-        public static final int gd_action_bar_share=0x7f02001d;
-        public static final int gd_action_bar_slideshow=0x7f02001e;
-        public static final int gd_action_bar_sort_by_size=0x7f02001f;
-        public static final int gd_action_bar_star=0x7f020020;
-        public static final int gd_action_bar_take_photo=0x7f020021;
-        public static final int gd_action_bar_talk=0x7f020022;
-        public static final int gd_action_bar_trashcan=0x7f020023;
-        public static final int gd_page_indicator_dot=0x7f020024;
-        public static final int gd_page_indicator_dot_focused=0x7f020025;
-        public static final int gd_page_indicator_dot_normal=0x7f020026;
-        public static final int gd_page_indicator_dot_normal_focused=0x7f020027;
-        public static final int gd_page_indicator_dot_normal_normal=0x7f020028;
-        public static final int gd_page_indicator_dot_normal_pressed=0x7f020029;
-        public static final int gd_page_indicator_dot_pressed=0x7f02002a;
-        public static final int gd_page_indicator_dot_selected=0x7f02002b;
-        public static final int gd_page_indicator_dot_selected_focused=0x7f02002c;
-        public static final int gd_page_indicator_dot_selected_normal=0x7f02002d;
-        public static final int gd_page_indicator_dot_selected_pressed=0x7f02002e;
-        public static final int gd_quick_action_arrow_up=0x7f02002f;
-        public static final int gd_quick_action_bar_arrow_down=0x7f020030;
-        public static final int gd_quick_action_bar_background=0x7f020031;
-        public static final int gd_quick_action_bar_bottom_frame=0x7f020032;
-        public static final int gd_quick_action_bar_grip_left=0x7f020033;
-        public static final int gd_quick_action_bar_grip_right=0x7f020034;
-        public static final int gd_quick_action_bar_item=0x7f020035;
-        public static final int gd_quick_action_bar_item_normal=0x7f020036;
-        public static final int gd_quick_action_bar_item_pressed=0x7f020037;
-        public static final int gd_quick_action_bar_item_selected=0x7f020038;
-        public static final int gd_quick_action_grid_arrow_down=0x7f020039;
-        public static final int gd_quick_action_grid_bg=0x7f02003a;
-        public static final int gd_quick_action_grid_bottom_frame=0x7f02003b;
-        public static final int gd_quick_action_grid_selector=0x7f02003c;
-        public static final int gd_quick_action_grid_selector_focused=0x7f02003d;
-        public static final int gd_quick_action_grid_selector_pressed=0x7f02003e;
-        public static final int gd_quick_action_top_frame=0x7f02003f;
-        public static final int gd_segment_checkmark=0x7f020040;
-        public static final int gd_segment_checkmark_off=0x7f020041;
-        public static final int gd_segment_checkmark_on=0x7f020042;
-        public static final int gd_segment_divider=0x7f020043;
-        public static final int gd_segment_label=0x7f020044;
-        public static final int gd_segment_label_focused=0x7f020045;
-        public static final int gd_segment_label_normal=0x7f020046;
-        public static final int gd_segment_label_pressed=0x7f020047;
-        public static final int gd_shadow_bottom=0x7f020048;
-        public static final int gd_shadow_top=0x7f020049;
-        public static final int gd_tab_indicator=0x7f02004a;
-        public static final int gd_tab_indicator_normal=0x7f02004b;
-        public static final int gd_tab_indicator_pressed=0x7f02004c;
-        public static final int gd_tab_indicator_selected=0x7f02004d;
-        public static final int gd_tab_indicator_unselected=0x7f02004e;
-        public static final int geatte_app_log_alt=0x7f02004f;
-        public static final int geatte_app_log_norm=0x7f020050;
-        public static final int geatte_application_logo=0x7f020051;
-        public static final int geatte_tabs_icon=0x7f020052;
-        public static final int green_light=0x7f020053;
-        public static final int ic_btn_back=0x7f020054;
-        public static final int ic_btn_next=0x7f020055;
-        public static final int ic_tab_grey=0x7f020056;
-        public static final int ic_tab_white=0x7f020057;
-        public static final int icon=0x7f020058;
-        public static final int invalid=0x7f020059;
-        public static final int maybe=0x7f02005a;
-        public static final int no=0x7f02005b;
-        public static final int pause=0x7f02005c;
-        public static final int pick=0x7f02005d;
-        public static final int profile=0x7f02005e;
-        public static final int red_light=0x7f02005f;
-        public static final int send=0x7f020060;
-        public static final int sendimg=0x7f020061;
-        public static final int snap=0x7f020062;
-        public static final int tab_bg_selected=0x7f020063;
-        public static final int tab_bg_selector=0x7f020064;
-        public static final int tab_bg_unselected=0x7f020065;
-        public static final int tab_buttons=0x7f020066;
-        public static final int tab_divider=0x7f020067;
-        public static final int tab_text_selector=0x7f020068;
-        public static final int tabs=0x7f020069;
-        public static final int warning=0x7f02006a;
-        public static final int write=0x7f02006b;
-        public static final int yes=0x7f02006c;
+        public static final int empty_list=0x7f020006;
+        public static final int feedbacks=0x7f020007;
+        public static final int gd_action_bar_add=0x7f020008;
+        public static final int gd_action_bar_all_friends=0x7f020009;
+        public static final int gd_action_bar_compass=0x7f02000a;
+        public static final int gd_action_bar_compose=0x7f02000b;
+        public static final int gd_action_bar_edit=0x7f02000c;
+        public static final int gd_action_bar_export=0x7f02000d;
+        public static final int gd_action_bar_eye=0x7f02000e;
+        public static final int gd_action_bar_gallery=0x7f02000f;
+        public static final int gd_action_bar_group=0x7f020010;
+        public static final int gd_action_bar_help=0x7f020011;
+        public static final int gd_action_bar_home=0x7f020012;
+        public static final int gd_action_bar_info=0x7f020013;
+        public static final int gd_action_bar_item=0x7f020014;
+        public static final int gd_action_bar_item_focused=0x7f020015;
+        public static final int gd_action_bar_item_pressed=0x7f020016;
+        public static final int gd_action_bar_list=0x7f020017;
+        public static final int gd_action_bar_locate=0x7f020018;
+        public static final int gd_action_bar_locate_myself=0x7f020019;
+        public static final int gd_action_bar_mail=0x7f02001a;
+        public static final int gd_action_bar_refresh=0x7f02001b;
+        public static final int gd_action_bar_search=0x7f02001c;
+        public static final int gd_action_bar_settings=0x7f02001d;
+        public static final int gd_action_bar_share=0x7f02001e;
+        public static final int gd_action_bar_slideshow=0x7f02001f;
+        public static final int gd_action_bar_sort_by_size=0x7f020020;
+        public static final int gd_action_bar_star=0x7f020021;
+        public static final int gd_action_bar_take_photo=0x7f020022;
+        public static final int gd_action_bar_talk=0x7f020023;
+        public static final int gd_action_bar_trashcan=0x7f020024;
+        public static final int gd_page_indicator_dot=0x7f020025;
+        public static final int gd_page_indicator_dot_focused=0x7f020026;
+        public static final int gd_page_indicator_dot_normal=0x7f020027;
+        public static final int gd_page_indicator_dot_normal_focused=0x7f020028;
+        public static final int gd_page_indicator_dot_normal_normal=0x7f020029;
+        public static final int gd_page_indicator_dot_normal_pressed=0x7f02002a;
+        public static final int gd_page_indicator_dot_pressed=0x7f02002b;
+        public static final int gd_page_indicator_dot_selected=0x7f02002c;
+        public static final int gd_page_indicator_dot_selected_focused=0x7f02002d;
+        public static final int gd_page_indicator_dot_selected_normal=0x7f02002e;
+        public static final int gd_page_indicator_dot_selected_pressed=0x7f02002f;
+        public static final int gd_quick_action_arrow_up=0x7f020030;
+        public static final int gd_quick_action_bar_arrow_down=0x7f020031;
+        public static final int gd_quick_action_bar_background=0x7f020032;
+        public static final int gd_quick_action_bar_bottom_frame=0x7f020033;
+        public static final int gd_quick_action_bar_grip_left=0x7f020034;
+        public static final int gd_quick_action_bar_grip_right=0x7f020035;
+        public static final int gd_quick_action_bar_item=0x7f020036;
+        public static final int gd_quick_action_bar_item_normal=0x7f020037;
+        public static final int gd_quick_action_bar_item_pressed=0x7f020038;
+        public static final int gd_quick_action_bar_item_selected=0x7f020039;
+        public static final int gd_quick_action_grid_arrow_down=0x7f02003a;
+        public static final int gd_quick_action_grid_bg=0x7f02003b;
+        public static final int gd_quick_action_grid_bottom_frame=0x7f02003c;
+        public static final int gd_quick_action_grid_selector=0x7f02003d;
+        public static final int gd_quick_action_grid_selector_focused=0x7f02003e;
+        public static final int gd_quick_action_grid_selector_pressed=0x7f02003f;
+        public static final int gd_quick_action_top_frame=0x7f020040;
+        public static final int gd_segment_checkmark=0x7f020041;
+        public static final int gd_segment_checkmark_off=0x7f020042;
+        public static final int gd_segment_checkmark_on=0x7f020043;
+        public static final int gd_segment_divider=0x7f020044;
+        public static final int gd_segment_label=0x7f020045;
+        public static final int gd_segment_label_focused=0x7f020046;
+        public static final int gd_segment_label_normal=0x7f020047;
+        public static final int gd_segment_label_pressed=0x7f020048;
+        public static final int gd_shadow_bottom=0x7f020049;
+        public static final int gd_shadow_top=0x7f02004a;
+        public static final int gd_tab_indicator=0x7f02004b;
+        public static final int gd_tab_indicator_normal=0x7f02004c;
+        public static final int gd_tab_indicator_pressed=0x7f02004d;
+        public static final int gd_tab_indicator_selected=0x7f02004e;
+        public static final int gd_tab_indicator_unselected=0x7f02004f;
+        public static final int geatte_app_log_alt=0x7f020050;
+        public static final int geatte_app_log_norm=0x7f020051;
+        public static final int geatte_application_logo=0x7f020052;
+        public static final int geatte_tabs_icon=0x7f020053;
+        public static final int green_light=0x7f020054;
+        public static final int grid=0x7f020055;
+        public static final int grid_imageview_bg=0x7f020056;
+        public static final int ic_btn_back=0x7f020057;
+        public static final int ic_btn_next=0x7f020058;
+        public static final int ic_tab_grey=0x7f020059;
+        public static final int ic_tab_white=0x7f02005a;
+        public static final int icon=0x7f02005b;
+        public static final int invalid=0x7f02005c;
+        public static final int list=0x7f02005d;
+        public static final int maybe=0x7f02005e;
+        public static final int no=0x7f02005f;
+        public static final int pause=0x7f020060;
+        public static final int pick=0x7f020061;
+        public static final int profile=0x7f020062;
+        public static final int red_light=0x7f020063;
+        public static final int send=0x7f020064;
+        public static final int sendimg=0x7f020065;
+        public static final int snap=0x7f020066;
+        public static final int tab_bg_selected=0x7f020067;
+        public static final int tab_bg_selector=0x7f020068;
+        public static final int tab_bg_unselected=0x7f020069;
+        public static final int tab_buttons=0x7f02006a;
+        public static final int tab_divider=0x7f02006b;
+        public static final int tab_text_selector=0x7f02006c;
+        public static final int tabs=0x7f02006d;
+        public static final int thumb_missing=0x7f02006e;
+        public static final int warning=0x7f02006f;
+        public static final int write=0x7f020070;
+        public static final int yes=0x7f020071;
     }
     public static final class id {
         public static final int app_pick_button=0x7f05002e;
@@ -1016,15 +1047,15 @@ containing a value of this type.
         public static final int app_snap_button=0x7f05002a;
         public static final int app_top_label=0x7f050029;
         public static final int bottom=0x7f050008;
-        public static final int button=0x7f050084;
+        public static final int button=0x7f050086;
         public static final int center=0x7f05000d;
         public static final int center_horizontal=0x7f05000c;
         public static final int center_vertical=0x7f05000b;
-        public static final int checkbox=0x7f050086;
-        public static final int contact_check=0x7f050073;
-        public static final int contact_subtitle=0x7f050075;
-        public static final int contact_thumbnail=0x7f050076;
-        public static final int contact_title=0x7f050074;
+        public static final int checkbox=0x7f050088;
+        public static final int contact_check=0x7f050074;
+        public static final int contact_subtitle=0x7f050076;
+        public static final int contact_thumbnail=0x7f050077;
+        public static final int contact_title=0x7f050075;
         public static final int contacts_clean_btn=0x7f050037;
         public static final int contacts_footer=0x7f050036;
         public static final int contacts_info_footer=0x7f050034;
@@ -1039,11 +1070,11 @@ containing a value of this type.
         public static final int edit_img=0x7f050042;
         public static final int edit_title_label=0x7f05003e;
         public static final int edit_top_label=0x7f05003d;
-        public static final int edittext=0x7f050085;
+        public static final int edittext=0x7f050087;
         public static final int empty=0x7f050002;
-        public static final int fi_geatte_desc=0x7f050059;
-        public static final int fi_geatte_img=0x7f050058;
-        public static final int fi_geatte_title=0x7f05005a;
+        public static final int fi_geatte_desc=0x7f05005a;
+        public static final int fi_geatte_img=0x7f050059;
+        public static final int fi_geatte_title=0x7f05005b;
         public static final int gd_action_bar=0x7f050012;
         public static final int gd_action_bar_content_view=0x7f050014;
         public static final int gd_action_bar_home_item=0x7f050015;
@@ -1069,13 +1100,13 @@ containing a value of this type.
         public static final int gdi_quick_action_items=0x7f050021;
         public static final int gdi_rack=0x7f050020;
         public static final int gdi_scroll=0x7f05001f;
-        public static final int geatte_async_image=0x7f05006c;
-        public static final int geatte_async_item_title=0x7f05006e;
-        public static final int geatte_async_subtitle=0x7f05006d;
-        public static final int geatte_bitmap_item_desc=0x7f050072;
-        public static final int geatte_bitmap_item_label=0x7f050071;
-        public static final int geatte_bitmap_item_thumbnail=0x7f05006f;
-        public static final int geatte_bitmap_item_title=0x7f050070;
+        public static final int geatte_async_image=0x7f05006d;
+        public static final int geatte_async_item_title=0x7f05006f;
+        public static final int geatte_async_subtitle=0x7f05006e;
+        public static final int geatte_bitmap_item_desc=0x7f050073;
+        public static final int geatte_bitmap_item_label=0x7f050072;
+        public static final int geatte_bitmap_item_thumbnail=0x7f050070;
+        public static final int geatte_bitmap_item_title=0x7f050071;
         public static final int geatte_contact_item_subtitle=0x7f050033;
         public static final int geatte_contact_item_thumbnail=0x7f050031;
         public static final int geatte_contact_item_title=0x7f050032;
@@ -1083,154 +1114,161 @@ containing a value of this type.
         public static final int geatte_feedback_item_interest_thumbnail=0x7f05004a;
         public static final int geatte_feedback_item_subtitle=0x7f050049;
         public static final int geatte_feedback_item_title=0x7f050048;
-        public static final int geatte_progress_bar=0x7f050053;
-        public static final int geatte_progress_text=0x7f050054;
-        public static final int geatte_separator_text=0x7f050064;
-        public static final int geatte_separator_thumbnail=0x7f050063;
-        public static final int geatte_thumbnail_item_subtitle=0x7f050083;
-        public static final int geatte_thumbnail_item_thumbnail=0x7f050081;
-        public static final int geatte_thumbnail_item_title=0x7f050082;
-        public static final int geatte_vote_btn_no=0x7f050079;
-        public static final int geatte_vote_btn_yes=0x7f050078;
-        public static final int geatte_vote_img=0x7f050077;
+        public static final int geatte_progress_bar=0x7f050054;
+        public static final int geatte_progress_text=0x7f050055;
+        public static final int geatte_separator_text=0x7f050065;
+        public static final int geatte_separator_thumbnail=0x7f050064;
+        public static final int geatte_thumbnail_item_subtitle=0x7f050084;
+        public static final int geatte_thumbnail_item_thumbnail=0x7f050082;
+        public static final int geatte_thumbnail_item_title=0x7f050083;
+        public static final int geatte_vote_btn_no=0x7f05007a;
+        public static final int geatte_vote_btn_yes=0x7f050079;
+        public static final int geatte_vote_img=0x7f050078;
+        public static final int grid_image=0x7f050085;
+        public static final int gridview=0x7f05004b;
         public static final int hdpi=0x7f050005;
         public static final int image_detail=0x7f050039;
-        public static final int intro_exit=0x7f050051;
-        public static final int intro_footer=0x7f05004c;
-        public static final int intro_header=0x7f05004d;
-        public static final int intro_next=0x7f050052;
-        public static final int intro_scroll=0x7f05004b;
-        public static final int intro_text=0x7f05004e;
+        public static final int intro_exit=0x7f050052;
+        public static final int intro_footer=0x7f05004d;
+        public static final int intro_header=0x7f05004e;
+        public static final int intro_next=0x7f050053;
+        public static final int intro_scroll=0x7f05004c;
+        public static final int intro_text=0x7f05004f;
         public static final int ldpi=0x7f050003;
         public static final int left=0x7f050009;
         public static final int mdpi=0x7f050004;
         public static final int multiple=0x7f05000f;
-        public static final int my_geatte_desc=0x7f050056;
-        public static final int my_geatte_img=0x7f050055;
-        public static final int my_geatte_title=0x7f050057;
+        public static final int my_geatte_desc=0x7f050057;
+        public static final int my_geatte_img=0x7f050056;
+        public static final int my_geatte_title=0x7f050058;
         public static final int normal=0x7f050000;
-        public static final int ratingbar=0x7f050088;
+        public static final int ratingbar=0x7f05008a;
         public static final int right=0x7f05000a;
-        public static final int select_account=0x7f05005c;
-        public static final int select_account_back=0x7f050061;
-        public static final int select_account_click_next_text=0x7f05005d;
-        public static final int select_account_connecting_text=0x7f05005f;
-        public static final int select_account_footer=0x7f050060;
-        public static final int select_account_next=0x7f050062;
-        public static final int select_account_progress_bar=0x7f05005e;
-        public static final int select_account_text=0x7f05005b;
+        public static final int select_account=0x7f05005d;
+        public static final int select_account_back=0x7f050062;
+        public static final int select_account_click_next_text=0x7f05005e;
+        public static final int select_account_connecting_text=0x7f050060;
+        public static final int select_account_footer=0x7f050061;
+        public static final int select_account_next=0x7f050063;
+        public static final int select_account_progress_bar=0x7f05005f;
+        public static final int select_account_text=0x7f05005c;
         public static final int send_button=0x7f050043;
         public static final int send_geatte_button=0x7f050046;
         public static final int send_to_button=0x7f050045;
-        public static final int setup_complete_back=0x7f050068;
-        public static final int setup_complete_finish=0x7f050069;
-        public static final int setup_complete_footer=0x7f050067;
-        public static final int setup_complete_header=0x7f050065;
-        public static final int setup_complete_text=0x7f050066;
-        public static final int setup_intro_edit_phone=0x7f050050;
-        public static final int setup_intro_phone_missing_text=0x7f05004f;
+        public static final int setup_complete_back=0x7f050069;
+        public static final int setup_complete_finish=0x7f05006a;
+        public static final int setup_complete_footer=0x7f050068;
+        public static final int setup_complete_header=0x7f050066;
+        public static final int setup_complete_text=0x7f050067;
+        public static final int setup_intro_edit_phone=0x7f050051;
+        public static final int setup_intro_phone_missing_text=0x7f050050;
         public static final int single=0x7f05000e;
-        public static final int tabsLayout=0x7f05006a;
-        public static final int tabsText=0x7f05006b;
+        public static final int tabsLayout=0x7f05006b;
+        public static final int tabsText=0x7f05006c;
         public static final int title=0x7f05003f;
         public static final int title_detail=0x7f05003a;
-        public static final int togglebutton=0x7f050087;
+        public static final int togglebutton=0x7f050089;
         public static final int top=0x7f050007;
-        public static final int voting_cancel_button=0x7f05007d;
-        public static final int voting_comment=0x7f05007b;
-        public static final int voting_comment_footer=0x7f05007c;
-        public static final int voting_comment_mid=0x7f05007a;
-        public static final int voting_image_view=0x7f05007f;
-        public static final int voting_ok_button=0x7f05007e;
-        public static final int voting_thumbnail=0x7f050080;
+        public static final int voting_cancel_button=0x7f05007e;
+        public static final int voting_comment=0x7f05007c;
+        public static final int voting_comment_footer=0x7f05007d;
+        public static final int voting_comment_mid=0x7f05007b;
+        public static final int voting_image_view=0x7f050080;
+        public static final int voting_ok_button=0x7f05007f;
+        public static final int voting_thumbnail=0x7f050081;
         public static final int xhdpi=0x7f050006;
     }
     public static final class layout {
         public static final int email_account=0x7f030000;
-        public static final int gd_action_bar_dashboard=0x7f030001;
-        public static final int gd_action_bar_empty=0x7f030002;
-        public static final int gd_action_bar_item_base=0x7f030003;
-        public static final int gd_action_bar_item_loader=0x7f030004;
-        public static final int gd_action_bar_normal=0x7f030005;
-        public static final int gd_content_dashboard=0x7f030006;
-        public static final int gd_content_empty=0x7f030007;
-        public static final int gd_content_normal=0x7f030008;
-        public static final int gd_description_item_view=0x7f030009;
-        public static final int gd_drawable_item_view=0x7f03000a;
-        public static final int gd_expandable_list_content_dashboard=0x7f03000b;
-        public static final int gd_expandable_list_content_empty=0x7f03000c;
-        public static final int gd_expandable_list_content_normal=0x7f03000d;
-        public static final int gd_list_content_dashboard=0x7f03000e;
-        public static final int gd_list_content_empty=0x7f03000f;
-        public static final int gd_list_content_normal=0x7f030010;
-        public static final int gd_long_text_item_view=0x7f030011;
-        public static final int gd_progress_item_view=0x7f030012;
-        public static final int gd_quick_action_bar=0x7f030013;
-        public static final int gd_quick_action_bar_item=0x7f030014;
-        public static final int gd_quick_action_grid=0x7f030015;
-        public static final int gd_quick_action_grid_item=0x7f030016;
-        public static final int gd_segment=0x7f030017;
-        public static final int gd_separator_item_view=0x7f030018;
-        public static final int gd_subtext_item_view=0x7f030019;
-        public static final int gd_subtitle_item_view=0x7f03001a;
-        public static final int gd_tab_content=0x7f03001b;
-        public static final int gd_tab_indicator=0x7f03001c;
-        public static final int gd_text_item_view=0x7f03001d;
-        public static final int gd_thumbnail_item_view=0x7f03001e;
-        public static final int geatte_app=0x7f03001f;
-        public static final int geatte_canvas=0x7f030020;
-        public static final int geatte_contact_item_view=0x7f030021;
-        public static final int geatte_contacts_info_list_content=0x7f030022;
-        public static final int geatte_contacts_list_content=0x7f030023;
-        public static final int geatte_detail=0x7f030024;
-        public static final int geatte_edit=0x7f030025;
-        public static final int geatte_edit_view=0x7f030026;
-        public static final int geatte_feedback_item_view=0x7f030027;
-        public static final int geatte_feedback_list_content=0x7f030028;
-        public static final int geatte_intro=0x7f030029;
-        public static final int geatte_list=0x7f03002a;
-        public static final int geatte_list_content_empty=0x7f03002b;
-        public static final int geatte_progress_item_view=0x7f03002c;
-        public static final int geatte_row=0x7f03002d;
-        public static final int geatte_row_fi=0x7f03002e;
-        public static final int geatte_select_account=0x7f03002f;
-        public static final int geatte_separator_thumbnail_item_view=0x7f030030;
-        public static final int geatte_setup_complete=0x7f030031;
-        public static final int geatte_tab=0x7f030032;
-        public static final int geatte_tab_widget=0x7f030033;
-        public static final int geatte_tabs_bg=0x7f030034;
-        public static final int geatte_thumbnail_async_bitmap_item_view=0x7f030035;
-        public static final int geatte_thumbnail_bitmap_item_view=0x7f030036;
-        public static final int geatte_thumbnail_checkbox_view=0x7f030037;
-        public static final int geatte_thumbnail_item_view=0x7f030038;
-        public static final int geatte_vote=0x7f030039;
-        public static final int geatte_vote_bar=0x7f03003a;
-        public static final int geatte_vote_btn=0x7f03003b;
-        public static final int geatte_vote_comment_edit_view=0x7f03003c;
-        public static final int geatte_voting_view=0x7f03003d;
-        public static final int geattethumbnail_item_view=0x7f03003e;
-        public static final int main=0x7f03003f;
+        public static final int empty_grid=0x7f030001;
+        public static final int gd_action_bar_dashboard=0x7f030002;
+        public static final int gd_action_bar_empty=0x7f030003;
+        public static final int gd_action_bar_item_base=0x7f030004;
+        public static final int gd_action_bar_item_loader=0x7f030005;
+        public static final int gd_action_bar_normal=0x7f030006;
+        public static final int gd_content_dashboard=0x7f030007;
+        public static final int gd_content_empty=0x7f030008;
+        public static final int gd_content_normal=0x7f030009;
+        public static final int gd_description_item_view=0x7f03000a;
+        public static final int gd_drawable_item_view=0x7f03000b;
+        public static final int gd_expandable_list_content_dashboard=0x7f03000c;
+        public static final int gd_expandable_list_content_empty=0x7f03000d;
+        public static final int gd_expandable_list_content_normal=0x7f03000e;
+        public static final int gd_list_content_dashboard=0x7f03000f;
+        public static final int gd_list_content_empty=0x7f030010;
+        public static final int gd_list_content_normal=0x7f030011;
+        public static final int gd_long_text_item_view=0x7f030012;
+        public static final int gd_progress_item_view=0x7f030013;
+        public static final int gd_quick_action_bar=0x7f030014;
+        public static final int gd_quick_action_bar_item=0x7f030015;
+        public static final int gd_quick_action_grid=0x7f030016;
+        public static final int gd_quick_action_grid_item=0x7f030017;
+        public static final int gd_segment=0x7f030018;
+        public static final int gd_separator_item_view=0x7f030019;
+        public static final int gd_subtext_item_view=0x7f03001a;
+        public static final int gd_subtitle_item_view=0x7f03001b;
+        public static final int gd_tab_content=0x7f03001c;
+        public static final int gd_tab_indicator=0x7f03001d;
+        public static final int gd_text_item_view=0x7f03001e;
+        public static final int gd_thumbnail_item_view=0x7f03001f;
+        public static final int geatte_app=0x7f030020;
+        public static final int geatte_canvas=0x7f030021;
+        public static final int geatte_contact_item_view=0x7f030022;
+        public static final int geatte_contacts_info_list_content=0x7f030023;
+        public static final int geatte_contacts_list_content=0x7f030024;
+        public static final int geatte_detail=0x7f030025;
+        public static final int geatte_edit=0x7f030026;
+        public static final int geatte_edit_view=0x7f030027;
+        public static final int geatte_feedback_item_view=0x7f030028;
+        public static final int geatte_feedback_list_content=0x7f030029;
+        public static final int geatte_grid_content_empty=0x7f03002a;
+        public static final int geatte_intro=0x7f03002b;
+        public static final int geatte_list=0x7f03002c;
+        public static final int geatte_list_content_empty=0x7f03002d;
+        public static final int geatte_progress_item_view=0x7f03002e;
+        public static final int geatte_row=0x7f03002f;
+        public static final int geatte_row_fi=0x7f030030;
+        public static final int geatte_select_account=0x7f030031;
+        public static final int geatte_separator_thumbnail_item_view=0x7f030032;
+        public static final int geatte_setup_complete=0x7f030033;
+        public static final int geatte_tab=0x7f030034;
+        public static final int geatte_tab_widget=0x7f030035;
+        public static final int geatte_tabs_bg=0x7f030036;
+        public static final int geatte_thumbnail_async_bitmap_item_view=0x7f030037;
+        public static final int geatte_thumbnail_bitmap_item_view=0x7f030038;
+        public static final int geatte_thumbnail_checkbox_view=0x7f030039;
+        public static final int geatte_thumbnail_item_view=0x7f03003a;
+        public static final int geatte_vote=0x7f03003b;
+        public static final int geatte_vote_bar=0x7f03003c;
+        public static final int geatte_vote_btn=0x7f03003d;
+        public static final int geatte_vote_comment_edit_view=0x7f03003e;
+        public static final int geatte_voting_view=0x7f03003f;
+        public static final int geattethumbnail_item_view=0x7f030040;
+        public static final int grid_bitmap_item_view=0x7f030041;
+        public static final int main=0x7f030042;
     }
     public static final class string {
         public static final int app_name=0x7f08001d;
         public static final int app_url=0x7f08001e;
-        public static final int auth_error_text=0x7f080051;
-        public static final int comment_label=0x7f080032;
-        public static final int connect_error_text=0x7f080050;
-        public static final int connected_with_account_text=0x7f080054;
-        public static final int contacts_back=0x7f08005b;
-        public static final int contacts_clean=0x7f080059;
-        public static final int contacts_info_view_name=0x7f080058;
-        public static final int contacts_save=0x7f08005a;
-        public static final int contacts_view_name=0x7f080057;
-        public static final int desc_label=0x7f080030;
-        public static final int edit_desc_label=0x7f08002c;
-        public static final int edit_desc_text_default=0x7f08002f;
-        public static final int edit_geatte=0x7f080029;
-        public static final int edit_image_label=0x7f08002d;
-        public static final int edit_title_label=0x7f08002b;
-        public static final int edit_title_text_default=0x7f08002e;
-        public static final int edit_top_label=0x7f08002a;
+        public static final int auth_error_text=0x7f080053;
+        public static final int comment_label=0x7f080034;
+        public static final int connect_error_text=0x7f080052;
+        public static final int connected_with_account_text=0x7f080056;
+        public static final int contacts_back=0x7f08005d;
+        public static final int contacts_clean=0x7f08005b;
+        public static final int contacts_info_view_name=0x7f08005a;
+        public static final int contacts_save=0x7f08005c;
+        public static final int contacts_view_name=0x7f080059;
+        public static final int desc_label=0x7f080032;
+        public static final int edit_desc_label=0x7f08002e;
+        public static final int edit_desc_text_default=0x7f080031;
+        public static final int edit_geatte=0x7f08002b;
+        public static final int edit_image_label=0x7f08002f;
+        public static final int edit_title_label=0x7f08002d;
+        public static final int edit_title_text_default=0x7f080030;
+        public static final int edit_top_label=0x7f08002c;
+        public static final int empty_friend_interests=0x7f080021;
+        public static final int empty_my_interests=0x7f080020;
         public static final int gd_add=0x7f08000b;
         public static final int gd_all_friends=0x7f080016;
         public static final int gd_compass=0x7f08000f;
@@ -1258,119 +1296,124 @@ containing a value of this type.
         public static final int gd_take_photo=0x7f080007;
         public static final int gd_talk=0x7f080002;
         public static final int gd_trashcan=0x7f080014;
-        public static final int intro_exit=0x7f08004d;
+        public static final int intro_exit=0x7f08004f;
         /**  Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, 
     &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] 
          */
-        public static final int intro_text=0x7f08005c;
-        public static final int menu_add_more_geatte=0x7f080025;
-        public static final int menu_delete=0x7f080024;
-        public static final int menu_get_next_page=0x7f080026;
-        public static final int menu_invite=0x7f080028;
-        public static final int menu_refresh=0x7f080027;
-        public static final int no_accounts=0x7f08004f;
+        public static final int intro_text=0x7f080060;
+        public static final int menu_add_more_geatte=0x7f080027;
+        public static final int menu_delete=0x7f080026;
+        public static final int menu_get_next_page=0x7f080028;
+        public static final int menu_invite=0x7f08002a;
+        public static final int menu_refresh=0x7f080029;
+        public static final int no_accounts=0x7f080051;
         public static final int no_geattes=0x7f08001f;
         public static final int pick_button_label=0x7f08001c;
-        public static final int register=0x7f080036;
-        public static final int register_progress_text_conn=0x7f080037;
-        public static final int register_progress_text_error=0x7f08003a;
-        public static final int register_progress_text_reg=0x7f080038;
-        public static final int register_progress_text_unreg=0x7f080039;
-        public static final int select_account_click_next_text=0x7f080052;
-        public static final int select_account_connecting_text=0x7f080053;
-        public static final int select_account_text=0x7f08004e;
-        public static final int send_geatte_text=0x7f080033;
-        public static final int send_to_reset_text=0x7f080035;
-        public static final int send_to_text=0x7f080034;
-        public static final int setup_back=0x7f08004a;
-        public static final int setup_complete_edit_phone_example=0x7f080056;
-        public static final int setup_complete_phone_missing_text=0x7f080055;
-        public static final int setup_complete_text=0x7f08005d;
-        public static final int setup_finish=0x7f08004c;
-        public static final int setup_next=0x7f08004b;
-        public static final int show_all_feedbacks=0x7f080020;
-        public static final int show_all_feedbacks_title=0x7f080021;
-        public static final int show_geattetab=0x7f080022;
-        public static final int show_geattetab_loading=0x7f080023;
+        public static final int register=0x7f080038;
+        public static final int register_progress_text_conn=0x7f080039;
+        public static final int register_progress_text_error=0x7f08003c;
+        public static final int register_progress_text_reg=0x7f08003a;
+        public static final int register_progress_text_unreg=0x7f08003b;
+        public static final int select_account_click_next_text=0x7f080054;
+        public static final int select_account_connecting_text=0x7f080055;
+        public static final int select_account_text=0x7f080050;
+        public static final int send_geatte_text=0x7f080035;
+        public static final int send_to_reset_text=0x7f080037;
+        public static final int send_to_text=0x7f080036;
+        public static final int setup_back=0x7f08004c;
+        public static final int setup_complete_edit_phone_example=0x7f080058;
+        public static final int setup_complete_phone_missing_text=0x7f080057;
+        public static final int setup_complete_text=0x7f080061;
+        public static final int setup_finish=0x7f08004e;
+        public static final int setup_next=0x7f08004d;
+        public static final int show_all_feedbacks=0x7f080022;
+        public static final int show_all_feedbacks_title=0x7f080023;
+        public static final int show_geattetab=0x7f080024;
+        public static final int show_geattetab_loading=0x7f080025;
         public static final int snap_button_label=0x7f08001b;
-        public static final int upload_image_error=0x7f08003d;
-        public static final int upload_text_error=0x7f08003c;
-        public static final int upload_text_retry=0x7f08003b;
-        public static final int upload_vote_error=0x7f08003e;
-        public static final int vote_label=0x7f080031;
-        public static final int voting_a_geatte=0x7f080045;
-        public static final int voting_choose_answer=0x7f080044;
-        public static final int voting_comment=0x7f080042;
-        public static final int voting_comment_cancel_text=0x7f080048;
-        public static final int voting_comment_ok_text=0x7f080049;
-        public static final int voting_comment_text_default=0x7f080047;
-        public static final int voting_comment_title=0x7f080046;
-        public static final int voting_maybe=0x7f080041;
-        public static final int voting_no=0x7f080040;
-        public static final int voting_send=0x7f080043;
-        public static final int voting_yes=0x7f08003f;
+        public static final int tab_grid=0x7f08005f;
+        public static final int tab_list=0x7f08005e;
+        public static final int upload_image_error=0x7f08003f;
+        public static final int upload_text_error=0x7f08003e;
+        public static final int upload_text_retry=0x7f08003d;
+        public static final int upload_vote_error=0x7f080040;
+        public static final int vote_label=0x7f080033;
+        public static final int voting_a_geatte=0x7f080047;
+        public static final int voting_choose_answer=0x7f080046;
+        public static final int voting_comment=0x7f080044;
+        public static final int voting_comment_cancel_text=0x7f08004a;
+        public static final int voting_comment_ok_text=0x7f08004b;
+        public static final int voting_comment_text_default=0x7f080049;
+        public static final int voting_comment_title=0x7f080048;
+        public static final int voting_maybe=0x7f080043;
+        public static final int voting_no=0x7f080042;
+        public static final int voting_send=0x7f080045;
+        public static final int voting_yes=0x7f080041;
     }
     public static final class style {
-        public static final int Geatte=0x7f09003e;
-        public static final int Geatte_Comment=0x7f090063;
-        public static final int Geatte_Comment_Widget=0x7f090064;
+        public static final int Geatte=0x7f09003f;
+        public static final int Geatte_Comment=0x7f090065;
+        public static final int Geatte_Comment_Widget=0x7f090066;
         /**  Styles for the GeatteContactItem 
  item name="android:background">#737CA1</item
          */
-        public static final int Geatte_GeatteContactItem=0x7f09005c;
-        public static final int Geatte_GeatteContactItem_Subtitle=0x7f09005e;
-        public static final int Geatte_GeatteContactItem_Thumbnail=0x7f09005f;
-        public static final int Geatte_GeatteContactItem_Title=0x7f09005d;
+        public static final int Geatte_GeatteContactItem=0x7f09005d;
+        public static final int Geatte_GeatteContactItem_Subtitle=0x7f09005f;
+        public static final int Geatte_GeatteContactItem_Thumbnail=0x7f090060;
+        public static final int Geatte_GeatteContactItem_Title=0x7f09005e;
         /**  Styles for the GeatteFeedbackItem 
  item name="android:background">#737CA1</item
          */
-        public static final int Geatte_GeatteFeedbackItem=0x7f090058;
-        public static final int Geatte_GeatteFeedbackItem_Subtitle=0x7f09005a;
-        public static final int Geatte_GeatteFeedbackItem_Thumbnail=0x7f09005b;
-        public static final int Geatte_GeatteFeedbackItem_Title=0x7f090059;
+        public static final int Geatte_GeatteFeedbackItem=0x7f090059;
+        public static final int Geatte_GeatteFeedbackItem_Subtitle=0x7f09005b;
+        public static final int Geatte_GeatteFeedbackItem_Thumbnail=0x7f09005c;
+        public static final int Geatte_GeatteFeedbackItem_Title=0x7f09005a;
         /**  Styles for the GeatteThumbnailCheckboxStyle 
  item name="android:background">#737CA1</item
          */
-        public static final int Geatte_GeatteThumbnailCheckboxStyle=0x7f090050;
-        public static final int Geatte_GeatteThumbnailCheckboxStyle_Subtitle=0x7f090052;
-        public static final int Geatte_GeatteThumbnailCheckboxStyle_Thumbnail=0x7f090053;
-        public static final int Geatte_GeatteThumbnailCheckboxStyle_Title=0x7f090051;
+        public static final int Geatte_GeatteThumbnailCheckboxStyle=0x7f090051;
+        public static final int Geatte_GeatteThumbnailCheckboxStyle_Subtitle=0x7f090053;
+        public static final int Geatte_GeatteThumbnailCheckboxStyle_Thumbnail=0x7f090054;
+        public static final int Geatte_GeatteThumbnailCheckboxStyle_Title=0x7f090052;
         /**  Styles for the GeatteThumbnailItem 
  item name="android:background">#737CA1</item
          */
-        public static final int Geatte_GeatteThumbnailItem=0x7f09004c;
-        public static final int Geatte_GeatteThumbnailItem_Subtitle=0x7f09004e;
-        public static final int Geatte_GeatteThumbnailItem_Thumbnail=0x7f09004f;
-        public static final int Geatte_GeatteThumbnailItem_Title=0x7f09004d;
+        public static final int Geatte_GeatteThumbnailItem=0x7f09004d;
+        public static final int Geatte_GeatteThumbnailItem_Subtitle=0x7f09004f;
+        public static final int Geatte_GeatteThumbnailItem_Thumbnail=0x7f090050;
+        public static final int Geatte_GeatteThumbnailItem_Title=0x7f09004e;
+        /**  Styles for the GridBitmapItem 
+         */
+        public static final int Geatte_GridBitmapItemStyle=0x7f090061;
         /**  Styles for the GeatteProgressItemView 
          */
-        public static final int Geatte_ProgressItemView=0x7f090060;
-        public static final int Geatte_ProgressItemView_ProgressBar=0x7f090061;
-        public static final int Geatte_ProgressItemView_Text=0x7f090062;
+        public static final int Geatte_ProgressItemView=0x7f090062;
+        public static final int Geatte_ProgressItemView_ProgressBar=0x7f090063;
+        public static final int Geatte_ProgressItemView_Text=0x7f090064;
         /**  Styles for the SeparatorThumbnailItem 
          */
-        public static final int Geatte_SeparatorThumbnailItem=0x7f090049;
-        public static final int Geatte_SeparatorThumbnailItem_Text=0x7f09004a;
-        public static final int Geatte_SeparatorThumbnailItem_Thumbnail=0x7f09004b;
-        public static final int Geatte_TextAppearance=0x7f09003f;
-        public static final int Geatte_TextAppearance_Large=0x7f090040;
-        public static final int Geatte_TextAppearance_Medium=0x7f090041;
-        public static final int Geatte_TextAppearance_Small=0x7f090042;
-        public static final int Geatte_TextAppearance_Small_Secondary=0x7f090043;
+        public static final int Geatte_SeparatorThumbnailItem=0x7f09004a;
+        public static final int Geatte_SeparatorThumbnailItem_Text=0x7f09004b;
+        public static final int Geatte_SeparatorThumbnailItem_Thumbnail=0x7f09004c;
+        public static final int Geatte_TextAppearance=0x7f090040;
+        public static final int Geatte_TextAppearance_Large=0x7f090041;
+        public static final int Geatte_TextAppearance_Medium=0x7f090042;
+        public static final int Geatte_TextAppearance_Small=0x7f090043;
+        public static final int Geatte_TextAppearance_Small_Secondary=0x7f090044;
         /**  Styles for the ThumbnailAsyncBitmapItemStyle 
  item name="android:background">#737CA1</item
          */
-        public static final int Geatte_ThumbnailAsyncBitmapItemStyle=0x7f090054;
-        public static final int Geatte_ThumbnailAsyncBitmapItemStyle_Subtitle=0x7f090056;
-        public static final int Geatte_ThumbnailAsyncBitmapItemStyle_Thumbnail=0x7f090057;
-        public static final int Geatte_ThumbnailAsyncBitmapItemStyle_Title=0x7f090055;
+        public static final int Geatte_ThumbnailAsyncBitmapItemStyle=0x7f090055;
+        public static final int Geatte_ThumbnailAsyncBitmapItemStyle_Subtitle=0x7f090057;
+        public static final int Geatte_ThumbnailAsyncBitmapItemStyle_Thumbnail=0x7f090058;
+        public static final int Geatte_ThumbnailAsyncBitmapItemStyle_Title=0x7f090056;
         /**  Styles for the ThumbnailBitmapItem 
          */
-        public static final int Geatte_ThumbnailBitmapItem=0x7f090044;
-        public static final int Geatte_ThumbnailBitmapItem_Desc=0x7f090047;
-        public static final int Geatte_ThumbnailBitmapItem_Label=0x7f090046;
-        public static final int Geatte_ThumbnailBitmapItem_Thumbnail=0x7f090048;
-        public static final int Geatte_ThumbnailBitmapItem_Title=0x7f090045;
+        public static final int Geatte_ThumbnailBitmapItem=0x7f090045;
+        public static final int Geatte_ThumbnailBitmapItem_Desc=0x7f090048;
+        public static final int Geatte_ThumbnailBitmapItem_Label=0x7f090047;
+        public static final int Geatte_ThumbnailBitmapItem_Thumbnail=0x7f090049;
+        public static final int Geatte_ThumbnailBitmapItem_Title=0x7f090046;
         public static final int GreenDroid=0x7f090006;
         /**  PopDownMenu 
          */
@@ -1448,10 +1491,13 @@ containing a value of this type.
         public static final int TextAppearance_Separator=0x7f090004;
         public static final int TextAppearance_Small=0x7f090003;
         public static final int TextAppearance_TabIndicator=0x7f090005;
-        public static final int Theme_Geatte=0x7f090065;
+        public static final int Theme_Geatte=0x7f090067;
         public static final int Theme_GreenDroid=0x7f090035;
         public static final int Theme_GreenDroid_NoTitleBar=0x7f090036;
         public static final int edit_text=0x7f090039;
+        /**   this is the style for the container GridView 
+         */
+        public static final int geatte_grid=0x7f09003e;
         /**   this is the style for the container ListView, not the rows 
          */
         public static final int geatte_list=0x7f09003d;

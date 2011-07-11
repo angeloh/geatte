@@ -46,7 +46,8 @@ public class Config {
     public static final String EXTRA_IMAGE_PATH = "image_path";
     public static final String EXTRA_IMAGE_RANDOM_ID = "image_random_id";
 
-    public static final String EXTRA_CURRENT_TAB = "0";
+    public static final String EXTRA_CURRENT_TAB = "current_tab";
+    public static final String EXTRA_CURRENT_DISPLAY = "current_display";
 
     // intent actions
     public static final String ACTION_VOTING = "action_voting";
@@ -119,7 +120,7 @@ public class Config {
 
     public static final String INVITE_EMAIL_SUBJECT = "Come join Geatte to share shopping feedback with me";
     public static final String INVITE_EMAIL_TEXT = "Geatte is a shopping feedback app on mobile for friends " +
-    "to share information and help each other to make decision. We can share photos of want-to-have items to " +
+    "to share information and help each other to make decision. You can share photos of want-to-have items to " +
     "anyone on your contact list who has installed Geatte. Go download Geatte free on your Android or iPhone market.";
 
 }

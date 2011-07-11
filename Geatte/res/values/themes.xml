@@ -31,6 +31,10 @@
 		
 		<item name="GeatteDrawableMargin">@dimen/geatte_drawable_margin</item>
 		
+		<item name="GeatteGridBitmapItemPadding">@dimen/geatte_grid_bitmap_item_padding</item>
+		<item name="GeatteGridBitmapItemSize">@dimen/geatte_grid_bitmap_item_size</item>
+		<item name="GeatteGridBitmapItemStyle">@style/Geatte.GridBitmapItemStyle</item>
+		
 		<item name="GeatteTextAppearanceLarge">@style/Geatte.TextAppearance.Large</item>
 		<item name="GeatteTextAppearanceMedium">@style/Geatte.TextAppearance.Medium</item>
 		<item name="GeatteTextAppearanceSmall">@style/Geatte.TextAppearance.Small</item>

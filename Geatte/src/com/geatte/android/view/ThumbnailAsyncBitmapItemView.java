@@ -51,7 +51,11 @@ public class ThumbnailAsyncBitmapItemView extends RelativeLayout implements Item
 	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
 	bitmapOptions.inSampleSize = sampleSize;
 	Bitmap imgBitmap = BitmapFactory.decodeFile(item.imagePath, bitmapOptions);
-	mThumbnailView.setImageBitmap(imgBitmap);
+	if (imgBitmap == null) {
+	    mThumbnailView.setImageResource(R.drawable.thumb_missing);
+	} else {
+	    mThumbnailView.setImageBitmap(imgBitmap);
+	}
     }
 
 }
