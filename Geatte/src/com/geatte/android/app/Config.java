@@ -22,7 +22,7 @@ public class Config {
     /**
      * Set this flag to {@link Config#GD_LOG_LEVEL_NONE} when releasing
      */
-    private static final int GD_LOG_LEVEL = LOG_LEVEL_DEBUG;
+    private static final int GD_LOG_LEVEL = LOG_LEVEL_NONE;
 
     public static final boolean LOG_DEBUG_ENABLED = (GD_LOG_LEVEL == LOG_LEVEL_DEBUG);
     public static final boolean LOG_INFO_ENABLED = LOG_DEBUG_ENABLED || (GD_LOG_LEVEL == LOG_LEVEL_INFO);
