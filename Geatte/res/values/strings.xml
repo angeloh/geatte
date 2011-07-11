@@ -82,6 +82,12 @@
     <string name="tab_list">List View</string>
     <string name="tab_grid">Grid View</string>
     
+    <string name="shopinion_mi">My</string>
+    <string name="shopinion_fi">Friend\'s</string>
+    <string name="shopinion_snap">Snap</string>
+    <string name="shopinion_pick">Pick</string>
+    <string name="shopinion_all">All</string>
+    
     <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, 
     &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->
     <string name="intro_text">

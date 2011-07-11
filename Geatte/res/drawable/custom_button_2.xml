@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android='http://schemas.android.com/apk/res/android'>
+	<item android:state_pressed='true'>
+		<shape android:shape='rectangle'>
+			<gradient 
+				android:angle='270' 
+				android:endColor='@color/Button_Type_0_Dark'
+				android:startColor='@color/Button_Type_0_Light'>
+			</gradient>
+			<stroke 
+				android:color='@color/Pressed_Stroke' 
+				android:width='@dimen/Pressed_Stroke'>
+			</stroke>
+			<corners android:radius='@dimen/Button_Corner'>
+			</corners>
+			<padding 
+				android:bottom='@dimen/Button_Padding' 
+				android:left='@dimen/Button_Padding'
+				android:right='@dimen/Button_Padding' 
+				android:top='@dimen/Button_Padding'>
+			</padding>
+		</shape>
+	</item>
+	<item android:state_focused='true'>
+		<shape android:shape='rectangle'>
+			<gradient 
+				android:angle='270' 
+				android:endColor='@color/Button_Type_0_Light'
+				android:startColor='@color/Button_Type_0_Dark'>
+			</gradient>
+			<stroke 
+				android:color='@color/Focused_Stroke' 
+				android:width='@dimen/Focused_Stroke'>
+			</stroke>
+			<corners 
+				android:radius='@dimen/Button_Corner'>
+			</corners>
+			<padding 
+				android:bottom='@dimen/Button_Padding' 
+				android:left='@dimen/Button_Padding'
+				android:right='@dimen/Button_Padding' 
+				android:top='@dimen/Button_Padding'>
+			</padding>
+		</shape>
+	</item>
+	<item>
+		<shape android:shape='rectangle'>
+			<gradient 
+				android:angle='270' 
+				android:endColor='@color/Button_Type_0_Light'
+				android:startColor='@color/Button_Type_0_Dark'>
+			</gradient>
+			<stroke 
+				android:color='@color/Normal_Stroke' 
+				android:width='@dimen/Normal_Stroke'>
+			</stroke>
+			<corners 
+				android:radius='@dimen/Button_Corner'>
+			</corners>
+			<padding 
+				android:bottom='@dimen/Button_Padding' 
+				android:left='@dimen/Button_Padding'
+				android:right='@dimen/Button_Padding' 
+				android:top='@dimen/Button_Padding'>
+			</padding>
+		</shape>
+	</item>
+</selector> 

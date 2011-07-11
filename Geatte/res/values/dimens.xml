@@ -21,4 +21,22 @@
 	<dimen name="geatte_progress_bar_height">20dp</dimen>
 	<dimen name="geatte_progress_bar_margin">6dp</dimen>
 	
+	<!-- custom_button_2 -->
+	<dimen name="Button_Corner">4dp</dimen>
+	<dimen name="Button_Padding">4dp</dimen>
+	<dimen name="Button_Type_0_Height">25dp</dimen>
+	<dimen name="Button_Type_0_Width">40dp</dimen>
+	<dimen name="Button_Type_1_Height">25dp</dimen>
+	<dimen name="Button_Type_1_Width">40dp</dimen>
+	<dimen name="Button_Type_2_Height">25dp</dimen>
+	<dimen name="Button_Type_2_Width">40dp</dimen>
+	<dimen name="Button_Type_3_Height">32dp</dimen>
+	<dimen name="Button_Type_3_Width">48dp</dimen>
+	<dimen name="Button_Type_4_Height">32dp</dimen>
+	<dimen name="Button_Type_4_Width">48dp</dimen>
+	<dimen name="Focused_Stroke">4dp</dimen>
+	<dimen name="Normal_Stroke">1dp</dimen>
+	<dimen name="Pressed_Stroke">4dp</dimen>
+
+	
 </resources>

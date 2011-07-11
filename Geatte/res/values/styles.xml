@@ -48,6 +48,14 @@
 		<item name="android:stretchMode">columnWidth</item>
 	</style>
 	
+	<!--  this is the style for the container ListView, not the rows -->
+	<style name="shopinion_list">
+		<!-- item name="android:background">#FFFFFF</item-->
+		<item name="android:cacheColorHint">#00000000</item>
+		<item name="android:divider">#808080</item>
+		<item name="android:dividerHeight">2px</item>
+	</style>
+	
 	<style name="Geatte" />
 
 	<style name="Geatte.TextAppearance">

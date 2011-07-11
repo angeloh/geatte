@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<greendroid.widget.ActionBarHost
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@id/gd_action_bar_host"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<!--
+		Layout height/width and background are set here. This is a hack to
+		apply a default style to the ActionBar. Indeed, no style can be
+		applied to a LinearLayout
+	-->
+	<greendroid.widget.ActionBar
+		style="@style/GreenDroid.Widget.ActionBar.Dashboard"
+		android:id="@id/gd_action_bar"
+		android:layout_height="@dimen/gd_action_bar_height"
+		android:layout_width="fill_parent"
+		android:background="?attr/gdActionBarBackground" />
+	
+	<FrameLayout
+		android:id="@id/gd_action_bar_content_view"
+		android:layout_height="0dp"
+		android:layout_width="fill_parent"
+		android:layout_weight="1">
+
+		<ListView
+			android:id="@android:id/list"
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:drawSelectorOnTop="false"
+			style="@style/shopinion_list" />
+		
+		<ViewStub
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout="@layout/empty_grid" />
+
+	</FrameLayout>
+
+	<LinearLayout
+		android:id="@+id/shopinion_mi_footer"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="@android:drawable/bottom_bar"
+		android:paddingTop="1dp">
+
+		<Button
+			android:id="@+id/shopinion_mi_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/ft_my"
+			android:text="@string/shopinion_mi"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+			
+		<Button
+			android:id="@+id/shopinion_fi_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/ft_friends"
+			android:text="@string/shopinion_fi"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+
+		<Button
+			android:id="@+id/shopinion_snap_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/ft_snap"
+			android:text="@string/shopinion_snap"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+
+		<Button
+			android:id="@+id/shopinion_pick_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/ft_pick"
+			android:text="@string/shopinion_pick"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+			
+		<Button
+			android:id="@+id/shopinion_all_btn"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:drawableTop="@drawable/ft_all"
+			android:text="@string/shopinion_all"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+
+	</LinearLayout>
+</greendroid.widget.ActionBarHost>
+

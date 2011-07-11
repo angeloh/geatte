@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_btn_back"
-            background="@drawable/custom_button" />
+            background="@drawable/custom_button_1" />
             
     </LinearLayout>
 </greendroid.widget.ActionBarHost>
