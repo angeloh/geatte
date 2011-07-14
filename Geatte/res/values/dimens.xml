@@ -5,12 +5,25 @@
 	<dimen name="geatte_thumbnail_size">50dp</dimen>
     <dimen name="geatte_thumbnail_radius">5dp</dimen>
 
+	<dimen name="interest_thumbnail_padding">8dp</dimen>
+	<dimen name="interest_thumbnail_counter_thumb_padding">10dp</dimen>
+	<dimen name="interest_thumbnail_counter_thumb_margin">20dp</dimen>
+	<dimen name="interest_thumbnail_counter_text_margin_1">10dp</dimen>
+	<dimen name="interest_thumbnail_counter_text_margin_2">16dp</dimen>
+
 	<dimen name="geatte_grid_bitmap_item_padding">8dp</dimen>
 	<dimen name="geatte_grid_bitmap_item_size">85dp</dimen>
 	
 	<dimen name="geatte_drawable_margin">6dp</dimen>
 	
-	<dimen name="geatte_item_view_large_height">128dp</dimen>
+	<dimen name="geatte_text_size_extra_large">40sp</dimen>
+	<dimen name="geatte_text_size_large">22sp</dimen>
+	<dimen name="geatte_text_size_medium">18sp</dimen>
+	<dimen name="geatte_text_size_small">14sp</dimen>
+	<dimen name="geatte_text_size_small_sec">13sp</dimen>	
+	
+	<dimen name="geatte_item_view_extra_height">246dp</dimen>
+	<dimen name="geatte_item_view_large_height">180dp</dimen>
 	<dimen name="geatte_item_view_upper_mid_height">96dp</dimen>	
 	<dimen name="geatte_item_view_height">64dp</dimen>
 	<dimen name="geatte_item_view_lower_mid_height">48dp</dimen>

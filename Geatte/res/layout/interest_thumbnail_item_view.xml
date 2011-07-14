@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.geatte.android.view.InterestThumbnailItemView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
+	style="?attr/InterestThumbnailItemStyle"
+	android:layout_width="fill_parent"
+	android:layout_height="?attr/GeatteItemViewPreferredExtraHeight"
+	android:padding="3dip"
+	android:descendantFocusability="blocksDescendants">
+	
+	<LinearLayout
+		android:id="@+id/interest_thumbnail_item_header"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:orientation="horizontal"
+		android:gravity="top" >
+	
+		<greendroid.widget.AsyncImageView
+			style="?attr/InterestThumbnailItemStyleThumbnail"
+			android:id="@+id/interest_thumbnail"
+			greendroid:defaultSrc="@drawable/icon" 
+			android:scaleType="centerCrop" />
+		
+		<RelativeLayout 
+		   	android:layout_width="fill_parent"
+		   	android:layout_height="wrap_content" 
+		   	android:layout_toRightOf="@id/interest_thumbnail" >
+				<ImageButton
+					style="?attr/InterestThumbnailItemStyleCounterThumbnail"
+					android:id="@+id/ct_yes_img"
+					android:background="@drawable/imageview_border"
+					android:src="@drawable/ct_yes" />
+				<TextView
+					style="?attr/InterestThumbnailItemStyleCounterText"
+					android:id="@+id/ct_yes_text"
+					android:layout_width="wrap_content"
+					android:layout_toRightOf="@id/ct_yes_img" />
+				<ImageButton
+					style="?attr/InterestThumbnailItemStyleCounterThumbnail"
+					android:id="@+id/ct_maybe_img"
+					android:background="@drawable/imageview_border"
+					android:src="@drawable/ct_maybe"
+					android:layout_below="@id/ct_yes_img" />
+				<TextView
+					style="?attr/InterestThumbnailItemStyleCounterText"
+					android:id="@+id/ct_maybe_text"
+					android:layout_width="wrap_content"
+					android:layout_toRightOf="@id/ct_maybe_img"
+					android:layout_below="@id/ct_yes_text" />
+				<ImageButton
+					style="?attr/InterestThumbnailItemStyleCounterThumbnail"
+					android:id="@+id/ct_no_img"
+					android:background="@drawable/imageview_border"
+					android:src="@drawable/ct_no"
+					android:layout_below="@id/ct_maybe_img" />
+				<TextView
+					style="?attr/InterestThumbnailItemStyleCounterText"
+					android:id="@+id/ct_no_text"
+					android:layout_width="wrap_content"
+					android:layout_toRightOf="@id/ct_no_img"
+					android:layout_below="@id/ct_maybe_text" />
+		</RelativeLayout>
+	
+	</LinearLayout>
+	
+	<TextView
+		style="?attr/InterestThumbnailItemStyleTitle"
+		android:id="@+id/interest_title"
+		android:layout_width="fill_parent"
+        android:layout_below="@id/interest_thumbnail_item_header"
+        android:layout_alignParentLeft="true" />
+		
+	<TextView
+		style="?attr/InterestThumbnailItemStyleSubtitle"
+		android:id="@+id/interest_subtitle"
+		android:layout_width="fill_parent"
+		android:layout_below="@id/interest_title"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentBottom="true"/>
+</com.geatte.android.view.InterestThumbnailItemView>

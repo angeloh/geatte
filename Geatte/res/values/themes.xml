@@ -35,15 +35,23 @@
 		<item name="GeatteGridBitmapItemSize">@dimen/geatte_grid_bitmap_item_size</item>
 		<item name="GeatteGridBitmapItemStyle">@style/Geatte.GridBitmapItemStyle</item>
 		
+		<item name="GeatteTextAppearanceExtraLarge">@style/Geatte.TextAppearance.Extra_Large</item>
 		<item name="GeatteTextAppearanceLarge">@style/Geatte.TextAppearance.Large</item>
 		<item name="GeatteTextAppearanceMedium">@style/Geatte.TextAppearance.Medium</item>
 		<item name="GeatteTextAppearanceSmall">@style/Geatte.TextAppearance.Small</item>
 		<item name="GeatteTextAppearanceSmallSecondary">@style/Geatte.TextAppearance.Small.Secondary</item>
 		
+		<item name="GeatteTextSizeExtraLarge">@dimen/geatte_text_size_extra_large</item>
+		<item name="GeatteTextSizeLarge">@dimen/geatte_text_size_large</item>
+		<item name="GeatteTextSizeMedium">@dimen/geatte_text_size_medium</item>
+		<item name="GeatteTextSizeSmall">@dimen/geatte_text_size_small</item>
+		<item name="GeatteTextSizeSmallSecondary">@dimen/geatte_text_size_small_sec</item>
+		
 		<item name="GeatteProgressBarWidth">@dimen/geatte_progress_bar_width</item>
 		<item name="GeatteProgressBarHeight">@dimen/geatte_progress_bar_height</item>
 		<item name="GeatteProgressBarMargin">@dimen/geatte_progress_bar_margin</item>
 		
+		<item name="GeatteItemViewPreferredExtraHeight">@dimen/geatte_item_view_extra_height</item>
 		<item name="GeatteItemViewPreferredLargeHeight">@dimen/geatte_item_view_large_height</item>
 		<item name="GeatteItemViewPreferredUpperMidHeight">@dimen/geatte_item_view_upper_mid_height</item>
 		<item name="GeatteItemViewPreferredHeight">@dimen/geatte_item_view_height</item>
@@ -88,6 +96,18 @@
 		<item name="GeatteProgressItemViewStyle">@style/Geatte.ProgressItemView</item>
 		<item name="GeatteProgressItemViewStyleText">@style/Geatte.ProgressItemView.Text</item>
 		<item name="GeatteProgressItemViewStyleProgressBar">@style/Geatte.ProgressItemView.ProgressBar</item>
+		
+		<item name="InterestThumbnailItemStyle">@style/Geatte.InterestThumbnailItemStyle</item>
+		<item name="InterestThumbnailItemStyleTitle">@style/Geatte.InterestThumbnailItemStyle.Title</item>
+		<item name="InterestThumbnailItemStyleSubtitle">@style/Geatte.InterestThumbnailItemStyle.Subtitle</item>
+		<item name="InterestThumbnailItemStyleThumbnail">@style/Geatte.InterestThumbnailItemStyle.Thumbnail</item>
+		<item name="InterestThumbnailItemStyleCounterThumbnail">@style/Geatte.InterestThumbnailItemStyle.Counter.Thumbnail</item>
+		<item name="InterestThumbnailItemStyleCounterText">@style/Geatte.InterestThumbnailItemStyle.Counter.Text</item>
+		<item name="InterestThumbnailItemPadding">@dimen/interest_thumbnail_padding</item>
+		<item name="InterestThumbnailItemCounterThumbPadding">@dimen/interest_thumbnail_counter_thumb_padding</item>
+		<item name="InterestThumbnailItemCounterThumbMargin">@dimen/interest_thumbnail_counter_thumb_margin</item>
+		<item name="InterestThumbnailItemCounterTextMargin1">@dimen/interest_thumbnail_counter_text_margin_1</item>
+		<item name="InterestThumbnailItemCounterTextMargin2">@dimen/interest_thumbnail_counter_text_margin_2</item>
 		
 		<item name="GeatteTabsIcon">@drawable/geatte_tabs_icon</item>
 		

@@ -1,20 +1,22 @@
 package com.geatte.android.app;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.cyrilmottier.android.greendroid.R;
+import com.geatte.android.view.InterestThumbnailItem;
+import com.geatte.android.view.InterestThumbnailItemView;
 import com.geatte.android.view.ListActionBarActivity;
-import com.geatte.android.view.ThumbnailAsyncBitmapItem;
-import com.geatte.android.view.ThumbnailAsyncBitmapItemView;
-
 import greendroid.image.ChainImageProcessor;
 import greendroid.image.ImageProcessor;
 import greendroid.image.MaskImageProcessor;
 import greendroid.image.ScaleImageProcessor;
 import greendroid.widget.ActionBar;
+import greendroid.widget.ActionBarItem;
 import greendroid.widget.AsyncImageView;
 import greendroid.widget.ItemAdapter;
+import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.item.Item;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +34,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
@@ -39,7 +43,7 @@ import android.widget.ImageView.ScaleType;
 public class ShopinionMainActivity extends ListActionBarActivity {
 
     private final Handler mHandler = new Handler();
-    private AsyncThumbnailItemAdapter mAsyncImageAdapter = null;
+    private InterestThumbnailItemAdapter mImageAdapter = null;
 
     public ShopinionMainActivity() {
 	super(ActionBar.Type.Dashboard);
@@ -56,6 +60,10 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onCreate() START");
 	}
+
+	ActionBarItem actionBarItem = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(
+		R.drawable.grid).setContentDescription(R.string.tab_grid);
+	addActionBarItem(actionBarItem);
 
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onCreate(): END");
@@ -87,8 +95,8 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		}
 	    }
 
-	    mAsyncImageAdapter = new AsyncThumbnailItemAdapter(this, items);
-	    setListAdapter(mAsyncImageAdapter);
+	    mImageAdapter = new InterestThumbnailItemAdapter(this, items);
+	    setListAdapter(mImageAdapter);
 
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, "ShopinionMainActivity:fillList() :  ERROR ", e);
@@ -112,18 +120,22 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() : Process my interest = " + counter);
 		}
 
-		int interestId = interestCur.getInt(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_AS_ID));
+		int interestId = interestCur.getInt(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_ID));
+		String geatteId = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_GEATTE_ID));
 		String imagePath = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
 		byte[] imageThumbnail = interestCur.getBlob(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_THUMBNAIL));
 		String interestTitle = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
 		String interestDesc = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC));
 
-		Log.i(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
-			"interestId = " + interestId + ", imagePath = " + imagePath + ", interestTitle = " +
-			interestTitle + ", interestDesc = " + interestDesc);
+		int [] counters = mDbHelper.fetchMyInterestFeedbackCounters(geatteId);
 
-		//items.add(new ThumbnailAsyncBitmapItem(interestId, interestTitle, interestDesc, imagePath));
-		items.add(new ThumbnailAsyncBitmapItem(interestId, interestTitle, interestDesc, imagePath, imageThumbnail));
+		if (Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
+			    "interestId = " + interestId + ", imagePath = " + imagePath + ", interestTitle = " +
+			    interestTitle + ", interestDesc = " + interestDesc + ", counters = " + Arrays.toString(counters));
+		}
+
+		items.add(new InterestThumbnailItem(interestId, interestTitle, interestDesc, imagePath, imageThumbnail, counters));
 
 		interestCur.moveToNext();
 
@@ -139,7 +151,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	return items;
     }
 
-    private static class AsyncThumbnailItemAdapter extends ItemAdapter {
+    private static class InterestThumbnailItemAdapter extends ItemAdapter {
 
 	private Context mContext;
 	private LayoutInflater mInflater;
@@ -149,46 +161,94 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	    public AsyncImageView imageView;
 	    public TextView textViewTitle;
 	    public TextView textViewSubTitle;
+	    public TextView textCounterYes;
+	    public TextView textCounterMaybe;
+	    public TextView textCounterNo;
+	    public ImageButton btnYes;
+	    public ImageButton btnMaybe;
+	    public ImageButton btnNo;
 	}
 
-	public AsyncThumbnailItemAdapter(Context context, Item[] items) {
+	public InterestThumbnailItemAdapter(Context context, Item[] items) {
 	    super(context, items);
 	    mContext = context;
 	    mInflater = LayoutInflater.from(context);
-	    prepareImageProcessor(context);
+	    //prepareImageProcessor(context);
 	}
 
-	public AsyncThumbnailItemAdapter(Context context, List<Item> items) {
+	public InterestThumbnailItemAdapter(Context context, List<Item> items) {
 	    super(context, items);
 	    mContext = context;
 	    mInflater = LayoutInflater.from(context);
-	    prepareImageProcessor(context);
+	    //prepareImageProcessor(context);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 	    final Item item = (Item) getItem(position);
-	    if (item instanceof ThumbnailAsyncBitmapItem) {
+	    if (item instanceof InterestThumbnailItem) {
 		ViewHolder holder;
 
 		if (convertView == null) {
-		    convertView = mInflater.inflate(R.layout.geatte_thumbnail_async_bitmap_item_view, parent, false);
+		    convertView = mInflater.inflate(R.layout.interest_thumbnail_item_view, parent, false);
 		    holder = new ViewHolder();
-		    holder.imageView = (AsyncImageView) convertView.findViewById(R.id.geatte_async_image);
-		    holder.imageView.setImageProcessor(mImageProcessor);
-		    holder.textViewTitle = (TextView) convertView.findViewById(R.id.geatte_async_item_title);
-		    holder.textViewSubTitle = (TextView) convertView.findViewById(R.id.geatte_async_subtitle);
+		    holder.imageView = (AsyncImageView) convertView.findViewById(R.id.interest_thumbnail);
+		    //holder.imageView.setImageProcessor(mImageProcessor);
+		    holder.textViewTitle = (TextView) convertView.findViewById(R.id.interest_title);
+		    holder.textViewSubTitle = (TextView) convertView.findViewById(R.id.interest_subtitle);
+		    holder.textCounterYes = (TextView) convertView.findViewById(R.id.ct_yes_text);
+		    holder.textCounterMaybe = (TextView) convertView.findViewById(R.id.ct_maybe_text);
+		    holder.textCounterNo = (TextView) convertView.findViewById(R.id.ct_no_text);
+		    holder.btnYes = (ImageButton) convertView.findViewById(R.id.ct_yes_img);
+		    holder.btnMaybe = (ImageButton) convertView.findViewById(R.id.ct_maybe_img);
+		    holder.btnNo = (ImageButton) convertView.findViewById(R.id.ct_no_img);
 
 		    convertView.setTag(holder);
 		} else {
 		    holder = (ViewHolder) convertView.getTag();
 		}
 
-		ThumbnailAsyncBitmapItem tItem = (ThumbnailAsyncBitmapItem) item;
+		InterestThumbnailItem tItem = (InterestThumbnailItem) item;
 		holder.textViewTitle.setText(tItem.text);
-		holder.textViewSubTitle.setText(tItem.subtitle);
+		holder.textViewSubTitle.setText(tItem.subtext);
+		holder.textCounterYes.setText(Integer.toString(tItem.numOfYes));
+		holder.textCounterMaybe.setText(Integer.toString(tItem.numOfMaybe));
+		holder.textCounterNo.setText(Integer.toString(tItem.numOfNo));
+		holder.btnYes.setTag(new Long(tItem.getId()));
+		holder.btnMaybe.setTag(new Long(tItem.getId()));
+		holder.btnNo.setTag(new Long(tItem.getId()));
 		//setTag(item.id);
+
+		holder.btnYes.setOnClickListener(new OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			Long interestId = (Long) view.getTag();
+			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
+			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
+			view.getContext().startActivity(intent);
+		    }
+		});
+
+		holder.btnMaybe.setOnClickListener(new OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			Long interestId = (Long) view.getTag();
+			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
+			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
+			view.getContext().startActivity(intent);
+		    }
+		});
+
+		holder.btnNo.setOnClickListener(new OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			Long interestId = (Long) view.getTag();
+			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
+			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
+			view.getContext().startActivity(intent);
+		    }
+		});
 
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
@@ -261,11 +321,14 @@ public class ShopinionMainActivity extends ListActionBarActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 	super.onListItemClick(l, v, position, id);
-	if (v instanceof ThumbnailAsyncBitmapItemView) {
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() BEGIN");
+	}
+	if (v instanceof InterestThumbnailItemView) {
 	    if(Config.LOG_DEBUG_ENABLED) {
 		Log.d(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() START");
 	    }
-	    ThumbnailAsyncBitmapItem item = (ThumbnailAsyncBitmapItem) l.getAdapter().getItem(position);
+	    InterestThumbnailItem item = (InterestThumbnailItem) l.getAdapter().getItem(position);
 	    if (item == null) {
 		Log.w(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() : item is null");
 	    } else {
@@ -277,6 +340,28 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		}
 	    }
 	}
+    }
+
+    @Override
+    public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+	switch (position) {
+	case 0:
+	    Intent intent = new Intent(this, ShopinionGridActivity.class);
+	    startActivity(intent);
+	    break;
+
+	default:
+	    return super.onHandleActionBarItemClick(item, position);
+	}
+
+	return true;
+    }
+
+    @Override
+    public void onMIBtnClick(View v ) {
+	Intent intent = new Intent(this, ShopinionMainActivity.class);
+	startActivity(intent);
     }
 
 }

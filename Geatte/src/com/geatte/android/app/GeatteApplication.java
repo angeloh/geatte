@@ -8,7 +8,8 @@ public class GeatteApplication extends GDApplication {
 
     @Override
     public Class<?> getHomeActivityClass() {
-	return GeatteCanvas.class;
+	//return GeatteCanvas.class;
+	return ShopinionMainActivity.class;
     }
 
     @Override

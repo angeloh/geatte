@@ -4,11 +4,11 @@
 		
 	<item
 		android:state_pressed="true"
-		android:drawable="@drawable/geatte_app_log_alt" />
+		android:drawable="@drawable/geatte_app_log_norm" />
 		
 	<item
 		android:state_focused="true"
-		android:drawable="@drawable/geatte_app_log_alt" />
+		android:drawable="@drawable/geatte_app_log_norm" />
 		
 	<item
 		android:drawable="@drawable/geatte_app_log_norm" />

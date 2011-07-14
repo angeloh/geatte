@@ -131,7 +131,7 @@ public class GeatteListAsyncActivity extends GDListActivity implements OnScrollL
 		++counter;
 		Log.d(Config.LOGTAG, "GeatteListAsyncActivity:getMyGeatteItems() : Process my interest = " + counter);
 
-		int interestId = interestCur.getInt(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_AS_ID));
+		int interestId = interestCur.getInt(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_ID));
 		String imagePath = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
 		String interestTitle = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
 		String interestDesc = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC));

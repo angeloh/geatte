@@ -1,6 +1,5 @@
 package com.geatte.android.view;
 
-import greendroid.app.GDActivity;
 import greendroid.util.Config;
 import greendroid.widget.ActionBar;
 import android.app.ListActivity;
@@ -12,14 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.cyrilmottier.android.greendroid.R;
-
 /**
  * An equivalent to {@link ListActivity} that manages a ListView.
  * 
  * @see {@link ListActivity}
  */
-public class ListActionBarActivity extends GDActivity {
+public abstract class ListActionBarActivity extends AppFooterActionbarActivity {
 
     private static final String LOG_TAG = ListActionBarActivity.class.getSimpleName();
 
@@ -131,15 +128,7 @@ public class ListActionBarActivity extends GDActivity {
 	    Log.i(LOG_TAG, "No layout specified : creating the default layout");
 	}
 
-	switch (getActionBarType()) {
-	case Dashboard:
-	    return R.layout.gd_list_content_dashboard;
-	case Empty:
-	    return R.layout.gd_list_content_empty;
-	case Normal:
-	default:
-	    return R.layout.gd_list_content_normal;
-	}
+	return super.createLayout();
     }
 
     @Override
@@ -162,10 +151,11 @@ public class ListActionBarActivity extends GDActivity {
     public void onPostContentChanged() {
 	super.onPostContentChanged();
 
-	mListView.setOnItemClickListener(mOnItemClickListener);
 	if (mFinishedStart) {
 	    setListAdapter(mAdapter);
 	}
+
+	mListView.setOnItemClickListener(mOnItemClickListener);
 	mHandler.post(mRequestFocus);
 	mFinishedStart = true;
     }
@@ -192,6 +182,9 @@ public class ListActionBarActivity extends GDActivity {
     }
 
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+	@SuppressWarnings("unused")
+	public void onNothingSelected(AdapterView<?> arg0) {
+	}
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 	    onListItemClick((ListView) parent, v, position, id);
 	}

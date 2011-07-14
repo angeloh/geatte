@@ -18,7 +18,7 @@
 	<color name="blue_2">#365984</color>
 	
 	<!-- custom_button_2 -->
-	<color name="Button_Type_0_Dark">#bec4cb</color>
+	<color name="Button_Type_0_Dark">#BEC4CB</color>
 	<color name="Button_Type_0_Light">#F2FBFE</color>
 	<!--color name="Button_Type_0_Light">#e4f5fe</color-->
 	<color name="Button_Type_0_Text">#252f3c</color>

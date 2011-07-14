@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<item type="id" name="shopinion_footer" />
+	<item type="id" name="shopinion_mi_btn" />
+	<item type="id" name="shopinion_fi_btn" />
+	<item type="id" name="shopinion_snap_btn" />
+	<item type="id" name="shopinion_pick_btn" />
+	<item type="id" name="shopinion_all_btn" />
+
+</resources>

@@ -66,20 +66,24 @@
 		<item name="android:textStyle">normal</item>
 	</style>
 	
+	<style name="Geatte.TextAppearance.Extra_Large">
+		<item name="android:textSize">?attr/GeatteTextSizeExtraLarge</item>
+	</style>
+	
 	<style name="Geatte.TextAppearance.Large">
-		<item name="android:textSize">22sp</item>
+		<item name="android:textSize">?attr/GeatteTextSizeLarge</item>
 	</style>
 	
 	<style name="Geatte.TextAppearance.Medium">
-		<item name="android:textSize">18sp</item>
+		<item name="android:textSize">?attr/GeatteTextSizeMedium</item>
 	</style>
 	
 	<style name="Geatte.TextAppearance.Small">
-		<item name="android:textSize">14sp</item>
+		<item name="android:textSize">?attr/GeatteTextSizeSmall</item>
 	</style>
 	
 	<style name="Geatte.TextAppearance.Small.Secondary">
-		<item name="android:textSize">13sp</item>
+		<item name="android:textSize">?attr/GeatteTextSizeSmallSecondary</item>
 		<item name="android:textColor">?android:attr/textColorSecondary</item>
 	</style>
 	
@@ -246,6 +250,43 @@
 	</style>
 	<style name="Geatte.ProgressItemView.Text">
 		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
+	</style>
+	
+	<!-- Styles for the InterestThumbnailItemStyle -->
+	<style name="Geatte.InterestThumbnailItemStyle">
+		<!-- item name="android:background">#737CA1</item-->
+	</style>
+	
+	<style name="Geatte.InterestThumbnailItemStyle.Title">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
+	</style>
+	
+	<style name="Geatte.InterestThumbnailItemStyle.Subtitle">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+	</style>
+
+	<style name="Geatte.InterestThumbnailItemStyle.Thumbnail">
+		<item name="android:layout_width">?attr/GeatteItemViewPreferredLargeHeight</item>
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredLargeHeight</item>
+		<item name="android:paddingLeft">?attr/InterestThumbnailItemPadding</item>
+	</style>
+	
+	<style name="Geatte.InterestThumbnailItemStyle.Counter" />
+	<style name="Geatte.InterestThumbnailItemStyle.Counter.Thumbnail">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginLeft">?attr/InterestThumbnailItemCounterThumbMargin</item>
+		<item name="android:layout_marginBottom">?attr/InterestThumbnailItemCounterThumbMargin</item>
+		<item name="android:scaleType">centerInside</item>
+	</style>
+	
+	<style name="Geatte.InterestThumbnailItemStyle.Counter.Text">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredLowerMidHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceExtraLarge</item>
+		<item name="android:layout_marginLeft">?attr/InterestThumbnailItemCounterTextMargin1</item>
+		<item name="android:layout_marginBottom">?attr/InterestThumbnailItemCounterTextMargin2</item>
 	</style>
 	
 	<style name="Geatte.Comment" />

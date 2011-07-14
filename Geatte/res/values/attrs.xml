@@ -16,11 +16,19 @@
 	<attr name="GeatteGridBitmapItemSize" format="dimension" />
 	<attr name="GeatteGridBitmapItemStyle" format="reference" />
 	
+	<attr name="GeatteTextAppearanceExtraLarge" format="reference" />
 	<attr name="GeatteTextAppearanceLarge" format="reference" />
 	<attr name="GeatteTextAppearanceMedium" format="reference" />
 	<attr name="GeatteTextAppearanceSmall" format="reference" />
 	<attr name="GeatteTextAppearanceSmallSecondary" format="reference" />
+	
+	<attr name="GeatteTextSizeExtraLarge" format="dimension" />
+	<attr name="GeatteTextSizeLarge" format="dimension" />
+	<attr name="GeatteTextSizeMedium" format="dimension" />
+	<attr name="GeatteTextSizeSmall" format="dimension" />
+	<attr name="GeatteTextSizeSmallSecondary" format="dimension" />
 
+	<attr name="GeatteItemViewPreferredExtraHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredLargeHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredUpperMidHeight" format="dimension" />
 	<attr name="GeatteItemViewPreferredHeight" format="dimension" />
@@ -56,6 +64,18 @@
 	<attr name="GeatteThumbnailAsyncBitmapItemStyleTitle" format="reference" />
 	<attr name="GeatteThumbnailAsyncBitmapItemStyleSubtitle" format="reference" />
 	<attr name="GeatteThumbnailAsyncBitmapItemStyleThumbnail" format="reference" />
+	
+	<attr name="InterestThumbnailItemStyle" format="reference" />
+	<attr name="InterestThumbnailItemStyleTitle" format="reference" />
+	<attr name="InterestThumbnailItemStyleSubtitle" format="reference" />
+	<attr name="InterestThumbnailItemStyleThumbnail" format="reference" />
+	<attr name="InterestThumbnailItemStyleCounterThumbnail" format="reference" />
+	<attr name="InterestThumbnailItemStyleCounterText" format="reference" />
+	<attr name="InterestThumbnailItemPadding" format="dimension" />
+	<attr name="InterestThumbnailItemCounterThumbPadding" format="dimension" />
+	<attr name="InterestThumbnailItemCounterThumbMargin" format="dimension" />
+	<attr name="InterestThumbnailItemCounterTextMargin1" format="dimension" />
+	<attr name="InterestThumbnailItemCounterTextMargin2" format="dimension" />
 	
 	<attr name="GeatteFeedbackItemStyle" format="reference" />
 	<attr name="GeatteFeedbackItemStyleTitle" format="reference" />

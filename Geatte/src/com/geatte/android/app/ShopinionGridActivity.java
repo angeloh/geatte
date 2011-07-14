@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cyrilmottier.android.greendroid.R;
-import com.geatte.android.view.GridActionBarActivity;
+import com.geatte.android.view.GridActionBarFooterActivity;
 import com.geatte.android.view.GridBitmapItem;
 import greendroid.widget.ActionBar;
+import greendroid.widget.ActionBarItem;
 import greendroid.widget.ItemAdapter;
+import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.item.Item;
 import android.content.Context;
 import android.content.Intent;
@@ -22,24 +24,33 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-public class GeatteGridAsyncXActivity extends GridActionBarActivity {
+public class ShopinionGridActivity extends GridActionBarFooterActivity {
 
     private final Handler mHandler = new Handler();
     private ImageAdapter mImageAdapter = null;
 
-    public GeatteGridAsyncXActivity() {
-	super(ActionBar.Type.Empty);
+    public ShopinionGridActivity() {
+	super(ActionBar.Type.Dashboard);
+    }
+
+    @Override
+    public int createLayout() {
+	return R.layout.shopinin_my_interests_grid;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:onCreate() START");
+	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onCreate() START");
 	}
 
+	ActionBarItem actionBarItem = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(
+		R.drawable.list).setContentDescription(R.string.tab_list);
+	addActionBarItem(actionBarItem);
+
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:onCreate(): END");
+	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onCreate(): END");
 	}
     }
 
@@ -47,7 +58,7 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
     protected void onResume() {
 	super.onResume();
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:onResume(): START");
+	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): START");
 	}
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
@@ -55,7 +66,7 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
 	    }
 	},250);
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:onResume(): END");
+	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): END");
 	}
     }
 
@@ -64,7 +75,7 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
 	    List<Item> items = getMyGeatteItems();
 	    if (items.size() == 0) {
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "GeatteListAsyncXActivity:fillList() : No geatte available!!");
+		    Log.d(Config.LOGTAG, "ShopinionGridActivity:fillList() : No geatte available!!");
 		}
 	    }
 
@@ -72,7 +83,7 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
 	    setListAdapter(mImageAdapter);
 
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteListAsyncXActivity:fillList() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "ShopinionGridActivity:fillList() :  ERROR ", e);
 	}
     }
 
@@ -90,14 +101,14 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
 	    while (interestCur.isAfterLast() == false) {
 		++counter;
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:getMyGeatteItems() : Process my interest = " + counter);
+		    Log.d(Config.LOGTAG, "ShopinionGridActivity:getMyGeatteItems() : Process my interest = " + counter);
 		}
 
 		int interestId = interestCur.getInt(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_ID));
 		String imagePath = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
 		byte[] imageThumbnail = interestCur.getBlob(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_THUMBNAIL));
 
-		Log.i(Config.LOGTAG, "GeatteGridAsyncXActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
+		Log.i(Config.LOGTAG, "ShopinionGridActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
 			"interestId = " + interestId + ", imageThumbnail.length = " + imageThumbnail.length);
 
 		items.add(new GridBitmapItem(interestId, imagePath, imageThumbnail));
@@ -106,7 +117,7 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
 
 	    }
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteGridAsyncXActivity:getMyGeatteItems() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "ShopinionGridActivity:getMyGeatteItems() :  ERROR ", e);
 	} finally {
 	    if (interestCur != null) {
 		interestCur.close();
@@ -156,7 +167,7 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
 		GridBitmapItem tItem = (GridBitmapItem) item;
 
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:ImageAdapter:getView() : image set to bytearray for length = " + tItem.thumbnail.length);
+		    Log.d(Config.LOGTAG, "ShopinionGridActivity:ImageAdapter:getView() : image set to bytearray for length = " + tItem.thumbnail.length);
 		}
 
 		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
@@ -180,20 +191,42 @@ public class GeatteGridAsyncXActivity extends GridActionBarActivity {
 	super.onGridItemClick(g, v, position, id);
 	if (v instanceof ImageView) {
 	    if(Config.LOG_DEBUG_ENABLED) {
-		Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:onGridItemClick() START");
+		Log.d(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() START");
 	    }
 	    GridBitmapItem item = (GridBitmapItem) g.getAdapter().getItem(position);
 	    if (item == null) {
-		Log.w(Config.LOGTAG, "GeatteGridAsyncXActivity:onGridItemClick() : item is null");
+		Log.w(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() : item is null");
 	    } else {
 		Intent intent = new Intent(this, GeatteFeedbackActivity.class);
 		intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, item.getId());
 		startActivity(intent);
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "GeatteGridAsyncXActivity:onGridItemClick() END");
+		    Log.d(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() END");
 		}
 	    }
 	}
+    }
+
+    @Override
+    public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+	switch (position) {
+	case 0:
+	    Intent intent = new Intent(this, ShopinionMainActivity.class);
+	    startActivity(intent);
+	    break;
+
+	default:
+	    return super.onHandleActionBarItemClick(item, position);
+	}
+
+	return true;
+    }
+
+    @Override
+    public void onMIBtnClick(View v ) {
+	Intent intent = new Intent(this, ShopinionMainActivity.class);
+	startActivity(intent);
     }
 
 }

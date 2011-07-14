@@ -258,7 +258,7 @@ public class GeatteDBAdapter {
 	    initialValues.put(KEY_IMAGE_PATH, imagePath);
 	    //initialValues.put(KEY_IMAGE_HASH, getHashFromByteArray(byteArray));
 
-	    int sampleSize = CommonUtils.getResizeRatio(imagePath, 1500, 32);
+	    int sampleSize = CommonUtils.getResizeRatio(imagePath, 1500, 24);
 	    if(Config.LOG_DEBUG_ENABLED) {
 		Log.d(Config.LOGTAG, " GeatteDBAdapter:insertImage() resize image with sampleSize = " + sampleSize);
 	    }
@@ -596,6 +596,7 @@ public class GeatteDBAdapter {
     public Cursor fetchAllMyInterestsWithBlob() {
 	String query = "SELECT " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_ID + ", " +
+	DB_TABLE_INTERESTS + "." + KEY_INTEREST_GEATTE_ID + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_TITLE + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_DESC + ", " +
 	DB_TABLE_INTERESTS + "." + KEY_INTEREST_CREATED_DATE + ", " +
@@ -738,6 +739,53 @@ public class GeatteDBAdapter {
 	Cursor cursor = mDb.rawQuery(query, null);
 	return cursor;
     }
+
+    public int[] fetchMyInterestFeedbackCounters(String geatteId) {
+	int [] counters = new int[3];
+	if (geatteId == null || geatteId.length() == 0) {
+	    return counters;
+	}
+	Cursor cursor = null;
+	try {
+	    String query = "SELECT " +
+	    DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTE + ", " +
+	    "COUNT(*) AS NUM " +
+	    "FROM " +
+	    DB_TABLE_FEEDBACKS +
+	    " WHERE " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_GEATTE_ID + "=\"" + geatteId + "\"" +
+	    " GROUP BY " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTE;
+
+	    Log.i(Config.LOGTAG, "fetch feedbacks counters query string = " + query);
+
+	    cursor = mDb.rawQuery(query, null);
+	    cursor.moveToFirst();
+
+	    while (cursor.isAfterLast() == false) {
+		String vote = cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTE));
+		int num = cursor.getInt(cursor.getColumnIndexOrThrow("NUM"));
+		if (vote.equals(Config.LIKE.YES.toString())) {
+		    counters[0] = num;
+		}
+		if (vote.equals(Config.LIKE.MAYBE.toString())) {
+		    counters[1] = num;
+		}
+		if (vote.equals(Config.LIKE.NO.toString())) {
+		    counters[2] = num;
+		}
+		cursor.moveToNext();
+	    }
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch fetchMyInterestFeedbackCounters()", ex);
+	} finally {
+	    if (cursor != null) {
+		cursor.close();
+	    }
+	}
+
+	return counters;
+    }
+
+
 
     /**
      * Return a Cursor for all feedbacks

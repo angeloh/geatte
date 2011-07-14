@@ -24,12 +24,13 @@
 		android:layout_width="fill_parent"
 		android:layout_weight="1">
 
-		<ListView
-			android:id="@android:id/list"
-			android:layout_height="fill_parent"
-			android:layout_width="fill_parent"
-			android:drawSelectorOnTop="false"
-			style="@style/shopinion_list" />
+		<GridView
+		    android:id="@+id/gridview"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="fill_parent"
+		    android:gravity="center"
+		    style="@style/geatte_grid"
+		/>
 		
 		<ViewStub
             android:id="@android:id/empty"
