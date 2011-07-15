@@ -2,7 +2,9 @@ package com.geatte.android.app;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -258,7 +260,7 @@ public class GeatteDBAdapter {
 	    initialValues.put(KEY_IMAGE_PATH, imagePath);
 	    //initialValues.put(KEY_IMAGE_HASH, getHashFromByteArray(byteArray));
 
-	    int sampleSize = CommonUtils.getResizeRatio(imagePath, 1500, 24);
+	    int sampleSize = CommonUtils.getResizeRatio(imagePath, 1500, 30);
 	    if(Config.LOG_DEBUG_ENABLED) {
 		Log.d(Config.LOGTAG, " GeatteDBAdapter:insertImage() resize image with sampleSize = " + sampleSize);
 	    }
@@ -358,7 +360,7 @@ public class GeatteDBAdapter {
 	initialValues.put(KEY_FI_IMAGE_PATH, imagePath);
 
 	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	bitmapOptions.inSampleSize = 6;
+	bitmapOptions.inSampleSize = 8;
 	Bitmap imgBitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 	ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	imgBitmap.compress(CompressFormat.JPEG, 100, bos);
@@ -484,7 +486,7 @@ public class GeatteDBAdapter {
 	try {
 	    contactCur = fetchContactFromPhone(phoneNumber);
 	    if (contactCur == null || contactCur.isAfterLast()) {
-		contactName = "";
+		contactName = "A Friend";
 	    } else {
 		contactName = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_NAME));
 	    }
@@ -908,13 +910,13 @@ public class GeatteDBAdapter {
     }
 
     /**
-     * Return a Cursor positioned at the friend interest's feedbacks that matches the given geatteId
+     * Return string array for the friend interest's feedbacks that matches the given geatteId
      * 
      * @param geatteId geatteId
-     * @return Cursor positioned to matching interest, if found
+     * @return array list, position zero is the vote, position one and after are comments
      * @throws SQLException if note could not be found/retrieved
      */
-    public Cursor fetchFIFeedback(String geatteId) throws SQLException {
+    public List<String> fetchFIFeedback(String geatteId) throws SQLException {
 	String query = "SELECT " +
 	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_GEATTE_ID + ", " +
 	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_VOTE + ", " +
@@ -922,12 +924,37 @@ public class GeatteDBAdapter {
 	DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_CREATED_DATE + " " +
 	"FROM " +
 	DB_TABLE_FI_FEEDBACKS +
-	" WHERE " + DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_GEATTE_ID + "=\"" + geatteId + "\"";
+	" WHERE " + DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_GEATTE_ID + "=\"" + geatteId + "\"" +
+	" ORDER BY " + DB_TABLE_FI_FEEDBACKS + "." + KEY_FI_FEEDBACK_CREATED_DATE + " DESC";
 
 	Log.i(Config.LOGTAG, "fetch friend's interest feedbacks query string = " + query);
 
-	Cursor cursor = mDb.rawQuery(query, null);
-	return cursor;
+	List<String> ret = new ArrayList<String>();
+	Cursor cursor = null;
+	try {
+	    cursor = mDb.rawQuery(query, null);
+	    cursor.moveToFirst();
+	    String vote = null;
+
+	    while (cursor.isAfterLast() == false) {
+		if (vote == null) {
+		    vote = cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_FEEDBACK_VOTE));
+		}
+		String comment = cursor.getString(cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_FEEDBACK_COMMENT));
+		ret.add(comment);
+		cursor.moveToNext();
+	    }
+
+	    // add vote to pos zero
+	    ret.add(0, vote);
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch fetchMyInterestFeedbackCounters()", ex);
+	} finally {
+	    if (cursor != null) {
+		cursor.close();
+	    }
+	}
+	return ret;
     }
 
     /**

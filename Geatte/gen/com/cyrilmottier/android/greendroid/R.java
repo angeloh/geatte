@@ -27,23 +27,23 @@ public final class R {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteCommentWidget=0x7f01009d;
+        public static final int GeatteCommentWidget=0x7f0100a3;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyle=0x7f010095;
+        public static final int GeatteContactItemStyle=0x7f01009b;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyleSubtitle=0x7f010097;
+        public static final int GeatteContactItemStyleSubtitle=0x7f01009d;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyleThumbnail=0x7f010098;
+        public static final int GeatteContactItemStyleThumbnail=0x7f01009e;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteContactItemStyleTitle=0x7f010096;
+        public static final int GeatteContactItemStyleTitle=0x7f01009c;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -57,19 +57,19 @@ containing a value of this type.
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyle=0x7f010091;
+        public static final int GeatteFeedbackItemStyle=0x7f010097;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyleSubtitle=0x7f010093;
+        public static final int GeatteFeedbackItemStyleSubtitle=0x7f010099;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyleThumbnail=0x7f010094;
+        public static final int GeatteFeedbackItemStyleThumbnail=0x7f01009a;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteFeedbackItemStyleTitle=0x7f010092;
+        public static final int GeatteFeedbackItemStyleTitle=0x7f010098;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -197,15 +197,15 @@ containing a value of this type.
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyle=0x7f010099;
+        public static final int GeatteProgressItemViewStyle=0x7f01009f;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleProgressBar=0x7f01009b;
+        public static final int GeatteProgressItemViewStyleProgressBar=0x7f0100a1;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteProgressItemViewStyleText=0x7f01009a;
+        public static final int GeatteProgressItemViewStyleText=0x7f0100a0;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -221,7 +221,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int GeatteTabsIcon=0x7f01009c;
+        public static final int GeatteTabsIcon=0x7f0100a2;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -409,6 +409,26 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
+        public static final int InterestThumbnailItemFeedbackTextMargin=0x7f010095;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int InterestThumbnailItemFeedbackThumbMargin=0x7f010096;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
         public static final int InterestThumbnailItemPadding=0x7f01008c;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -422,6 +442,22 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int InterestThumbnailItemStyleCounterThumbnail=0x7f01008a;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int InterestThumbnailItemStyleFeedbackSubtext=0x7f010094;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int InterestThumbnailItemStyleFeedbackText=0x7f010093;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int InterestThumbnailItemStyleFeedbackThumbnail=0x7f010091;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int InterestThumbnailItemStyleFeedbackVote=0x7f010092;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -1061,21 +1097,21 @@ containing a value of this type.
     public static final class dimen {
         /**  custom_button_2 
          */
-        public static final int Button_Corner=0x7f070026;
-        public static final int Button_Padding=0x7f070027;
-        public static final int Button_Type_0_Height=0x7f070028;
-        public static final int Button_Type_0_Width=0x7f070029;
-        public static final int Button_Type_1_Height=0x7f07002a;
-        public static final int Button_Type_1_Width=0x7f07002b;
-        public static final int Button_Type_2_Height=0x7f07002c;
-        public static final int Button_Type_2_Width=0x7f07002d;
-        public static final int Button_Type_3_Height=0x7f07002e;
-        public static final int Button_Type_3_Width=0x7f07002f;
-        public static final int Button_Type_4_Height=0x7f070030;
-        public static final int Button_Type_4_Width=0x7f070031;
-        public static final int Focused_Stroke=0x7f070032;
-        public static final int Normal_Stroke=0x7f070033;
-        public static final int Pressed_Stroke=0x7f070034;
+        public static final int Button_Corner=0x7f070028;
+        public static final int Button_Padding=0x7f070029;
+        public static final int Button_Type_0_Height=0x7f07002a;
+        public static final int Button_Type_0_Width=0x7f07002b;
+        public static final int Button_Type_1_Height=0x7f07002c;
+        public static final int Button_Type_1_Width=0x7f07002d;
+        public static final int Button_Type_2_Height=0x7f07002e;
+        public static final int Button_Type_2_Width=0x7f07002f;
+        public static final int Button_Type_3_Height=0x7f070030;
+        public static final int Button_Type_3_Width=0x7f070031;
+        public static final int Button_Type_4_Height=0x7f070032;
+        public static final int Button_Type_4_Width=0x7f070033;
+        public static final int Focused_Stroke=0x7f070034;
+        public static final int Normal_Stroke=0x7f070035;
+        public static final int Pressed_Stroke=0x7f070036;
         public static final int gd_action_bar_height=0x7f07000b;
         public static final int gd_arrow_offset=0x7f07000c;
         public static final int gd_drawable_height=0x7f070006;
@@ -1089,30 +1125,32 @@ containing a value of this type.
         public static final int gd_progress_bar_width=0x7f070008;
         public static final int gd_separator_item_view_height=0x7f070000;
         public static final int gd_separator_item_view_padding_left=0x7f070001;
-        public static final int geatte_drawable_margin=0x7f070016;
-        public static final int geatte_grid_bitmap_item_padding=0x7f070014;
-        public static final int geatte_grid_bitmap_item_size=0x7f070015;
-        public static final int geatte_item_view_extra_height=0x7f07001c;
-        public static final int geatte_item_view_half_height=0x7f070021;
-        public static final int geatte_item_view_height=0x7f07001f;
-        public static final int geatte_item_view_large_height=0x7f07001d;
-        public static final int geatte_item_view_lower_mid_height=0x7f070020;
-        public static final int geatte_item_view_quarter_height=0x7f070022;
-        public static final int geatte_item_view_upper_mid_height=0x7f07001e;
-        public static final int geatte_progress_bar_height=0x7f070024;
-        public static final int geatte_progress_bar_margin=0x7f070025;
-        public static final int geatte_progress_bar_width=0x7f070023;
-        public static final int geatte_text_size_extra_large=0x7f070017;
-        public static final int geatte_text_size_large=0x7f070018;
-        public static final int geatte_text_size_medium=0x7f070019;
-        public static final int geatte_text_size_small=0x7f07001a;
-        public static final int geatte_text_size_small_sec=0x7f07001b;
+        public static final int geatte_drawable_margin=0x7f070018;
+        public static final int geatte_grid_bitmap_item_padding=0x7f070016;
+        public static final int geatte_grid_bitmap_item_size=0x7f070017;
+        public static final int geatte_item_view_extra_height=0x7f07001e;
+        public static final int geatte_item_view_half_height=0x7f070023;
+        public static final int geatte_item_view_height=0x7f070021;
+        public static final int geatte_item_view_large_height=0x7f07001f;
+        public static final int geatte_item_view_lower_mid_height=0x7f070022;
+        public static final int geatte_item_view_quarter_height=0x7f070024;
+        public static final int geatte_item_view_upper_mid_height=0x7f070020;
+        public static final int geatte_progress_bar_height=0x7f070026;
+        public static final int geatte_progress_bar_margin=0x7f070027;
+        public static final int geatte_progress_bar_width=0x7f070025;
+        public static final int geatte_text_size_extra_large=0x7f070019;
+        public static final int geatte_text_size_large=0x7f07001a;
+        public static final int geatte_text_size_medium=0x7f07001b;
+        public static final int geatte_text_size_small=0x7f07001c;
+        public static final int geatte_text_size_small_sec=0x7f07001d;
         public static final int geatte_thumbnail_radius=0x7f07000e;
         public static final int geatte_thumbnail_size=0x7f07000d;
         public static final int interest_thumbnail_counter_text_margin_1=0x7f070012;
         public static final int interest_thumbnail_counter_text_margin_2=0x7f070013;
         public static final int interest_thumbnail_counter_thumb_margin=0x7f070011;
         public static final int interest_thumbnail_counter_thumb_padding=0x7f070010;
+        public static final int interest_thumbnail_feedback_text_margin=0x7f070014;
+        public static final int interest_thumbnail_feedback_thumb_margin=0x7f070015;
         public static final int interest_thumbnail_padding=0x7f07000f;
     }
     public static final class drawable {
@@ -1250,11 +1288,11 @@ containing a value of this type.
         public static final int app_snap_button=0x7f050031;
         public static final int app_top_label=0x7f050030;
         public static final int bottom=0x7f050008;
-        public static final int button=0x7f050096;
+        public static final int button=0x7f05009f;
         public static final int center=0x7f05000d;
         public static final int center_horizontal=0x7f05000c;
         public static final int center_vertical=0x7f05000b;
-        public static final int checkbox=0x7f050098;
+        public static final int checkbox=0x7f0500a1;
         public static final int contact_check=0x7f05007a;
         public static final int contact_subtitle=0x7f05007c;
         public static final int contact_thumbnail=0x7f05007d;
@@ -1264,12 +1302,12 @@ containing a value of this type.
         public static final int contacts_info_footer=0x7f05003b;
         public static final int contacts_info_ok_btn=0x7f05003c;
         public static final int contacts_save_btn=0x7f05003f;
-        public static final int ct_maybe_img=0x7f050090;
-        public static final int ct_maybe_text=0x7f050091;
-        public static final int ct_no_img=0x7f050092;
-        public static final int ct_no_text=0x7f050093;
-        public static final int ct_yes_img=0x7f05008e;
-        public static final int ct_yes_text=0x7f05008f;
+        public static final int ct_maybe_img=0x7f050099;
+        public static final int ct_maybe_text=0x7f05009a;
+        public static final int ct_no_img=0x7f05009b;
+        public static final int ct_no_text=0x7f05009c;
+        public static final int ct_yes_img=0x7f050097;
+        public static final int ct_yes_text=0x7f050098;
         public static final int dashboard=0x7f050001;
         public static final int desc=0x7f050048;
         public static final int desc_detail=0x7f050043;
@@ -1279,11 +1317,20 @@ containing a value of this type.
         public static final int edit_img=0x7f050049;
         public static final int edit_title_label=0x7f050045;
         public static final int edit_top_label=0x7f050044;
-        public static final int edittext=0x7f050097;
+        public static final int edittext=0x7f0500a0;
         public static final int empty=0x7f050002;
+        public static final int f_interest_subtitle=0x7f050094;
+        public static final int f_interest_thumbnail=0x7f05008d;
+        public static final int f_interest_thumbnail_item_header=0x7f05008c;
+        public static final int f_interest_title=0x7f050093;
         public static final int fi_geatte_desc=0x7f050060;
         public static final int fi_geatte_img=0x7f05005f;
         public static final int fi_geatte_title=0x7f050061;
+        public static final int fi_sent_by_text=0x7f05008e;
+        public static final int fi_sent_on_text=0x7f05008f;
+        public static final int fi_vote_feedback=0x7f050092;
+        public static final int fi_vote_img_btn=0x7f050090;
+        public static final int fi_vote_text=0x7f050091;
         public static final int gd_action_bar=0x7f050012;
         public static final int gd_action_bar_content_view=0x7f050014;
         public static final int gd_action_bar_home_item=0x7f05001c;
@@ -1337,10 +1384,10 @@ containing a value of this type.
         public static final int gridview=0x7f05001b;
         public static final int hdpi=0x7f050005;
         public static final int image_detail=0x7f050040;
-        public static final int interest_subtitle=0x7f050095;
-        public static final int interest_thumbnail=0x7f05008d;
-        public static final int interest_thumbnail_item_header=0x7f05008c;
-        public static final int interest_title=0x7f050094;
+        public static final int interest_subtitle=0x7f05009e;
+        public static final int interest_thumbnail=0x7f050096;
+        public static final int interest_thumbnail_item_header=0x7f050095;
+        public static final int interest_title=0x7f05009d;
         public static final int intro_exit=0x7f050058;
         public static final int intro_footer=0x7f050053;
         public static final int intro_header=0x7f050054;
@@ -1355,7 +1402,7 @@ containing a value of this type.
         public static final int my_geatte_img=0x7f05005c;
         public static final int my_geatte_title=0x7f05005e;
         public static final int normal=0x7f050000;
-        public static final int ratingbar=0x7f05009a;
+        public static final int ratingbar=0x7f0500a3;
         public static final int right=0x7f05000a;
         public static final int select_account=0x7f050063;
         public static final int select_account_back=0x7f050068;
@@ -1386,7 +1433,7 @@ containing a value of this type.
         public static final int tabsText=0x7f050072;
         public static final int title=0x7f050046;
         public static final int title_detail=0x7f050041;
-        public static final int togglebutton=0x7f050099;
+        public static final int togglebutton=0x7f0500a2;
         public static final int top=0x7f050007;
         public static final int voting_cancel_button=0x7f050084;
         public static final int voting_comment=0x7f050082;
@@ -1467,10 +1514,15 @@ containing a value of this type.
         public static final int geatte_voting_view=0x7f030042;
         public static final int geattethumbnail_item_view=0x7f030043;
         public static final int grid_bitmap_item_view=0x7f030044;
-        public static final int interest_thumbnail_item_view=0x7f030045;
-        public static final int main=0x7f030046;
-        public static final int shopinin_my_interests=0x7f030047;
-        public static final int shopinin_my_interests_grid=0x7f030048;
+        public static final int interest_f_thumbnail_item_view=0x7f030045;
+        public static final int interest_thumbnail_item_view=0x7f030046;
+        public static final int main=0x7f030047;
+        public static final int shopinin_friend_interests=0x7f030048;
+        public static final int shopinin_friend_interests_grid=0x7f030049;
+        public static final int shopinin_my_interests=0x7f03004a;
+        public static final int shopinin_my_interests_grid=0x7f03004b;
+        public static final int shopinion_contacts_info_list_content=0x7f03004c;
+        public static final int shopinion_feedback_list_content=0x7f03004d;
     }
     public static final class string {
         public static final int app_name=0x7f08001d;
@@ -1582,8 +1634,8 @@ containing a value of this type.
     }
     public static final class style {
         public static final int Geatte=0x7f090040;
-        public static final int Geatte_Comment=0x7f09006e;
-        public static final int Geatte_Comment_Widget=0x7f09006f;
+        public static final int Geatte_Comment=0x7f090073;
+        public static final int Geatte_Comment_Widget=0x7f090074;
         /**  Styles for the GeatteContactItem 
  item name="android:background">#737CA1</item
          */
@@ -1622,6 +1674,11 @@ containing a value of this type.
         public static final int Geatte_InterestThumbnailItemStyle_Counter=0x7f09006b;
         public static final int Geatte_InterestThumbnailItemStyle_Counter_Text=0x7f09006d;
         public static final int Geatte_InterestThumbnailItemStyle_Counter_Thumbnail=0x7f09006c;
+        public static final int Geatte_InterestThumbnailItemStyle_Feedback=0x7f09006e;
+        public static final int Geatte_InterestThumbnailItemStyle_Feedback_Subtext=0x7f090072;
+        public static final int Geatte_InterestThumbnailItemStyle_Feedback_Text=0x7f090071;
+        public static final int Geatte_InterestThumbnailItemStyle_Feedback_Thumbnail=0x7f09006f;
+        public static final int Geatte_InterestThumbnailItemStyle_Feedback_Vote=0x7f090070;
         public static final int Geatte_InterestThumbnailItemStyle_Subtitle=0x7f090069;
         public static final int Geatte_InterestThumbnailItemStyle_Thumbnail=0x7f09006a;
         public static final int Geatte_InterestThumbnailItemStyle_Title=0x7f090068;
@@ -1732,7 +1789,7 @@ containing a value of this type.
         public static final int TextAppearance_Separator=0x7f090004;
         public static final int TextAppearance_Small=0x7f090003;
         public static final int TextAppearance_TabIndicator=0x7f090005;
-        public static final int Theme_Geatte=0x7f090070;
+        public static final int Theme_Geatte=0x7f090075;
         public static final int Theme_GreenDroid=0x7f090035;
         public static final int Theme_GreenDroid_NoTitleBar=0x7f090036;
         public static final int edit_text=0x7f090039;

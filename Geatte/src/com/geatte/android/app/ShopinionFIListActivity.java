@@ -1,12 +1,11 @@
 package com.geatte.android.app;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.cyrilmottier.android.greendroid.R;
-import com.geatte.android.view.InterestThumbnailItem;
-import com.geatte.android.view.InterestThumbnailItemView;
+import com.geatte.android.view.InterestFriendThumbnailItem;
+import com.geatte.android.view.InterestFriendThumbnailItemView;
 import com.geatte.android.view.ListActionBarActivity;
 import greendroid.image.ChainImageProcessor;
 import greendroid.image.ImageProcessor;
@@ -41,25 +40,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 
-public class ShopinionMainActivity extends ListActionBarActivity {
+public class ShopinionFIListActivity extends ListActionBarActivity {
 
     private final Handler mHandler = new Handler();
     private InterestThumbnailItemAdapter mImageAdapter = null;
 
-    public ShopinionMainActivity() {
+    public ShopinionFIListActivity() {
 	super(ActionBar.Type.Dashboard);
     }
 
     @Override
     public int createLayout() {
-	return R.layout.shopinin_my_interests;
+	return R.layout.shopinin_friend_interests;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onCreate() START");
+	    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onCreate() START");
 	}
 
 	ActionBarItem actionBarItem = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(
@@ -68,7 +67,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	addActionBarItem(Type.AllFriends);
 
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onCreate(): END");
+	    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onCreate(): END");
 	}
     }
 
@@ -76,7 +75,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
     protected void onResume() {
 	super.onResume();
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onResume(): START");
+	    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onResume(): START");
 	}
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
@@ -84,16 +83,16 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	    }
 	},250);
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onResume(): END");
+	    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onResume(): END");
 	}
     }
 
     private void fillList() {
 	try {
-	    List<Item> items = getMyGeatteItems();
+	    List<Item> items = getFIGeatteItems();
 	    if (items.size() == 0) {
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionMainActivity:fillList() : No geatte available!!");
+		    Log.d(Config.LOGTAG, "ShopinionFIListActivity:fillList() : No geatte available!!");
 		}
 	    }
 
@@ -101,52 +100,66 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	    setListAdapter(mImageAdapter);
 
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "ShopinionMainActivity:fillList() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "ShopinionFIListActivity:fillList() :  ERROR ", e);
 	}
     }
 
-    private List<Item> getMyGeatteItems() {
+    private List<Item> getFIGeatteItems() {
 	List<Item> items = new ArrayList<Item>();
 
 	final GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
-	Cursor interestCur = null;
+	Cursor fiCur = null;
 	try {
 	    mDbHelper.open();
-	    interestCur = mDbHelper.fetchAllMyInterestsWithBlob();
+	    fiCur = mDbHelper.fetchAllFriendInterestsWithBlob();
 
-	    interestCur.moveToFirst();
+	    fiCur.moveToFirst();
 	    int counter = 0;
-	    while (interestCur.isAfterLast() == false) {
+	    while (fiCur.isAfterLast() == false) {
 		++counter;
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() : Process my interest = " + counter);
+		    Log.d(Config.LOGTAG, "ShopinionFIListActivity:getFIGeatteItems() : Process friend interest = " + counter);
 		}
 
-		int interestId = interestCur.getInt(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_ID));
-		String geatteId = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_GEATTE_ID));
-		String imagePath = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
-		byte[] imageThumbnail = interestCur.getBlob(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_THUMBNAIL));
-		String interestTitle = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
-		String interestDesc = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC));
+		long fInterestId = fiCur.getLong(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_ID));
+		String fImagePath = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
+		byte[] fImageThumbnail = fiCur.getBlob(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_THUMBNAIL));
+		String fInterestTitle = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_TITLE));
+		String fInterestDesc = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_DESC));
+		String fInterestSentOn = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_CREATED_DATE));
+		String fInterestSentFrom = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_FROM));
 
-		int [] counters = mDbHelper.fetchMyInterestFeedbackCounters(geatteId);
+		List<String> comments = mDbHelper.fetchFIFeedback(Long.toString(fInterestId));
 
 		if (Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
-			    "interestId = " + interestId + ", imagePath = " + imagePath + ", interestTitle = " +
-			    interestTitle + ", interestDesc = " + interestDesc + ", counters = " + Arrays.toString(counters));
+		    Log.i(Config.LOGTAG, "ShopinionFIListActivity:getFIGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
+			    "fInterestId = " + fInterestId + ", fImagePath = " + fImagePath + ", fInterestTitle = " +
+			    fInterestTitle + ", fInterestDesc = " + fInterestDesc + ", comments = " + comments.toString());
 		}
 
-		items.add(new InterestThumbnailItem(interestId, interestTitle, interestDesc, imagePath, imageThumbnail, counters));
+		String sendByText = "@" + mDbHelper.fetchContactFirstName(fInterestSentFrom);
+		String sendOnText = "by " + fInterestSentOn;
+		String voteText = "NA";
+		String voteFeedbackText = "";
+		if (comments.get(0) != null) {
+		    voteText = comments.get(0);
+		}
+		//TODO could output all comments
+		if (comments.size() > 1 && comments.get(1) != null) {
+		    voteFeedbackText = comments.get(1);
+		}
 
-		interestCur.moveToNext();
+		items.add(new InterestFriendThumbnailItem(fInterestId, fInterestTitle, fInterestDesc,
+			fImagePath, fImageThumbnail, sendByText, sendOnText, voteText, voteFeedbackText));
+
+		fiCur.moveToNext();
 
 	    }
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "ShopinionFIListActivity:getFIGeatteItems() :  ERROR ", e);
 	} finally {
-	    if (interestCur != null) {
-		interestCur.close();
+	    if (fiCur != null) {
+		fiCur.close();
 	    }
 	    mDbHelper.close();
 	}
@@ -163,12 +176,11 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	    public AsyncImageView imageView;
 	    public TextView textViewTitle;
 	    public TextView textViewSubTitle;
-	    public TextView textCounterYes;
-	    public TextView textCounterMaybe;
-	    public TextView textCounterNo;
-	    public ImageButton btnYes;
-	    public ImageButton btnMaybe;
-	    public ImageButton btnNo;
+	    public TextView SentBy;
+	    public TextView SentOn;
+	    public TextView VoteText;
+	    public TextView VoteFeedback;
+	    public ImageButton btnVoteImage;
 	}
 
 	public InterestThumbnailItemAdapter(Context context, Item[] items) {
@@ -189,85 +201,68 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 	    final Item item = (Item) getItem(position);
-	    if (item instanceof InterestThumbnailItem) {
+	    if (item instanceof InterestFriendThumbnailItem) {
 		ViewHolder holder;
 
 		if (convertView == null) {
-		    convertView = mInflater.inflate(R.layout.interest_thumbnail_item_view, parent, false);
+		    convertView = mInflater.inflate(R.layout.interest_f_thumbnail_item_view, parent, false);
 		    holder = new ViewHolder();
-		    holder.imageView = (AsyncImageView) convertView.findViewById(R.id.interest_thumbnail);
+		    holder.imageView = (AsyncImageView) convertView.findViewById(R.id.f_interest_thumbnail);
 		    //holder.imageView.setImageProcessor(mImageProcessor);
-		    holder.textViewTitle = (TextView) convertView.findViewById(R.id.interest_title);
-		    holder.textViewSubTitle = (TextView) convertView.findViewById(R.id.interest_subtitle);
-		    holder.textCounterYes = (TextView) convertView.findViewById(R.id.ct_yes_text);
-		    holder.textCounterMaybe = (TextView) convertView.findViewById(R.id.ct_maybe_text);
-		    holder.textCounterNo = (TextView) convertView.findViewById(R.id.ct_no_text);
-		    holder.btnYes = (ImageButton) convertView.findViewById(R.id.ct_yes_img);
-		    holder.btnMaybe = (ImageButton) convertView.findViewById(R.id.ct_maybe_img);
-		    holder.btnNo = (ImageButton) convertView.findViewById(R.id.ct_no_img);
-
+		    holder.textViewTitle = (TextView) convertView.findViewById(R.id.f_interest_title);
+		    holder.textViewSubTitle = (TextView) convertView.findViewById(R.id.f_interest_subtitle);
+		    holder.SentBy = (TextView) convertView.findViewById(R.id.fi_sent_by_text);
+		    holder.SentOn = (TextView) convertView.findViewById(R.id.fi_sent_on_text);
+		    holder.VoteText = (TextView) convertView.findViewById(R.id.fi_vote_text);
+		    holder.VoteFeedback = (TextView) convertView.findViewById(R.id.fi_vote_feedback);
+		    holder.btnVoteImage = (ImageButton) convertView.findViewById(R.id.fi_vote_img_btn);
 		    convertView.setTag(holder);
 		} else {
 		    holder = (ViewHolder) convertView.getTag();
 		}
 
-		InterestThumbnailItem tItem = (InterestThumbnailItem) item;
+		InterestFriendThumbnailItem tItem = (InterestFriendThumbnailItem) item;
 		holder.textViewTitle.setText(tItem.text);
 		holder.textViewSubTitle.setText(tItem.subtext);
-		holder.textCounterYes.setText(Integer.toString(tItem.numOfYes));
-		holder.textCounterMaybe.setText(Integer.toString(tItem.numOfMaybe));
-		holder.textCounterNo.setText(Integer.toString(tItem.numOfNo));
-		holder.btnYes.setTag(new Long(tItem.getId()));
-		holder.btnMaybe.setTag(new Long(tItem.getId()));
-		holder.btnNo.setTag(new Long(tItem.getId()));
+		holder.SentBy.setText(tItem.sendByText);
+		holder.SentOn.setText(tItem.sendOnText);
+		holder.VoteText.setText(tItem.voteText);
+		holder.VoteFeedback.setText(tItem.voteFeedbackText);
+		holder.btnVoteImage.setTag(new Long(tItem.getId()));
 		//setTag(item.id);
 
-		holder.btnYes.setOnClickListener(new OnClickListener() {
+		holder.btnVoteImage.setOnClickListener(new OnClickListener() {
 		    @Override
 		    public void onClick(View view) {
-			Long interestId = (Long) view.getTag();
+			Long geatteId = (Long) view.getTag();
 			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
-			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
+			intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(geatteId));
 			view.getContext().startActivity(intent);
 		    }
 		});
 
-		holder.btnMaybe.setOnClickListener(new OnClickListener() {
-		    @Override
-		    public void onClick(View view) {
-			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
-			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
-			view.getContext().startActivity(intent);
-		    }
-		});
-
-		holder.btnNo.setOnClickListener(new OnClickListener() {
-		    @Override
-		    public void onClick(View view) {
-			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
-			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
-			view.getContext().startActivity(intent);
-		    }
-		});
+		if (tItem.voteText.equals(Config.LIKE.YES.toString())) {
+		    holder.btnVoteImage.setImageResource(R.drawable.ct_yes);
+		}
+		else if (tItem.voteText.equals(Config.LIKE.MAYBE.toString())) {
+		    holder.btnVoteImage.setImageResource(R.drawable.ct_maybe);
+		}
+		else if (tItem.voteText.equals(Config.LIKE.NO.toString())) {
+		    holder.btnVoteImage.setImageResource(R.drawable.ct_no);
+		}
+		else {
+		    holder.btnVoteImage.setImageResource(R.drawable.ct_maybe);
+		}
 
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
+		    Log.d(Config.LOGTAG, "ShopinionFIListActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
 		}
 		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
 		    holder.imageView.setImageResource(R.drawable.thumb_missing);
 		} else {
 		    holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
 		}
-		//String uri = Uri.fromFile(new File(tItem.imagePath)).toString();
-		//Log.d(Config.LOGTAG, "GeatteListAsyncActivity:getView() : async image request to = " + uri);
-		//holder.imageView.setUrl(Uri.fromFile(new File(tItem.imagePath)).toString());
 
-		//		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		//		bitmapOptions.inSampleSize = 64;
-		//		Bitmap imgBitmap = BitmapFactory.decodeFile(tItem.imagePath, bitmapOptions);
-		//		holder.imageView.setImageBitmap(imgBitmap);
 		return convertView;
 	    }
 	    else {
@@ -324,21 +319,21 @@ public class ShopinionMainActivity extends ListActionBarActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
 	super.onListItemClick(l, v, position, id);
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() BEGIN");
+	    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onListItemClick() BEGIN");
 	}
-	if (v instanceof InterestThumbnailItemView) {
+	if (v instanceof InterestFriendThumbnailItemView) {
 	    if(Config.LOG_DEBUG_ENABLED) {
-		Log.d(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() START");
+		Log.d(Config.LOGTAG, "ShopinionFIListActivity:onListItemClick() START");
 	    }
-	    InterestThumbnailItem item = (InterestThumbnailItem) l.getAdapter().getItem(position);
+	    InterestFriendThumbnailItem item = (InterestFriendThumbnailItem) l.getAdapter().getItem(position);
 	    if (item == null) {
-		Log.w(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() : item is null");
+		Log.w(Config.LOGTAG, "ShopinionFIListActivity:onListItemClick() : item is null");
 	    } else {
-		Intent intent = new Intent(this, GeatteFeedbackActivity.class);
-		intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, item.getId());
+		Intent intent = new Intent(this, GeatteVotingActivity.class);
+		intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(item.getId()));
 		startActivity(intent);
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() END");
+		    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onListItemClick() END");
 		}
 	    }
 	}
@@ -349,12 +344,13 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 
 	switch (position) {
 	case 0:
-	    Intent intent = new Intent(this, ShopinionGridActivity.class);
+	    Intent intent = new Intent(this, ShopinionFIGridActivity.class);
 	    startActivity(intent);
 	    break;
 	case 1:
 	    onShowAllContacts(item.getItemView());
 	    break;
+
 	default:
 	    return super.onHandleActionBarItemClick(item, position);
 	}

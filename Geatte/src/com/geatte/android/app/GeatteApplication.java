@@ -15,6 +15,7 @@ public class GeatteApplication extends GDApplication {
     @Override
     public Intent getMainApplicationIntent() {
 	return new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_url)));
+	//return new Intent(this, ShopinionMainActivity.class);
     }
 
 }

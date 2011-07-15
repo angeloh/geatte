@@ -289,6 +289,33 @@
 		<item name="android:layout_marginBottom">?attr/InterestThumbnailItemCounterTextMargin2</item>
 	</style>
 	
+	<style name="Geatte.InterestThumbnailItemStyle.Feedback" />
+	<style name="Geatte.InterestThumbnailItemStyle.Feedback.Thumbnail">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_marginLeft">?attr/InterestThumbnailItemFeedbackThumbMargin</item>
+		<item name="android:layout_marginBottom">?attr/InterestThumbnailItemFeedbackThumbMargin</item>
+		<item name="android:scaleType">centerInside</item>
+	</style>
+	<style name="Geatte.InterestThumbnailItemStyle.Feedback.Vote">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceMedium</item>
+		<item name="android:layout_marginLeft">?attr/InterestThumbnailItemFeedbackTextMargin</item>
+		<item name="android:layout_marginBottom">?attr/InterestThumbnailItemFeedbackTextMargin</item>
+	</style>
+	<style name="Geatte.InterestThumbnailItemStyle.Feedback.Text">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceLarge</item>
+		<item name="android:layout_marginLeft">?attr/InterestThumbnailItemFeedbackTextMargin</item>
+		<item name="android:layout_marginBottom">?attr/InterestThumbnailItemFeedbackTextMargin</item>
+	</style>
+	<style name="Geatte.InterestThumbnailItemStyle.Feedback.Subtext">
+		<item name="android:layout_height">?attr/GeatteItemViewPreferredHalfHeight</item>
+		<item name="android:textAppearance">?attr/GeatteTextAppearanceSmall</item>
+		<item name="android:layout_marginLeft">?attr/InterestThumbnailItemFeedbackTextMargin</item>
+		<item name="android:layout_marginBottom">?attr/InterestThumbnailItemFeedbackTextMargin</item>
+	</style>
+	
 	<style name="Geatte.Comment" />
 	<style name="Geatte.Comment.Widget">
 		<item name="android:padding">7dp</item>

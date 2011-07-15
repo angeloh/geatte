@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.geatte.android.view.InterestThumbnailItemView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
+	style="?attr/InterestThumbnailItemStyle"
+	android:layout_width="fill_parent"
+	android:layout_height="?attr/GeatteItemViewPreferredExtraHeight"
+	android:padding="3dip"
+	android:descendantFocusability="blocksDescendants">
+	
+	<LinearLayout
+		android:id="@+id/f_interest_thumbnail_item_header"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:orientation="horizontal"
+		android:gravity="top" >
+	
+		<greendroid.widget.AsyncImageView
+			style="?attr/InterestThumbnailItemStyleThumbnail"
+			android:id="@+id/f_interest_thumbnail"
+			greendroid:defaultSrc="@drawable/icon" 
+			android:scaleType="centerCrop" />
+		
+		<RelativeLayout 
+		   	android:layout_width="fill_parent"
+		   	android:layout_height="wrap_content" 
+		   	android:layout_toRightOf="@id/f_interest_thumbnail" >
+				<TextView
+					style="?attr/InterestThumbnailItemStyleFeedbackText"
+					android:id="@+id/fi_sent_by_text"
+					android:layout_width="wrap_content" />
+				<TextView
+					style="?attr/InterestThumbnailItemStyleFeedbackSubtext"
+					android:id="@+id/fi_sent_on_text"
+					android:layout_width="wrap_content"
+					android:layout_below="@id/fi_sent_by_text" />
+				<ImageButton
+					style="?attr/InterestThumbnailItemStyleFeedbackThumbnail"
+					android:id="@+id/fi_vote_img_btn"
+					android:background="@drawable/imageview_border"
+					android:layout_below="@id/fi_sent_on_text" />
+				<TextView
+					style="?attr/InterestThumbnailItemStyleFeedbackVote"
+					android:id="@+id/fi_vote_text"
+					android:layout_width="wrap_content"
+					android:layout_below="@id/fi_sent_on_text"
+					android:layout_toRightOf="@id/fi_vote_img_btn" />
+				<TextView
+					style="?attr/InterestThumbnailItemStyleFeedbackSubtext"
+					android:id="@+id/fi_vote_feedback"
+					android:layout_width="wrap_content"
+					android:layout_below="@id/fi_vote_img_btn" />
+		</RelativeLayout>
+	
+	</LinearLayout>
+	
+	<TextView
+		style="?attr/InterestThumbnailItemStyleTitle"
+		android:id="@+id/f_interest_title"
+		android:layout_width="fill_parent"
+        android:layout_below="@id/f_interest_thumbnail_item_header"
+        android:layout_alignParentLeft="true" />
+		
+	<TextView
+		style="?attr/InterestThumbnailItemStyleSubtitle"
+		android:id="@+id/f_interest_subtitle"
+		android:layout_width="fill_parent"
+		android:layout_below="@id/f_interest_title"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentBottom="true"/>
+</com.geatte.android.view.InterestThumbnailItemView>

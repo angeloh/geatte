@@ -77,6 +77,13 @@
 	<attr name="InterestThumbnailItemCounterTextMargin1" format="dimension" />
 	<attr name="InterestThumbnailItemCounterTextMargin2" format="dimension" />
 	
+	<attr name="InterestThumbnailItemStyleFeedbackThumbnail" format="reference" />
+	<attr name="InterestThumbnailItemStyleFeedbackVote" format="reference" />
+	<attr name="InterestThumbnailItemStyleFeedbackText" format="reference" />
+	<attr name="InterestThumbnailItemStyleFeedbackSubtext" format="reference" />
+	<attr name="InterestThumbnailItemFeedbackTextMargin" format="dimension" />
+	<attr name="InterestThumbnailItemFeedbackThumbMargin" format="dimension" />
+	
 	<attr name="GeatteFeedbackItemStyle" format="reference" />
 	<attr name="GeatteFeedbackItemStyleTitle" format="reference" />
 	<attr name="GeatteFeedbackItemStyleSubtitle" format="reference" />

@@ -43,10 +43,14 @@ public abstract class GridActionBarFooterActivity extends AppFooterActionbarActi
      * getGridView().getItemAtPosition(position) if they need to access the data
      * associated with the selected item.
      * 
-     * @param g The GridView where the click happened
-     * @param v The view that was clicked within the ListView
-     * @param position The position of the view in the list
-     * @param id The row id of the item that was clicked
+     * @param g
+     *            The GridView where the click happened
+     * @param v
+     *            The view that was clicked within the ListView
+     * @param position
+     *            The position of the view in the list
+     * @param id
+     *            The row id of the item that was clicked
      */
     protected void onGridItemClick(GridView g, View v, int position, long id) {
     }
@@ -55,7 +59,8 @@ public abstract class GridActionBarFooterActivity extends AppFooterActionbarActi
      * Set the currently selected grid item to the specified position with the
      * adapter's data
      * 
-     * @param position The position to select in the managed {@link GridView}
+     * @param position
+     *            The position to select in the managed {@link GridView}
      */
     public void setSelection(int position) {
 	mGridView.setSelection(position);
@@ -105,7 +110,8 @@ public abstract class GridActionBarFooterActivity extends AppFooterActionbarActi
      * Provides the ListAdapter for the GridView handled by this
      * {@link GridActionBarFooterActivity}
      * 
-     * @param adapter The {@link ListAdapter} to set.
+     * @param adapter
+     *            The {@link ListAdapter} to set.
      */
     public void setListAdapter(ListAdapter adapter) {
 	synchronized (this) {
@@ -169,7 +175,8 @@ public abstract class GridActionBarFooterActivity extends AppFooterActionbarActi
 
     private void throwSetActionBarContentViewException() {
 	throw new UnsupportedOperationException(
-	"The setActionBarContentView method is not supported for GridActionBarFooterActivity. In order to get a custom layout you must return a layout identifier in createLayout");
+		"The setActionBarContentView method is not supported for GridActionBarFooterActivity. " +
+	"In order to get a custom layout you must return a layout identifier in createLayout");
 
     }
 

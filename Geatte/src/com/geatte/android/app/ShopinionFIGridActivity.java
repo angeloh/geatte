@@ -25,25 +25,25 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-public class ShopinionGridActivity extends GridActionBarFooterActivity {
+public class ShopinionFIGridActivity extends GridActionBarFooterActivity {
 
     private final Handler mHandler = new Handler();
     private ImageAdapter mImageAdapter = null;
 
-    public ShopinionGridActivity() {
+    public ShopinionFIGridActivity() {
 	super(ActionBar.Type.Dashboard);
     }
 
     @Override
     public int createLayout() {
-	return R.layout.shopinin_my_interests_grid;
+	return R.layout.shopinin_friend_interests_grid;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onCreate() START");
+	    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:onCreate() START");
 	}
 
 	ActionBarItem actionBarItem = getActionBar().newActionBarItem(NormalActionBarItem.class).setDrawable(
@@ -52,7 +52,7 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 	addActionBarItem(Type.AllFriends);
 
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onCreate(): END");
+	    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:onCreate(): END");
 	}
     }
 
@@ -60,7 +60,7 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
     protected void onResume() {
 	super.onResume();
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): START");
+	    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:onResume(): START");
 	}
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
@@ -68,16 +68,16 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 	    }
 	},250);
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): END");
+	    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:onResume(): END");
 	}
     }
 
     private void fillList() {
 	try {
-	    List<Item> items = getMyGeatteItems();
+	    List<Item> items = getFIGeatteItems();
 	    if (items.size() == 0) {
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionGridActivity:fillList() : No geatte available!!");
+		    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:fillList() : No geatte available!!");
 		}
 	    }
 
@@ -85,44 +85,44 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 	    setListAdapter(mImageAdapter);
 
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "ShopinionGridActivity:fillList() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "ShopinionFIGridActivity:fillList() :  ERROR ", e);
 	}
     }
 
-    private List<Item> getMyGeatteItems() {
+    private List<Item> getFIGeatteItems() {
 	List<Item> items = new ArrayList<Item>();
 
 	final GeatteDBAdapter mDbHelper = new GeatteDBAdapter(this);
-	Cursor interestCur = null;
+	Cursor fiCur = null;
 	try {
 	    mDbHelper.open();
-	    interestCur = mDbHelper.fetchAllMyInterestsWithBlob();
+	    fiCur = mDbHelper.fetchAllFriendInterestsWithBlob();
 
-	    interestCur.moveToFirst();
+	    fiCur.moveToFirst();
 	    int counter = 0;
-	    while (interestCur.isAfterLast() == false) {
+	    while (fiCur.isAfterLast() == false) {
 		++counter;
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionGridActivity:getMyGeatteItems() : Process my interest = " + counter);
+		    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:getFIGeatteItems() : Process friend interest = " + counter);
 		}
 
-		int interestId = interestCur.getInt(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_ID));
-		String imagePath = interestCur.getString(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
-		byte[] imageThumbnail = interestCur.getBlob(interestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_THUMBNAIL));
+		long fInterestId = fiCur.getLong(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_ID));
+		String fImagePath = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_PATH));
+		byte[] fImageThumbnail = fiCur.getBlob(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FI_IMAGE_THUMBNAIL));
 
-		Log.i(Config.LOGTAG, "ShopinionGridActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
-			"interestId = " + interestId + ", imageThumbnail.length = " + imageThumbnail.length);
+		Log.i(Config.LOGTAG, "ShopinionFIGridActivity:getFIGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
+			"fInterestId = " + fInterestId + ", imageThumbnail.length = " + fImageThumbnail.length);
 
-		items.add(new GridBitmapItem(interestId, imagePath, imageThumbnail));
+		items.add(new GridBitmapItem(fInterestId, fImagePath, fImageThumbnail));
 
-		interestCur.moveToNext();
+		fiCur.moveToNext();
 
 	    }
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "ShopinionGridActivity:getMyGeatteItems() :  ERROR ", e);
+	    Log.e(Config.LOGTAG, "ShopinionFIGridActivity:getFIGeatteItems() :  ERROR ", e);
 	} finally {
-	    if (interestCur != null) {
-		interestCur.close();
+	    if (fiCur != null) {
+		fiCur.close();
 	    }
 	    mDbHelper.close();
 	}
@@ -169,7 +169,7 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 		GridBitmapItem tItem = (GridBitmapItem) item;
 
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionGridActivity:ImageAdapter:getView() : image set to bytearray for length = " + tItem.thumbnail.length);
+		    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:ImageAdapter:getView() : image set to bytearray for length = " + tItem.thumbnail.length);
 		}
 
 		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
@@ -193,17 +193,17 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 	super.onGridItemClick(g, v, position, id);
 	if (v instanceof ImageView) {
 	    if(Config.LOG_DEBUG_ENABLED) {
-		Log.d(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() START");
+		Log.d(Config.LOGTAG, "ShopinionFIGridActivity:onGridItemClick() START");
 	    }
 	    GridBitmapItem item = (GridBitmapItem) g.getAdapter().getItem(position);
 	    if (item == null) {
-		Log.w(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() : item is null");
+		Log.w(Config.LOGTAG, "ShopinionFIGridActivity:onGridItemClick() : item is null");
 	    } else {
-		Intent intent = new Intent(this, GeatteFeedbackActivity.class);
-		intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, item.getId());
+		Intent intent = new Intent(this, GeatteVotingActivity.class);
+		intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(item.getId()));
 		startActivity(intent);
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() END");
+		    Log.d(Config.LOGTAG, "ShopinionFIGridActivity:onGridItemClick() END");
 		}
 	    }
 	}
@@ -214,13 +214,12 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 
 	switch (position) {
 	case 0:
-	    Intent intent = new Intent(this, ShopinionMainActivity.class);
+	    Intent intent = new Intent(this, ShopinionFIListActivity.class);
 	    startActivity(intent);
 	    break;
 	case 1:
 	    onShowAllContacts(item.getItemView());
 	    break;
-
 	default:
 	    return super.onHandleActionBarItemClick(item, position);
 	}

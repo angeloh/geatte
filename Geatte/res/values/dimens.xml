@@ -10,6 +10,9 @@
 	<dimen name="interest_thumbnail_counter_thumb_margin">20dp</dimen>
 	<dimen name="interest_thumbnail_counter_text_margin_1">10dp</dimen>
 	<dimen name="interest_thumbnail_counter_text_margin_2">16dp</dimen>
+	<dimen name="interest_thumbnail_feedback_text_margin">6dp</dimen>
+	<dimen name="interest_thumbnail_feedback_thumb_margin">6dp</dimen>
+	
 
 	<dimen name="geatte_grid_bitmap_item_padding">8dp</dimen>
 	<dimen name="geatte_grid_bitmap_item_size">85dp</dimen>
@@ -28,7 +31,7 @@
 	<dimen name="geatte_item_view_height">64dp</dimen>
 	<dimen name="geatte_item_view_lower_mid_height">48dp</dimen>
 	<dimen name="geatte_item_view_half_height">32dp</dimen>
-	<dimen name="geatte_item_view_quarter_height">16dp</dimen>
+	<dimen name="geatte_item_view_quarter_height">18dp</dimen>
 	
 	<dimen name="geatte_progress_bar_width">20dp</dimen>
 	<dimen name="geatte_progress_bar_height">20dp</dimen>

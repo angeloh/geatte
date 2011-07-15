@@ -109,6 +109,13 @@
 		<item name="InterestThumbnailItemCounterTextMargin1">@dimen/interest_thumbnail_counter_text_margin_1</item>
 		<item name="InterestThumbnailItemCounterTextMargin2">@dimen/interest_thumbnail_counter_text_margin_2</item>
 		
+		<item name="InterestThumbnailItemStyleFeedbackThumbnail">@style/Geatte.InterestThumbnailItemStyle.Feedback.Thumbnail</item>
+		<item name="InterestThumbnailItemStyleFeedbackVote">@style/Geatte.InterestThumbnailItemStyle.Feedback.Vote</item>
+		<item name="InterestThumbnailItemStyleFeedbackText">@style/Geatte.InterestThumbnailItemStyle.Feedback.Text</item>
+		<item name="InterestThumbnailItemStyleFeedbackSubtext">@style/Geatte.InterestThumbnailItemStyle.Feedback.Subtext</item>
+		<item name="InterestThumbnailItemFeedbackTextMargin">@dimen/interest_thumbnail_feedback_text_margin</item>
+		<item name="InterestThumbnailItemFeedbackThumbMargin">@dimen/interest_thumbnail_feedback_thumb_margin</item>
+		
 		<item name="GeatteTabsIcon">@drawable/geatte_tabs_icon</item>
 		
 		<item name="GeatteCommentWidget">@style/Geatte.Comment.Widget</item>
