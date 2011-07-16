@@ -80,7 +80,7 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		}
 		adapter.notifyDataSetChanged();
 	    }
-	},500);
+	},250);
     }
 
     private ThumbnailBitmapItem createFeedbackItemsFromFetchResult(String geatteId, Long interestId, List<Item> items) {

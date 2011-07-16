@@ -17,7 +17,7 @@
 	<dimen name="geatte_grid_bitmap_item_padding">8dp</dimen>
 	<dimen name="geatte_grid_bitmap_item_size">85dp</dimen>
 	
-	<dimen name="geatte_drawable_margin">6dp</dimen>
+	<dimen name="geatte_drawable_margin">3dp</dimen>
 	
 	<dimen name="geatte_text_size_extra_large">40sp</dimen>
 	<dimen name="geatte_text_size_large">22sp</dimen>

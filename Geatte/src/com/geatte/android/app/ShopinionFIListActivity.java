@@ -235,7 +235,7 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long geatteId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
+			Intent intent = new Intent(view.getContext(), GeatteVotingActivity.class);
 			intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(geatteId));
 			view.getContext().startActivity(intent);
 		    }
