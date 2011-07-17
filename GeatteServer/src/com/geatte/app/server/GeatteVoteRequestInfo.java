@@ -53,12 +53,12 @@ public class GeatteVoteRequestInfo {
     throws IOException {
 
 	// Basic XSRF protection
-	if (req.getHeader("X-Same-Domain") == null) {
+	/*if (req.getHeader("X-Same-Domain") == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + " (Missing X-Same-Domain header)");
 	    log.warning("GeatteVoteRequestInfo:processRequest() : Missing X-Same-Domain");
 	    return null;
-	}
+	}*/
 
 	User user = null;
 	GeatteVoteRequestInfo reqInfo = new GeatteVoteRequestInfo();
@@ -120,12 +120,15 @@ public class GeatteVoteRequestInfo {
 	    log.info("GeatteVoteRequestInfo:processRequest() : after trim() reqInfo.geatteId = " + reqInfo.mGeatteId);
 	}
 
+	// ***** remove login temporarily *****
+	/*
 	if (reqInfo.mUserEmail == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(LOGIN_REQUIRED_STATUS);
 	    log.warning("GeatteVoteRequestInfo:processRequest() : can not get login user email!!");
 	    return null;
 	}
+	 */
 
 	reqInfo.mGeatteVoter = reqInfo.getParameter(Config.FRIEND_GEATTE_VOTER);
 	reqInfo.mGeatteVoteResp = reqInfo.getParameter(Config.FRIEND_GEATTE_VOTE_RESP);

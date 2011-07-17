@@ -89,6 +89,13 @@
 		</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>GeatteAllGetServlet</servlet-name>
+		<servlet-class>
+			com.geatte.app.server.GeatteAllGetServlet
+		</servlet-class>
+	</servlet>
+	
 	<!-- 
 	<servlet>
 		<servlet-name>SendServlet</servlet-name>
@@ -145,6 +152,11 @@
 	<servlet-mapping>
 		<servlet-name>GeatteUplaodTextOnlyServlet</servlet-name>
 		<url-pattern>/geatteuploadtextonly</url-pattern>
+	</servlet-mapping>
+	
+		<servlet-mapping>
+		<servlet-name>GeatteAllGetServlet</servlet-name>
+		<url-pattern>/geatteallget</url-pattern>
 	</servlet-mapping>
 	
 	<!-- 

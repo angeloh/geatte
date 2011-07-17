@@ -1,7 +1,10 @@
 package com.geatte.app.server;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.repackaged.com.google.common.util.Base64;
 import com.google.appengine.repackaged.org.json.JSONArray;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
@@ -249,14 +253,16 @@ public class RegisterServlet extends HttpServlet {
 		    + ", deviceType = " + deviceType + ", deviceRegistrationID = " + reqInfo.deviceRegistrationID
 		    + ", key = " + key);
 
-	    // TODO
-	    // if (device.getType().equals(DeviceInfo.TYPE_CHROME)) {
-	    // String channelId = ChannelServiceFactory.getChannelService()
-	    // .createChannel(reqInfo.deviceRegistrationID);
-	    // resp.getWriter().println(OK_STATUS + " " + channelId);
-	    // } else {
-	    resp.getWriter().println(OK_STATUS);
-	    // }
+	    // if type is IOS, register to Urban
+	    if (device.getType().equalsIgnoreCase(DeviceInfo.TYPE_IOS)) {
+		doRegisterIOSToUrban(device);
+		resp.getWriter().println(OK_STATUS);
+	    } else if (device.getType().equalsIgnoreCase(DeviceInfo.TYPE_ANDROID) ||
+		    device.getType().equalsIgnoreCase(DeviceInfo.TYPE_AC2DM)) {
+		resp.getWriter().println(OK_STATUS);
+	    } else {
+		resp.getWriter().println(ERROR_STATUS + "(Wrong " + Config.DEVICE_TYPE_PARAM + ")");
+	    }
 
 	    log.log(Level.INFO, "RegisterServlet.doPOST() : END RegisterServlet.doPOST()");
 	} catch (Exception e) {
@@ -267,4 +273,61 @@ public class RegisterServlet extends HttpServlet {
 	    pm.close();
 	}
     }
+
+    /*private boolean doRegisterIOSToUrban(DeviceInfo deviceInfo) {
+	try {
+	    UrbanAirshipClient client = new UrbanAirshipClient(Config.URBAN_ACCOUNT, Config.URBAN_PASS);
+	    Device device = new Device();
+	    device.setiOSDeviceToken(deviceInfo.getDeviceRegistrationID());
+	    if (deviceInfo.getDeviceName() != null && !deviceInfo.getDeviceName().isEmpty()) {
+		device.setAlias(deviceInfo.getDeviceName());
+	    }
+	    client.register(device);
+	    return true;
+	} catch (Exception e) {
+	    log.log(Level.WARNING, "RegisterServlet.doRegisterIOSToUrban() : Error registering to Urban.", e);
+	}
+	return false;
+    }*/
+
+    private boolean doRegisterIOSToUrban(DeviceInfo deviceInfo) {
+	try {
+	    URL url = new URL("https://go.urbanairship.com/api/device_tokens/"+deviceInfo.getDeviceRegistrationID());
+
+	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	    connection.setRequestMethod("PUT");
+	    connection.setDoOutput(true);
+
+	    String appKey = Config.URBAN_APP_KEY;
+	    String appMasterSecret = Config.URBAN_APP_MASTERSECRET;
+
+	    String authString = appKey + ":" + appMasterSecret;
+	    String authStringBase64 = Base64.encode(authString.getBytes());
+	    authStringBase64 = authStringBase64.trim();
+
+	    connection.setRequestProperty("Content-type", "application/json");
+	    connection.setRequestProperty("Authorization", "Basic " + authStringBase64);
+
+	    JSONObject object = new JSONObject();
+	    if (deviceInfo.getDeviceName() != null && !deviceInfo.getDeviceName().isEmpty()) {
+		object.put("alias", deviceInfo.getDeviceName());
+	    }
+	    object.put("tz", "America/Los_Angeles");
+
+	    //	    String jsonBodyString = "{\"alias\": \""+ deviceInfo.getDeviceName() +
+	    //	    "\", \"tz\": \"America/Los_Angeles\" }";
+
+	    OutputStreamWriter osw = new OutputStreamWriter(connection.getOutputStream());
+	    osw.write(object.toString());
+	    osw.close();
+
+	    int responseCode = connection.getResponseCode();
+	    log.log(Level.INFO, "RegisterServlet.doRegisterIOSToUrban() : registering to Urban OK, resp = " + responseCode);
+	    return true;
+	} catch (Exception e) {
+	    log.log(Level.WARNING, "RegisterServlet.doRegisterIOSToUrban() : Error registering to Urban.", e);
+	}
+	return false;
+    }
+
 }

@@ -31,7 +31,8 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 public class DeviceInfo {
     private static final Logger log = Logger.getLogger(DeviceInfo.class.getName());
     public static final String TYPE_AC2DM = "ac2dm";
-    public static final String TYPE_CHROME = "chrome";
+    public static final String TYPE_IOS = "ios";
+    public static final String TYPE_ANDROID = "android";
 
     /**
      * The device id
@@ -114,7 +115,9 @@ public class DeviceInfo {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-	this.phoneNumber = phoneNumber;
+	if (phoneNumber != null) {
+	    this.phoneNumber = phoneNumber.trim();
+	}
     }
 
     /**
@@ -128,7 +131,9 @@ public class DeviceInfo {
      * @param countryCode the countryCode to set
      */
     public void setCountryCode(String countryCode) {
-	this.countryCode = countryCode;
+	if (countryCode != null) {
+	    this.countryCode = countryCode.trim();
+	}
     }
 
     // Accessor methods for properties added later (hence can be null)
@@ -137,7 +142,9 @@ public class DeviceInfo {
     }
 
     public void setDeviceRegistrationID(String deviceRegistrationID) {
-	this.deviceRegistrationID = deviceRegistrationID;
+	if (deviceRegistrationID != null) {
+	    this.deviceRegistrationID = deviceRegistrationID.trim();
+	}
     }
 
     public String getUserEmail() {
@@ -145,7 +152,9 @@ public class DeviceInfo {
     }
 
     public void setUserEmail(String userEmail) {
-	this.userEmail = userEmail;
+	if (userEmail != null) {
+	    this.userEmail = userEmail;
+	}
     }
 
 
@@ -158,7 +167,9 @@ public class DeviceInfo {
     }
 
     public void setType(String type) {
-	this.type = type;
+	if (type != null) {
+	    this.type = type.trim();
+	}
     }
 
     public String getType() {
@@ -166,7 +177,9 @@ public class DeviceInfo {
     }
 
     public void setDeviceName(String name) {
-	this.deviceName = name;
+	if (name != null) {
+	    this.deviceName = name.trim();
+	}
     }
 
     public String getDeviceName() {

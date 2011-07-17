@@ -15,6 +15,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * The server side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class GreetingServiceImpl extends RemoteServiceServlet implements GreetingService {
 
     private static final Logger log = Logger.getLogger(GreetingServiceImpl.class.getName());

@@ -48,12 +48,15 @@ public class GeatteTmpImageUploadServlet extends HttpServlet {
 		mUserEmail = user.getEmail();
 		log.log(Level.INFO,"GeatteTmpImageUpload.doPOST() : get user email thru ClientLogin :" + mUserEmail);
 	    }
+	    // ***** remove login temporarily *****
+	    /*
 	    if (mUserEmail == null) {
 		resp.setStatus(500);
 		resp.getWriter().println(ERROR_STATUS + "(Login is required)");
 		log.warning("GeatteTmpImageUpload.doPOST() : can not get login user email!!");
 		return;
 	    }
+	     */
 
 	    ServletFileUpload upload = new ServletFileUpload();
 
@@ -82,8 +85,8 @@ public class GeatteTmpImageUploadServlet extends HttpServlet {
 	    }
 	    if (mImageBlobField == null) {
 		resp.setStatus(400);
-		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_IMAGE_PARAM + ")");
-		log.severe("GeatteTmpImageUpload.doPOST() : Missing image, " + Config.GEATTE_IMAGE_PARAM + " is null");
+		resp.getWriter().println(ERROR_STATUS + "(Must specify " + Config.GEATTE_IMAGE_BLOB_PARAM + ")");
+		log.severe("GeatteTmpImageUpload.doPOST() : Missing image, " + Config.GEATTE_IMAGE_BLOB_PARAM + " is null");
 		return;
 	    }
 

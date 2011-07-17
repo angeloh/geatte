@@ -70,12 +70,12 @@ public class GeatteRegisterRequestInfo {
     throws IOException {
 
 	// Basic XSRF protection
-	if (req.getHeader("X-Same-Domain") == null) {
+	/*if (req.getHeader("X-Same-Domain") == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + " (Missing X-Same-Domain header)");
 	    log.warning("GeatteRegisterRequestInfo:processRequest() : Missing X-Same-Domain");
 	    return null;
-	}
+	}*/
 
 	User user = null;
 	GeatteRegisterRequestInfo reqInfo = new GeatteRegisterRequestInfo();
@@ -138,12 +138,14 @@ public class GeatteRegisterRequestInfo {
 	    log.info("GeatteRegisterRequestInfo:processRequest() : after trim() reqInfo.deviceRegistrationID = " + reqInfo.deviceRegistrationID);
 	}
 
+	// ***** remove login temporarily *****
+	/*
 	if (reqInfo.userEmail == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(LOGIN_REQUIRED_STATUS);
 	    log.warning("GeatteRegisterRequestInfo:processRequest() : can not get login user email!!");
 	    return null;
-	}
+	}*/
 
 	if (ctx != null) {
 	    reqInfo.initDevices(ctx);

@@ -1,8 +1,14 @@
 package com.geatte.app.server;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -10,9 +16,14 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION )
 public class GeatteInfo {
+    private static final Logger log = Logger.getLogger(GeatteInfo.class.getName());
 
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -130,6 +141,114 @@ public class GeatteInfo {
 
     public void setCountryCode(String countryCode) {
 	this.countryCode = countryCode;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<GeatteInfo> getAllItemInfoFromNumber(PersistenceManager pm, String fromNumber, String defaultCountryCode) {
+
+	// trim dash '-' '(' ')'from given number
+	fromNumber = fromNumber.replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "").trim();
+
+
+	Query query = pm.newQuery(GeatteInfo.class);
+
+	query.setFilter("fromNumber == fromNumberParam");
+	query.declareParameters("String fromNumberParam");
+
+	// first get the number as is
+	List<GeatteInfo> qresult = (List<GeatteInfo>) query.execute(fromNumber);
+	// copy to array - we need to close the query
+	List<GeatteInfo> result = new ArrayList<GeatteInfo>();
+	for (GeatteInfo di : qresult) {
+	    result.add(di);
+	}
+
+	// try to compare by adding prefix +
+	if (fromNumber.indexOf("+") < 0) {
+	    String preNumber = "+" + fromNumber;
+	    qresult = (List<GeatteInfo>) query.execute(preNumber);
+	    for (GeatteInfo di : qresult) {
+		result.add(di);
+	    }
+	}
+
+	// try to compare by reformat with default country code
+	PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+	PhoneNumber numberProto = null;
+	try {
+	    numberProto = phoneUtil.parse(fromNumber, defaultCountryCode);
+	} catch (NumberParseException npe) {
+	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoFromNumber(): NumberParseException was thrown: "
+		    , npe);
+	}
+
+	if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
+	    String formatNumber = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
+	    qresult = (List<GeatteInfo>) query.execute(formatNumber);
+	    for (GeatteInfo di : qresult) {
+		result.add(di);
+	    }
+	} else {
+	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoFromNumber() : number can not use default country code, fromNumber = "
+		    + fromNumber + ", defaultCountryCode = " + defaultCountryCode);
+	}
+
+	query.closeAll();
+	return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<GeatteInfo> getAllItemInfoToNumber(PersistenceManager pm, String toNumber, String defaultCountryCode) {
+
+	// trim dash '-' '(' ')'from given number
+	toNumber = toNumber.replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "").trim();
+
+
+	Query query = pm.newQuery(GeatteInfo.class);
+
+	query.setFilter("toNumber == toNumberParam");
+	query.declareParameters("String toNumberParam");
+
+	// first get the number as is
+	List<GeatteInfo> qresult = (List<GeatteInfo>) query.execute(toNumber);
+	// copy to array - we need to close the query
+	List<GeatteInfo> result = new ArrayList<GeatteInfo>();
+	for (GeatteInfo di : qresult) {
+	    result.add(di);
+	}
+
+	// try to compare by adding prefix +
+	if (toNumber.indexOf("+") < 0) {
+	    String preNumber = "+" + toNumber;
+	    qresult = (List<GeatteInfo>) query.execute(preNumber);
+	    for (GeatteInfo di : qresult) {
+		result.add(di);
+	    }
+	}
+
+	// try to compare by reformat with default country code
+	PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+	PhoneNumber numberProto = null;
+	try {
+	    numberProto = phoneUtil.parse(toNumber, defaultCountryCode);
+	} catch (NumberParseException npe) {
+	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoToNumber(): NumberParseException was thrown: "
+		    , npe);
+	}
+
+	if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
+	    String formatNumber = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
+	    qresult = (List<GeatteInfo>) query.execute(formatNumber);
+	    for (GeatteInfo di : qresult) {
+		result.add(di);
+	    }
+	} else {
+	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoToNumber() : number can not use default country code, toNumber = "
+		    + toNumber + ", defaultCountryCode = " + defaultCountryCode);
+	}
+
+	query.closeAll();
+	return result;
     }
 
 }

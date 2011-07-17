@@ -53,12 +53,12 @@ public class GeatteContactsRequestInfo {
     throws IOException {
 
 	// Basic XSRF protection
-	if (req.getHeader("X-Same-Domain") == null) {
+	/*if (req.getHeader("X-Same-Domain") == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(ERROR_STATUS + " (Missing X-Same-Domain header)");
 	    log.warning("RequestInfo:processRequest() : Missing X-Same-Domain");
 	    return null;
-	}
+	}*/
 
 	User user = null;
 	GeatteContactsRequestInfo reqInfo = new GeatteContactsRequestInfo();
@@ -111,12 +111,14 @@ public class GeatteContactsRequestInfo {
 	    return null;
 	}
 
+	// ***** remove login temporarily *****
+	/*
 	if (reqInfo.userEmail == null) {
 	    resp.setStatus(400);
 	    resp.getWriter().println(LOGIN_REQUIRED_STATUS);
 	    log.warning("GeatteContactsRequestInfo:processRequest() : can not get login user email!!");
 	    return null;
-	}
+	}*/
 
 	return reqInfo;
     }

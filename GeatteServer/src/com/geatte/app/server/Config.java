@@ -26,6 +26,11 @@ public class Config {
     public static final String FRIEND_GEATTE_VOTE_RESP = "friendGeatteVoteResp";
     public static final String FRIEND_GEATTE_FEEDBACK = "friendGeatteFeedback";
 
+    public static final String VOTE_VOTER = "voter";
+    public static final String VOTE_RESP = "voteResp";
+    public static final String VOTE_FEEDBACK = "voteFeedback";
+    public static final String VOTE_CREATED_DATE = "createdDate";
+
     public static final String CONTACT_LIST = "contactList";
     public static final String CONTACT_DEFAULT_COUNTRY_CODE = "countryCode";
     public static final String CONTACT_PHONE_NUMBER = "phoneNumber";
@@ -34,4 +39,9 @@ public class Config {
     public static final String GEATTE_IMAGE_RANDOM_ID_PARAM = "random_id";
     public static final String GEATTE_IMAGE_BLOB_PARAM = "image_blob";
     public static final String GEATTE_IMAGE_BLOB_RESP = "image_blob_resp";
+
+    public static final String URBAN_ACCOUNT = "sparkover";
+    public static final String URBAN_PASS = "sparkover66";
+    public static final String URBAN_APP_KEY = "xRQrtEuvQYClc40BUYI0lA";
+    public static final String URBAN_APP_MASTERSECRET = "Npri6VTGQeCZTT12FL60PQ";
 }

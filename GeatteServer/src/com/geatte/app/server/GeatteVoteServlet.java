@@ -129,7 +129,7 @@ public class GeatteVoteServlet extends HttpServlet {
 	    params.put("data.geatte_vote_resp", new String[]{mGeatteVoteRespField});
 	    params.put("data.geatte_vote_feedback", new String[]{mGeatteFeedbackField});
 
-	    submitGeatteVoteTask(geatteOwnerNumber, params);
+	    submitGeatteVoteTask(mGeatteVoterField, geatteOwnerNumber, params);
 	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : sent geatte id = " + mGeatteIdField + ",  geatte vote '" + geatteVoteId  + "' to owner phoneNumber = " + geatteOwnerNumber);
 	}
 
@@ -194,7 +194,7 @@ public class GeatteVoteServlet extends HttpServlet {
 
     }
 
-    private void submitGeatteVoteTask(String ownerNumber, Map<String, String[]> params) {
+    private void submitGeatteVoteTask(String fromNumber, String ownerNumber, Map<String, String[]> params) {
 	log.log(Level.INFO, "GeatteVoteServlet.submitGeatteVoteTask() : START submit geatte vote to " + ownerNumber);
 	boolean delayWhileIdle = true;
 	String collapseKey = Integer.toString((int)((Math.random()*5000) + 5001));
@@ -202,7 +202,9 @@ public class GeatteVoteServlet extends HttpServlet {
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
-	    .param(Config.GEATTE_TO_NUMBER_PARAM, ownerNumber).param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
+	    .param(Config.GEATTE_FROM_NUMBER_PARAM, fromNumber)
+	    .param(Config.GEATTE_TO_NUMBER_PARAM, ownerNumber)
+	    .param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
 	    if (delayWhileIdle) {
 		url.param(C2DMessaging.PARAM_DELAY_WHILE_IDLE, "1");
 	    }

@@ -28,6 +28,7 @@ import com.google.appengine.api.channel.ChannelMessage;
 import com.google.appengine.api.channel.ChannelServiceFactory;
 
 @SuppressWarnings("serial")
+@Deprecated
 public class SendServlet extends HttpServlet {
     static final Logger log =
 	Logger.getLogger(SendServlet.class.getName());
@@ -112,12 +113,12 @@ public class SendServlet extends HttpServlet {
 	    }
 
 	    try {
-		if (deviceInfo.getType().equals(DeviceInfo.TYPE_CHROME)) {
-		    res = doSendViaBrowserChannel(url, deviceInfo);
-		} else {
-		    res = doSendViaC2dm(url, title, sel, push, collapseKey,
-			    deviceInfo, reqDebug);
-		}
+		//		if (deviceInfo.getType().equals(DeviceInfo.TYPE_CHROME)) {
+		//		    res = doSendViaBrowserChannel(url, deviceInfo);
+		//		} else {
+		res = doSendViaC2dm(url, title, sel, push, collapseKey,
+			deviceInfo, reqDebug);
+		//		}
 
 		if (res) {
 		    log.info("Link sent to phone! collapse_key:" + collapseKey);

@@ -147,12 +147,16 @@ public class GeatteUploadServlet extends HttpServlet {
 		mUserEmail = user.getEmail();
 		log.log(Level.INFO,"GeatteUploadServlet.doPOST() : get user email thru ClientLogin :" + mUserEmail);
 	    }
+
+	    // ***** remove login temporarily *****
+	    /*
 	    if (mUserEmail == null) {
 		resp.setStatus(500);
 		resp.getWriter().println(ERROR_STATUS + "(Login is required)");
 		log.warning("GeatteUploadServlet.doPOST() : can not get login user email!!");
 		return;
 	    }
+	     */
 
 	    ServletFileUpload upload = new ServletFileUpload();
 
@@ -234,7 +238,7 @@ public class GeatteUploadServlet extends HttpServlet {
 		Map<String, String[]> params = new HashMap<String, String[]>();
 		params.put("data.geatteid", new String[]{geatteId});
 
-		submitGeatteTask(mToNumberField, params);
+		submitGeatteTask(mFromNumberField, mToNumberField, params);
 		log.log(Level.INFO, "GeatteUploadServlet.doPOST() : sent geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
 
 		JSONObject geatteJson = new JSONObject();
@@ -307,7 +311,7 @@ public class GeatteUploadServlet extends HttpServlet {
 	return null;
     }
 
-    private void submitGeatteTask(String toNumbers, Map<String, String[]> params) {
+    private void submitGeatteTask(String fromNumber, String toNumbers, Map<String, String[]> params) {
 	log.log(Level.INFO, "GeatteUploadServlet.submitGeatteTask() : START submit geatte to " + toNumbers);
 	boolean delayWhileIdle = true;
 	String collapseKey = Integer.toString((int)(Math.random()*5000));
@@ -315,7 +319,9 @@ public class GeatteUploadServlet extends HttpServlet {
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
-	    .param(Config.GEATTE_TO_NUMBER_PARAM, toNumbers).param(Config.GEATTE_COUNTRY_ISO_PARAM, mCountryCodeField)
+	    .param(Config.GEATTE_FROM_NUMBER_PARAM, fromNumber)
+	    .param(Config.GEATTE_TO_NUMBER_PARAM, toNumbers)
+	    .param(Config.GEATTE_COUNTRY_ISO_PARAM, mCountryCodeField)
 	    .param(C2DMessaging.PARAM_COLLAPSE_KEY, collapseKey);
 	    if (delayWhileIdle) {
 		url.param(C2DMessaging.PARAM_DELAY_WHILE_IDLE, "1");
