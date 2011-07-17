@@ -56,7 +56,7 @@ public class InterestFriendThumbnailItemView extends RelativeLayout implements I
 	mVoteTextView.setText(item.voteText);
 	mVoteFeedbackView.setText(item.voteFeedbackText);
 
-	int sampleSize = CommonUtils.getResizeRatio(item.imagePath, 1500, 16);
+	int sampleSize = CommonUtils.getResizeRatio(item.imagePath, 250, 12);
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, " InterestFriendThumbnailItemView:setObject() resize image with sampleSize = " + sampleSize);
 	}

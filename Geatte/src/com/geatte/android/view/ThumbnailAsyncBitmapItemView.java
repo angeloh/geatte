@@ -44,7 +44,7 @@ public class ThumbnailAsyncBitmapItemView extends RelativeLayout implements Item
 	mTitleView.setText(item.text);
 	mDescView.setText(item.subtitle);
 
-	int sampleSize = CommonUtils.getResizeRatio(item.imagePath, 1500, 16);
+	int sampleSize = CommonUtils.getResizeRatio(item.imagePath, 250, 2);
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, " ThumbnailAsyncBitmapItemView:setObject() resize image with sampleSize = " + sampleSize);
 	}

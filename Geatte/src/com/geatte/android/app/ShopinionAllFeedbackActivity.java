@@ -287,7 +287,15 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "ShopinionAllFeedbackActivity:getView() : async image set to bytearray for length= " + tItem.interestThumbnail.length);
 		}
-		holder.interestImageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.interestThumbnail, 0, tItem.interestThumbnail.length));
+
+		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		int sampleSize = CommonUtils.getResizeRatio(tItem.interestThumbnail.length, 20, 1);
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " ShopinionAllFeedbackActivity:getView() resize thumbnail with sampleSize = " + sampleSize);
+		}
+		bitmapOptions.inSampleSize = sampleSize;
+
+		holder.interestImageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.interestThumbnail, 0, tItem.interestThumbnail.length, bitmapOptions));
 
 		if (tItem.contactBitmap != null) {
 		    holder.contactImageView.setImageBitmap(tItem.contactBitmap);

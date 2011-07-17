@@ -360,7 +360,8 @@ public class GeatteDBAdapter {
 	initialValues.put(KEY_FI_IMAGE_PATH, imagePath);
 
 	BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-	bitmapOptions.inSampleSize = 8;
+	int sampleSize = CommonUtils.getResizeRatio(imagePath, 250, 12);
+	bitmapOptions.inSampleSize = sampleSize;
 	Bitmap imgBitmap = BitmapFactory.decodeFile(imagePath, bitmapOptions);
 	ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	imgBitmap.compress(CompressFormat.JPEG, 100, bos);

@@ -342,7 +342,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 
     private void processNewGeatteFeedback(Context context, String voteGeatteId, String voter, String voteResp, String voteFeedback) {
-	Log.d(Config.LOGTAG_C2DM, "Messaging request received for geatte vote id = " + voteGeatteId);
+	Log.d(Config.LOGTAG, "Messaging request received for geatte vote id = " + voteGeatteId);
 
 	try {
 	    voteGeatteId = URLDecoder.decode((voteGeatteId==null ? "" : voteGeatteId), Config.ENCODE_UTF8);

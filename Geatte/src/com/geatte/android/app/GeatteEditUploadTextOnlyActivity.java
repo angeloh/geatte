@@ -83,7 +83,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		Bundle extras = getIntent().getExtras();
 		mImagePath = (String) (extras != null ? extras.get(GeatteDBAdapter.KEY_IMAGE_PATH) : null);
 		mImageRandomId = (String) (extras != null ? extras.get(Config.EXTRA_IMAGE_RANDOM_ID) : null);
-		Log.d(Config.LOGTAG, " " + GeatteEditUploadTextOnlyActivity.CLASSTAG + " snap a new picture in " + mImagePath + ", and mImageRandomId = " + mImageRandomId);
+		Log.d(Config.LOGTAG, " GeatteEditUploadTextOnlyActivity:onCreate() scanned : snap a new picture in " + mImagePath + ", and mImageRandomId = " + mImageRandomId);
 		if (mImagePath == null || mImageRandomId == null) {
 		    setResult(RESULT_CANCELED);
 		    finish();
@@ -95,7 +95,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 			new MediaScannerConnection.OnScanCompletedListener() {
 		    public void onScanCompleted(String path, Uri uri) {
 			if(Config.LOG_DEBUG_ENABLED) {
-			    Log.d(Config.LOGTAG, " GeatteEditUploadTextOnlyActivity:populateFields() scanned : " + path);
+			    Log.d(Config.LOGTAG, " GeatteEditUploadTextOnlyActivity:onCreate() scanned : " + path);
 			}
 		    }
 		});

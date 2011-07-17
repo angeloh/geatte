@@ -52,9 +52,9 @@ public class AppEngineClient {
     }
 
     public HttpResponse makeRequestWithParams(String urlPath, List<NameValuePair> params) throws Exception {
-	HttpResponse res = makeRequestNoRetryWihtParams(urlPath, params, false);
+	HttpResponse res = makeRequestNoRetryWithParams(urlPath, params, false);
 	if (res.getStatusLine().getStatusCode() == 500) {
-	    res = makeRequestNoRetryWihtParams(urlPath, params, true);
+	    res = makeRequestNoRetryWithParams(urlPath, params, true);
 	}
 	return res;
     }
@@ -88,7 +88,7 @@ public class AppEngineClient {
 	return res;
     }
 
-    private HttpResponse makeRequestNoRetryWihtParams(String urlPath, List<NameValuePair> params, boolean renewToken)
+    private HttpResponse makeRequestNoRetryWithParams(String urlPath, List<NameValuePair> params, boolean renewToken)
     throws Exception {
 
 	StringBuilder ascidCookie = new StringBuilder();
