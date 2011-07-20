@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="true">
+    <datastore-index kind="GeatteInfo" ancestor="false">
+        <property name="fromNumber" direction="asc" />
+        <property name="createdDate" direction="desc" />
+    </datastore-index>
+    <datastore-index kind="GeatteInfo" ancestor="false">
+        <property name="toNumber" direction="asc" />
+        <property name="createdDate" direction="desc" />
+    </datastore-index>
+    <datastore-index kind="GeatteVote" ancestor="false">
+        <property name="geatteVoter" direction="asc" />
+        <property name="createdDate" direction="desc" />
+    </datastore-index>
+    <datastore-index kind="GeatteVote" ancestor="false">
+        <property name="geatteOwner" direction="asc" />
+        <property name="createdDate" direction="desc" />
+    </datastore-index>
+    <datastore-index kind="GeatteVote" ancestor="false">
+        <property name="geatteId" direction="asc" />
+        <property name="createdDate" direction="desc" />
+    </datastore-index>
+</datastore-indexes>

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.geatte.app.shared.CommonUtils;
 import com.google.android.c2dm.server.C2DMessaging;
 import com.google.appengine.repackaged.com.google.common.util.Base64;
 import com.google.appengine.repackaged.org.json.JSONArray;
@@ -65,7 +66,7 @@ public class GeatteSendServlet extends HttpServlet {
 	    }
 	}
 
-	List<String> numberList = splitNumbers(toNumbers);
+	List<String> numberList = CommonUtils.splitStringBySemiColon(toNumbers);
 	List<DeviceInfo> allDevices = getDevices(numberList, defaultCountryCode);
 
 	Map<String, String[]> params = req.getParameterMap();
@@ -179,19 +180,7 @@ public class GeatteSendServlet extends HttpServlet {
 	return false;
     }
 
-    private List<String> splitNumbers(String numbers) {
 
-	if (numbers == null || numbers.isEmpty()) {
-	    return new ArrayList<String>();
-	}
-	numbers = numbers.trim();
-	String[] list = numbers.split(";");
-	List<String> ret = new ArrayList<String>();
-	for (String n: list) {
-	    ret.add(n.trim());
-	}
-	return ret;
-    }
 
     private List<DeviceInfo> getDevices(List<String> numberList, String defaultCountryCode) {
 	// Context-shared PMF.

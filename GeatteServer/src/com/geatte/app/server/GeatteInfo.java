@@ -3,7 +3,9 @@ package com.geatte.app.server;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -144,32 +146,46 @@ public class GeatteInfo {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<GeatteInfo> getAllItemInfoFromNumber(PersistenceManager pm, String fromNumber, String defaultCountryCode) {
+    public static List<GeatteInfo> getAllItemInfoFromNumber(PersistenceManager pm, String fromNumber, String defaultCountryCode, Date lastSyncDate) {
 
 	// trim dash '-' '(' ')'from given number
 	fromNumber = fromNumber.replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "").trim();
 
+	Map<String, Object> map = new HashMap<String, Object>();
 
 	Query query = pm.newQuery(GeatteInfo.class);
 
-	query.setFilter("fromNumber == fromNumberParam");
-	query.declareParameters("String fromNumberParam");
+	if (lastSyncDate != null) {
+	    query.setFilter("fromNumber == fromNumberParam && createdDate > lastSyncDateParam");
+	    query.declareParameters("String fromNumberParam, java.util.Date lastSyncDateParam");
+	    map.put("lastSyncDateParam", lastSyncDate);
+	} else {
+	    query.setFilter("fromNumber == fromNumberParam");
+	    query.declareParameters("String fromNumberParam");
+	}
+	map.put("fromNumberParam", fromNumber);
+	query.setOrdering("createdDate desc");
 
 	// first get the number as is
-	List<GeatteInfo> qresult = (List<GeatteInfo>) query.execute(fromNumber);
+	List<GeatteInfo> qresult = (List<GeatteInfo>) query.executeWithMap(map);
 	// copy to array - we need to close the query
 	List<GeatteInfo> result = new ArrayList<GeatteInfo>();
 	for (GeatteInfo di : qresult) {
 	    result.add(di);
 	}
+	log.log(Level.FINER, "GeatteInfo.getAllItemInfoFromNumber(): get result size is : " +
+		result.size() + ", fromNumberParam = " + fromNumber);
 
 	// try to compare by adding prefix +
+	String preNumber = "+" + fromNumber;
 	if (fromNumber.indexOf("+") < 0) {
-	    String preNumber = "+" + fromNumber;
-	    qresult = (List<GeatteInfo>) query.execute(preNumber);
+	    map.put("fromNumberParam", preNumber);
+	    qresult = (List<GeatteInfo>) query.executeWithMap(map);
 	    for (GeatteInfo di : qresult) {
 		result.add(di);
 	    }
+	    log.log(Level.FINER, "GeatteInfo.getAllItemInfoFromNumber(): after perfix get " +
+		    "result size is : " + result.size() + ", fromNumberParam = " + preNumber);
 	}
 
 	// try to compare by reformat with default country code
@@ -184,13 +200,20 @@ public class GeatteInfo {
 
 	if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
 	    String formatNumber = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
-	    qresult = (List<GeatteInfo>) query.execute(formatNumber);
-	    for (GeatteInfo di : qresult) {
-		result.add(di);
+	    map.put("fromNumberParam", formatNumber);
+	    //avoid duplicates
+	    if (!formatNumber.equals(fromNumber) && !formatNumber.equals(preNumber)) {
+		qresult = (List<GeatteInfo>) query.executeWithMap(map);
+		for (GeatteInfo di : qresult) {
+		    result.add(di);
+		}
+		log.log(Level.FINER, "GeatteInfo.getAllItemInfoFromNumber(): after format" +
+			" get result size is : " + result.size() + ", fromNumberParam = " + formatNumber);
 	    }
 	} else {
-	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoFromNumber() : number can not use default country code, fromNumber = "
-		    + fromNumber + ", defaultCountryCode = " + defaultCountryCode);
+	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoFromNumber() : number can not use " +
+		    "default country code, fromNumber = " + fromNumber +
+		    ", defaultCountryCode = " + defaultCountryCode);
 	}
 
 	query.closeAll();
@@ -198,19 +221,28 @@ public class GeatteInfo {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<GeatteInfo> getAllItemInfoToNumber(PersistenceManager pm, String toNumber, String defaultCountryCode) {
+    public static List<GeatteInfo> getAllItemInfoToNumber(PersistenceManager pm, String toNumber, String defaultCountryCode, Date lastSyncDate) {
 
 	// trim dash '-' '(' ')'from given number
 	toNumber = toNumber.replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "").trim();
 
+	Map<String, Object> map = new HashMap<String, Object>();
 
 	Query query = pm.newQuery(GeatteInfo.class);
 
-	query.setFilter("toNumber == toNumberParam");
-	query.declareParameters("String toNumberParam");
+	if (lastSyncDate != null) {
+	    query.setFilter("toNumber == toNumberParam && createdDate > lastSyncDateParam");
+	    query.declareParameters("String toNumberParam, java.util.Date lastSyncDateParam");
+	    map.put("lastSyncDateParam", lastSyncDate);
+	} else {
+	    query.setFilter("toNumber == toNumberParam");
+	    query.declareParameters("String toNumberParam");
+	}
+	map.put("toNumberParam", toNumber);
+	query.setOrdering("createdDate desc");
 
 	// first get the number as is
-	List<GeatteInfo> qresult = (List<GeatteInfo>) query.execute(toNumber);
+	List<GeatteInfo> qresult = (List<GeatteInfo>) query.executeWithMap(map);
 	// copy to array - we need to close the query
 	List<GeatteInfo> result = new ArrayList<GeatteInfo>();
 	for (GeatteInfo di : qresult) {
@@ -218,9 +250,10 @@ public class GeatteInfo {
 	}
 
 	// try to compare by adding prefix +
+	String preNumber = "+" + toNumber;
 	if (toNumber.indexOf("+") < 0) {
-	    String preNumber = "+" + toNumber;
-	    qresult = (List<GeatteInfo>) query.execute(preNumber);
+	    map.put("toNumberParam", preNumber);
+	    qresult = (List<GeatteInfo>) query.executeWithMap(map);
 	    for (GeatteInfo di : qresult) {
 		result.add(di);
 	    }
@@ -238,13 +271,18 @@ public class GeatteInfo {
 
 	if (numberProto != null && phoneUtil.isValidNumber(numberProto)) {
 	    String formatNumber = phoneUtil.format(numberProto, PhoneNumberFormat.E164);
-	    qresult = (List<GeatteInfo>) query.execute(formatNumber);
-	    for (GeatteInfo di : qresult) {
-		result.add(di);
+	    map.put("toNumberParam", formatNumber);
+	    // avoid duplicates
+	    if (!formatNumber.equals(toNumber) && !formatNumber.equals(preNumber)) {
+		qresult = (List<GeatteInfo>) query.executeWithMap(map);
+		for (GeatteInfo di : qresult) {
+		    result.add(di);
+		}
 	    }
 	} else {
-	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoToNumber() : number can not use default country code, toNumber = "
-		    + toNumber + ", defaultCountryCode = " + defaultCountryCode);
+	    log.log(Level.WARNING, "GeatteInfo.getAllItemInfoToNumber() : number can not use " +
+		    "default country code, toNumber = " + toNumber +
+		    ", defaultCountryCode = " + defaultCountryCode);
 	}
 
 	query.closeAll();

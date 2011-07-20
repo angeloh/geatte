@@ -34,6 +34,7 @@ public class GeatteVoteServlet extends HttpServlet {
     private String mGeatteIdField = null;
     private String mCountryCodeField = null;
     private String mGeatteVoterField = null;
+    private String mGeatteOwnerField = null;
     private String mGeatteVoteRespField = null;
     private String mGeatteFeedbackField = null;
 
@@ -118,19 +119,22 @@ public class GeatteVoteServlet extends HttpServlet {
 
 	//after save to db, send geatte vote to owner
 	String geatteVoteId = null;
+	mGeatteOwnerField = getGeatteVoteOwnerNumber(resp);
 	if ((geatteVoteId = saveToDb(resp)) != null ) {
-	    String geatteOwnerNumber = getGeatteVoteOwnerNumber(resp);
-	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : ready to send geatte id = " + mGeatteIdField + ", geatte vote '" + geatteVoteId  + "' to owner phoneNumber = " + geatteOwnerNumber);
+	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : ready to send geatte id = " + mGeatteIdField +
+		    ", geatte vote '" + geatteVoteId  + "' to owner phoneNumber = " + mGeatteOwnerField);
 
 	    // the message push to device
 	    Map<String, String[]> params = new HashMap<String, String[]>();
 	    params.put("data.geatteid_vote", new String[]{mGeatteIdField});
 	    params.put("data.geatte_voter", new String[]{mGeatteVoterField});
+	    params.put("data.geatte_owner", new String[]{mGeatteOwnerField});
 	    params.put("data.geatte_vote_resp", new String[]{mGeatteVoteRespField});
 	    params.put("data.geatte_vote_feedback", new String[]{mGeatteFeedbackField});
 
-	    submitGeatteVoteTask(mGeatteVoterField, geatteOwnerNumber, params);
-	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : sent geatte id = " + mGeatteIdField + ",  geatte vote '" + geatteVoteId  + "' to owner phoneNumber = " + geatteOwnerNumber);
+	    submitGeatteVoteTask(mGeatteVoterField, mGeatteOwnerField, params);
+	    log.log(Level.INFO, "GeatteVoteServlet.doPOST() : sent geatte id = " + mGeatteIdField + ",  geatte vote '" +
+		    geatteVoteId  + "' to owner phoneNumber = " + mGeatteOwnerField);
 	}
 
 	log.log(Level.INFO, "GeatteVoteServlet.doPOST() : END GeatteVoteServlet.doPOST()");
@@ -147,13 +151,14 @@ public class GeatteVoteServlet extends HttpServlet {
 
 	    log.log(Level.INFO, "GeatteVoteServlet.saveToDb() : create a new GeatteVote");
 
-	    geatteVote = new GeatteVote(mGeatteIdField, mGeatteVoterField, mGeatteVoteRespField, mGeatteFeedbackField);
+	    geatteVote = new GeatteVote(mGeatteIdField, mGeatteVoterField, mGeatteOwnerField, mGeatteVoteRespField, mGeatteFeedbackField);
 
 	    pm.makePersistent(geatteVote);
 
 	    log.log(Level.INFO, "GeatteVoteServlet.saveToDb() : Saved GeatteVote geatteId = " + mGeatteIdField
-		    + ", friendGeatteVoter = " + mGeatteVoterField + ", friendGeatteVoteResp = " + mGeatteVoteRespField
-		    + ", friendGeatteFeedback = " + mGeatteFeedbackField + ", id = " + geatteVote.getId().toString());
+		    + ", geatteVoter = " + mGeatteVoterField + ", geatteOwner = " + mGeatteOwnerField
+		    + ", geatteVoteResp = " + mGeatteVoteRespField
+		    + ", geatteFeedback = " + mGeatteFeedbackField + ", id = " + geatteVote.getId().toString());
 
 	    return geatteVote.getId().toString();
 
