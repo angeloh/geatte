@@ -22,7 +22,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION )
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class GeatteVote {
     private static final Logger log = Logger.getLogger(GeatteVote.class.getName());
 

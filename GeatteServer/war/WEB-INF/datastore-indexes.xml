@@ -20,4 +20,7 @@
         <property name="geatteId" direction="asc" />
         <property name="createdDate" direction="desc" />
     </datastore-index>
+    <datastore-index kind="DeviceInfo" ancestor="true" source="manual">
+        <property name="toDevices_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

@@ -4,8 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION )
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class GeatteInfo {
     private static final Logger log = Logger.getLogger(GeatteInfo.class.getName());
 
@@ -39,6 +41,9 @@ public class GeatteInfo {
 
     @Persistent
     private String toNumber;
+
+    @Persistent
+    private Set<String> toDeviceNumbers = new HashSet<String>();
 
     @Persistent
     private String geatteTitile;
@@ -92,6 +97,14 @@ public class GeatteInfo {
 
     public void setToNumber(String toNumber) {
 	this.toNumber = toNumber;
+    }
+
+    public Set<String> getToDeviceNumbers() {
+	return toDeviceNumbers;
+    }
+
+    public void setToDeviceKeys(Set<String> toDeviceNumbers) {
+	this.toDeviceNumbers = toDeviceNumbers;
     }
 
     public Date getUpdateDate() {
@@ -229,24 +242,18 @@ public class GeatteInfo {
 	Map<String, Object> map = new HashMap<String, Object>();
 
 	Query query = pm.newQuery(GeatteInfo.class);
-
-	if (lastSyncDate != null) {
-	    query.setFilter("toNumber == toNumberParam && createdDate > lastSyncDateParam");
-	    query.declareParameters("String toNumberParam, java.util.Date lastSyncDateParam");
-	    map.put("lastSyncDateParam", lastSyncDate);
-	} else {
-	    query.setFilter("toNumber == toNumberParam");
-	    query.declareParameters("String toNumberParam");
-	}
+	query.setFilter("this.toDeviceNumbers.contains(toNumberParam)");
+	query.declareParameters("String toNumberParam");
 	map.put("toNumberParam", toNumber);
-	query.setOrdering("createdDate desc");
 
 	// first get the number as is
 	List<GeatteInfo> qresult = (List<GeatteInfo>) query.executeWithMap(map);
 	// copy to array - we need to close the query
 	List<GeatteInfo> result = new ArrayList<GeatteInfo>();
 	for (GeatteInfo di : qresult) {
-	    result.add(di);
+	    if (di.getCreatedDate().after(lastSyncDate)) {
+		result.add(di);
+	    }
 	}
 
 	// try to compare by adding prefix +
@@ -255,7 +262,9 @@ public class GeatteInfo {
 	    map.put("toNumberParam", preNumber);
 	    qresult = (List<GeatteInfo>) query.executeWithMap(map);
 	    for (GeatteInfo di : qresult) {
-		result.add(di);
+		if (di.getCreatedDate().after(lastSyncDate)) {
+		    result.add(di);
+		}
 	    }
 	}
 
@@ -276,7 +285,9 @@ public class GeatteInfo {
 	    if (!formatNumber.equals(toNumber) && !formatNumber.equals(preNumber)) {
 		qresult = (List<GeatteInfo>) query.executeWithMap(map);
 		for (GeatteInfo di : qresult) {
-		    result.add(di);
+		    if (di.getCreatedDate().after(lastSyncDate)) {
+			result.add(di);
+		    }
 		}
 	    }
 	} else {

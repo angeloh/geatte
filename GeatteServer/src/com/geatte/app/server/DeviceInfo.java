@@ -27,7 +27,7 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
  *
  * registrations lists different phones registered to that account.
  */
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
 public class DeviceInfo {
     private static final Logger log = Logger.getLogger(DeviceInfo.class.getName());
     public static final String TYPE_AC2DM = "ac2dm";

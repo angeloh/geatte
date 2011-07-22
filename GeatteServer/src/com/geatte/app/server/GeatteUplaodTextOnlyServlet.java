@@ -179,7 +179,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 		Map<String, String[]> params = new HashMap<String, String[]>();
 		params.put("data.geatteid", new String[]{geatteId});
 
-		submitGeatteTask(mFromNumberField, mToNumberField, params);
+		submitGeatteTask(geatteId, mFromNumberField, mToNumberField, params);
 		log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.doPOST() : sent geatte '" + geatteId  + "' to phoneNumbers = " + mToNumberField);
 
 		//image already saved to geatte info, delete from image info
@@ -286,7 +286,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 	return null;
     }
 
-    private void submitGeatteTask(String fromNumber, String toNumbers, Map<String, String[]> params) {
+    private void submitGeatteTask(String geatteId, String fromNumber, String toNumbers, Map<String, String[]> params) {
 	log.log(Level.INFO, "GeatteUplaodTextOnlyServlet.submitGeatteTask() : START submit geatte to " + toNumbers);
 	boolean delayWhileIdle = true;
 	String collapseKey = Integer.toString((int)(Math.random()*5000));
@@ -294,6 +294,7 @@ public class GeatteUplaodTextOnlyServlet extends HttpServlet {
 	//Queue dmQueue = QueueFactory.getDefaultQueue();
 	try {
 	    TaskOptions url = TaskOptions.Builder.withUrl(GeatteSendServlet.URI)
+	    .param(Config.GEATTE_ID_PARAM, geatteId)
 	    .param(Config.GEATTE_FROM_NUMBER_PARAM, fromNumber)
 	    .param(Config.GEATTE_TO_NUMBER_PARAM, toNumbers)
 	    .param(Config.GEATTE_COUNTRY_ISO_PARAM, mCountryCodeField)

@@ -7,11 +7,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,6 +43,7 @@ public class GeatteSendServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, IOException {
 
+	String geatteId = req.getParameter(Config.GEATTE_ID_PARAM);
 	String fromNumber = req.getParameter(Config.GEATTE_FROM_NUMBER_PARAM);
 	String toNumbers = req.getParameter(Config.GEATTE_TO_NUMBER_PARAM);
 	String defaultCountryCode = req.getParameter(Config.GEATTE_COUNTRY_ISO_PARAM);
@@ -68,6 +72,9 @@ public class GeatteSendServlet extends HttpServlet {
 
 	List<String> numberList = CommonUtils.splitStringBySemiColon(toNumbers);
 	List<DeviceInfo> allDevices = getDevices(numberList, defaultCountryCode);
+	if (geatteId != null) {
+	    saveDevicesToItem(allDevices, geatteId);
+	}
 
 	Map<String, String[]> params = req.getParameterMap();
 
@@ -180,10 +187,7 @@ public class GeatteSendServlet extends HttpServlet {
 	return false;
     }
 
-
-
     private List<DeviceInfo> getDevices(List<String> numberList, String defaultCountryCode) {
-	// Context-shared PMF.
 	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
 	List<DeviceInfo> allDevices = new ArrayList<DeviceInfo>();
 	try {
@@ -200,6 +204,29 @@ public class GeatteSendServlet extends HttpServlet {
 	    pm.close();
 	}
 	return allDevices;
+
+    }
+
+    private void saveDevicesToItem(List<DeviceInfo> allDevices, String geatteId) {
+	PersistenceManager pm = DBHelper.getPMF(getServletContext()).getPersistenceManager();
+	try {
+	    Set<String> phones = new HashSet<String>();
+	    for (DeviceInfo dInfo : allDevices) {
+		phones.add(dInfo.getPhoneNumber());
+	    }
+
+	    Long id = Long.parseLong(geatteId);
+	    GeatteInfo geatte = pm.getObjectById(GeatteInfo.class, id);
+	    geatte.setToDeviceKeys(phones);
+	    pm.makePersistent(geatte);
+	    log.info("GeatteSendServlet.saveDevicesToItem() : obtain geatte for id = " + geatteId + ", save device phone numbers to db");
+	} catch (JDOObjectNotFoundException ex) {
+	    log.warning("GeatteSendServlet.saveDevicesToItem() : can not obtain geatte from db for id = " + geatteId);
+	} catch (NumberFormatException nfe) {
+	    log.warning("GeatteSendServlet.saveDevicesToItem() : wrong format of geatteId = " + geatteId);
+	} finally {
+	    pm.close();
+	}
 
     }
 }
