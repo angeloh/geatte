@@ -5,12 +5,14 @@
     <string name="app_name">Geatte</string>
     <string name="app_url">http://www.geatte.com</string>
     <string name="no_geattes">No Geattes Yet</string>
-    <string name="empty_my_interests">You have not created any interests.</string>
-    <string name="empty_friend_interests">You have not received any interests from friends.</string>
+    <string name="empty_my_interests">No Interests Found. Start Creating Your Interest.</string>
+    <string name="empty_friend_interests">No Interests Received From Friends. Invite More Friends To Join Geatte.</string>
+    <string name="empty_list">No Interests Found! Contact Geatte Team For Help.</string>
     <string name="show_all_feedbacks">Show All Feedbacks</string>
     <string name="show_all_feedbacks_title">Feedbacks For My Interests</string>
     <string name="show_geattetab">GeatteTab</string>
     <string name="show_geattetab_loading">Loading...</string>
+    <string name="show_item_feedback_title">Feedback</string>
 
     <string name="menu_delete">Delete Geatte</string>
 	<string name="menu_add_more_geatte">Add more geatte</string>

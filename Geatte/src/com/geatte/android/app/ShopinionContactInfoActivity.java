@@ -48,7 +48,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() : No contacts available!!");
 		}
-		warnItem = new GeatteThumbnailItem("Click menu to invite friends", null, R.drawable.email);
+		warnItem = new GeatteThumbnailItem("Click Menu To Invite Friends", null, R.drawable.email);
 	    } else {
 		warnItem = null;
 	    }
@@ -70,7 +70,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 		    mContactsAdapter.remove(progressItem);
 		    mContactsAdapter.notifyDataSetChanged();
 		}
-	    },500);
+	    },50);
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() :  ERROR ", e);
 	}
@@ -84,6 +84,25 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): START");
 	mContactsAdapter.notifyDataSetChanged();
 	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): END");
+    }
+
+    @Override
+    public void onPause() {
+	super.onPause();
+	if (getListAdapter() != null) {
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onPause(): execute gc");
+	    }
+	    for (int i = 0; i < getListAdapter().getCount(); i++) {
+		if (getListAdapter().getItem(i) instanceof GeatteContactItem) {
+		    GeatteContactItem item = (GeatteContactItem) getListAdapter().getItem(i);
+		    if (item.contactBitmap != null) {
+			item.contactBitmap.recycle();
+		    }
+		    item.contactBitmap = null;
+		}
+	    }
+	}
     }
 
     @Override
@@ -197,7 +216,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
      * A ThumbnailItemAdapter is an extension of an ItemAdapter for
      * GeatteContactItem to return associated view.
      */
-    private class ThumbnailItemAdapter extends ItemAdapter {
+    static private class ThumbnailItemAdapter extends ItemAdapter {
 
 	private Context mContext;
 
@@ -321,7 +340,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 	    final GeatteProgressItem progressItem = new GeatteProgressItem("Retrieving contacts", true);
 	    items.add(progressItem);
 
-	    mContactsAdapter = new ThumbnailItemAdapter(ShopinionContactInfoActivity.this, items);
+	    mContactsAdapter = new ThumbnailItemAdapter(ShopinionContactInfoActivity.this.getApplicationContext(), items);
 	    setListAdapter(mContactsAdapter);
 
 	    mHandler.postDelayed(new Runnable() {
@@ -332,7 +351,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 		    mContactsAdapter.remove(progressItem);
 		    mContactsAdapter.notifyDataSetChanged();
 		}
-	    },500);
+	    },50);
 	    Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() END");
 	}
     }

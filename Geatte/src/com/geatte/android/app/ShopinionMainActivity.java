@@ -1,13 +1,5 @@
 package com.geatte.android.app;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.cyrilmottier.android.greendroid.R;
-import com.geatte.android.view.InterestThumbnailItem;
-import com.geatte.android.view.InterestThumbnailItemView;
-import com.geatte.android.view.ListActionBarActivity;
 import greendroid.image.ChainImageProcessor;
 import greendroid.image.ImageProcessor;
 import greendroid.image.MaskImageProcessor;
@@ -19,8 +11,31 @@ import greendroid.widget.ItemAdapter;
 import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.item.Item;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,8 +44,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Paint.Style;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +57,20 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
+
+import com.cyrilmottier.android.greendroid.R;
+import com.geatte.android.view.InterestThumbnailItem;
+import com.geatte.android.view.InterestThumbnailItemView;
+import com.geatte.android.view.ListActionBarActivity;
 
 public class ShopinionMainActivity extends ListActionBarActivity {
 
     private final Handler mHandler = new Handler();
     private InterestThumbnailItemAdapter mImageAdapter = null;
+    private PendingIntent mAlarmSender;
+    private ProgressDialog mDialog;
 
     public ShopinionMainActivity() {
 	super(ActionBar.Type.Dashboard);
@@ -66,6 +92,21 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		R.drawable.grid).setContentDescription(R.string.tab_grid);
 	addActionBarItem(actionBarItem);
 	addActionBarItem(Type.AllFriends);
+	//addActionBarItem(Type.Compass);
+
+
+	// TODO check if server has this device's reg id
+
+	// Run the setup first if necessary
+	if (isSetupRequired()) {
+	    startActivity(new Intent(this, GeatteSetupActivity.class));
+	}
+
+	// Create an IntentSender that will launch our service, to be scheduled
+	// with the alarm manager.
+	mAlarmSender = PendingIntent.getService(ShopinionMainActivity.this,
+		0, new Intent(ShopinionMainActivity.this, GeatteContactsService.class), 0);
+	scheduleContactService();
 
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onCreate(): END");
@@ -78,14 +119,41 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onResume(): START");
 	}
+	mDialog = ProgressDialog.show(ShopinionMainActivity.this, "Loading", "Please wait...", true);
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
 		fillList();
 	    }
-	},250);
+	},50);
+	if (!isOnline()) {
+	    Toast.makeText(getApplicationContext(), "No internet connection available!!", Toast.LENGTH_SHORT).show();
+	    Log.w(Config.LOGTAG, "ShopinionMainActivity:onResume()  No internet connection available!!");
+	}
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionMainActivity:onResume(): END");
 	}
+    }
+
+    @Override
+    public void onPause() {
+	super.onPause();
+	if (getListAdapter() != null) {
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "ShopinionMainActivity:onPause(): execute gc");
+	    }
+	    for (int i = 0; i < getListAdapter().getCount(); i++) {
+		if (getListAdapter().getItem(i) instanceof InterestThumbnailItem) {
+		    InterestThumbnailItem item = (InterestThumbnailItem) getListAdapter().getItem(i);
+		    item.thumbnail = null;
+		}
+	    }
+	}
+    }
+
+    @Override
+    public void onDestroy() {
+	super.onDestroy();
+	unScheduleContactService();
     }
 
     private void fillList() {
@@ -99,6 +167,22 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 
 	    mImageAdapter = new InterestThumbnailItemAdapter(this, items);
 	    setListAdapter(mImageAdapter);
+
+	    mHandler.postDelayed(new Runnable() {
+		public void run() {
+		    if (mDialog != null && mDialog.isShowing()) {
+			try {
+			    if(Config.LOG_DEBUG_ENABLED) {
+				Log.d(Config.LOGTAG, "ShopinionMainActivity:fillList(): try to dismiss mDialog");
+			    }
+			    mDialog.dismiss();
+			    mDialog = null;
+			} catch (Exception e) {
+			    Log.w(Config.LOGTAG, "ShopinionMainActivity:fillList(): failed to dismiss mDialog", e);
+			}
+		    }
+		}
+	    },10);
 
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, "ShopinionMainActivity:fillList() :  ERROR ", e);
@@ -153,13 +237,13 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	return items;
     }
 
-    private static class InterestThumbnailItemAdapter extends ItemAdapter {
+    static private class InterestThumbnailItemAdapter extends ItemAdapter {
 
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private ImageProcessor mImageProcessor;
 
-	static class ViewHolder {
+	class ViewHolder {
 	    public AsyncImageView imageView;
 	    public TextView textViewTitle;
 	    public TextView textViewSubTitle;
@@ -226,8 +310,9 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
+			Intent intent = new Intent(view.getContext(), ShopinionFeedbackActivity.class);
 			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
+			intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
 		    }
 		});
@@ -236,8 +321,9 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
+			Intent intent = new Intent(view.getContext(), ShopinionFeedbackActivity.class);
 			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
+			intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
 		    }
 		});
@@ -246,8 +332,9 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), GeatteFeedbackActivity.class);
+			Intent intent = new Intent(view.getContext(), ShopinionFeedbackActivity.class);
 			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
+			intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
 		    }
 		});
@@ -334,8 +421,9 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	    if (item == null) {
 		Log.w(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() : item is null");
 	    } else {
-		Intent intent = new Intent(this, GeatteFeedbackActivity.class);
+		Intent intent = new Intent(this, ShopinionFeedbackActivity.class);
 		intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, item.getId());
+		intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 		startActivity(intent);
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "ShopinionMainActivity:onListItemClick() END");
@@ -355,6 +443,9 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	case 1:
 	    onShowAllContacts(item.getItemView());
 	    break;
+	    //	case 2:
+	    //	    onTestGetAllItems();
+	    //	    break;
 	default:
 	    return super.onHandleActionBarItemClick(item, position);
 	}
@@ -365,6 +456,104 @@ public class ShopinionMainActivity extends ListActionBarActivity {
     public void onShowAllContacts(View v) {
 	Intent intent = new Intent(getApplicationContext(), ShopinionContactInfoActivity.class);
 	startActivity(intent);
+    }
+
+    public void onTestGetAllItems() {
+
+	DefaultHttpClient client = new DefaultHttpClient();
+
+	List<NameValuePair> qparams = new ArrayList<NameValuePair>();
+	qparams.add(new BasicNameValuePair(Config.DEV_PHONE_NUMBER_PARAM, "15103978860"));
+	qparams.add(new BasicNameValuePair(Config.DEV_PHONE_COUNTRY_ISO_PARAM, "us"));
+	qparams.add(new BasicNameValuePair("lastSyncDate", "2011-07-01 01:00:00"));
+	qparams.add(new BasicNameValuePair("reqType", "my_votes;friend_items"));
+
+	try {
+
+	    URI uri = URIUtils.createURI("https", Config.BASE_SERVER, -1, "/geatteallget",
+		    URLEncodedUtils.format(qparams, "UTF-8"), null);
+	    Log.d(Config.LOGTAG, "Sending request to geatte info to url = " + uri.toString());
+	    HttpGet httpget = new HttpGet(uri);
+	    HttpResponse response = client.execute(httpget);
+
+	    JSONObject jResponse = null;
+	    BufferedReader reader = new BufferedReader(
+		    new InputStreamReader(
+			    response.getEntity().getContent(), "UTF-8"));
+
+	    char[] tmp = new char[2048];
+	    StringBuffer body = new StringBuffer();
+	    while (true) {
+		int cnt = reader.read(tmp);
+		if (cnt <= 0) {
+		    break;
+		}
+		body.append(tmp, 0, cnt);
+	    }
+	    try {
+		jResponse = new JSONObject(URLDecoder.decode((body.toString()==null ? "" : body.toString()), Config.ENCODE_UTF8));
+	    } catch (JSONException e) {
+		Log.e(Config.LOGTAG, " onTestGetAllItems ", e);
+	    }
+
+	    if (jResponse != null) {
+		Log.d(Config.LOGTAG, " onTestGetAllItems GOT geatteId = " + jResponse);
+	    } else {
+		Log.e(Config.LOGTAG, " onTestGetAllItems json response is null ");
+	    }
+
+	} catch (Exception e) {
+	    Log.e(Config.LOGTAG, " onTestGetAllItems", e);
+	}
+    }
+
+    private boolean isSetupRequired() {
+	Context context = getApplicationContext();
+	final SharedPreferences prefs = context.getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
+	if (prefs.getString(Config.PREF_REGISTRATION_ID, null) == null) {
+	    return true;
+	}
+	String userEmail = prefs.getString(Config.PREF_USER_EMAIL, null);
+	if (userEmail == null) {
+	    return true;
+	}
+	return false;
+	// async check server
+	//	String phoneNumber = DeviceRegistrar.getPhoneNumber(context);
+	//	new RegIdCheckTask().execute(phoneNumber, userEmail);
+	//
+	//	String hasRegIdStr = prefs.getString(Config.PREF_SERVER_HAS_REG_ID, null);
+	//	boolean hasRegId = Boolean.parseBoolean(hasRegIdStr);
+	//	if (!hasRegId) {
+	//	    return true;
+	//	} else {
+	//	    return false;
+	//	}
+    }
+
+    private void scheduleContactService() {
+	// We want the alarm to go off 30 seconds from now.
+	long firstTime = SystemClock.elapsedRealtime();
+
+	// Schedule the alarm!
+	AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+	am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+		firstTime, 5*60*60*1000, mAlarmSender);
+    }
+
+    private void unScheduleContactService() {
+	// And cancel the alarm.
+	AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+	am.cancel(mAlarmSender);
+    }
+
+    private boolean isOnline() {
+	ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+	    return true;
+	}
+	return false;
     }
 
 }

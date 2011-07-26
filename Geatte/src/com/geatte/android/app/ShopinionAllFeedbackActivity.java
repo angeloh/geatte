@@ -72,12 +72,31 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 	    public void run() {
 		fillList();
 	    }
-	},250);
+	},50);
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionAllFeedbackActivity:onResume(): END");
 	}
     }
 
+    @Override
+    public void onPause() {
+	super.onPause();
+	if (getListAdapter() != null) {
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "ShopinionAllFeedbackActivity:onPause(): execute gc");
+	    }
+	    for (int i = 0; i < getListAdapter().getCount(); i++) {
+		if (getListAdapter().getItem(i) instanceof GeatteFeedbackItem) {
+		    GeatteFeedbackItem item = (GeatteFeedbackItem) getListAdapter().getItem(i);
+		    if (item.contactBitmap != null) {
+			item.contactBitmap.recycle();
+		    }
+		    item.contactBitmap = null;
+		    item.interestThumbnail = null;
+		}
+	    }
+	}
+    }
 
     @Override
     public void onDestroy() {
@@ -110,7 +129,7 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 			}
 		    }
 		}
-	    },500);
+	    },10);
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, "ShopinionAllFeedbackActivity:fillList() :  ERROR ", e);
 	}
@@ -231,13 +250,13 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
      * ThumbnailBitmapItem, SeparatorThumbnailItem, GeatteThumbnailItem
      * to return associated view.
      */
-    private static class GeatteFeedbackItemAdapter extends ItemAdapter {
+    static private class GeatteFeedbackItemAdapter extends ItemAdapter {
 
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private ImageProcessor mImageProcessor;
 
-	static class ViewHolder {
+	class ViewHolder {
 	    public ImageView contactImageView;
 	    public AsyncImageView interestImageView;
 	    public TextView textViewTitle;

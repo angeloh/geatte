@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+@Deprecated
 public class GeatteGridFIAsyncXActivity extends GridActionBarActivity {
 
     private final Handler mHandler = new Handler();

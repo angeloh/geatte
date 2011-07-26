@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 
+@Deprecated
 public class GeatteListFIAsyncXActivity extends GDListActivity {
 
     private final Handler mHandler = new Handler();

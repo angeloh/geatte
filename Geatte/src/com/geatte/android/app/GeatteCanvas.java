@@ -39,6 +39,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+@Deprecated
 public class GeatteCanvas extends GDActivity {
     private static final String CLASSTAG = GeatteCanvas.class.getSimpleName();
     private static final int ACTIVITY_SNAP = 0;

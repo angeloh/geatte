@@ -7,5 +7,8 @@
 	<item type="id" name="shopinion_snap_btn" />
 	<item type="id" name="shopinion_pick_btn" />
 	<item type="id" name="shopinion_all_btn" />
+	
+	<item type="id" name="voting_image_view" />
+	<item type="id" name="voting_thumbnail" />
 
 </resources>

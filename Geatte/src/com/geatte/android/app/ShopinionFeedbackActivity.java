@@ -1,7 +1,9 @@
 package com.geatte.android.app;
 
-import greendroid.app.GDListActivity;
+import greendroid.widget.ActionBarItem;
 import greendroid.widget.ItemAdapter;
+import greendroid.widget.ActionBar.OnActionBarListener;
+import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.item.Item;
 import greendroid.widget.itemview.ItemView;
 
@@ -10,10 +12,12 @@ import java.util.List;
 
 import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteThumbnailItem;
+import com.geatte.android.view.ListActionBarActivity;
 import com.geatte.android.view.SeparatorThumbnailItem;
 import com.geatte.android.view.ThumbnailBitmapItem;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,24 +30,39 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class GeatteFeedbackActivity extends GDListActivity {
+public class ShopinionFeedbackActivity extends ListActionBarActivity {
 
     private final Handler mHandler = new Handler();
+    private Config.BACK_STYLE mIsHomeBar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setTitle(R.string.app_name);
 
 	Bundle extras = getIntent().getExtras();
+
+	String isHomeBar = extras != null ? extras.getString(Config.ACTION_FEEDBACK_BAR_HOME) : Config.BACK_STYLE.HOME.toString();
+	if (isHomeBar == null) {
+	    mIsHomeBar = Config.BACK_STYLE.HOME;
+	} else {
+	    mIsHomeBar = Config.BACK_STYLE.valueOf(isHomeBar);
+	}
+
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra mIsHomeBar = " + mIsHomeBar);
+	}
+
 	final String geatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra geatteId = " + geatteId);
+	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra geatteId = " + geatteId);
 	}
 	final Long interestId = extras != null ? extras.getLong(GeatteDBAdapter.KEY_INTEREST_ID) : null;
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteFeedbackActivity:onCreate get extra interestId = " + interestId);
+	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra interestId = " + interestId);
 	}
+
+	setTitle(R.string.show_item_feedback_title);
+	addActionBarItem(Type.AllFriends);
 
 	List<Item> items = new ArrayList<Item>();
 	final GeatteThumbnailItem warnItem;
@@ -53,14 +72,14 @@ public class GeatteFeedbackActivity extends GDListActivity {
 	    ThumbnailBitmapItem item = createFeedbackItemsFromFetchResult(geatteId, interestId, items);
 	    if (item == null) {
 		geatteItem = null;
-		warnItem = new GeatteThumbnailItem("No geatte available", null, R.drawable.invalid);
+		warnItem = new GeatteThumbnailItem("Can't find the item", null, R.drawable.invalid);
 	    } else {
 		geatteItem = item;
 		warnItem = null;
 	    }
 	}
 	else {
-	    warnItem = new GeatteThumbnailItem("Invalid geatte", null, R.drawable.invalid);
+	    warnItem = new GeatteThumbnailItem("Can't find the item", null, R.drawable.invalid);
 	    geatteItem = null;
 	}
 
@@ -80,7 +99,26 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		}
 		adapter.notifyDataSetChanged();
 	    }
-	},250);
+	},50);
+    }
+
+    @Override
+    public void onPause() {
+	super.onPause();
+	if (getListAdapter() != null) {
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onPause(): execute gc");
+	    }
+	    for (int i = 0; i < getListAdapter().getCount(); i++) {
+		if (getListAdapter().getItem(i) instanceof GeatteThumbnailItem) {
+		    GeatteThumbnailItem item = (GeatteThumbnailItem) getListAdapter().getItem(i);
+		    if (item.bitmap != null) {
+			item.bitmap.recycle();
+		    }
+		    item.bitmap = null;
+		}
+	    }
+	}
     }
 
     private ThumbnailBitmapItem createFeedbackItemsFromFetchResult(String geatteId, Long interestId, List<Item> items) {
@@ -100,18 +138,15 @@ public class GeatteFeedbackActivity extends GDListActivity {
 	    if (geatteId != null) {
 		myInterestCur = mDbHelper.fetchMyInterest(geatteId);
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult fetched my interest by geatteId = " + geatteId);
+		    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:createFeedbackItemsFromFetchResult fetched my interest by geatteId = " + geatteId);
 		}
 	    } else {
-		Log.w(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult invalid interestId and geatteId, ignore create!!");
+		Log.w(Config.LOGTAG, "ShopinionFeedbackActivity:createFeedbackItemsFromFetchResult invalid interestId and geatteId, ignore create!!");
 		return null;
 	    }
 	    if (myInterestCur.isAfterLast()) {
 		geatteItem = null;
 	    } else {
-		//	    String savedImagePath = cursor.getString(
-		//		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
-		//	    mInterestImage.setImageBitmap(BitmapFactory.decodeFile(savedImagePath));
 		String title = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
 		String desc = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC));
 		String savedImagePath = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
@@ -123,6 +158,9 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		List<Item> yesItems = new ArrayList<Item>();
 		List<Item> noItems = new ArrayList<Item>();
 		List<Item> maybeItems = new ArrayList<Item>();
+		yesItems.add(new SeparatorThumbnailItem("Go Get It", R.drawable.ct_yes));
+		noItems.add(new SeparatorThumbnailItem("Don't Get It", R.drawable.ct_no));
+		maybeItems.add(new SeparatorThumbnailItem("Think Twice", R.drawable.ct_maybe));
 
 		feedbackCur = mDbHelper.fetchMyInterestFeedback(geatteId);
 		feedbackCur.moveToFirst();
@@ -130,10 +168,6 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		while (feedbackCur.isAfterLast() == false) {
 		    String vote = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTE));
 		    if (vote.equals(Config.LIKE.YES.toString())) {
-			if (yesItems.size() == 0) {
-			    //yesItems.add(new SeparatorItem(feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER))));
-			    yesItems.add(new SeparatorThumbnailItem("Go Get It!!", R.drawable.ct_yes));
-			}
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
 			// get contact name for this voter
 			String voterName = mDbHelper.fetchContactName(voter);
@@ -152,10 +186,6 @@ public class GeatteFeedbackActivity extends GDListActivity {
 
 		    }
 		    if (vote.equals(Config.LIKE.NO.toString())) {
-			if (noItems.size() == 0) {
-			    //yesItems.add(new SeparatorItem(feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER))));
-			    noItems.add(new SeparatorThumbnailItem("Don't Get It!!", R.drawable.ct_no));
-			}
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
 			// get contact name for this voter
 			String voterName = mDbHelper.fetchContactName(voter);
@@ -174,10 +204,6 @@ public class GeatteFeedbackActivity extends GDListActivity {
 		    }
 
 		    if (vote.equals(Config.LIKE.MAYBE.toString())) {
-			if (maybeItems.size() == 0) {
-			    //yesItems.add(new SeparatorItem(feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER))));
-			    maybeItems.add(new SeparatorThumbnailItem("Think Twice!!", R.drawable.ct_maybe));
-			}
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
 			// get contact name for this voter
 			String voterName = mDbHelper.fetchContactName(voter);
@@ -199,12 +225,22 @@ public class GeatteFeedbackActivity extends GDListActivity {
 
 		}
 
+		if (yesItems.size() == 1) {
+		    yesItems.add(new GeatteThumbnailItem("No Agreement Yet!", "", R.drawable.profile));
+		}
+		if (noItems.size() == 1) {
+		    noItems.add(new GeatteThumbnailItem("Awesome. No Objections!", "", R.drawable.profile));
+		}
+		if (maybeItems.size() == 1) {
+		    maybeItems.add(new GeatteThumbnailItem("Great. No Maybe!", "", R.drawable.profile));
+		}
+
 		items.addAll(yesItems);
 		items.addAll(maybeItems);
 		items.addAll(noItems);
 	    }
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteFeedbackActivity:createFeedbackItemsFromFetchResult ERROR ", e);
+	    Log.e(Config.LOGTAG, "ShopinionFeedbackActivity:createFeedbackItemsFromFetchResult ERROR ", e);
 	} finally {
 	    if (myInterestCur != null) {
 		myInterestCur.close();
@@ -225,7 +261,7 @@ public class GeatteFeedbackActivity extends GDListActivity {
      * ThumbnailBitmapItem, SeparatorThumbnailItem, GeatteThumbnailItem
      * to return associated view.
      */
-    private class ThumbnailBitmapItemAdapter extends ItemAdapter {
+    static private class ThumbnailBitmapItemAdapter extends ItemAdapter {
 
 	private Context mContext;
 
@@ -313,7 +349,71 @@ public class GeatteFeedbackActivity extends GDListActivity {
 
     @Override
     public int createLayout() {
-	return R.layout.geatte_feedback_list_content;
+	if (mIsHomeBar == Config.BACK_STYLE.LIST) {
+	    return R.layout.shopinion_item_feedback_list_content_actionbar_back;
+	} else if (mIsHomeBar == Config.BACK_STYLE.GRID) {
+	    return R.layout.shopinion_item_feedback_grid_content_actionbar_back;
+	} else {
+	    return R.layout.shopinion_item_feedback_list_content;
+	}
     }
+
+    @Override
+    public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+
+	switch (position) {
+	case 0:
+	    onShowAllContacts(item.getItemView());
+	    break;
+	default:
+	    return super.onHandleActionBarItemClick(item, position);
+	}
+
+	return true;
+    }
+
+    public void onShowAllContacts(View v) {
+	Intent intent = new Intent(getApplicationContext(), ShopinionContactInfoActivity.class);
+	startActivity(intent);
+    }
+
+    @Override
+    public void onPreContentChanged() {
+	super.onPreContentChanged();
+	getActionBar().setOnActionBarListener(mActionBarOnFeedbackListener);
+    }
+
+    private OnActionBarListener mActionBarOnFeedbackListener = new OnActionBarListener() {
+	public void onActionBarItemClicked(int position) {
+	    if (position == OnActionBarListener.HOME_ITEM) {
+		switch (mIsHomeBar) {
+		case GRID:
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "Going back to the grid activity");
+		    }
+		    Intent intentG = new Intent(ShopinionFeedbackActivity.this, ShopinionGridActivity.class);
+		    startActivity(intentG);
+		    break;
+		case LIST:
+		case HOME:
+		default:
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "Going back to the home activity");
+		    }
+		    Intent intentM = new Intent(ShopinionFeedbackActivity.this, ShopinionMainActivity.class);
+		    startActivity(intentM);
+		    break;
+		}
+
+	    } else {
+		if (!onHandleActionBarItemClick(getActionBar().getItem(position), position)) {
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.w(Config.LOGTAG, "Click on item at position " + position + " dropped down to the floor");
+		    }
+		}
+	    }
+	}
+    };
+
 
 }

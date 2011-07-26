@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<greendroid.widget.ActionBarHost
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:greendroid="http://schemas.android.com/apk/res/com.geatte.android.app"
+	android:id="@id/gd_action_bar_host"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
 
-	<FrameLayout
+	<!--
+		Layout height/width and background are set here. This is a hack to
+		apply a default style to the ActionBar. Indeed, no style can be
+		applied to a LinearLayout
+	-->
+	<greendroid.widget.ActionBar
+		xmlns:actionBar="http://schemas.android.com/apk/res/com.geatte.android.app"
+		android:id="@id/gd_action_bar"
+		android:layout_height="@dimen/gd_action_bar_height"
 		android:layout_width="fill_parent"
+		android:background="?attr/gdActionBarBackground"
+		actionBar:homeDrawable="@drawable/list" />
+
+    <FrameLayout
+		android:id="@id/gd_action_bar_content_view"
 		android:layout_height="0dp"
+		android:layout_width="fill_parent"
 		android:layout_weight="1">
 
 		<ImageView
@@ -31,7 +46,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:background="@android:drawable/bottom_bar"
-		android:paddingTop="4dp">
+		android:paddingTop="1dp">
 
 		<Button
 			android:layout_width="0dp"
@@ -39,7 +54,9 @@
 			android:layout_weight="1"
 			android:drawableTop="@drawable/green_light"
 			android:text="@string/voting_yes"
-			android:onClick="onYes" />
+			android:onClick="onYes"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
 			
 		<Button
 			android:layout_width="0dp"
@@ -47,7 +64,9 @@
 			android:layout_weight="1"
 			android:drawableTop="@drawable/warning"
 			android:text="@string/voting_maybe"
-			android:onClick="onMaybe" />
+			android:onClick="onMaybe"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
 
 		<Button
 			android:layout_width="0dp"
@@ -55,7 +74,9 @@
 			android:layout_weight="1"
 			android:drawableTop="@drawable/red_light"
 			android:text="@string/voting_no"
-			android:onClick="onNo" />
+			android:onClick="onNo"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
 
 		<Button
 			android:layout_width="0dp"
@@ -63,7 +84,9 @@
 			android:layout_weight="1"
 			android:drawableTop="@drawable/write"
 			android:text="@string/voting_comment"
-			android:onClick="onComment" />
+			android:onClick="onComment"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
 			
 		<Button
 			android:layout_width="0dp"
@@ -71,8 +94,10 @@
 			android:layout_weight="1"
 			android:drawableTop="@drawable/send"
 			android:text="@string/voting_send"
-			android:onClick="onSend" />
+			android:onClick="onSend"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
 
 	</LinearLayout>
 
-</LinearLayout>
+</greendroid.widget.ActionBarHost>

@@ -17,6 +17,8 @@
 	<color name="blue_1">#304B6D</color>
 	<color name="blue_2">#365984</color>
 	
+	<color name="separator_bg">#E4EEFE</color>
+	
 	<!-- custom_button_2 -->
 	<color name="Button_Type_0_Dark">#BEC4CB</color>
 	<color name="Button_Type_0_Light">#F2FBFE</color>

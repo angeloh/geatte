@@ -112,7 +112,8 @@
 
 	<!-- Styles for the SeparatorThumbnailItem -->
 	<style name="Geatte.SeparatorThumbnailItem">
-		<item name="android:background">#646D7E</item>
+		<item name="android:background">@color/separator_bg</item>
+		<item name="android:layout_marginBottom">?attr/GeatteDrawableMargin</item>
 	</style>
 	
 	<style name="Geatte.SeparatorThumbnailItem.Text">

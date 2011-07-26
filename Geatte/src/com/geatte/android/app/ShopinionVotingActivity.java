@@ -8,8 +8,11 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+
+import com.cyrilmottier.android.greendroid.R;
 import greendroid.app.GDActivity;
 import greendroid.widget.AsyncImageView;
+import greendroid.widget.ActionBar.OnActionBarListener;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,10 +27,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-@Deprecated
-public class GeatteVotingActivity extends GDActivity {
+public class ShopinionVotingActivity extends GDActivity {
 
-    private static final String CLASSTAG = GeatteVotingActivity.class.getSimpleName();
+    private static final String CLASSTAG = ShopinionVotingActivity.class.getSimpleName();
     private static final String GEATTE_VOTE_UPLOAD_PATH = "/geattevote";
     private static final int ACTIVITY_COMMENT = 0;
     private ImageView mGeatteVoteImage;
@@ -37,50 +39,69 @@ public class GeatteVotingActivity extends GDActivity {
     private String mLike = null;
     private String mComment = null;
     private CommentPopupWidget mPopup;
+    private Config.BACK_STYLE mIsHomeBar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate START");
+	    Log.d(Config.LOGTAG, "ShopinionVotingActivity:onCreate START");
 	}
 	super.onCreate(savedInstanceState);
-	setActionBarContentView(R.layout.geatte_voting_view);
-	mGeatteVoteImage = (ImageView) findViewById(R.id.voting_image_view);
-	mVotingThumbnail = (AsyncImageView) findViewById(R.id.voting_thumbnail);
 
 	Bundle extras = getIntent().getExtras();
 	mGeatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
 
-	Log.i(Config.LOGTAG, " " +  GeatteVotingActivity.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
-	populateFields();
-	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onCreate END");
+	String isHomeBar = extras != null ? extras.getString(Config.ACTION_VOTING_BAR_HOME) : Config.BACK_STYLE.HOME.toString();
+	if (isHomeBar == null) {
+	    mIsHomeBar = Config.BACK_STYLE.HOME;
+	} else {
+	    mIsHomeBar = Config.BACK_STYLE.valueOf(isHomeBar);
 	}
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionVotingActivity:onCreate get extra mIsHomeBar = " + mIsHomeBar);
+	}
+
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionVotingActivity:onCreate END");
+	}
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+	super.onPostCreate(savedInstanceState);
+	mGeatteVoteImage = (ImageView) findViewById(R.id.voting_image_view);
+	mVotingThumbnail = (AsyncImageView) findViewById(R.id.voting_thumbnail);
     }
 
     @Override
     protected void onResume() {
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume START");
+	    Log.d(Config.LOGTAG, "ShopinionVotingActivity:onResume() onResume START");
 	}
 	super.onResume();
+	Log.i(Config.LOGTAG, " " +  ShopinionVotingActivity.CLASSTAG + " GOT geatteId = " + mGeatteId + ", populate the vote view");
 	populateFields();
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteVotingActivity.onResume() onResume END");
+	    Log.d(Config.LOGTAG, "ShopinionVotingActivity:onResume() onResume END");
 	}
+    }
+
+    @Override
+    public void onPause() {
+	super.onPause();
     }
 
     @Override
     protected void onDestroy() {
 	super.onDestroy();
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onDestroy(): START");
+	    Log.d(Config.LOGTAG, "ShopinionVotingActivity:onDestroy(): START");
 	}
 	if (mDialog != null) {
 	    mDialog.cancel();
 	}
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "GeatteVotingActivity:onDestroy(): END");
+	    Log.d(Config.LOGTAG, "ShopinionVotingActivity:onDestroy(): END");
 	}
     }
 
@@ -93,7 +114,7 @@ public class GeatteVotingActivity extends GDActivity {
 		fiCursor = dbHelper.fetchFriendInterest(mGeatteId);
 
 		if (fiCursor.isAfterLast()) {
-		    Log.w(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " unable to get record from db for geatte id = " + mGeatteId);
+		    Log.w(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " unable to get record from db for geatte id = " + mGeatteId);
 		}
 		//	    mTitleText.setText(cursor.getString(
 		//		    cursor.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE)));
@@ -107,13 +128,13 @@ public class GeatteVotingActivity extends GDActivity {
 
 
 		if (mGeatteVoteImage == null) {
-		    Log.e(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " mGeatteVoteImage is null ");
+		    Log.e(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " mGeatteVoteImage is null ");
 		}
 		if (savedFIImagePath == null) {
-		    Log.e(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " savedFIImagePath is null ");
+		    Log.e(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " savedFIImagePath is null ");
 		}
 		if (BitmapFactory.decodeFile(savedFIImagePath) == null) {
-		    Log.e(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " BitmapFactory.decodeFile(savedFIImagePath) is null ");
+		    Log.e(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " BitmapFactory.decodeFile(savedFIImagePath) is null ");
 		}
 		mGeatteVoteImage.setImageBitmap(BitmapFactory.decodeFile(savedFIImagePath));
 		if (savedFITitle != null) {
@@ -123,14 +144,14 @@ public class GeatteVotingActivity extends GDActivity {
 		}
 
 	    } catch (Exception ex) {
-		Log.e(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " ERROR ", ex);
+		Log.e(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " ERROR ", ex);
 	    } finally {
 		fiCursor.close();
 		dbHelper.close();
 	    }
 
 	} else {
-	    Log.e(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " can not populate the fields when mGeatteId is null ");
+	    Log.e(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " can not populate the fields when mGeatteId is null ");
 	}
     }
 
@@ -145,16 +166,16 @@ public class GeatteVotingActivity extends GDActivity {
 
 	    if (ret >= 0) {
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "GeatteVotingActivity:saveState() : saved feedback for friend interest for geatteId = " + geatteId
+		    Log.d(Config.LOGTAG, "ShopinionVotingActivity:saveState() : saved feedback for friend interest for geatteId = " + geatteId
 			    + ", vote = " + vote + ", comment = " + comment + " to DB SUCCESSUL!");
 		}
 	    } else {
-		Log.w(Config.LOGTAG, " GeatteVotingActivity:saveState() : saved contact for friend interest for geatteId = " + geatteId
+		Log.w(Config.LOGTAG, " ShopinionVotingActivity:saveState() : saved contact for friend interest for geatteId = " + geatteId
 			+ ", vote = " + vote + ", comment = " + comment + " to DB FAILED!");
 	    }
 
 	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "GeatteVotingActivity:saveState: exception", e);
+	    Log.e(Config.LOGTAG, "ShopinionVotingActivity:saveState: exception", e);
 	} finally {
 	    dbHelper.close();
 	}
@@ -290,7 +311,7 @@ public class GeatteVotingActivity extends GDActivity {
 
 	/// popupwindow way
 	//	// get the instance of the LayoutInflater
-	//	LayoutInflater inflater = (LayoutInflater) GeatteVotingActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	//	LayoutInflater inflater = (LayoutInflater) ShopinionVotingActivity:this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	//	// inflate our view from the corresponding XML file
 	//	View layout = inflater.inflate(R.layout.geatte_vote_comment_edit_view, (ViewGroup)findViewById(R.id.voting_comment_root));
 	//	// create a 100px width and 200px height popup window
@@ -312,9 +333,9 @@ public class GeatteVotingActivity extends GDActivity {
 	//	    public void onClick(View vv) {
 	//		mComment = commentEditText.getText().toString();
 	//		if (mComment != null && !mComment.trim().equals("")) {
-	//		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment = " + mComment);
+	//		    Log.d(Config.LOGTAG, " " + ShopinionVotingActivity:CLASSTAG + " return from comment typing, comment = " + mComment);
 	//		} else {
-	//		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment is null or empty");
+	//		    Log.d(Config.LOGTAG, " " + ShopinionVotingActivity:CLASSTAG + " return from comment typing, comment is null or empty");
 	//		}
 	//		finish();
 	//	    }
@@ -333,9 +354,9 @@ public class GeatteVotingActivity extends GDActivity {
 	    mComment = intent.getExtras().getString(Config.EXTRA_KEY_VOTING_COMMENT);
 	    if(Config.LOG_DEBUG_ENABLED) {
 		if (mComment != null && !mComment.trim().equals("")) {
-		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment = " + mComment);
+		    Log.d(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " return from comment typing, comment = " + mComment);
 		} else {
-		    Log.d(Config.LOGTAG, " " + GeatteVotingActivity.CLASSTAG + " return from comment typing, comment is null or empty");
+		    Log.d(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " return from comment typing, comment is null or empty");
 		}
 	    }
 	}
@@ -343,7 +364,7 @@ public class GeatteVotingActivity extends GDActivity {
 
     public void onSend(View v) {
 	if (mLike != null) {
-	    mDialog = ProgressDialog.show(GeatteVotingActivity.this, "Sending to Your friend", "Please wait...", true);
+	    mDialog = ProgressDialog.show(ShopinionVotingActivity.this, "Sending to Your friend", "Please wait...", true);
 
 	    final SharedPreferences prefs = this.getApplicationContext().getSharedPreferences(Config.PREFERENCE_KEY, Context.MODE_PRIVATE);
 	    mComment = prefs.getString(Config.PREF_VOTING_COMMENT, null);
@@ -358,4 +379,56 @@ public class GeatteVotingActivity extends GDActivity {
 	    .show();
 	}
     }
+
+    @Override
+    public int createLayout() {
+	if (mIsHomeBar == Config.BACK_STYLE.LIST) {
+	    return R.layout.shopinion_voting_view_actionbar_back_to_list;
+	} else if (mIsHomeBar == Config.BACK_STYLE.GRID) {
+	    return R.layout.shopinion_voting_view_actionbar_back_to_grid;
+	} else {
+	    return R.layout.shopinion_voting_view;
+	}
+    }
+
+    @Override
+    public void onPreContentChanged() {
+	super.onPreContentChanged();
+	getActionBar().setOnActionBarListener(mActionBarOnVotingListener);
+    }
+
+    private OnActionBarListener mActionBarOnVotingListener = new OnActionBarListener() {
+	public void onActionBarItemClicked(int position) {
+	    if (position == OnActionBarListener.HOME_ITEM) {
+		switch (mIsHomeBar) {
+		case GRID:
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "Going back to the grid fi activity");
+		    }
+		    Intent intentG = new Intent(ShopinionVotingActivity.this, ShopinionFIGridActivity.class);
+		    startActivity(intentG);
+		    break;
+		case LIST:
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "Going back to the list fi activity");
+		    }
+		    Intent intentM = new Intent(ShopinionVotingActivity.this, ShopinionFIListActivity.class);
+		    startActivity(intentM);
+		    break;
+		case HOME:
+		default:
+		    Intent intentD = new Intent(ShopinionVotingActivity.this, ShopinionMainActivity.class);
+		    startActivity(intentD);
+		    break;
+		}
+
+	    } else {
+		if (!onHandleActionBarItemClick(getActionBar().getItem(position), position)) {
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.w(Config.LOGTAG, "Click on item at position " + position + " dropped down to the floor");
+		    }
+		}
+	    }
+	}
+    };
 }

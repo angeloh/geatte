@@ -12,11 +12,12 @@
 		applied to a LinearLayout
 	-->
 	<greendroid.widget.ActionBar
-		style="@style/GreenDroid.Widget.ActionBar.Dashboard"
+		xmlns:actionBar="http://schemas.android.com/apk/res/com.geatte.android.app"
 		android:id="@id/gd_action_bar"
 		android:layout_height="@dimen/gd_action_bar_height"
 		android:layout_width="fill_parent"
-		android:background="?attr/gdActionBarBackground" />
+		android:background="?attr/gdActionBarBackground"
+		actionBar:homeDrawable="@drawable/list" />
 	
 	<FrameLayout
 		android:id="@id/gd_action_bar_content_view"
@@ -36,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout="@layout/empty_list_fi" />
+            android:layout="@layout/empty_list" />
 
 	</FrameLayout>
 

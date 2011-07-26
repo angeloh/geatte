@@ -102,7 +102,7 @@ public abstract class GridActionBarFooterActivity extends AppFooterActionbarActi
      * @return The {@link ListAdapter} currently associated to the underlying
      *         {@link GridView}
      */
-    public ListAdapter getAdapter() {
+    public ListAdapter getListAdapter() {
 	return mAdapter;
     }
 

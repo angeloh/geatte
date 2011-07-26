@@ -13,6 +13,10 @@ public class Config {
 	YES, NO, MAYBE
     };
 
+    public static enum BACK_STYLE {
+	HOME, LIST, GRID
+    };
+
     private static final int LOG_LEVEL_DEBUG = 4;
     private static final int LOG_LEVEL_INFO = 3;
     private static final int LOG_LEVEL_WARNING = 2;
@@ -52,6 +56,9 @@ public class Config {
     // intent actions
     public static final String ACTION_VOTING = "action_voting";
     public static final String ACTION_FEEDBACK = "action_feedback";
+
+    public static final String ACTION_FEEDBACK_BAR_HOME = "action_feedback_bar_home";
+    public static final String ACTION_VOTING_BAR_HOME = "action_voting_bar_home";
 
     // setup configs
     public static final String SAVED_SCREEN_ID = "saved_screen_id";

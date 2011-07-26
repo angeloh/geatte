@@ -18,6 +18,7 @@ import greendroid.widget.ItemAdapter;
 import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.item.Item;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -44,6 +45,7 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 
     private final Handler mHandler = new Handler();
     private InterestThumbnailItemAdapter mImageAdapter = null;
+    private ProgressDialog mDialog;
 
     public ShopinionFIListActivity() {
 	super(ActionBar.Type.Dashboard);
@@ -77,13 +79,30 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onResume(): START");
 	}
+	mDialog = ProgressDialog.show(ShopinionFIListActivity.this, "Loading", "Please wait...", true);
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
 		fillList();
 	    }
-	},250);
+	},50);
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onResume(): END");
+	}
+    }
+
+    @Override
+    public void onPause() {
+	super.onPause();
+	if (getListAdapter() != null) {
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "ShopinionFIListActivity:onPause(): execute gc");
+	    }
+	    for (int i = 0; i < getListAdapter().getCount(); i++) {
+		if (getListAdapter().getItem(i) instanceof InterestFriendThumbnailItem) {
+		    InterestFriendThumbnailItem item = (InterestFriendThumbnailItem) getListAdapter().getItem(i);
+		    item.thumbnail = null;
+		}
+	    }
 	}
     }
 
@@ -98,6 +117,22 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 
 	    mImageAdapter = new InterestThumbnailItemAdapter(this, items);
 	    setListAdapter(mImageAdapter);
+
+	    mHandler.postDelayed(new Runnable() {
+		public void run() {
+		    if (mDialog != null && mDialog.isShowing()) {
+			try {
+			    if(Config.LOG_DEBUG_ENABLED) {
+				Log.d(Config.LOGTAG, "ShopinionFIListActivity:fillList(): try to dismiss mDialog");
+			    }
+			    mDialog.dismiss();
+			    mDialog = null;
+			} catch (Exception e) {
+			    Log.w(Config.LOGTAG, "ShopinionFIListActivity:fillList(): failed to dismiss mDialog", e);
+			}
+		    }
+		}
+	    },10);
 
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, "ShopinionFIListActivity:fillList() :  ERROR ", e);
@@ -166,13 +201,13 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 	return items;
     }
 
-    private static class InterestThumbnailItemAdapter extends ItemAdapter {
+    static private class InterestThumbnailItemAdapter extends ItemAdapter {
 
 	private Context mContext;
 	private LayoutInflater mInflater;
 	private ImageProcessor mImageProcessor;
 
-	static class ViewHolder {
+	class ViewHolder {
 	    public AsyncImageView imageView;
 	    public TextView textViewTitle;
 	    public TextView textViewSubTitle;
@@ -235,8 +270,9 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long geatteId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), GeatteVotingActivity.class);
+			Intent intent = new Intent(view.getContext(), ShopinionVotingActivity.class);
 			intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(geatteId));
+			intent.putExtra(Config.ACTION_VOTING_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
 		    }
 		});
@@ -329,8 +365,9 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 	    if (item == null) {
 		Log.w(Config.LOGTAG, "ShopinionFIListActivity:onListItemClick() : item is null");
 	    } else {
-		Intent intent = new Intent(this, GeatteVotingActivity.class);
+		Intent intent = new Intent(this, ShopinionVotingActivity.class);
 		intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(item.getId()));
+		intent.putExtra(Config.ACTION_VOTING_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 		startActivity(intent);
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "ShopinionFIListActivity:onListItemClick() END");

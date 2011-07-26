@@ -32,10 +32,11 @@ import org.json.JSONObject;
 
 import com.geatte.android.app.Config;
 import com.geatte.android.app.DeviceRegistrar;
-import com.geatte.android.app.GeatteFeedbackActivity;
 import com.geatte.android.app.GeatteDBAdapter;
-import com.geatte.android.app.GeatteVotingActivity;
 import com.geatte.android.app.R;
+import com.geatte.android.app.ShopinionFeedbackActivity;
+import com.geatte.android.app.ShopinionVotingActivity;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -293,7 +294,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 			}
 
 			// send notification
-			Intent intentNotify = new Intent(context, GeatteVotingActivity.class);
+			Intent intentNotify = new Intent(context, ShopinionVotingActivity.class);
 			intentNotify.setAction(Config.ACTION_VOTING + System.currentTimeMillis());
 			if (intentNotify.getExtras() != null) {
 			    String geatteIdExtra = intentNotify.getExtras().getString(Config.GEATTE_ID_PARAM);
@@ -370,7 +371,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		    voter + ", contact name = " + contactName + " to DB SUCCESSUL!");
 
 	    // send notification
-	    Intent intentNotify = new Intent(this, GeatteFeedbackActivity.class);
+	    Intent intentNotify = new Intent(this, ShopinionFeedbackActivity.class);
 	    intentNotify.setAction(Config.ACTION_FEEDBACK + System.currentTimeMillis());
 	    intentNotify.putExtra(Config.GEATTE_ID_PARAM, voteGeatteId);
 	    intentNotify.putExtra(Config.FRIEND_GEATTE_VOTER, voter);

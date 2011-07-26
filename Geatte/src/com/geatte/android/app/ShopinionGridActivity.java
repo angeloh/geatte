@@ -12,6 +12,7 @@ import greendroid.widget.ItemAdapter;
 import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.item.Item;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,6 +30,7 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 
     private final Handler mHandler = new Handler();
     private ImageAdapter mImageAdapter = null;
+    private ProgressDialog mDialog;
 
     public ShopinionGridActivity() {
 	super(ActionBar.Type.Dashboard);
@@ -62,13 +64,30 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): START");
 	}
+	mDialog = ProgressDialog.show(ShopinionGridActivity.this, "Loading", "Please wait...", true);
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
 		fillList();
 	    }
-	},250);
+	},50);
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): END");
+	}
+    }
+
+    @Override
+    public void onPause() {
+	super.onPause();
+	if (getListAdapter() != null) {
+	    if(Config.LOG_DEBUG_ENABLED) {
+		Log.d(Config.LOGTAG, "ShopinionGridActivity:onPause(): execute gc");
+	    }
+	    for (int i = 0; i < getListAdapter().getCount(); i++) {
+		if (getListAdapter().getItem(i) instanceof GridBitmapItem) {
+		    GridBitmapItem item = (GridBitmapItem) getListAdapter().getItem(i);
+		    item.thumbnail = null;
+		}
+	    }
 	}
     }
 
@@ -83,6 +102,22 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 
 	    mImageAdapter = new ImageAdapter(this, items);
 	    setListAdapter(mImageAdapter);
+
+	    mHandler.postDelayed(new Runnable() {
+		public void run() {
+		    if (mDialog != null && mDialog.isShowing()) {
+			try {
+			    if(Config.LOG_DEBUG_ENABLED) {
+				Log.d(Config.LOGTAG, "ShopinionGridActivity:fillList(): try to dismiss mDialog");
+			    }
+			    mDialog.dismiss();
+			    mDialog = null;
+			} catch (Exception e) {
+			    Log.w(Config.LOGTAG, "ShopinionGridActivity:fillList(): failed to dismiss mDialog", e);
+			}
+		    }
+		}
+	    },10);
 
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, "ShopinionGridActivity:fillList() :  ERROR ", e);
@@ -129,11 +164,11 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 	return items;
     }
 
-    private static class ImageAdapter extends ItemAdapter {
+    static private class ImageAdapter extends ItemAdapter {
 	private Context mContext;
 	private LayoutInflater mInflater;
 
-	static class ViewHolder {
+	class ViewHolder {
 	    public ImageView imageView;
 	}
 
@@ -199,8 +234,9 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 	    if (item == null) {
 		Log.w(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() : item is null");
 	    } else {
-		Intent intent = new Intent(this, GeatteFeedbackActivity.class);
+		Intent intent = new Intent(this, ShopinionFeedbackActivity.class);
 		intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, item.getId());
+		intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.GRID.toString());
 		startActivity(intent);
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "ShopinionGridActivity:onGridItemClick() END");
