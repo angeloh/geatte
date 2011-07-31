@@ -44,6 +44,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Paint.Style;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -54,13 +55,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.InterestThumbnailItem;
 import com.geatte.android.view.InterestThumbnailItemView;
 import com.geatte.android.view.ListActionBarActivity;
@@ -71,6 +72,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
     private InterestThumbnailItemAdapter mImageAdapter = null;
     private PendingIntent mAlarmSender;
     private ProgressDialog mDialog;
+    private View mListContainer;
 
     public ShopinionMainActivity() {
 	super(ActionBar.Type.Dashboard);
@@ -147,6 +149,9 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    item.thumbnail = null;
 		}
 	    }
+	    if (mListContainer != null) {
+		mListContainer.setVisibility(View.INVISIBLE);
+	    }
 	}
     }
 
@@ -181,6 +186,12 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 			    Log.w(Config.LOGTAG, "ShopinionMainActivity:fillList(): failed to dismiss mDialog", e);
 			}
 		    }
+		    if (mListContainer == null) {
+			mListContainer = findViewById(R.id.listContainer);
+		    }
+		    mListContainer.startAnimation(AnimationUtils.loadAnimation(ShopinionMainActivity.this
+			    .getApplicationContext(), android.R.anim.fade_in));
+		    mListContainer.setVisibility(View.VISIBLE);
 		}
 	    },10);
 
@@ -293,6 +304,11 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    convertView.setTag(holder);
 		} else {
 		    holder = (ViewHolder) convertView.getTag();
+		    if (holder.imageView.getDrawable() != null) {
+			BitmapDrawable drawable = (BitmapDrawable) holder.imageView.getDrawable();
+			drawable.getBitmap().recycle();
+		    }
+		    holder.imageView.setImageBitmap(null);
 		}
 
 		InterestThumbnailItem tItem = (InterestThumbnailItem) item;
@@ -339,13 +355,13 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    }
 		});
 
-		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
-		}
 		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
 		    holder.imageView.setImageResource(R.drawable.thumb_missing);
 		} else {
 		    holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
+		    if(Config.LOG_DEBUG_ENABLED) {
+			Log.d(Config.LOGTAG, "ShopinionMainActivity:getView() : async image set to bytearray for length = " + tItem.thumbnail.length);
+		    }
 		}
 		//String uri = Uri.fromFile(new File(tItem.imagePath)).toString();
 		//Log.d(Config.LOGTAG, "GeatteListAsyncActivity:getView() : async image request to = " + uri);

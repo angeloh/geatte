@@ -10,5 +10,7 @@
 	
 	<item type="id" name="voting_image_view" />
 	<item type="id" name="voting_thumbnail" />
+	
+	<item type="id" name="listContainer" />
 
 </resources>

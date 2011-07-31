@@ -38,7 +38,7 @@ public class GeatteContactItemView extends RelativeLayout implements ItemView {
 	final GeatteContactItem item = (GeatteContactItem) object;
 	mTitleView.setText(item.text);
 	mSubtitleView.setText(item.subtitle);
-	if (item.contactBitmap != null) {
+	if (item.contactBitmap != null && !item.contactBitmap.isRecycled()) {
 	    mContactThumbnailView.setImageBitmap(item.contactBitmap);
 	} else {
 	    mContactThumbnailView.setImageResource(item.contactDrawableId);

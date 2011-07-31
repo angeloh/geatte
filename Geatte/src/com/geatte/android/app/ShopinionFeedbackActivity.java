@@ -10,7 +10,6 @@ import greendroid.widget.itemview.ItemView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteThumbnailItem;
 import com.geatte.android.view.ListActionBarActivity;
 import com.geatte.android.view.SeparatorThumbnailItem;
@@ -232,7 +231,7 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 		    noItems.add(new GeatteThumbnailItem("Awesome. No Objections!", "", R.drawable.profile));
 		}
 		if (maybeItems.size() == 1) {
-		    maybeItems.add(new GeatteThumbnailItem("Great. No Maybe!", "", R.drawable.profile));
+		    maybeItems.add(new GeatteThumbnailItem("Find More Friends To Vote!", "", R.drawable.profile));
 		}
 
 		items.addAll(yesItems);

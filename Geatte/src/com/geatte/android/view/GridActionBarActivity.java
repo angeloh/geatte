@@ -1,5 +1,7 @@
 package com.geatte.android.view;
 
+import com.geatte.android.app.R;
+
 import greendroid.app.GDActivity;
 import greendroid.widget.ActionBar;
 import android.os.Handler;
@@ -8,8 +10,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
-
-import com.cyrilmottier.android.greendroid.R;
 
 /**
  * Manages a GridView.

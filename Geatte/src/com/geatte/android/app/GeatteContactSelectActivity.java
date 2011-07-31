@@ -3,11 +3,12 @@ package com.geatte.android.app;
 import greendroid.app.GDListActivity;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.Item;
+import greendroid.widget.itemview.ItemView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteProgressItem;
 import com.geatte.android.view.GeatteThumbnailCheckbox;
 import com.geatte.android.view.GeatteThumbnailCheckboxView;
@@ -266,6 +267,11 @@ public class GeatteContactSelectActivity extends GDListActivity {
 		checkboxView.setCheckboxClickListener(this);
 		checkboxView.setCheckboxTag(((GeatteThumbnailCheckbox) item).phone);
 		return (View) checkboxView;
+	    } else if (item instanceof GeatteThumbnailItem) {
+		ItemView cell = item.newView(mContext, null);
+		cell.prepareItemView();
+		cell.setObject(item);
+		return (View) cell;
 	    } else {
 		return super.getView(position, convertView, parent);
 	    }
@@ -361,7 +367,7 @@ public class GeatteContactSelectActivity extends GDListActivity {
 	    if(Config.LOG_DEBUG_ENABLED) {
 		Log.d(Config.LOGTAG, "trying to refresh contacts service");
 	    }
-	    startService(new Intent(this, GeatteContactsService.class));
+	    startService(new Intent(this.getApplicationContext(), GeatteContactsService.class));
 	    return true;
 	case MENU_INVITE:
 	    if(Config.LOG_DEBUG_ENABLED) {

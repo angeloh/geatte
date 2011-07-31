@@ -13,7 +13,6 @@ import greendroid.widget.itemview.ItemView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteFeedbackItem;
 import com.geatte.android.view.GeatteThumbnailItem;
 import android.app.ProgressDialog;
@@ -292,7 +291,7 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 		}
 		holder.interestImageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.interestThumbnail, 0, tItem.interestThumbnail.length));
 
-		if (tItem.contactBitmap != null) {
+		if (tItem.contactBitmap != null && !tItem.contactBitmap.isRecycled()) {
 		    holder.contactImageView.setImageBitmap(tItem.contactBitmap);
 		} else {
 		    holder.contactImageView.setImageResource(tItem.contactDrawableId);

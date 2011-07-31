@@ -38,7 +38,7 @@ public class GeatteThumbnailItemView extends RelativeLayout implements ItemView 
 	final GeatteThumbnailItem item = (GeatteThumbnailItem) object;
 	mTitleView.setText(item.text);
 	mSubtitleView.setText(item.subtitle);
-	if (item.bitmap != null) {
+	if (item.bitmap != null && !item.bitmap.isRecycled()) {
 	    mThumbnailView.setImageBitmap(item.bitmap);
 	} else {
 	    mThumbnailView.setImageResource(item.drawableId);

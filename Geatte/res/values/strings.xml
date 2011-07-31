@@ -32,8 +32,8 @@
     <string name="vote_label">Vote:</string>
     <string name="comment_label">Comment:</string>
     
-    <string name="send_geatte_text">Send Geatte</string>
-    <string name="send_to_text">Send To</string>
+    <string name="send_geatte_text">Send</string>
+    <string name="send_to_text">Select Contact</string>
     <string name="send_to_reset_text">Add More</string>
     
     <string name="register">Register</string>
@@ -47,13 +47,13 @@
     <string name="upload_image_error">Error to upload geatte image</string>
     <string name="upload_vote_error">Error to upload geatte vote</string>
     
-    <string name="voting_yes">Yes</string>
-    <string name="voting_no">No</string>
+    <string name="voting_yes">Great</string>
+    <string name="voting_no">Lame</string>
     <string name="voting_maybe">Maybe</string>
     <string name="voting_comment">Write</string>
-    <string name="voting_send">Send</string>
+    <string name="voting_send">Vote</string>
     <string name="voting_choose_answer">Choose an answer first!</string>
-    <string name="voting_a_geatte">Vote A Geatte</string>
+    <string name="voting_a_geatte">Vote A Friend\'s Item</string>
     <string name="voting_comment_title">Write A Comment</string>
     <string name="voting_comment_text_default">Enter Comment</string>
     <string name="voting_comment_cancel_text">Cancel</string>

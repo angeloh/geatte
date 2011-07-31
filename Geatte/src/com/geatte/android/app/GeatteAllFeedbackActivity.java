@@ -8,7 +8,6 @@ import greendroid.widget.itemview.ItemView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteProgressItem;
 import com.geatte.android.view.GeatteThumbnailItem;
 import com.geatte.android.view.SeparatorThumbnailItem;

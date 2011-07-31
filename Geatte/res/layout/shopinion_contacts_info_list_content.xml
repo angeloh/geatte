@@ -24,11 +24,20 @@
 		android:layout_width="fill_parent"
 		android:layout_weight="1">
 
-		<ListView
-			android:id="@android:id/list"
-			android:layout_height="fill_parent"
-			android:layout_width="fill_parent"
-			style="@style/shopinion_list" />
+        <com.geatte.android.view.FastScrollView
+              android:id="@id/listContainer"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:visibility="invisible">
+			
+			<ListView
+				android:id="@android:id/list"
+				android:layout_height="fill_parent"
+				android:layout_width="fill_parent"
+				android:scrollbars="none"
+				style="@style/shopinion_list" />
+		
+		</com.geatte.android.view.FastScrollView>
 
 	</FrameLayout>
 	

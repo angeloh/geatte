@@ -3,7 +3,6 @@ package com.geatte.android.app;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GridActionBarFooterActivity;
 import com.geatte.android.view.GridBitmapItem;
 import greendroid.widget.ActionBar;
@@ -17,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -199,6 +199,11 @@ public class ShopinionGridActivity extends GridActionBarFooterActivity {
 		    convertView.setTag(holder);
 		} else {
 		    holder = (ViewHolder) convertView.getTag();
+		    if (holder.imageView.getDrawable() != null) {
+			BitmapDrawable drawable = (BitmapDrawable) holder.imageView.getDrawable();
+			drawable.getBitmap().recycle();
+		    }
+		    holder.imageView.setImageBitmap(null);
 		}
 
 		GridBitmapItem tItem = (GridBitmapItem) item;

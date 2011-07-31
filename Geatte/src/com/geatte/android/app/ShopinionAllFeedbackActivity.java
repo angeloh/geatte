@@ -14,7 +14,6 @@ import greendroid.widget.itemview.ItemView;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteFeedbackItem;
 import com.geatte.android.view.GeatteThumbnailItem;
 import com.geatte.android.view.ListActionBarActivity;
@@ -39,6 +38,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
@@ -47,6 +47,7 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 
     private final Handler mHandler = new Handler();
     private ProgressDialog mDialog;
+    private View mListContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 	}
 	setTitle(R.string.show_all_feedbacks_title);
 	addActionBarItem(Type.AllFriends);
+
 	if(Config.LOG_DEBUG_ENABLED) {
 	    Log.d(Config.LOGTAG, "END ShopinionAllFeedbackActivity:onCreate");
 	}
@@ -95,6 +97,9 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 		    item.interestThumbnail = null;
 		}
 	    }
+	    if (mListContainer != null) {
+		mListContainer.setVisibility(View.INVISIBLE);
+	    }
 	}
     }
 
@@ -107,7 +112,7 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 	try {
 	    List<Item> items = getAllFeedbackItems();
 	    if (items.size() == 0) {
-		if(Config.LOG_DEBUG_ENABLED) {
+		if (Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, "ShopinionFIListActivity:fillList() : No geatte available!!");
 		}
 	    }
@@ -119,17 +124,24 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 		public void run() {
 		    if (mDialog != null && mDialog.isShowing()) {
 			try {
-			    if(Config.LOG_DEBUG_ENABLED) {
+			    if (Config.LOG_DEBUG_ENABLED) {
 				Log.d(Config.LOGTAG, "ShopinionAllFeedbackActivity:fillList(): try to dismiss mDialog");
 			    }
 			    mDialog.dismiss();
 			    mDialog = null;
 			} catch (Exception e) {
-			    Log.w(Config.LOGTAG, "ShopinionAllFeedbackActivity:fillList(): failed to dismiss mDialog", e);
+			    Log.w(Config.LOGTAG, "ShopinionAllFeedbackActivity:fillList(): failed to dismiss mDialog",
+				    e);
 			}
 		    }
+		    if (mListContainer == null) {
+			mListContainer = findViewById(R.id.listContainer);
+		    }
+		    mListContainer.startAnimation(AnimationUtils.loadAnimation(ShopinionAllFeedbackActivity.this
+			    .getApplicationContext(), android.R.anim.fade_in));
+		    mListContainer.setVisibility(View.VISIBLE);
 		}
-	    },10);
+	    }, 10);
 	} catch (Exception e) {
 	    Log.e(Config.LOGTAG, "ShopinionAllFeedbackActivity:fillList() :  ERROR ", e);
 	}
@@ -303,20 +315,24 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 		holder.textViewSubTitle.setText(tItem.subtitle);
 		//setTag(item.id);
 
+		int thumbLen = tItem.interestThumbnail == null ? 0 : tItem.interestThumbnail.length;
+
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionAllFeedbackActivity:getView() : async image set to bytearray for length= " + tItem.interestThumbnail.length);
+		    Log.d(Config.LOGTAG, "ShopinionAllFeedbackActivity:getView() : async image set to bytearray for length= " + thumbLen);
 		}
 
 		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		int sampleSize = CommonUtils.getResizeRatio(tItem.interestThumbnail.length, 20, 1);
+		int sampleSize = CommonUtils.getResizeRatio(thumbLen, 20, 1);
 		if(Config.LOG_DEBUG_ENABLED) {
 		    Log.d(Config.LOGTAG, " ShopinionAllFeedbackActivity:getView() resize thumbnail with sampleSize = " + sampleSize);
 		}
 		bitmapOptions.inSampleSize = sampleSize;
 
-		holder.interestImageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.interestThumbnail, 0, tItem.interestThumbnail.length, bitmapOptions));
+		if (tItem.interestThumbnail != null) {
+		    holder.interestImageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.interestThumbnail, 0, thumbLen, bitmapOptions));
+		}
 
-		if (tItem.contactBitmap != null) {
+		if (tItem.contactBitmap != null && !tItem.contactBitmap.isRecycled()) {
 		    holder.contactImageView.setImageBitmap(tItem.contactBitmap);
 		} else {
 		    holder.contactImageView.setImageResource(tItem.contactDrawableId);

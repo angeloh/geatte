@@ -45,7 +45,7 @@ public class GeatteFeedbackItemView extends RelativeLayout implements ItemView {
 	final GeatteFeedbackItem item = (GeatteFeedbackItem) object;
 	mTitleView.setText(item.text);
 	mSubtitleView.setText(item.subtitle);
-	if (item.contactBitmap != null) {
+	if (item.contactBitmap != null && !item.contactBitmap.isRecycled()) {
 	    mContactThumbnailView.setImageBitmap(item.contactBitmap);
 	} else {
 	    mContactThumbnailView.setImageResource(item.contactDrawableId);

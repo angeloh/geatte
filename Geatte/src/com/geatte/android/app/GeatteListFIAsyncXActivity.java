@@ -3,7 +3,6 @@ package com.geatte.android.app;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteThumbnailItem;
 import com.geatte.android.view.ThumbnailAsyncBitmapItem;
 import com.geatte.android.view.ThumbnailAsyncBitmapItemView;

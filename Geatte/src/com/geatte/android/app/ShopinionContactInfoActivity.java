@@ -2,10 +2,11 @@ package com.geatte.android.app;
 
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.item.Item;
+import greendroid.widget.itemview.ItemView;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyrilmottier.android.greendroid.R;
 import com.geatte.android.view.GeatteContactItem;
 import com.geatte.android.view.GeatteContactItemView;
 import com.geatte.android.view.GeatteProgressItem;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.content.*;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -33,6 +35,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
     private static final int MENU_REFRESH = Menu.FIRST;
     private static final int MENU_INVITE = Menu.FIRST + 1;
     private final Handler mHandler = new Handler();
+    private View mListContainer;
     ThumbnailItemAdapter mContactsAdapter = null;
 
     @Override
@@ -83,6 +86,12 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 	super.onResume();
 	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): START");
 	mContactsAdapter.notifyDataSetChanged();
+	if (mListContainer == null) {
+	    mListContainer = findViewById(R.id.listContainer);
+	}
+	mListContainer.startAnimation(AnimationUtils.loadAnimation(ShopinionContactInfoActivity.this
+		.getApplicationContext(), android.R.anim.fade_in));
+	mListContainer.setVisibility(View.VISIBLE);
 	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): END");
     }
 
@@ -101,6 +110,9 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 		    }
 		    item.contactBitmap = null;
 		}
+	    }
+	    if (mListContainer != null) {
+		mListContainer.setVisibility(View.INVISIBLE);
 	    }
 	}
     }
@@ -139,10 +151,10 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 		Bitmap contactBitmap = queryPhotoForContact(contactIdInt);
 
 		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:getContacts() : add one GeatteThumbnailCheckbox, contactPhone = " + contactPhone
+		    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:getContacts() : add one GeatteContactItem, contactPhone = " + contactPhone
 			    + ", contactId = " + contactId + ", contactName = " + contactName);
 		}
-		if (contactBitmap != null) {
+		if (contactBitmap != null && !contactBitmap.isRecycled()) {
 		    items.add(new GeatteContactItem(contactName, null, contactPhone, contactBitmap));
 		} else {
 		    items.add(new GeatteContactItem(contactName, null, contactPhone, R.drawable.profile));
@@ -240,6 +252,11 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 		contactView.setObject(item);
 		contactView.setTag(((GeatteContactItem) item).phone);
 		return (View) contactView;
+	    } else if (item instanceof GeatteThumbnailItem) {
+		ItemView cell = item.newView(mContext, null);
+		cell.prepareItemView();
+		cell.setObject(item);
+		return (View) cell;
 	    } else {
 		return super.getView(position, convertView, parent);
 	    }
@@ -270,7 +287,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 	    if(Config.LOG_DEBUG_ENABLED) {
 		Log.d(Config.LOGTAG, "trying to refresh contacts service");
 	    }
-	    startService(new Intent(this, GeatteContactsService.class));
+	    startService(new Intent(this.getApplicationContext(), GeatteContactsService.class));
 	    return true;
 	case MENU_INVITE:
 	    if(Config.LOG_DEBUG_ENABLED) {
@@ -340,7 +357,7 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 	    final GeatteProgressItem progressItem = new GeatteProgressItem("Retrieving contacts", true);
 	    items.add(progressItem);
 
-	    mContactsAdapter = new ThumbnailItemAdapter(ShopinionContactInfoActivity.this.getApplicationContext(), items);
+	    mContactsAdapter = new ThumbnailItemAdapter(ShopinionContactInfoActivity.this, items);
 	    setListAdapter(mContactsAdapter);
 
 	    mHandler.postDelayed(new Runnable() {

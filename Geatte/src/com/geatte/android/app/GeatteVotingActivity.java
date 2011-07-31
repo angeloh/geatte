@@ -270,17 +270,17 @@ public class GeatteVotingActivity extends GDActivity {
 
     public void onYes(View v) {
 	mLike = Config.LIKE.YES.toString();
-	mVotingThumbnail.setDefaultImageResource(R.drawable.green_light);
+	mVotingThumbnail.setDefaultImageResource(R.drawable.v_yes);
     }
 
     public void onMaybe(View v) {
 	mLike = Config.LIKE.MAYBE.toString();
-	mVotingThumbnail.setDefaultImageResource(R.drawable.warning);
+	mVotingThumbnail.setDefaultImageResource(R.drawable.v_maybe);
     }
 
     public void onNo(View v) {
 	mLike = Config.LIKE.NO.toString();
-	mVotingThumbnail.setDefaultImageResource(R.drawable.red_light);
+	mVotingThumbnail.setDefaultImageResource(R.drawable.v_no);
     }
 
     public void onComment(View v) {
@@ -323,7 +323,7 @@ public class GeatteVotingActivity extends GDActivity {
 	//	pw.showAtLocation(layout, Gravity.BOTTOM, 0, 0);
 
 	///override popupwindow
-	mPopup = new CommentPopupWidget(this.getApplicationContext());
+	mPopup = new CommentPopupWidget(this);
 	mPopup.show(v);
     }
 

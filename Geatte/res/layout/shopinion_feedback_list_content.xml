@@ -24,19 +24,28 @@
 		android:layout_width="fill_parent"
 		android:layout_weight="1">
 
-		<ListView
-			android:id="@android:id/list"
-			android:layout_height="fill_parent"
-			android:layout_width="fill_parent"
-			android:drawSelectorOnTop="false"
-			style="@style/shopinion_list" />
-		
-		<ViewStub
-            android:id="@android:id/empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout="@layout/empty_list_my" />
+        <com.geatte.android.view.FastScrollView
+              android:id="@id/listContainer"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:visibility="invisible">
+			
+			<ListView
+				android:id="@android:id/list"
+				android:layout_height="fill_parent"
+				android:layout_width="fill_parent"
+				android:drawSelectorOnTop="false"
+				android:scrollbars="none"
+				style="@style/shopinion_list" />
+			
+			<ViewStub
+	            android:id="@android:id/empty"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:layout="@layout/empty_list_my" />
+            
+         </com.geatte.android.view.FastScrollView>
 
 	</FrameLayout>
 

@@ -9,7 +9,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.cyrilmottier.android.greendroid.R;
 import greendroid.app.GDActivity;
 import greendroid.widget.AsyncImageView;
 import greendroid.widget.ActionBar.OnActionBarListener;
@@ -20,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -89,6 +89,11 @@ public class ShopinionVotingActivity extends GDActivity {
     @Override
     public void onPause() {
 	super.onPause();
+	if (mGeatteVoteImage.getDrawable() != null) {
+	    BitmapDrawable drawable = (BitmapDrawable) mGeatteVoteImage.getDrawable();
+	    drawable.getBitmap().recycle();
+	}
+	mGeatteVoteImage.setImageBitmap(null);
     }
 
     @Override
@@ -137,7 +142,7 @@ public class ShopinionVotingActivity extends GDActivity {
 		    Log.e(Config.LOGTAG, " " + ShopinionVotingActivity.CLASSTAG + " BitmapFactory.decodeFile(savedFIImagePath) is null ");
 		}
 		mGeatteVoteImage.setImageBitmap(BitmapFactory.decodeFile(savedFIImagePath));
-		if (savedFITitle != null) {
+		if (savedFITitle != null && savedFITitle.length() > 0) {
 		    setTitle(savedFITitle);
 		} else {
 		    setTitle(R.string.voting_a_geatte);
@@ -291,17 +296,17 @@ public class ShopinionVotingActivity extends GDActivity {
 
     public void onYes(View v) {
 	mLike = Config.LIKE.YES.toString();
-	mVotingThumbnail.setDefaultImageResource(R.drawable.green_light);
+	mVotingThumbnail.setDefaultImageResource(R.drawable.v_yes);
     }
 
     public void onMaybe(View v) {
 	mLike = Config.LIKE.MAYBE.toString();
-	mVotingThumbnail.setDefaultImageResource(R.drawable.warning);
+	mVotingThumbnail.setDefaultImageResource(R.drawable.v_maybe);
     }
 
     public void onNo(View v) {
 	mLike = Config.LIKE.NO.toString();
-	mVotingThumbnail.setDefaultImageResource(R.drawable.red_light);
+	mVotingThumbnail.setDefaultImageResource(R.drawable.v_no);
     }
 
     public void onComment(View v) {
@@ -344,7 +349,7 @@ public class ShopinionVotingActivity extends GDActivity {
 	//	pw.showAtLocation(layout, Gravity.BOTTOM, 0, 0);
 
 	///override popupwindow
-	mPopup = new CommentPopupWidget(this.getApplicationContext());
+	mPopup = new CommentPopupWidget(this);
 	mPopup.show(v);
     }
 

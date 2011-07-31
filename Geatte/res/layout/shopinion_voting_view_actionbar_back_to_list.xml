@@ -38,7 +38,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="bottom|right"
-			greendroid:defaultSrc="@drawable/pause"/>
+			greendroid:defaultSrc="@drawable/v_pause"/>
 
 	</FrameLayout>
 
@@ -52,7 +52,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:drawableTop="@drawable/green_light"
+			android:drawableTop="@drawable/v_yes"
 			android:text="@string/voting_yes"
 			android:onClick="onYes"
 			android:background="@drawable/custom_button_2"
@@ -62,7 +62,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:drawableTop="@drawable/warning"
+			android:drawableTop="@drawable/v_maybe"
 			android:text="@string/voting_maybe"
 			android:onClick="onMaybe"
 			android:background="@drawable/custom_button_2"
@@ -72,7 +72,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:drawableTop="@drawable/red_light"
+			android:drawableTop="@drawable/v_no"
 			android:text="@string/voting_no"
 			android:onClick="onNo"
 			android:background="@drawable/custom_button_2"
@@ -82,7 +82,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:drawableTop="@drawable/write"
+			android:drawableTop="@drawable/v_comment"
 			android:text="@string/voting_comment"
 			android:onClick="onComment"
 			android:background="@drawable/custom_button_2"
@@ -92,7 +92,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:drawableTop="@drawable/send"
+			android:drawableTop="@drawable/v_reply"
 			android:text="@string/voting_send"
 			android:onClick="onSend"
 			android:background="@drawable/custom_button_2"
