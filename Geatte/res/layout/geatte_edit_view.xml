@@ -73,7 +73,7 @@
             android:layout_width="0dip"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-			android:drawableLeft="@drawable/addcontact"
+			android:drawableLeft="@drawable/send_contact"
 			android:text="@string/send_to_text" />
 
 		<Button
@@ -82,7 +82,7 @@
             android:layout_width="0dip"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-			android:drawableRight="@drawable/sendimg"
+			android:drawableRight="@drawable/send_upload"
 			android:text="@string/send_geatte_text" />
             
     </LinearLayout>

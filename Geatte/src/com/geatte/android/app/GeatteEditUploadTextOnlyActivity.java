@@ -34,8 +34,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.net.Uri;
 
+@Deprecated
 public class GeatteEditUploadTextOnlyActivity extends GDActivity {
-    private static final String RETRY_STATUS = "RETRY";
     private static final String CLASSTAG = GeatteEditUploadTextOnlyActivity.class.getSimpleName();
     private static final String UPLOAD_PATH = "/geatteuploadtextonly";
     private static final int ACTIVITY_CONTACT = 0;
@@ -63,7 +63,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 
 	//setContentView(R.layout.geatte_edit);
 	setActionBarContentView(R.layout.geatte_edit_view);
-	setTitle(R.string.edit_geatte);
+	setTitle(R.string.edit_interest);
 
 	mTitleEditText = (EditText) findViewById(R.id.title);
 	mDescEditText = (EditText) findViewById(R.id.desc);
@@ -217,7 +217,6 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
     @Override
     protected void onPause() {
 	super.onPause();
-	updateState();
     }
 
     @Override
@@ -340,7 +339,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 		    if (respStatusCode == 400 || respStatusCode == 500) {
 
 			//when resp is RETRY, redirect to geatte canvas
-			if (body.toString().contains(RETRY_STATUS)) {
+			if (body.toString().contains(Config.RETRY_STATUS)) {
 			    if (mDialog != null && mDialog.isShowing()) {
 				try {
 				    if(Config.LOG_DEBUG_ENABLED) {
@@ -354,7 +353,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 			    }
 			    this.publishProgress(getString(R.string.upload_text_retry));
 			    Log.w(Config.LOGTAG, "GeatteUploadTask Got RETRY, body = " + body.toString());
-			    return RETRY_STATUS;
+			    return Config.RETRY_STATUS;
 			} else {
 			    Log.w(Config.LOGTAG, "GeatteUploadTask Error: " + respStatusCode + " " + body.toString());
 			    throw new Exception("GeatteUploadTask Error: " + respStatusCode + " " + body.toString());
@@ -406,7 +405,7 @@ public class GeatteEditUploadTextOnlyActivity extends GDActivity {
 
 	@Override
 	protected void onPostExecute(String geatteId) {
-	    if (geatteId != null && geatteId.equals(RETRY_STATUS)) {
+	    if (geatteId != null && geatteId.equals(Config.RETRY_STATUS)) {
 		Log.i(Config.LOGTAG, "GeatteUploadTask:onPostExecute(): got retry");
 		return;
 	    }

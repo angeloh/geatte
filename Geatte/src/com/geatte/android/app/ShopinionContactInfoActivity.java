@@ -1,6 +1,7 @@
 package com.geatte.android.app;
 
 import greendroid.widget.ItemAdapter;
+import greendroid.widget.ActionBar.OnActionBarListener;
 import greendroid.widget.item.Item;
 import greendroid.widget.itemview.ItemView;
 
@@ -41,58 +42,38 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() START");
-	setTitle(R.string.contacts_info_view_name);
-
-	final GeatteThumbnailItem warnItem;
-	try {
-	    List<Item> items = getContacts();
-	    if (items.size() == 0) {
-		if(Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() : No contacts available!!");
-		}
-		warnItem = new GeatteThumbnailItem("Click Menu To Invite Friends", null, R.drawable.email);
-	    } else {
-		warnItem = null;
-	    }
-	    final GeatteProgressItem progressItem = new GeatteProgressItem("Retrieving contacts", true);
-	    items.add(progressItem);
-
-	    mContactsAdapter = new ThumbnailItemAdapter(this, items);
-	    setListAdapter(mContactsAdapter);
-
-	    // Broadcast receiver to get notification from GeatteContactsService to update contact list
-	    registerReceiver(receiver,
-		    new IntentFilter(Config.INTENT_ACTION_UPDATE_CONTACTS));
-
-	    mHandler.postDelayed(new Runnable() {
-		public void run() {
-		    if (warnItem != null) {
-			mContactsAdapter.insert(warnItem, 0);
-		    }
-		    mContactsAdapter.remove(progressItem);
-		    mContactsAdapter.notifyDataSetChanged();
-		}
-	    },50);
-	} catch (Exception e) {
-	    Log.e(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() :  ERROR ", e);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() START");
 	}
 
-	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() END");
+	// Broadcast receiver to get notification from GeatteContactsService to update contact list
+	registerReceiver(receiver,
+		new IntentFilter(Config.INTENT_ACTION_UPDATE_CONTACTS));
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onCreate() END");
+	}
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+	super.onPostCreate(savedInstanceState);
+	setTitle(R.string.contacts_info_view_name);
+	mListContainer = findViewById(R.id.listContainer);
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
-	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): START");
-	mContactsAdapter.notifyDataSetChanged();
-	if (mListContainer == null) {
-	    mListContainer = findViewById(R.id.listContainer);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): START");
 	}
+	fillList();
 	mListContainer.startAnimation(AnimationUtils.loadAnimation(ShopinionContactInfoActivity.this
 		.getApplicationContext(), android.R.anim.fade_in));
 	mListContainer.setVisibility(View.VISIBLE);
-	Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): END");
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:onResume(): END");
+	}
     }
 
     @Override
@@ -121,6 +102,38 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
     public void onDestroy() {
 	unregisterReceiver(receiver);
 	super.onDestroy();
+    }
+
+    private void fillList() {
+	final GeatteThumbnailItem warnItem;
+	try {
+	    List<Item> items = getContacts();
+	    if (items.size() == 0) {
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, "ShopinionContactInfoActivity:fillList() : No contacts available!!");
+		}
+		warnItem = new GeatteThumbnailItem("Click Menu To Invite Friends", null, R.drawable.email);
+	    } else {
+		warnItem = null;
+	    }
+	    final GeatteProgressItem progressItem = new GeatteProgressItem("Retrieving contacts", true);
+	    items.add(progressItem);
+
+	    mContactsAdapter = new ThumbnailItemAdapter(this, items);
+	    setListAdapter(mContactsAdapter);
+
+	    mHandler.postDelayed(new Runnable() {
+		public void run() {
+		    if (warnItem != null) {
+			mContactsAdapter.insert(warnItem, 0);
+		    }
+		    mContactsAdapter.remove(progressItem);
+		    mContactsAdapter.notifyDataSetChanged();
+		}
+	    },50);
+	} catch (Exception e) {
+	    Log.e(Config.LOGTAG, "ShopinionContactInfoActivity:fillList() :  ERROR ", e);
+	}
     }
 
     private List<Item> getContacts() {
@@ -372,5 +385,26 @@ public class ShopinionContactInfoActivity extends ListActionBarActivity {
 	    Log.d(Config.LOGTAG, "updateContactsTask:onPostExecute() END");
 	}
     }
+
+    @Override
+    public void onPreContentChanged() {
+	super.onPreContentChanged();
+	getActionBar().setOnActionBarListener(mActionBarOnVotingListener);
+    }
+
+    private OnActionBarListener mActionBarOnVotingListener = new OnActionBarListener() {
+	public void onActionBarItemClicked(int position) {
+	    if (position == OnActionBarListener.HOME_ITEM) {
+		setResult(RESULT_OK);
+		finish();
+	    } else {
+		if (!onHandleActionBarItemClick(getActionBar().getItem(position), position)) {
+		    if (Config.LOG_DEBUG_ENABLED) {
+			Log.w(Config.LOGTAG, "Click on item at position " + position + " dropped down to the floor");
+		    }
+		}
+	    }
+	}
+    };
 
 }

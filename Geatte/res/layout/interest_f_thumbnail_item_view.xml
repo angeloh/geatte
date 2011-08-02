@@ -34,16 +34,22 @@
 					android:id="@+id/fi_sent_on_text"
 					android:layout_width="wrap_content"
 					android:layout_below="@id/fi_sent_by_text" />
+				<TextView
+					style="?attr/InterestThumbnailItemStyleFeedbackSubtext"
+					android:id="@+id/fi_resp_text"
+					android:layout_width="wrap_content"
+					android:layout_below="@id/fi_sent_on_text"
+					android:text="@string/fi_resp_label" />
 				<ImageButton
 					style="?attr/InterestThumbnailItemStyleFeedbackThumbnail"
 					android:id="@+id/fi_vote_img_btn"
 					android:background="@drawable/imageview_border"
-					android:layout_below="@id/fi_sent_on_text" />
+					android:layout_below="@id/fi_resp_text" />
 				<TextView
 					style="?attr/InterestThumbnailItemStyleFeedbackVote"
 					android:id="@+id/fi_vote_text"
 					android:layout_width="wrap_content"
-					android:layout_below="@id/fi_sent_on_text"
+					android:layout_below="@id/fi_resp_text"
 					android:layout_toRightOf="@id/fi_vote_img_btn" />
 				<TextView
 					style="?attr/InterestThumbnailItemStyleFeedbackSubtext"

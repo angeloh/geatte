@@ -13,42 +13,59 @@
 		android:background="@drawable/gd_quick_action_top_frame" />
 	
 	<LinearLayout
-        android:id="@+id/voting_comment_mid"
-	    android:orientation="horizontal"
+        android:id="@+id/send_write_mid"
+	    android:orientation="vertical"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/gdi_header"
 	    android:background="@color/dark_gray">
-		<EditText android:id="@+id/voting_comment"
+		
+    	<EditText 
+			android:id="@+id/send_edittext_title"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:hint="@string/voting_comment_text_default"
+			android:hint="@string/edit_title_text_default"
+	        android:imeOptions="actionDone"
+	        android:theme="@android:style/Theme.Translucent"
+			style="@style/edit_text" />	
+		
+		<EditText 
+			android:id="@+id/send_edittext_desc"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/edit_desc_text_default"
+			android:imeOptions="actionDone"
+			android:theme="@android:style/Theme.Translucent"
 			style="@style/edit_text" />
 	</LinearLayout>
 
 	<LinearLayout
-        android:id="@+id/voting_comment_footer"
+        android:id="@+id/send_write_footer"
 	    android:orientation="horizontal"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@id/voting_comment_mid"
+	    android:layout_below="@id/send_write_mid"
 	    android:background="@color/dark_gray">
- 
-		<Button
-	    	android:id="@+id/voting_cancel_button"
-	    	android:layout_marginTop="1px"
-            android:layout_width="0dip"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1"
-			android:text="@string/comment_cancel_text" />
 
 		<Button
-	    	android:id="@+id/voting_ok_button"
+	    	android:id="@+id/send_write_cancel_btn"
 	    	android:layout_marginTop="1px"
-            android:layout_width="0dip"
+            android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-			android:text="@string/comment_ok_text" />
+			android:text="@string/comment_cancel_text"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+
+		<Button
+	    	android:id="@+id/send_write_ok_btn"
+	    	android:layout_marginTop="1px"
+            android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+			android:text="@string/comment_ok_text"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
             
     </LinearLayout>
 
@@ -56,7 +73,7 @@
 		android:id="@+id/gdi_footer"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@id/voting_comment_footer"
+		android:layout_below="@id/send_write_footer"
 		android:background="@drawable/gd_quick_action_grid_bottom_frame" />
 
 	<ImageView

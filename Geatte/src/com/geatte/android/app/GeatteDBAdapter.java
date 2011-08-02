@@ -240,6 +240,28 @@ public class GeatteDBAdapter {
 	return mDb.insert(DB_TABLE_INTERESTS, null, initialValues);
     }
 
+    /**
+     * Create a new interest using the title, desc and geatteId provided. If the interest is
+     * successfully created return the new rowId for that interest, otherwise return
+     * a -1 to indicate failure.
+     * 
+     * @param title the title of the interest
+     * @param desc the desc of the interest
+     * @param geatteId the geatteId of the interest
+     * @return rowId or -1 if failed
+     */
+    public long insertInterest(String title, String desc, String geatteId) {
+	ContentValues initialValues = new ContentValues();
+	initialValues.put(KEY_INTEREST_TITLE, title);
+	initialValues.put(KEY_INTEREST_DESC, desc);
+	initialValues.put(KEY_INTEREST_GEATTE_ID, geatteId);
+	// set the format to sql date time
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	initialValues.put(KEY_INTEREST_CREATED_DATE, dateFormat.format(new Date()));
+
+	return mDb.insert(DB_TABLE_INTERESTS, null, initialValues);
+    }
+
     public long insertFeedback(String geatteId, String voter, String vote, String comment) {
 	ContentValues initialValues = new ContentValues();
 	initialValues.put(KEY_FEEDBACK_GEATTE_ID, geatteId);
@@ -793,10 +815,13 @@ public class GeatteDBAdapter {
     /**
      * Return a Cursor for all feedbacks
      * 
+     * @param limit query limit
+     * @param startFrom query startFrom, 1 to n, inclusive
      * @return Cursor positioned to matching interest, if found
      * @throws SQLException if note could not be found/retrieved
      */
-    public Cursor fetchAllMyInterestFeedback() throws SQLException {
+    public Cursor fetchAllMyInterestFeedback(int limit, int startFrom) throws SQLException {
+	int offset = startFrom - 1;
 	String query = "SELECT " +
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_GEATTE_ID + ", " +
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_VOTER + ", " +
@@ -804,13 +829,16 @@ public class GeatteDBAdapter {
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_COMMENT + ", " +
 	DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " " +
 	"FROM " + DB_TABLE_FEEDBACKS +
-	" ORDER BY " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " DESC";
+	" ORDER BY " + DB_TABLE_FEEDBACKS + "." + KEY_FEEDBACK_UPDATED_DATE + " DESC" +
+	" LIMIT " + limit +
+	" OFFSET " + offset;
 
-	Log.i(Config.LOGTAG, "fetch all feedbacks query string = " + query);
+	if (Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "fetch all feedbacks query string = " + query);
+	}
 
 	try {
 	    Cursor cursor = mDb.rawQuery(query, null);
-	    Log.i(Config.LOGTAG, "return cursor fetchAllMyInterestFeedback()");
 	    return cursor;
 	} catch (Exception ex) {
 	    Log.e(Config.LOGTAG, "ERROR to fetch all feedbacks ", ex);
@@ -972,6 +1000,29 @@ public class GeatteDBAdapter {
 	ContentValues args = new ContentValues();
 	args.put(KEY_INTEREST_TITLE, title);
 	args.put(KEY_INTEREST_DESC, desc);
+	// set the format to sql date time
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	args.put(KEY_INTEREST_CREATED_DATE, dateFormat.format(new Date()));
+
+	return mDb.update(DB_TABLE_INTERESTS, args, KEY_INTEREST_ID + "=" + rowId, null) > 0;
+    }
+
+    /**
+     * Update the interest using the details provided. The note to be updated is
+     * specified using the rowId, and it is altered to use the title and body
+     * values passed in
+     * 
+     * @param rowId id of interest to update
+     * @param title value to set interest title to
+     * @param desc value to set interest desc to
+     * @param geatteId value to set interest geatteId to
+     * @return true if the note was successfully updated, false otherwise
+     */
+    public boolean updateInterestWithGeatteId(long rowId, String title, String desc, String geatteId) {
+	ContentValues args = new ContentValues();
+	args.put(KEY_INTEREST_TITLE, title);
+	args.put(KEY_INTEREST_DESC, desc);
+	args.put(KEY_INTEREST_GEATTE_ID, geatteId);
 	// set the format to sql date time
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	args.put(KEY_INTEREST_CREATED_DATE, dateFormat.format(new Date()));

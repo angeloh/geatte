@@ -126,7 +126,7 @@ public class GeatteAllFeedbackXActivity extends GDListActivity {
 	Cursor feedbackCur = null;
 	try {
 	    mDbHelper.open();
-	    feedbackCur = mDbHelper.fetchAllMyInterestFeedback();
+	    feedbackCur = mDbHelper.fetchAllMyInterestFeedback(20, 1);
 	    feedbackCur.moveToFirst();
 
 	    int counter = 0;

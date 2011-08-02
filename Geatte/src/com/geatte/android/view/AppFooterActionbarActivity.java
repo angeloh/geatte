@@ -24,10 +24,10 @@ import android.widget.Button;
 
 import com.geatte.android.app.Config;
 import com.geatte.android.app.GeatteDBAdapter;
-import com.geatte.android.app.GeatteEditUploadTextOnlyActivity;
 import com.geatte.android.app.GeatteImageUploadIntentService;
 import com.geatte.android.app.R;
 import com.geatte.android.app.ShopinionAllFeedbackActivity;
+import com.geatte.android.app.ShopinionEditTextActivity;
 import com.geatte.android.app.ShopinionFIListActivity;
 import com.geatte.android.app.ShopinionMainActivity;
 
@@ -226,7 +226,7 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
 
 		new ImageUploadAsynTask().execute(randomId);
 
-		Intent editIntent = new Intent(this, GeatteEditUploadTextOnlyActivity.class);
+		Intent editIntent = new Intent(this, ShopinionEditTextActivity.class);
 		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
 		editIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
 		startActivity(editIntent);
@@ -273,7 +273,7 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
 		}
 
 		new ImageUploadAsynTask().execute(randomId);
-		Intent editIntent = new Intent(this, GeatteEditUploadTextOnlyActivity.class);
+		Intent editIntent = new Intent(this, ShopinionEditTextActivity.class);
 		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
 		editIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
 		startActivity(editIntent);

@@ -69,6 +69,7 @@ public class ShopinionVotingActivity extends GDActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
 	super.onPostCreate(savedInstanceState);
+	//only after parent onPostCreate, view is created
 	mGeatteVoteImage = (ImageView) findViewById(R.id.voting_image_view);
 	mVotingThumbnail = (AsyncImageView) findViewById(R.id.voting_thumbnail);
     }

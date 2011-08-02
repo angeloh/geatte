@@ -13,10 +13,12 @@
 		applied to a LinearLayout
 	-->
 	<greendroid.widget.ActionBar
+		xmlns:actionBar="http://schemas.android.com/apk/res/com.geatte.android.app"
 		android:id="@id/gd_action_bar"
 		android:layout_height="@dimen/gd_action_bar_height"
 		android:layout_width="fill_parent"
-		android:background="?attr/gdActionBarBackground" />
+		android:background="?attr/gdActionBarBackground"
+		actionBar:homeDrawable="@drawable/back" />
 
 	<FrameLayout
 		android:id="@id/gd_action_bar_content_view"

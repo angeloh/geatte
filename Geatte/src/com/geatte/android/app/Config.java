@@ -85,6 +85,8 @@ public class Config {
     public static final String PREF_SERVER_HAS_REG_ID = "hasRegIdOnServer";
     public static final String PREF_SELECTED_CONTACTS = "selectedContacts";
     public static final String PREF_VOTING_COMMENT = "votingComment";
+    public static final String PREF_SEND_CAPTION = "sendCaption";
+    public static final String PREF_SEND_DESC = "sendDesc";
     public static final String PREF_PHONE_NUMBER = "myPhoneNumber";
 
     // app server
@@ -94,6 +96,8 @@ public class Config {
     public static final String GEATTE_IMAGE_GET_URL = "/geatteimageget";
     public static final String GEATTE_REG_CHECK_URL = "/geatteregidcheck";
     public static final String GEATTE_IMAGE_BLOB_UPLOAD_URL = "/geatteimageblobupload";
+    public static final String ITEM_UPLOAD_PATH = "/geatteuploadtextonly";
+    public static final String RETRY_STATUS = "RETRY";
 
     public static final String DEV_REG_ID_PARAM = "devRegId";
     public static final String DEVICE_ID_PARAM = "deviceId";

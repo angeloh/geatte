@@ -23,80 +23,55 @@
 		android:id="@id/gd_action_bar_content_view"
 		android:layout_height="0dp"
 		android:layout_width="fill_parent"
-		android:layout_weight="1">
+		android:layout_weight="1"
+		android:background="@android:color/white" >
 
 		<ImageView
-			android:id="@id/voting_image_view"
+			android:id="@+id/edit_img"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			android:scaleType="centerInside"/>
-			
-		<greendroid.widget.AsyncImageView
-			android:id="@id/voting_thumbnail"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="bottom|right"
-			greendroid:defaultSrc="@drawable/v_pause"/>
 
 	</FrameLayout>
-
+	
 	<LinearLayout
+ 		android:id="@+id/edit_footer"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:background="@android:drawable/bottom_bar"
 		android:paddingTop="1dp">
 
 		<Button
+			android:id="@+id/send_to_button"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:drawableTop="@drawable/v_yes"
-			android:text="@string/voting_yes"
-			android:onClick="onYes"
-			android:background="@drawable/custom_button_2"
-			android:textColor="@color/Button_Type_0_Text" />
-			
-		<Button
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:drawableTop="@drawable/v_maybe"
-			android:text="@string/voting_maybe"
-			android:onClick="onMaybe"
+			android:drawableLeft="@drawable/send_contact"
+			android:text="@string/send_to_text"
 			android:background="@drawable/custom_button_2"
 			android:textColor="@color/Button_Type_0_Text" />
 
 		<Button
+			android:id="@+id/send_write_button"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:drawableTop="@drawable/v_no"
-			android:text="@string/voting_no"
-			android:onClick="onNo"
+			android:drawableLeft="@drawable/send_write"
+			android:text="@string/send_write_text"
+			android:onClick="onWrite"
 			android:background="@drawable/custom_button_2"
 			android:textColor="@color/Button_Type_0_Text" />
 
 		<Button
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:drawableTop="@drawable/v_comment"
-			android:text="@string/voting_comment"
-			android:onClick="onComment"
+	    	android:id="@+id/send_geatte_button"
+            android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+			android:drawableLeft="@drawable/send_upload"
+			android:text="@string/send_geatte_text"
 			android:background="@drawable/custom_button_2"
 			android:textColor="@color/Button_Type_0_Text" />
-			
-		<Button
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:drawableTop="@drawable/v_reply"
-			android:text="@string/voting_send"
-			android:onClick="onSend"
-			android:background="@drawable/custom_button_2"
-			android:textColor="@color/Button_Type_0_Text" />
-
-	</LinearLayout>
+            
+    </LinearLayout>
 
 </greendroid.widget.ActionBarHost>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<greendroid.widget.ActionBarHost
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@id/gd_action_bar_host"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<!--
+		Layout height/width and background are set here. This is a hack to
+		apply a default style to the ActionBar. Indeed, no style can be
+		applied to a LinearLayout
+	-->
+	<greendroid.widget.ActionBar
+		xmlns:actionBar="http://schemas.android.com/apk/res/com.geatte.android.app"
+		android:id="@id/gd_action_bar"
+		android:layout_height="@dimen/gd_action_bar_height"
+		android:layout_width="fill_parent"
+		android:background="?attr/gdActionBarBackground"
+		actionBar:homeDrawable="@drawable/back" />
+	<FrameLayout
+		android:id="@id/gd_action_bar_content_view"
+		android:layout_height="0dp"
+		android:layout_width="fill_parent"
+		android:layout_weight="1">
+
+		<ListView
+			android:id="@android:id/list"
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			style="@style/geatte_list" />
+
+	</FrameLayout>
+	
+	<LinearLayout
+        android:id="@+id/contacts_footer"
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:background="#FF707070">
+ 
+         <Button
+            android:id="@+id/contacts_clean_btn"
+            android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/contacts_clean"
+			android:drawableLeft="@drawable/send_clean"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+
+ 		<Button
+            android:id="@+id/contacts_back_btn"
+            android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" 
+			android:text="@string/contacts_back"
+			android:drawableLeft="@drawable/send_back"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />  
+        
+        <Button
+            android:id="@+id/contacts_send_btn"
+            android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/contacts_send"
+			android:drawableLeft="@drawable/send_upload"
+			android:background="@drawable/custom_button_2"
+			android:textColor="@color/Button_Type_0_Text" />
+            
+    </LinearLayout>
+</greendroid.widget.ActionBarHost>

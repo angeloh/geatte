@@ -20,21 +20,23 @@
 	<string name="menu_refresh">Refresh</string>
 	<string name="menu_invite">Tell friends</string>
     
-    <string name="edit_geatte">Create Geatte</string>
+    <string name="edit_interest">Creating An Interest...</string>
     <string name="edit_top_label">Send A Geatte</string>
     <string name="edit_title_label">Caption:</string>
     <string name="edit_desc_label">More:</string>
     <string name="edit_image_label">Image:</string>
-    <string name="edit_title_text_default">Enter Geatte Caption</string>
+    <string name="edit_title_text_default">Enter Interest Caption</string>
     <string name="edit_desc_text_default">Enter More Desc</string>
     
+    <string name="fi_resp_label">You Vote:</string>
     <string name="desc_label">More:</string>
     <string name="vote_label">Vote:</string>
     <string name="comment_label">Comment:</string>
     
     <string name="send_geatte_text">Send</string>
-    <string name="send_to_text">Select Contact</string>
-    <string name="send_to_reset_text">Add More</string>
+    <string name="send_to_text">To</string>
+    <string name="send_to_reset_text">To</string>
+    <string name="send_write_text">Write</string>
     
     <string name="register">Register</string>
     <string name="register_progress_text_conn">Connecting...</string>
@@ -56,8 +58,9 @@
     <string name="voting_a_geatte">Vote A Friend\'s Item</string>
     <string name="voting_comment_title">Write A Comment</string>
     <string name="voting_comment_text_default">Enter Comment</string>
-    <string name="voting_comment_cancel_text">Cancel</string>
-    <string name="voting_comment_ok_text">Ok</string>
+    
+    <string name="comment_cancel_text">Cancel</string>
+    <string name="comment_ok_text">Ok</string>
     
     <string name="setup_back">Back</string>
     <string name="setup_next">Next</string>
@@ -77,9 +80,11 @@
 	
 	<string name="contacts_view_name">Geatte Contacts</string>
 	<string name="contacts_info_view_name">Who Is On Geatte</string>
-	<string name="contacts_clean">Clean</string>
     <string name="contacts_save">Save</string>
-    <string name="contacts_back">Back</string>
+
+	<string name="contacts_send">Send</string>
+    <string name="contacts_clean">Clean All</string>
+    <string name="contacts_back">Save</string>
     
     <string name="tab_list">List View</string>
     <string name="tab_grid">Grid View</string>

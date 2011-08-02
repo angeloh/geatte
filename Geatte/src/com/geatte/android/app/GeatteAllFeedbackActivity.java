@@ -43,7 +43,7 @@ public class GeatteAllFeedbackActivity extends GDListActivity {
 	Cursor feedbackCur = null;
 	try {
 	    mDbHelper.open();
-	    feedbackCur = mDbHelper.fetchAllMyInterestFeedback();
+	    feedbackCur = mDbHelper.fetchAllMyInterestFeedback(20, 1);
 
 	    Log.d(Config.LOGTAG, "Got cursor for all feedbacks");
 

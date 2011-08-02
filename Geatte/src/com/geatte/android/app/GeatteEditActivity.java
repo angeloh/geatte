@@ -66,7 +66,7 @@ public class GeatteEditActivity extends GDActivity {
 
 	//setContentView(R.layout.geatte_edit);
 	setActionBarContentView(R.layout.geatte_edit_view);
-	setTitle(R.string.edit_geatte);
+	setTitle(R.string.edit_interest);
 
 	mTitleEditText = (EditText) findViewById(R.id.title);
 	mDescEditText = (EditText) findViewById(R.id.desc);

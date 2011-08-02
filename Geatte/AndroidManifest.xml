@@ -83,11 +83,10 @@
 		<activity android:name=".GeatteSetupActivity" android:label="@string/app_name">
 		</activity>
 
-		<activity android:name=".GeatteEditUploadTextOnlyActivity"
-		 android:label="@string/edit_geatte" >
+		<activity android:name=".ShopinionEditTextActivity" android:label="@string/edit_interest" >
 		</activity>
 
-		<activity android:name=".GeatteContactSelectActivity" android:label="@string/app_name">
+		<activity android:name=".ShopinionContactSelectActivity" android:label="@string/app_name">
 		</activity>
 		
 		<!-- activity android:name=".GeatteVotingCommentActivity" 

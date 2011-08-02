@@ -43,8 +43,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 
+/**
+ * Display feedback for my created interests.
+ *
+ */
 public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 
+    private static final int NUM_RESULTS = 20;
+    private static final int START_FROM = 1;
     private final Handler mHandler = new Handler();
     private ProgressDialog mDialog;
     private View mListContainer;
@@ -155,7 +161,7 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 	Cursor feedbackCur = null;
 	try {
 	    mDbHelper.open();
-	    feedbackCur = mDbHelper.fetchAllMyInterestFeedback();
+	    feedbackCur = mDbHelper.fetchAllMyInterestFeedback(NUM_RESULTS, START_FROM);
 	    feedbackCur.moveToFirst();
 
 	    int counter = 0;

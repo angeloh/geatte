@@ -227,7 +227,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		int [] counters = mDbHelper.fetchMyInterestFeedbackCounters(geatteId);
 
 		if (Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
+		    Log.d(Config.LOGTAG, "ShopinionMainActivity:getMyGeatteItems() : add one InterestThumbnailItem, " +
 			    "interestId = " + interestId + ", imagePath = " + imagePath + ", interestTitle = " +
 			    interestTitle + ", interestDesc = " + interestDesc + ", counters = " + Arrays.toString(counters));
 		}
