@@ -15,6 +15,7 @@ import com.geatte.android.view.ListActionBarActivity;
 import com.geatte.android.view.SeparatorThumbnailItem;
 import com.geatte.android.view.ThumbnailBitmapItem;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -33,6 +34,9 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 
     private final Handler mHandler = new Handler();
     private Config.BACK_STYLE mIsHomeBar = null;
+    private ProgressDialog mDialog;
+    private Long mInterestId;
+    private String mGeatteId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,54 +55,38 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra mIsHomeBar = " + mIsHomeBar);
 	}
 
-	final String geatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
+	mGeatteId = extras != null ? extras.getString(Config.GEATTE_ID_PARAM) : null;
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra geatteId = " + geatteId);
+	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra geatteId = " + mGeatteId);
 	}
-	final Long interestId = extras != null ? extras.getLong(GeatteDBAdapter.KEY_INTEREST_ID) : null;
+	mInterestId = extras != null ? extras.getLong(GeatteDBAdapter.KEY_INTEREST_ID) : null;
 	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra interestId = " + interestId);
+	    Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:onCreate get extra interestId = " + mInterestId);
 	}
+    }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+	super.onPostCreate(savedInstanceState);
 	setTitle(R.string.show_item_feedback_title);
 	addActionBarItem(Type.AllFriends);
+    }
 
-	List<Item> items = new ArrayList<Item>();
-	final GeatteThumbnailItem warnItem;
-	final ThumbnailBitmapItem geatteItem;
-
-	if (geatteId != null || (interestId != null && interestId != 0L)) {
-	    ThumbnailBitmapItem item = createFeedbackItemsFromFetchResult(geatteId, interestId, items);
-	    if (item == null) {
-		geatteItem = null;
-		warnItem = new GeatteThumbnailItem("Can't find the item", null, R.drawable.invalid);
-	    } else {
-		geatteItem = item;
-		warnItem = null;
-	    }
+    @Override
+    protected void onResume() {
+	super.onResume();
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): START");
 	}
-	else {
-	    warnItem = new GeatteThumbnailItem("Can't find the item", null, R.drawable.invalid);
-	    geatteItem = null;
-	}
-
-	//	final ProgressItem progressItem = new ProgressItem("Retrieving feedbacks", true);
-	//	items.add(progressItem);
-
-	final ThumbnailBitmapItemAdapter adapter = new ThumbnailBitmapItemAdapter(this, items);
-	setListAdapter(adapter);
-
+	mDialog = ProgressDialog.show(ShopinionFeedbackActivity.this, "Loading", "Please wait...", true);
 	mHandler.postDelayed(new Runnable() {
 	    public void run() {
-		//		adapter.remove(progressItem);
-		if (geatteItem != null) {
-		    adapter.insert(geatteItem, 0);
-		} else {
-		    adapter.insert(warnItem, 0);
-		}
-		adapter.notifyDataSetChanged();
+		fillList();
 	    }
 	},50);
+	if(Config.LOG_DEBUG_ENABLED) {
+	    Log.d(Config.LOGTAG, "ShopinionGridActivity:onResume(): END");
+	}
     }
 
     @Override
@@ -118,6 +106,58 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 		}
 	    }
 	}
+    }
+
+    private void fillList() {
+	try {
+	    List<Item> items = new ArrayList<Item>();
+	    final GeatteThumbnailItem warnItem;
+	    final ThumbnailBitmapItem geatteItem;
+
+	    if (mGeatteId != null || (mInterestId != null && mInterestId != 0L)) {
+		ThumbnailBitmapItem item = createFeedbackItemsFromFetchResult(mGeatteId, mInterestId, items);
+		if (item == null) {
+		    geatteItem = null;
+		    warnItem = new GeatteThumbnailItem("Can't find the item", null, R.drawable.invalid);
+		} else {
+		    geatteItem = item;
+		    warnItem = null;
+		}
+	    }
+	    else {
+		warnItem = new GeatteThumbnailItem("Can't find the item", null, R.drawable.invalid);
+		geatteItem = null;
+	    }
+
+	    final ThumbnailBitmapItemAdapter adapter = new ThumbnailBitmapItemAdapter(this, items);
+	    setListAdapter(adapter);
+
+	    mHandler.postDelayed(new Runnable() {
+		public void run() {
+		    if (geatteItem != null) {
+			adapter.insert(geatteItem, 0);
+		    } else {
+			adapter.insert(warnItem, 0);
+		    }
+		    adapter.notifyDataSetChanged();
+		    if (mDialog != null && mDialog.isShowing()) {
+			try {
+			    if (Config.LOG_DEBUG_ENABLED) {
+				Log.d(Config.LOGTAG, "ShopinionFeedbackActivity:fillList(): try to dismiss mDialog");
+			    }
+			    mDialog.dismiss();
+			    mDialog = null;
+			} catch (Exception e) {
+			    Log.w(Config.LOGTAG, "ShopinionFeedbackActivity:fillList(): failed to dismiss mDialog",
+				    e);
+			}
+		    }
+		}
+	    },50);
+	} catch (Exception e) {
+	    Log.e(Config.LOGTAG, "ShopinionFeedbackActivity:fillList() :  ERROR ", e);
+	}
+
     }
 
     private ThumbnailBitmapItem createFeedbackItemsFromFetchResult(String geatteId, Long interestId, List<Item> items) {

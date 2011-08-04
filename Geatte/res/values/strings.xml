@@ -98,17 +98,20 @@
     <!-- Introduction text at start of setup flow. Preserve occurrences of &lt;br>, &lt;a href="{tos_link}">, 
     &lt;a href="{pp_link}">, and &lt;a/> [CHAR LIMIT=NONE] -->
     <string name="intro_text">
-        Geatte is a shopping feedback app for you and your friends. &lt;br>&lt;br> You can get feedback 
-        from your friends who are already on the phone book and no need to recreate a network for this purpose.
-        &lt;br> The contacts of Geatte come from your phone contacts who have installed Geatte. You can collect
-        opinions from these friends and they can also ask for your feedback for their wish-list items.
-        &lt;br>&lt;br> This setup is one time setup and needs your Google account for accessing Geatte service.
-        After setup, you can start using Geatte to send out items you are interested and make smart decision with
-        feedbacks from family or friends you trust.
+        Geatte Is A Social Shopping App To Help You Make Decisions On The Go. 
+        &lt;br>&lt;br> 
+        Geatte provides a easy way to gather feedback from your circle of friends while you shop at stores.        
+		Any contact from your phone book can be selected to vote on your wish-list item. Geatte voting 
+		is a simple interface for you to vote friend\'s items in just two clicks. 
+        &lt;br>&lt;br> 
+        This setup is one time setup and needs your Google account for accessing Geatte service.
+        After setup, you can start using Geatte to send out items you are interested to buy and make smart
+        decision with feedback from family or friends you trust.
     </string>
     
     <string name="setup_complete_text">
-        Congratulations!! Setup is complete.  &lt;br>&lt;br> You can start using Geatte to ask feedback from 
-        your friends and give your sharp opinions on friend\'s Geatte requests.
+        Congratulations! Geatte Setup Is Complete.  
+        &lt;br>&lt;br>
+        You can start using Geatte to ask feedback from your friends and family and also give your wise suggestions on friend\'s items.
     </string>
 </resources>

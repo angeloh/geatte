@@ -33,8 +33,8 @@ public class InterestThumbnailItem extends SubtextItem {
     public InterestThumbnailItem(long id, String title, String desc, String imagePath, byte[] thumbnail, int [] counters) {
 	this(id, title, desc, imagePath, thumbnail);
 	this.numOfYes = counters[0];
-	this.numOfNo = counters[1];
-	this.numOfMaybe = counters[2];
+	this.numOfMaybe = counters[1];
+	this.numOfNo = counters[2];
     }
 
 

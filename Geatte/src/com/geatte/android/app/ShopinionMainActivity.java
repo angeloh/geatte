@@ -101,7 +101,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 
 	// Run the setup first if necessary
 	if (isSetupRequired()) {
-	    startActivity(new Intent(this, GeatteSetupActivity.class));
+	    startActivity(new Intent(this, ShopinionSetupActivity.class));
 	}
 
 	// Create an IntentSender that will launch our service, to be scheduled

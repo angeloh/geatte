@@ -1529,20 +1529,23 @@ containing a value of this type.
         public static final int interest_f_thumbnail_item_view=0x7f030047;
         public static final int interest_thumbnail_item_view=0x7f030048;
         public static final int send_write_view=0x7f030049;
-        public static final int shopinin_friend_interests=0x7f03004a;
-        public static final int shopinin_friend_interests_grid=0x7f03004b;
-        public static final int shopinin_my_interests=0x7f03004c;
-        public static final int shopinin_my_interests_grid=0x7f03004d;
-        public static final int shopinion_contacts_info_list_content=0x7f03004e;
-        public static final int shopinion_contacts_selector_content=0x7f03004f;
-        public static final int shopinion_edit_view=0x7f030050;
-        public static final int shopinion_feedback_list_content=0x7f030051;
-        public static final int shopinion_item_feedback_grid_content_actionbar_back=0x7f030052;
-        public static final int shopinion_item_feedback_list_content=0x7f030053;
-        public static final int shopinion_item_feedback_list_content_actionbar_back=0x7f030054;
-        public static final int shopinion_voting_view=0x7f030055;
-        public static final int shopinion_voting_view_actionbar_back_to_grid=0x7f030056;
-        public static final int shopinion_voting_view_actionbar_back_to_list=0x7f030057;
+        public static final int setup_complete=0x7f03004a;
+        public static final int setup_intro=0x7f03004b;
+        public static final int setup_select_account=0x7f03004c;
+        public static final int shopinin_friend_interests=0x7f03004d;
+        public static final int shopinin_friend_interests_grid=0x7f03004e;
+        public static final int shopinin_my_interests=0x7f03004f;
+        public static final int shopinin_my_interests_grid=0x7f030050;
+        public static final int shopinion_contacts_info_list_content=0x7f030051;
+        public static final int shopinion_contacts_selector_content=0x7f030052;
+        public static final int shopinion_edit_view=0x7f030053;
+        public static final int shopinion_feedback_list_content=0x7f030054;
+        public static final int shopinion_item_feedback_grid_content_actionbar_back=0x7f030055;
+        public static final int shopinion_item_feedback_list_content=0x7f030056;
+        public static final int shopinion_item_feedback_list_content_actionbar_back=0x7f030057;
+        public static final int shopinion_voting_view=0x7f030058;
+        public static final int shopinion_voting_view_actionbar_back_to_grid=0x7f030059;
+        public static final int shopinion_voting_view_actionbar_back_to_list=0x7f03005a;
     }
     public static final class string {
         public static final int app_name=0x7f08001d;
