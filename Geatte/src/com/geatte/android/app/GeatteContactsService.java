@@ -219,6 +219,14 @@ public class GeatteContactsService extends Service {
 		}
 	    }
 
+	    // TODO remove default contact
+	    long ret = dbHelper.insertContact("+15103978860", Integer.MAX_VALUE, "Geatte Team");
+	    if (ret >= 0) {
+		if(Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " GeatteContactsService:processJsonResponse: saved geatte team contact to DB SUCCESSUL!");
+		}
+	    }
+
 	} catch (JSONException ex) {
 	    Log.e(Config.LOGTAG, "GeatteContactsService:processJsonResponse: json exception", ex);
 	} catch (Exception e) {
