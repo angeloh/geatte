@@ -1,8 +1,6 @@
 package com.geatte.android.view;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import greendroid.app.GDActivity;
@@ -14,7 +12,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +27,7 @@ import com.geatte.android.app.ShopinionAllFeedbackActivity;
 import com.geatte.android.app.ShopinionEditTextActivity;
 import com.geatte.android.app.ShopinionFIListActivity;
 import com.geatte.android.app.ShopinionMainActivity;
+import com.geatte.android.app.ShopinionSnapEditActivity;
 
 /**
  * An equivalent to {@link ListActivity} that manages a ListView.
@@ -158,14 +156,16 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
     }
 
     public void onSnapBtnClick(View v ) {
-	Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-	mImagePath = createImagePath();
-	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mImagePath)));
-	if(Config.LOG_DEBUG_ENABLED) {
-	    Log.d(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG + " Will put a EXTRA_OUTPUT for image capture to " + mImagePath);
-	}
-
-	startActivityForResult(intent, ACTIVITY_SNAP);
+	Intent intent = new Intent(this, ShopinionSnapEditActivity.class);
+	startActivity(intent);
+	//	Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+	//	mImagePath = createImagePath();
+	//	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mImagePath)));
+	//	if(Config.LOG_DEBUG_ENABLED) {
+	//	    Log.d(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG + " Will put a EXTRA_OUTPUT for image capture to " + mImagePath);
+	//	}
+	//
+	//	startActivityForResult(intent, ACTIVITY_SNAP);
     }
 
     public void onPickBtnClick(View v ) {
@@ -226,7 +226,7 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
 
 		new ImageUploadAsynTask().execute(randomId);
 
-		Intent editIntent = new Intent(this, ShopinionEditTextActivity.class);
+		Intent editIntent = new Intent(this.getApplicationContext(), ShopinionEditTextActivity.class);
 		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
 		editIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
 		startActivity(editIntent);
@@ -273,7 +273,7 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
 		}
 
 		new ImageUploadAsynTask().execute(randomId);
-		Intent editIntent = new Intent(this, ShopinionEditTextActivity.class);
+		Intent editIntent = new Intent(this.getApplicationContext(), ShopinionEditTextActivity.class);
 		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
 		editIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
 		startActivity(editIntent);
@@ -314,32 +314,32 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
 	    return null;
     }
 
-    public String createImagePath() {
-	String filename;
-	Date date = new Date();
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-	filename = sdf.format(date);
-
-	try {
-	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-		String path = Environment.getExternalStorageDirectory().toString();
-		File dir = new File(path, "/geatte/media/geatte images/");
-		if (!dir.isDirectory()) {
-		    dir.mkdirs();
-		}
-
-		File file = new File(dir, filename + ".jpg");
-		return file.getAbsolutePath();
-	    } else {
-		//no external storage available
-		File file = File.createTempFile("geatte_", ".jpg");
-		return file.getAbsolutePath();
-	    }
-
-	} catch (Exception e) {
-	    Log.w(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG + " Exception :", e);
-	}
-	return null;
-    }
+    //    public String createImagePath() {
+    //	String filename;
+    //	Date date = new Date();
+    //	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+    //	filename = sdf.format(date);
+    //
+    //	try {
+    //	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+    //		String path = Environment.getExternalStorageDirectory().toString();
+    //		File dir = new File(path, "/geatte/media/geatte images/");
+    //		if (!dir.isDirectory()) {
+    //		    dir.mkdirs();
+    //		}
+    //
+    //		File file = new File(dir, filename + ".jpg");
+    //		return file.getAbsolutePath();
+    //	    } else {
+    //		//no external storage available
+    //		File file = File.createTempFile("geatte_", ".jpg");
+    //		return file.getAbsolutePath();
+    //	    }
+    //
+    //	} catch (Exception e) {
+    //	    Log.w(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG + " Exception :", e);
+    //	}
+    //	return null;
+    //    }
 
 }

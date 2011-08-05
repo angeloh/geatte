@@ -85,6 +85,9 @@
 
 		<activity android:name=".ShopinionEditTextActivity" android:label="@string/edit_interest" >
 		</activity>
+		
+		<activity android:name=".ShopinionSnapEditActivity" android:label="@string/edit_interest" >
+		</activity>
 
 		<activity android:name=".ShopinionContactSelectActivity" android:label="@string/app_name">
 		</activity>
