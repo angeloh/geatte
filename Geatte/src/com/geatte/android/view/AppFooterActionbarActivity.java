@@ -37,8 +37,7 @@ import com.geatte.android.app.ShopinionSnapEditActivity;
 public abstract class AppFooterActionbarActivity extends GDActivity {
 
     private static final String LOG_TAG = AppFooterActionbarActivity.class.getSimpleName();
-    private static final int ACTIVITY_SNAP = 0;
-    private static final int ACTIVITY_PICK = 1;
+    private static final int ACTIVITY_PICK = 0;
     protected String mImagePath = null;
     protected View m_shopinion_footer = null;
     protected Button m_shopinion_mi_btn = null;
@@ -158,14 +157,6 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
     public void onSnapBtnClick(View v ) {
 	Intent intent = new Intent(this, ShopinionSnapEditActivity.class);
 	startActivity(intent);
-	//	Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-	//	mImagePath = createImagePath();
-	//	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mImagePath)));
-	//	if(Config.LOG_DEBUG_ENABLED) {
-	//	    Log.d(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG + " Will put a EXTRA_OUTPUT for image capture to " + mImagePath);
-	//	}
-	//
-	//	startActivityForResult(intent, ACTIVITY_SNAP);
     }
 
     public void onPickBtnClick(View v ) {
@@ -204,38 +195,7 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-	if (requestCode == ACTIVITY_SNAP && resultCode == Activity.RESULT_OK) {
-	    File fi = null;
-	    try {
-		fi = new File(mImagePath);
-	    } catch (Exception ex) {
-		Log.w(Config.LOGTAG, "mImagePath not exist " + mImagePath);
-	    }
-
-	    if (fi != null && fi.exists()) {
-		if (Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG
-			    + " save image capture output to path : " + mImagePath);
-		}
-
-		String randomId = UUID.randomUUID().toString();
-		if (Config.LOG_DEBUG_ENABLED) {
-		    Log.d(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG
-			    + " try upload image capture output to server as intent service, randomId : " + randomId);
-		}
-
-		new ImageUploadAsynTask().execute(randomId);
-
-		Intent editIntent = new Intent(this.getApplicationContext(), ShopinionEditTextActivity.class);
-		editIntent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, mImagePath);
-		editIntent.putExtra(Config.EXTRA_IMAGE_RANDOM_ID, randomId);
-		startActivity(editIntent);
-
-	    } else {
-		Log.w(Config.LOGTAG, "file not exist or file is null");
-	    }
-
-	} else if (requestCode == ACTIVITY_PICK && resultCode == Activity.RESULT_OK) {
+	if (requestCode == ACTIVITY_PICK && resultCode == Activity.RESULT_OK) {
 	    Uri selectedImageUri = intent.getData();
 
 	    // OI FILE Manager
@@ -313,33 +273,5 @@ public abstract class AppFooterActionbarActivity extends GDActivity {
 	} else
 	    return null;
     }
-
-    //    public String createImagePath() {
-    //	String filename;
-    //	Date date = new Date();
-    //	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-    //	filename = sdf.format(date);
-    //
-    //	try {
-    //	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-    //		String path = Environment.getExternalStorageDirectory().toString();
-    //		File dir = new File(path, "/geatte/media/geatte images/");
-    //		if (!dir.isDirectory()) {
-    //		    dir.mkdirs();
-    //		}
-    //
-    //		File file = new File(dir, filename + ".jpg");
-    //		return file.getAbsolutePath();
-    //	    } else {
-    //		//no external storage available
-    //		File file = File.createTempFile("geatte_", ".jpg");
-    //		return file.getAbsolutePath();
-    //	    }
-    //
-    //	} catch (Exception e) {
-    //	    Log.w(Config.LOGTAG, " " + AppFooterActionbarActivity.LOG_TAG + " Exception :", e);
-    //	}
-    //	return null;
-    //    }
 
 }

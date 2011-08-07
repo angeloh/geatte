@@ -371,7 +371,7 @@ public class GeatteCanvas extends GDActivity {
 	try {
 	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 		String path = Environment.getExternalStorageDirectory().toString();
-		File dir = new File(path, "/geatte/media/geatte images/");
+		File dir = new File(path, Config.MEDIA_FOLDER);
 		if (!dir.isDirectory()) {
 		    dir.mkdirs();
 		}

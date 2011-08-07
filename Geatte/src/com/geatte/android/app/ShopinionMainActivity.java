@@ -6,7 +6,6 @@ import greendroid.image.MaskImageProcessor;
 import greendroid.image.ScaleImageProcessor;
 import greendroid.widget.ActionBar;
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.AsyncImageView;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
@@ -255,7 +254,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 	private ImageProcessor mImageProcessor;
 
 	class ViewHolder {
-	    public AsyncImageView imageView;
+	    public ImageButton imageBtn;
 	    public TextView textViewTitle;
 	    public TextView textViewSubTitle;
 	    public TextView textCounterYes;
@@ -290,7 +289,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		if (convertView == null) {
 		    convertView = mInflater.inflate(R.layout.interest_thumbnail_item_view, parent, false);
 		    holder = new ViewHolder();
-		    holder.imageView = (AsyncImageView) convertView.findViewById(R.id.interest_thumbnail);
+		    holder.imageBtn = (ImageButton) convertView.findViewById(R.id.interest_thumbnail);
 		    //holder.imageView.setImageProcessor(mImageProcessor);
 		    holder.textViewTitle = (TextView) convertView.findViewById(R.id.interest_title);
 		    holder.textViewSubTitle = (TextView) convertView.findViewById(R.id.interest_subtitle);
@@ -304,11 +303,11 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    convertView.setTag(holder);
 		} else {
 		    holder = (ViewHolder) convertView.getTag();
-		    if (holder.imageView.getDrawable() != null) {
-			BitmapDrawable drawable = (BitmapDrawable) holder.imageView.getDrawable();
+		    if (holder.imageBtn.getDrawable() != null) {
+			BitmapDrawable drawable = (BitmapDrawable) holder.imageBtn.getDrawable();
 			drawable.getBitmap().recycle();
 		    }
-		    holder.imageView.setImageBitmap(null);
+		    holder.imageBtn.setImageBitmap(null);
 		}
 
 		InterestThumbnailItem tItem = (InterestThumbnailItem) item;
@@ -317,6 +316,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		holder.textCounterYes.setText(Integer.toString(tItem.numOfYes));
 		holder.textCounterMaybe.setText(Integer.toString(tItem.numOfMaybe));
 		holder.textCounterNo.setText(Integer.toString(tItem.numOfNo));
+		holder.imageBtn.setTag(tItem.imagePath);
 		holder.btnYes.setTag(new Long(tItem.getId()));
 		holder.btnMaybe.setTag(new Long(tItem.getId()));
 		holder.btnNo.setTag(new Long(tItem.getId()));
@@ -326,7 +326,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), ShopinionFeedbackActivity.class);
+			Intent intent = new Intent(view.getContext().getApplicationContext(), ShopinionFeedbackActivity.class);
 			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
 			intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
@@ -337,7 +337,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), ShopinionFeedbackActivity.class);
+			Intent intent = new Intent(view.getContext().getApplicationContext(), ShopinionFeedbackActivity.class);
 			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
 			intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
@@ -348,7 +348,7 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long interestId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), ShopinionFeedbackActivity.class);
+			Intent intent = new Intent(view.getContext().getApplicationContext(), ShopinionFeedbackActivity.class);
 			intent.putExtra(GeatteDBAdapter.KEY_INTEREST_ID, interestId);
 			intent.putExtra(Config.ACTION_FEEDBACK_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
@@ -356,13 +356,23 @@ public class ShopinionMainActivity extends ListActionBarActivity {
 		});
 
 		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
-		    holder.imageView.setImageResource(R.drawable.thumb_missing);
+		    holder.imageBtn.setImageResource(R.drawable.thumb_missing);
 		} else {
-		    holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
+		    holder.imageBtn.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
 		    if(Config.LOG_DEBUG_ENABLED) {
 			Log.d(Config.LOGTAG, "ShopinionMainActivity:getView() : async image set to bytearray for length = " + tItem.thumbnail.length);
 		    }
 		}
+
+		holder.imageBtn.setOnClickListener(new OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			String imagePath = (String) view.getTag();
+			Intent intent = new Intent(view.getContext().getApplicationContext(), AlbumActivity.class);
+			intent.putExtra(GeatteDBAdapter.KEY_IMAGE_PATH, imagePath);
+			view.getContext().startActivity(intent);
+		    }
+		});
 		//String uri = Uri.fromFile(new File(tItem.imagePath)).toString();
 		//Log.d(Config.LOGTAG, "GeatteListAsyncActivity:getView() : async image request to = " + uri);
 		//holder.imageView.setUrl(Uri.fromFile(new File(tItem.imagePath)).toString());

@@ -265,7 +265,7 @@ public class ShopinionAllFeedbackActivity extends ListActionBarActivity {
 
     /**
      * A GeatteFeedbackItemAdapter is an extension of an ItemAdapter for
-     * ThumbnailBitmapItem, SeparatorThumbnailItem, GeatteThumbnailItem
+     * GeatteFeedbackItem, GeatteThumbnailItem
      * to return associated view.
      */
     static private class GeatteFeedbackItemAdapter extends ItemAdapter {

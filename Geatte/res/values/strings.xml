@@ -8,6 +8,7 @@
     <string name="empty_my_interests">No Interests Found. Start Creating Your Interest.</string>
     <string name="empty_friend_interests">No Interests Received From Friends. Invite More Friends To Join Geatte.</string>
     <string name="empty_list">No Interests Found! Contact Geatte Team For Help.</string>
+    <string name="empty_album">No Image Found In The Path.</string>
     <string name="show_all_feedbacks">Show All Feedbacks</string>
     <string name="show_all_feedbacks_title">Feedbacks For My Interests</string>
     <string name="show_geattetab">GeatteTab</string>

@@ -247,27 +247,28 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
 	    if (jResponse != null) {
 		String geatteId = jResponse.getString(Config.GEATTE_ID_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + " GOT geatteId = " + geatteId);
-
 		String fromNumber = jResponse.getString(Config.GEATTE_FROM_NUMBER_PARAM);
 		String contactName = dbHelper.fetchContactName(fromNumber);
-		Log.d(Config.LOGTAG, " " + TAG + "GOT fromNumber = " + fromNumber + ", contactName = " + contactName);
-
 		String title = jResponse.getString(Config.GEATTE_TITLE_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + " GOT title = " + title);
-
 		String desc = jResponse.getString(Config.GEATTE_DESC_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + " GOT desc = " + desc);
-
 		String createdDate = jResponse.getString(Config.GEATTE_CREATED_DATE_PARAM);
-		Log.d(Config.LOGTAG, " " + TAG + " GOT createdDate = " + createdDate);
+
+		if (Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + TAG + " GOT geatteId = " + geatteId);
+		    Log.d(Config.LOGTAG, " " + TAG + " GOT fromNumber = " + fromNumber + ", contactName = " + contactName);
+		    Log.d(Config.LOGTAG, " " + TAG + " GOT title = " + title);
+		    Log.d(Config.LOGTAG, " " + TAG + " GOT desc = " + desc);
+		    Log.d(Config.LOGTAG, " " + TAG + " GOT createdDate = " + createdDate);
+		}
 
 		long ret = dbHelper.insertFriendInterest(geatteId, title, desc, fromNumber, createdDate);
 		if (ret == -1) {
 		    Log.w(Config.LOGTAG, " " + TAG + " ERROR Saved geatteId = " + geatteId + " to DB, IGNORED");
 		    return;
 		}
-		Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + " to DB SUCCESSUL!");
+		if (Config.LOG_DEBUG_ENABLED) {
+		    Log.d(Config.LOGTAG, " " + TAG + "Saved geatteId = " + geatteId + " to DB SUCCESSUL!");
+		}
 
 		// fetch coming image
 		//client = new DefaultHttpClient();
@@ -306,7 +307,11 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 			//				intentNotify.putExtra(Config.GEATTE_DESC_PARAM, desc);
 			//				intentNotify.putExtra(Config.GEATTE_CREATED_DATE_PARAM, createdDate);
 			//				intentNotify.putExtra(Config.GEATTE_IMAGE_GET_URL, imagePath);
-			C2DMReceiver.generateNotification(context, "Got a Geatte from " + contactName, title, intentNotify);
+			if (contactName == null || contactName.equals("")) {
+			    C2DMReceiver.generateNotification(context, "Got a Geatte from " + fromNumber, title, intentNotify);
+			} else {
+			    C2DMReceiver.generateNotification(context, "Got a Geatte from " + contactName, title, intentNotify);
+			}
 
 		    } catch (IOException e) {
 			Log.e(Config.LOGTAG, " " + TAG, e);
@@ -460,7 +465,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 		String path = Environment.getExternalStorageDirectory().toString();
 
-		File dir = new File(path, "/geatte/media/geatte images/");
+		File dir = new File(path, Config.MEDIA_FOLDER);
 		if (!dir.isDirectory()) {
 		    dir.mkdirs();
 		}

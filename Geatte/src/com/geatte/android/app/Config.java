@@ -99,6 +99,9 @@ public class Config {
     public static final String ITEM_UPLOAD_PATH = "/geatteuploadtextonly";
     public static final String RETRY_STATUS = "RETRY";
 
+    //image path
+    public static final String MEDIA_FOLDER = "/geatte/media/geatte images/";
+
     public static final String DEV_REG_ID_PARAM = "devRegId";
     public static final String DEVICE_ID_PARAM = "deviceId";
     public static final String DEV_PHONE_NUMBER_PARAM = "phoneNumber";

@@ -7,8 +7,10 @@ import greendroid.widget.ActionBarItem.Type;
 import greendroid.widget.item.Item;
 import greendroid.widget.itemview.ItemView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.geatte.android.view.GeatteThumbnailItem;
 import com.geatte.android.view.ListActionBarActivity;
@@ -29,6 +31,7 @@ import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class ShopinionFeedbackActivity extends ListActionBarActivity {
 
@@ -37,6 +40,7 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
     private ProgressDialog mDialog;
     private Long mInterestId;
     private String mGeatteId;
+    private boolean mIsImageMissing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +156,9 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 				    e);
 			}
 		    }
+		    if (mIsImageMissing) {
+			Toast.makeText(getApplicationContext(), "Image is deleted or missing!", Toast.LENGTH_LONG).show();
+		    }
 		}
 	    },50);
 	} catch (Exception e) {
@@ -183,14 +190,27 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 		Log.w(Config.LOGTAG, "ShopinionFeedbackActivity:createFeedbackItemsFromFetchResult invalid interestId and geatteId, ignore create!!");
 		return null;
 	    }
+
+	    String savedImagePath = null;
 	    if (myInterestCur.isAfterLast()) {
 		geatteItem = null;
 	    } else {
 		String title = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_TITLE));
 		String desc = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_INTEREST_DESC));
-		String savedImagePath = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
+		savedImagePath = myInterestCur.getString(myInterestCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_IMAGE_PATH));
 		geatteItem = new ThumbnailBitmapItem(title, desc, savedImagePath);
+	    }
 
+	    // check if imagePath exists or not
+	    File fi = null;
+	    try {
+		fi = new File(savedImagePath);
+	    } catch (Exception ex) {
+		Log.w(Config.LOGTAG, "savedImagePath not exist " + savedImagePath);
+	    }
+
+	    if (fi == null || !fi.exists()) {
+		mIsImageMissing = true;
 	    }
 
 	    if (geatteId != null) {
@@ -208,10 +228,13 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 		    String vote = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTE));
 		    if (vote.equals(Config.LIKE.YES.toString())) {
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
+
+			Map<String, Object> map = mDbHelper.fetchContactIdAndName(voter);
 			// get contact name for this voter
-			String voterName = mDbHelper.fetchContactName(voter);
+			String voterName = (String)map.get(GeatteDBAdapter.KEY_CONTACT_NAME);
 			// get voter contact thumbnail
-			Integer contactId = mDbHelper.fetchContactId(voter);
+			Integer contactId = (Integer)map.get(GeatteDBAdapter.KEY_CONTACT_ID);
+
 			Bitmap contactBitmap = queryPhotoForContact(contactId);
 
 			String text = new StringBuilder(voterName).append(" LOVE it!").toString();
@@ -226,10 +249,13 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 		    }
 		    if (vote.equals(Config.LIKE.NO.toString())) {
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
+
+			Map<String, Object> map = mDbHelper.fetchContactIdAndName(voter);
 			// get contact name for this voter
-			String voterName = mDbHelper.fetchContactName(voter);
+			String voterName = (String)map.get(GeatteDBAdapter.KEY_CONTACT_NAME);
 			// get voter contact thumbnail
-			Integer contactId = mDbHelper.fetchContactId(voter);
+			Integer contactId = (Integer)map.get(GeatteDBAdapter.KEY_CONTACT_ID);
+
 			Bitmap contactBitmap = queryPhotoForContact(contactId);
 
 			String text = new StringBuilder(voterName).append(" said NO!").toString();
@@ -244,10 +270,13 @@ public class ShopinionFeedbackActivity extends ListActionBarActivity {
 
 		    if (vote.equals(Config.LIKE.MAYBE.toString())) {
 			String voter = feedbackCur.getString(feedbackCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FEEDBACK_VOTER));
+
+			Map<String, Object> map = mDbHelper.fetchContactIdAndName(voter);
 			// get contact name for this voter
-			String voterName = mDbHelper.fetchContactName(voter);
+			String voterName = (String)map.get(GeatteDBAdapter.KEY_CONTACT_NAME);
 			// get voter contact thumbnail
-			Integer contactId = mDbHelper.fetchContactId(voter);
+			Integer contactId = (Integer)map.get(GeatteDBAdapter.KEY_CONTACT_ID);
+
 			Bitmap contactBitmap = queryPhotoForContact(contactId);
 
 			String text = new StringBuilder(voterName).append(" said MAYBE!").toString();

@@ -42,16 +42,16 @@
 	    android:background="#FF707070">
  
          <Button
-            android:id="@+id/contacts_clean_btn"
+            android:id="@+id/contacts_send_btn"
             android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:text="@string/contacts_clean"
-			android:drawableLeft="@drawable/send_clean"
+			android:text="@string/contacts_send"
+			android:drawableLeft="@drawable/send_upload"
 			android:background="@drawable/custom_button_2"
 			android:textColor="@color/Button_Type_0_Text" />
 
- 		<Button
+  		<Button
             android:id="@+id/contacts_back_btn"
             android:layout_width="0dp"
 			android:layout_height="wrap_content"
@@ -60,14 +60,14 @@
 			android:drawableLeft="@drawable/send_back"
 			android:background="@drawable/custom_button_2"
 			android:textColor="@color/Button_Type_0_Text" />  
-        
-        <Button
-            android:id="@+id/contacts_send_btn"
+
+         <Button
+            android:id="@+id/contacts_clean_btn"
             android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:text="@string/contacts_send"
-			android:drawableLeft="@drawable/send_upload"
+			android:text="@string/contacts_clean"
+			android:drawableLeft="@drawable/send_clean"
 			android:background="@drawable/custom_button_2"
 			android:textColor="@color/Button_Type_0_Text" />
             

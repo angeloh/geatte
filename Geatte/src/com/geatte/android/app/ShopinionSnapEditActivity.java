@@ -166,7 +166,7 @@ public class ShopinionSnapEditActivity extends GDActivity {
 	try {
 	    if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
 		String path = Environment.getExternalStorageDirectory().toString();
-		File dir = new File(path, "/geatte/media/geatte images/");
+		File dir = new File(path, Config.MEDIA_FOLDER);
 		if (!dir.isDirectory()) {
 		    dir.mkdirs();
 		}
@@ -275,7 +275,21 @@ public class ShopinionSnapEditActivity extends GDActivity {
     @Override
     protected void onResume() {
 	super.onResume();
-	populateFields();
+	if (mImageRandomId != null && !mImageRandomId.equals("NOT_AN_ID")) {
+	    populateFields();
+	    return;
+	}
+
+	if (mImageRandomId != null && mImageRandomId.equals("NOT_AN_ID")) {
+	    // user click back in camera app, onResume() is called.
+	    setResult(RESULT_CANCELED);
+	    finish();
+	    return;
+	}
+	if (mImageRandomId == null) {
+	    // hack to ignore first onResume call, otherwise finish() will be called
+	    mImageRandomId = "NOT_AN_ID";
+	}
     }
 
     /**

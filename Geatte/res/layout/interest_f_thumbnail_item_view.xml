@@ -15,11 +15,12 @@
 		android:orientation="horizontal"
 		android:gravity="top" >
 	
-		<greendroid.widget.AsyncImageView
+		<ImageButton
 			style="?attr/InterestThumbnailItemStyleThumbnail"
 			android:id="@+id/f_interest_thumbnail"
-			greendroid:defaultSrc="@drawable/icon" 
-			android:scaleType="centerCrop" />
+        	greendroid:defaultSrc="@drawable/icon"
+        	android:background="@null"
+        	android:scaleType="centerCrop" />
 		
 		<RelativeLayout 
 		   	android:layout_width="fill_parent"

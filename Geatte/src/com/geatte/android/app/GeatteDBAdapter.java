@@ -4,7 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -269,6 +271,7 @@ public class GeatteDBAdapter {
 	initialValues.put(KEY_FEEDBACK_VOTE, vote);
 	initialValues.put(KEY_FEEDBACK_COMMENT, comment);
 	// set the format to sql date time
+	// TODO this should be from server and change to received_date
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	initialValues.put(KEY_FEEDBACK_UPDATED_DATE, dateFormat.format(new Date()));
 
@@ -363,6 +366,7 @@ public class GeatteDBAdapter {
 	if (title == null) {
 	    title = "New Geatte";
 	}
+
 	ContentValues initialValues = new ContentValues();
 	initialValues.put(KEY_FRIEND_INTEREST_ID, geatteId);
 	initialValues.put(KEY_FRIEND_INTEREST_TITLE, title);
@@ -501,6 +505,32 @@ public class GeatteDBAdapter {
 	    }
 	}
 	return contactName;
+    }
+
+    public Map<String, Object> fetchContactIdAndName(String phoneNumber) {
+	Map<String, Object> retMap = new HashMap<String, Object>();
+	Integer contactId = null;
+	String contactName = null;
+	Cursor contactCur = null;
+	try {
+	    contactCur = fetchContactFromPhone(phoneNumber);
+	    if (contactCur == null || contactCur.isAfterLast()) {
+		contactId = -1;
+		contactName = "";
+	    } else {
+		contactId = contactCur.getInt(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_ID));
+		contactName = contactCur.getString(contactCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_CONTACT_NAME));
+	    }
+	    retMap.put(GeatteDBAdapter.KEY_CONTACT_ID, contactId);
+	    retMap.put(GeatteDBAdapter.KEY_CONTACT_NAME, contactName);
+	} catch (Exception ex) {
+	    Log.e(Config.LOGTAG, "ERROR to fetch contactId()", ex);
+	} finally {
+	    if (contactCur != null) {
+		contactCur.close();
+	    }
+	}
+	return retMap;
     }
 
     public String fetchContactFirstName(String phoneNumber) {
@@ -1001,6 +1031,7 @@ public class GeatteDBAdapter {
 	args.put(KEY_INTEREST_TITLE, title);
 	args.put(KEY_INTEREST_DESC, desc);
 	// set the format to sql date time
+	// TODO do not update created_date, instead use updated_date
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	args.put(KEY_INTEREST_CREATED_DATE, dateFormat.format(new Date()));
 
@@ -1024,6 +1055,7 @@ public class GeatteDBAdapter {
 	args.put(KEY_INTEREST_DESC, desc);
 	args.put(KEY_INTEREST_GEATTE_ID, geatteId);
 	// set the format to sql date time
+	// TODO do not update created_date, instead use updated_date
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	args.put(KEY_INTEREST_CREATED_DATE, dateFormat.format(new Date()));
 

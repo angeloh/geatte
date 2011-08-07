@@ -12,7 +12,6 @@ import greendroid.image.MaskImageProcessor;
 import greendroid.image.ScaleImageProcessor;
 import greendroid.widget.ActionBar;
 import greendroid.widget.ActionBarItem;
-import greendroid.widget.AsyncImageView;
 import greendroid.widget.ItemAdapter;
 import greendroid.widget.NormalActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
@@ -175,12 +174,15 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		String fInterestSentOn = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_CREATED_DATE));
 		String fInterestSentFrom = fiCur.getString(fiCur.getColumnIndexOrThrow(GeatteDBAdapter.KEY_FRIEND_INTEREST_FROM));
 
+		fInterestSentOn = CommonUtils.convertUTCToLocal(fInterestSentOn);
+
 		List<String> comments = mDbHelper.fetchFIFeedback(Long.toString(fInterestId));
 
 		if (Config.LOG_DEBUG_ENABLED) {
 		    Log.i(Config.LOGTAG, "ShopinionFIListActivity:getFIGeatteItems() : add one ThumbnailAsyncBitmapItem, " +
 			    "fInterestId = " + fInterestId + ", fImagePath = " + fImagePath + ", fInterestTitle = " +
-			    fInterestTitle + ", fInterestDesc = " + fInterestDesc + ", comments = " + comments.toString());
+			    fInterestTitle + ", fInterestDesc = " + fInterestDesc + ", comments = " + comments.toString() +
+			    ", fInterestSentOn = " + fInterestSentOn);
 		}
 
 		String sendByText = "@" + mDbHelper.fetchContactFirstName(fInterestSentFrom);
@@ -219,7 +221,7 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 	private ImageProcessor mImageProcessor;
 
 	class ViewHolder {
-	    public AsyncImageView imageView;
+	    public ImageButton imageBtn;
 	    public TextView textViewTitle;
 	    public TextView textViewSubTitle;
 	    public TextView SentBy;
@@ -253,7 +255,7 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		if (convertView == null) {
 		    convertView = mInflater.inflate(R.layout.interest_f_thumbnail_item_view, parent, false);
 		    holder = new ViewHolder();
-		    holder.imageView = (AsyncImageView) convertView.findViewById(R.id.f_interest_thumbnail);
+		    holder.imageBtn = (ImageButton) convertView.findViewById(R.id.f_interest_thumbnail);
 		    //holder.imageView.setImageProcessor(mImageProcessor);
 		    holder.textViewTitle = (TextView) convertView.findViewById(R.id.f_interest_title);
 		    holder.textViewSubTitle = (TextView) convertView.findViewById(R.id.f_interest_subtitle);
@@ -265,11 +267,11 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		    convertView.setTag(holder);
 		} else {
 		    holder = (ViewHolder) convertView.getTag();
-		    if (holder.imageView.getDrawable() != null) {
-			BitmapDrawable drawable = (BitmapDrawable) holder.imageView.getDrawable();
+		    if (holder.imageBtn.getDrawable() != null) {
+			BitmapDrawable drawable = (BitmapDrawable) holder.imageBtn.getDrawable();
 			drawable.getBitmap().recycle();
 		    }
-		    holder.imageView.setImageBitmap(null);
+		    holder.imageBtn.setImageBitmap(null);
 		}
 
 		InterestFriendThumbnailItem tItem = (InterestFriendThumbnailItem) item;
@@ -279,6 +281,7 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		holder.SentOn.setText(tItem.sendOnText);
 		holder.VoteText.setText(tItem.voteText);
 		holder.VoteFeedback.setText(tItem.voteFeedbackText);
+		holder.imageBtn.setTag(tItem.imagePath);
 		holder.btnVoteImage.setTag(new Long(tItem.getId()));
 		//setTag(item.id);
 
@@ -286,7 +289,7 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		    @Override
 		    public void onClick(View view) {
 			Long geatteId = (Long) view.getTag();
-			Intent intent = new Intent(view.getContext(), ShopinionVotingActivity.class);
+			Intent intent = new Intent(view.getContext().getApplicationContext(), ShopinionVotingActivity.class);
 			intent.putExtra(Config.GEATTE_ID_PARAM, Long.toString(geatteId));
 			intent.putExtra(Config.ACTION_VOTING_BAR_HOME, Config.BACK_STYLE.LIST.toString());
 			view.getContext().startActivity(intent);
@@ -310,10 +313,20 @@ public class ShopinionFIListActivity extends ListActionBarActivity {
 		    Log.d(Config.LOGTAG, "ShopinionFIListActivity:getView() : async image set to bytearray for length= " + tItem.thumbnail.length);
 		}
 		if (tItem.thumbnail == null || tItem.thumbnail.length <= 0) {
-		    holder.imageView.setImageResource(R.drawable.thumb_missing);
+		    holder.imageBtn.setImageResource(R.drawable.thumb_missing);
 		} else {
-		    holder.imageView.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
+		    holder.imageBtn.setImageBitmap(BitmapFactory.decodeByteArray(tItem.thumbnail, 0, tItem.thumbnail.length));
 		}
+
+		holder.imageBtn.setOnClickListener(new OnClickListener() {
+		    @Override
+		    public void onClick(View view) {
+			String imagePath = (String) view.getTag();
+			Intent intent = new Intent(view.getContext().getApplicationContext(), AlbumActivity.class);
+			intent.putExtra(GeatteDBAdapter.KEY_FI_IMAGE_PATH, imagePath);
+			view.getContext().startActivity(intent);
+		    }
+		});
 
 		return convertView;
 	    }

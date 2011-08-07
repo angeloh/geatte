@@ -1,6 +1,11 @@
 package com.geatte.android.app;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import android.util.Log;
 
@@ -50,4 +55,31 @@ public class CommonUtils {
 	}
 
     }
+
+    public static String convertUTCToLocal(String utcDateStr) {
+	if (utcDateStr == null) {
+	    return null;
+	}
+
+	SimpleDateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	Date utcDate = null;
+	try {
+	    utcDate = utcFormat.parse(utcDateStr);
+	} catch (ParseException e) {
+	    Log.w(Config.LOGTAG, " GeatteDBAdapter:insertFriendInterest() failed to parse createdDate " + utcDateStr);
+	}
+	if (utcDate == null) {
+	    return utcDateStr;
+	}
+
+	Calendar cal = Calendar.getInstance();
+	TimeZone tz = cal.getTimeZone();
+
+	SimpleDateFormat localFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	localFormat.setTimeZone(tz);
+	String ret = localFormat.format(utcDate);
+	return ret;
+    }
+
 }

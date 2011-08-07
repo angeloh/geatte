@@ -9,7 +9,7 @@
 	<ImageView
 		style="?attr/GeatteThumbnailBitmapItemStyleThumbnail"
 		android:id="@+id/geatte_bitmap_item_thumbnail"
-		android:scaleType="centerInside" />
+		android:scaleType="centerCrop" />
 
 	<TextView
 		style="?attr/GeatteThumbnailBitmapItemStyleTitle"
